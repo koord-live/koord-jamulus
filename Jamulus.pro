@@ -8,11 +8,11 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
-    release
+    release \ 
+    nosound
 
 QT += network \
     xml \
-    concurrent
 
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
@@ -45,235 +45,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
 
-win32 {
-    DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
-    DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
-    HEADERS += windows/sound.h
-    SOURCES += windows/sound.cpp \
-        windows/ASIOSDK2/common/asio.cpp \
-        windows/ASIOSDK2/host/asiodrivers.cpp \
-        windows/ASIOSDK2/host/pc/asiolist.cpp
-    RC_FILE = windows/mainicon.rc
-    INCLUDEPATH += windows/ASIOSDK2/common \
-        windows/ASIOSDK2/host \
-        windows/ASIOSDK2/host/pc
-    mingw* {
-        LIBS += -lole32 \
-            -luser32 \
-            -ladvapi32 \
-            -lwinmm \
-            -lws2_32
-    } else {
-        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93
-        LIBS += ole32.lib \
-            user32.lib \
-            advapi32.lib \
-            winmm.lib \
-            ws2_32.lib
-    }
-
-    # replace ASIO with jack if requested
-    contains(CONFIG, "jackonwindows") {
-        message(Using Jack instead of ASIO.)
-
-        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
-            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
-        }
-
-        HEADERS -= windows/sound.h
-        SOURCES -= windows/sound.cpp
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
-        DEFINES += JACK_REPLACES_ASIO
-        DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
-        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
-    }
-} else:macx {
-    contains(CONFIG, "server_bundle") {
-        message(The generated application bundle will run a server instance.)
-
-        DEFINES += SERVER_BUNDLE
-        TARGET = $${TARGET}Server
-    }
-
-    QT += macextras
-    HEADERS += mac/sound.h
-    SOURCES += mac/sound.cpp
-    HEADERS += mac/activity.h
-    OBJECTIVE_SOURCES += mac/activity.mm
-    RC_FILE = mac/mainicon.icns
-    CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
-    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
-
-    macx-xcode {
-        QMAKE_INFO_PLIST = mac/Info-xcode.plist
-    } else {
-        QMAKE_INFO_PLIST = mac/Info-make.plist
-    }
-
-    LIBS += -framework CoreFoundation \
-        -framework CoreServices \
-        -framework CoreAudio \
-        -framework CoreMIDI \
-        -framework AudioToolbox \
-        -framework AudioUnit \
-        -framework Foundation
-
-    # replace coreaudio with jack if requested
-    contains(CONFIG, "jackonmac") {
-        message(Using Jack instead of CoreAudio.)
-
-        !exists(/usr/include/jack/jack.h) {
-            !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
-            }
-        }
-
-        HEADERS -= mac/sound.h
-        SOURCES -= mac/sound.cpp
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
-        DEFINES += JACK_REPLACES_COREAUDIO
-        INCLUDEPATH += /usr/local/include
-        LIBS += /usr/local/lib/libjack.dylib
-    }
-} else:android {
-    # we want to compile with C++14
-    CONFIG += c++14
-
-    QT += androidextras
-
-    # enabled only for debugging on android devices
-    DEFINES += ANDROIDDEBUG
-
-    target.path = /tmp/your_executable # path on device
-    INSTALLS += target
-
-    HEADERS += android/sound.h
-    SOURCES += android/sound.cpp \
-        android/androiddebug.cpp
-
-    LIBS += -lOpenSLES
-    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-    OTHER_FILES += android/AndroidManifest.xml
-
-    # if compiling for android you need to use Oboe library which is included as a git submodule
-    # make sure you git pull with submodules to pull the latest Oboe library
-    OBOE_SOURCES = libs/oboe/src/aaudio/AAudioLoader.cpp \
-        libs/oboe/src/aaudio/AudioStreamAAudio.cpp \
-        libs/oboe/src/common/AudioSourceCaller.cpp \
-        libs/oboe/src/common/AudioStream.cpp \
-        libs/oboe/src/common/AudioStreamBuilder.cpp \
-        libs/oboe/src/common/DataConversionFlowGraph.cpp \
-        libs/oboe/src/common/FilterAudioStream.cpp \
-        libs/oboe/src/common/FixedBlockAdapter.cpp \
-        libs/oboe/src/common/FixedBlockReader.cpp \
-        libs/oboe/src/common/FixedBlockWriter.cpp \
-        libs/oboe/src/common/LatencyTuner.cpp \
-        libs/oboe/src/common/QuirksManager.cpp \
-        libs/oboe/src/common/SourceFloatCaller.cpp \
-        libs/oboe/src/common/SourceI16Caller.cpp \
-        libs/oboe/src/common/StabilizedCallback.cpp \
-        libs/oboe/src/common/Trace.cpp \
-        libs/oboe/src/common/Utilities.cpp \
-        libs/oboe/src/common/Version.cpp \
-        libs/oboe/src/fifo/FifoBuffer.cpp \
-        libs/oboe/src/fifo/FifoController.cpp \
-        libs/oboe/src/fifo/FifoControllerBase.cpp \
-        libs/oboe/src/fifo/FifoControllerIndirect.cpp \
-        libs/oboe/src/flowgraph/ClipToRange.cpp \
-        libs/oboe/src/flowgraph/FlowGraphNode.cpp \
-        libs/oboe/src/flowgraph/ManyToMultiConverter.cpp \
-        libs/oboe/src/flowgraph/MonoToMultiConverter.cpp \
-        libs/oboe/src/flowgraph/RampLinear.cpp \
-        libs/oboe/src/flowgraph/SampleRateConverter.cpp \
-        libs/oboe/src/flowgraph/SinkFloat.cpp \
-        libs/oboe/src/flowgraph/SinkI16.cpp \
-        libs/oboe/src/flowgraph/SinkI24.cpp \
-        libs/oboe/src/flowgraph/SourceFloat.cpp \
-        libs/oboe/src/flowgraph/SourceI16.cpp \
-        libs/oboe/src/flowgraph/SourceI24.cpp \
-        libs/oboe/src/flowgraph/resampler/IntegerRatio.cpp \
-        libs/oboe/src/flowgraph/resampler/LinearResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/MultiChannelResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerMono.cpp \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerStereo.cpp \
-        libs/oboe/src/flowgraph/resampler/SincResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/SincResamplerStereo.cpp \
-        libs/oboe/src/opensles/AudioInputStreamOpenSLES.cpp \
-        libs/oboe/src/opensles/AudioOutputStreamOpenSLES.cpp \
-        libs/oboe/src/opensles/AudioStreamBuffered.cpp \
-        libs/oboe/src/opensles/AudioStreamOpenSLES.cpp \
-        libs/oboe/src/opensles/EngineOpenSLES.cpp \
-        libs/oboe/src/opensles/OpenSLESUtilities.cpp \
-        libs/oboe/src/opensles/OutputMixerOpenSLES.cpp
-
-    OBOE_HEADERS = libs/oboe/src/aaudio/AAudioLoader.h \
-        libs/oboe/src/aaudio/AudioStreamAAudio.h \
-        libs/oboe/src/common/AudioClock.h \
-        libs/oboe/src/common/AudioSourceCaller.h \
-        libs/oboe/src/common/DataConversionFlowGraph.h \
-        libs/oboe/src/common/FilterAudioStream.h \
-        libs/oboe/src/common/FixedBlockAdapter.h \
-        libs/oboe/src/common/FixedBlockReader.h \
-        libs/oboe/src/common/FixedBlockWriter.h \
-        libs/oboe/src/common/MonotonicCounter.h \
-        libs/oboe/src/common/OboeDebug.h \
-        libs/oboe/src/common/QuirksManager.h \
-        libs/oboe/src/common/SourceFloatCaller.h \
-        libs/oboe/src/common/SourceI16Caller.h \
-        libs/oboe/src/common/Trace.h \
-        libs/oboe/src/fifo/FifoBuffer.h \
-        libs/oboe/src/fifo/FifoController.h \
-        libs/oboe/src/fifo/FifoControllerBase.h \
-        libs/oboe/src/fifo/FifoControllerIndirect.h \
-        libs/oboe/src/flowgraph/ClipToRange.h \
-        libs/oboe/src/flowgraph/FlowGraphNode.h \
-        libs/oboe/src/flowgraph/ManyToMultiConverter.h \
-        libs/oboe/src/flowgraph/MonoToMultiConverter.h \
-        libs/oboe/src/flowgraph/RampLinear.h \
-        libs/oboe/src/flowgraph/SampleRateConverter.h \
-        libs/oboe/src/flowgraph/SinkFloat.h \
-        libs/oboe/src/flowgraph/SinkI16.h \
-        libs/oboe/src/flowgraph/SinkI24.h \
-        libs/oboe/src/flowgraph/SourceFloat.h \
-        libs/oboe/src/flowgraph/SourceI16.h \
-        libs/oboe/src/flowgraph/SourceI24.h \
-        libs/oboe/src/flowgraph/resampler/HyperbolicCosineWindow.h \
-        libs/oboe/src/flowgraph/resampler/IntegerRatio.h \
-        libs/oboe/src/flowgraph/resampler/LinearResampler.h \
-        libs/oboe/src/flowgraph/resampler/MultiChannelResampler.h \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResampler.h \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerMono.h \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerStereo.h \
-        libs/oboe/src/flowgraph/resampler/SincResampler.h \
-        libs/oboe/src/flowgraph/resampler/SincResamplerStereo.h \
-        libs/oboe/src/opensles/AudioInputStreamOpenSLES.h \
-        libs/oboe/src/opensles/AudioOutputStreamOpenSLES.h \
-        libs/oboe/src/opensles/AudioStreamBuffered.h \
-        libs/oboe/src/opensles/AudioStreamOpenSLES.h \
-        libs/oboe/src/opensles/EngineOpenSLES.h \
-        libs/oboe/src/opensles/OpenSLESUtilities.h \
-        libs/oboe/src/opensles/OutputMixerOpenSLES.h
-
-    INCLUDEPATH_OBOE = libs/oboe/include/ \
-        libs/oboe/src/
-
-    DISTFILES_OBOE += libs/oboe/AUTHORS \
-        libs/oboe/CONTRIBUTING \
-        libs/oboe/LICENSE \
-        libs/oboe/README
-
-        INCLUDEPATH += $$INCLUDEPATH_OBOE
-        HEADERS += $$OBOE_HEADERS
-        SOURCES += $$OBOE_SOURCES
-        DISTFILES += $$DISTFILES_OBOE
-} else:unix {
+unix {
     # we want to compile with C++11
     CONFIG += c++11
 
@@ -286,21 +58,6 @@ win32 {
 
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H
-
-    # only include jack support if CONFIG nosound is not set
-    !contains(CONFIG, "nosound") {
-        message(Jack Audio Interface Enabled.)
-
-        contains(CONFIG, "raspijamulus") {
-            message(Using Jack Audio in raspijamulus.sh mode.)
-            LIBS += -ljack
-        } else {
-            CONFIG += link_pkgconfig
-            PKGCONFIG += jack
-        }
-
-        DEFINES += WITH_SOUND
-    }
 
     isEmpty(PREFIX) {
         PREFIX = /usr/local
@@ -613,15 +370,7 @@ SOURCES_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
     libs/opus/celt/x86/x86_celt_map.c \
     libs/opus/celt/x86/x86cpu.c
 
-android {
-    contains(ANDROID_ARCHITECTURE, arm) | contains(ANDROID_ARCHITECTURE, arm64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_ARM
-        SOURCE_OPUS += $$SOURCES_OPUS_ARM
-    } else:contains(ANDROID_ARCHITECTURE, x86) | contains(ANDROID_ARCHITECTURE, x86_64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_X86
-        SOURCE_OPUS += $$SOURCES_OPUS_X86
-    }
-} else:win32 | unix | macx {
+win32 | unix | macx {
     contains(QT_ARCH, arm) | contains(QT_ARCH, arm64) {
         HEADERS_OPUS += $$HEADERS_OPUS_ARM
         SOURCE_OPUS += $$SOURCES_OPUS_ARM

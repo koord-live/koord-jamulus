@@ -29,8 +29,8 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include <QFileInfo>
-#include <QtConcurrent>
-#include <QFutureSynchronizer>
+// #include <QtConcurrent>
+// #include <QFutureSynchronizer>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
@@ -53,42 +53,6 @@
 
 
 /* Classes ********************************************************************/
-#if ( defined ( WIN32 ) || defined ( _WIN32 ) )
-// using QTimer for Windows
-class CHighPrecisionTimer : public QObject
-{
-    Q_OBJECT
-
-public:
-    CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize );
-
-    void Start();
-    void Stop();
-    bool isActive() const { return Timer.isActive(); }
-
-protected:
-    QTimer       Timer;
-    CVector<int> veciTimeOutIntervals;
-    int          iCurPosInVector;
-    int          iIntervalCounter;
-    bool         bUseDoubleSystemFrameSize;
-
-public slots:
-    void OnTimer();
-
-signals:
-    void timeout();
-};
-#else
-// using mach timers for Mac and nanosleep for Linux
-# if defined ( __APPLE__ ) || defined ( __MACOSX )
-#  include <mach/mach.h>
-#  include <mach/mach_error.h>
-#  include <mach/mach_time.h>
-# else
-#  include <sys/time.h>
-# endif
-
 class CHighPrecisionTimer : public QThread
 {
     Q_OBJECT
@@ -104,20 +68,12 @@ protected:
     virtual void run();
 
     bool bRun;
-
-# if defined ( __APPLE__ ) || defined ( __MACOSX )
-    uint64_t Delay;
-    uint64_t NextEnd;
-# else
     long     Delay;
     timespec NextEnd;
-# endif
 
 signals:
     void timeout();
 };
-#endif
-
 
 template<unsigned int slotId>
 class CServerSlots : public CServerSlots<slotId - 1>
@@ -323,7 +279,7 @@ protected:
 
     // variables needed for multithreading support
     bool                      bUseMultithreading;
-    QFutureSynchronizer<void> FutureSynchronizer;
+    // QFutureSynchronizer<void> FutureSynchronizer;
 
     bool CreateLevelsForAllConChannels  ( const int                        iNumClients,
                                           const CVector<int>&              vecNumAudioChannels,

@@ -24,7 +24,7 @@
  *
 \******************************************************************************/
 
-#include "sound.h"
+// #include "sound.h"
 
 #ifdef WITH_SOUND
 void CSound::OpenJack ( const bool  bNoAutoJackConnect,

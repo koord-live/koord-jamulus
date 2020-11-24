@@ -201,10 +201,10 @@ void CHighPrecisionTimer::run()
 
         NextEnd += Delay;
 #else
-        clock_nanosleep ( CLOCK_MONOTONIC,
-                          TIMER_ABSTIME,
-                          &NextEnd,
-                          NULL );
+        // clock_nanosleep ( CLOCK_MONOTONIC,
+        //                   TIMER_ABSTIME,
+        //                   &NextEnd,
+        //                   NULL );
 
         NextEnd.tv_nsec += Delay;
         if ( NextEnd.tv_nsec >= 1000000000L )
@@ -1040,16 +1040,17 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 const int iStartChanCnt = iBlockCnt * iMTBlockSize;
                 const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
-                FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
-                                                                   &CServer::MixEncodeTransmitDataBlocks,
-                                                                   iStartChanCnt,
-                                                                   iStopChanCnt,
-                                                                   iNumClients ) );
+                // dmag hack
+                // FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                //                                                    &CServer::MixEncodeTransmitDataBlocks,
+                //                                                    iStartChanCnt,
+                //                                                    iStopChanCnt,
+                //                                                    iNumClients ) );
             }
 
             // make sure all concurrent run threads have finished when we leave this function
-            FutureSynchronizer.waitForFinished();
-            FutureSynchronizer.clearFutures();
+            // FutureSynchronizer.waitForFinished();
+            // FutureSynchronizer.clearFutures();
         }
     }
     else
