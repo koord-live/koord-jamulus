@@ -36,7 +36,11 @@
 #include <QSystemTrayIcon>
 #include <QSettings>
 #include <QFileDialog>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+# include <QVersionNumber>
+#endif
 #include "global.h"
+#include "util.h"
 #include "server.h"
 #include "settings.h"
 #include "ui_serverdlgbase.h"
@@ -54,7 +58,7 @@
 
 
 /* Classes ********************************************************************/
-class CServerDlg : public QDialog, private Ui_CServerDlgBase
+class CServerDlg : public CBaseDlg, private Ui_CServerDlgBase
 {
     Q_OBJECT
 
@@ -62,8 +66,7 @@ public:
     CServerDlg ( CServer*         pNServP,
                  CServerSettings* pNSetP,
                  const bool       bStartMinimized,
-                 QWidget*         parent = nullptr,
-                 Qt::WindowFlags  f = nullptr );
+                 QWidget*         parent = nullptr );
 
 protected:
     virtual void changeEvent ( QEvent* pEvent );
@@ -93,7 +96,6 @@ protected:
 public slots:
     void OnRegisterServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );
-    void OnUseCCLicenceStateChanged ( int value );
     void OnEnableRecorderStateChanged ( int value )
         { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
 
@@ -112,10 +114,6 @@ public slots:
     void OnSysTrayMenuExit() { close(); }
     void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
     void OnWelcomeMessageChanged() { pServer->SetWelcomeMessage ( tedWelcomeMessage->toPlainText() ); }
-
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
-
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
     void OnRecordingDirClicked();

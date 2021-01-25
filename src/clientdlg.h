@@ -41,6 +41,7 @@
 # include <QVersionNumber>
 #endif
 #include "global.h"
+#include "util.h"
 #include "client.h"
 #include "settings.h"
 #include "multicolorled.h"
@@ -62,13 +63,14 @@
 #define LEVELMETER_UPDATE_TIME_MS   100   // ms
 #define BUFFER_LED_UPDATE_TIME_MS   300   // ms
 #define LED_BAR_UPDATE_TIME_MS      1000  // ms
+#define CHECK_AUDIO_DEV_OK_TIME_MS  5000  // ms
 
 // number of ping times > upper bound until error message is shown
 #define NUM_HIGH_PINGS_UNTIL_ERROR  5
 
 
 /* Classes ********************************************************************/
-class CClientDlg : public QDialog, private Ui_CClientDlgBase
+class CClientDlg : public CBaseDlg, private Ui_CClientDlgBase
 {
     Q_OBJECT
 
@@ -76,12 +78,11 @@ public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
                  const QString&   strConnOnStartupAddress,
-                 const int        iCtrlMIDIChannel,
+                 const QString&   strMIDISetup,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
                  const bool       bMuteStream,
-                 QWidget*         parent = nullptr,
-                 Qt::WindowFlags  f = nullptr );
+                 QWidget*         parent = nullptr );
 
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -96,6 +97,8 @@ protected:
     void               Connect ( const QString& strSelectedAddress,
                                  const QString& strMixerBoardLabel );
     void               Disconnect();
+    void               ManageDragNDrop ( QDropEvent* Event,
+                                         const bool  bCheckAccept );
 
     CClient*           pClient;
     CClientSettings*   pSettings;
@@ -107,12 +110,12 @@ protected:
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;
     QTimer             TimerPing;
+    QTimer             TimerCheckAudioDeviceOk;
 
-    virtual void       closeEvent ( QCloseEvent* Event );
+    virtual void       closeEvent     ( QCloseEvent*     Event );
+    virtual void       dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
+    virtual void       dropEvent      ( QDropEvent*      Event ) { ManageDragNDrop ( Event, false ); }
     void               UpdateDisplay();
-
-    QAction*           pLoadChannelSetupAction;
-    QAction*           pSaveChannelSetupAction;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -124,6 +127,7 @@ public slots:
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
+    void OnTimerCheckAudioDeviceOk();
 
     void OnTimerStatus() { UpdateDisplay(); }
 
@@ -140,8 +144,8 @@ public slots:
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 
-    void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
-                                    COSUtil::EOpSystemType eOSType,
+    void OnCLVersionAndOSReceived ( CHostAddress           ,
+                                    COSUtil::EOpSystemType ,
                                     QString                strVersion );
 
     void OnLoadChannelSetup();
@@ -151,9 +155,14 @@ public slots:
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
-    void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_NAME ); }
-    void OnSortChannelsByInstrument() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_INSTRUMENT ); }
-    void OnSortChannelsByGroupID() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_GROUPID ); }
+    void OnNoSortChannels()           { MainMixerBoard->SetFaderSorting ( ST_NO_SORT ); }
+    void OnSortChannelsByName()       { MainMixerBoard->SetFaderSorting ( ST_BY_NAME ); }
+    void OnSortChannelsByInstrument() { MainMixerBoard->SetFaderSorting ( ST_BY_INSTRUMENT ); }
+    void OnSortChannelsByGroupID()    { MainMixerBoard->SetFaderSorting ( ST_BY_GROUPID ); }
+    void OnSortChannelsByCity()       { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
+    void OnUseTowRowsForMixerPanel ( bool Checked ) { MainMixerBoard->SetNumMixerPanelRows ( Checked ? 2 : 1 ); }
+    void OnClearAllStoredSoloMuteSettings();
+    void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
@@ -173,12 +182,13 @@ public slots:
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
+    void OnSoundDeviceChanged ( QString strError );
 
-    void OnChangeChanGain ( int iId, double dGain, bool bIsMyOwnFader )
-        { pClient->SetRemoteChanGain ( iId, dGain, bIsMyOwnFader ); }
+    void OnChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader )
+        { pClient->SetRemoteChanGain ( iId, fGain, bIsMyOwnFader ); }
 
-	void OnChangeChanPan ( int iId, double dPan )
-        { pClient->SetRemoteChanPan ( iId, dPan ); }
+    void OnChangeChanPan ( int iId, float fPan )
+        { pClient->SetRemoteChanPan ( iId, fPan ); }
 
     void OnNewLocalInputText ( QString strChatText )
         { pClient->CreateChatTextMes ( strChatText ); }
@@ -199,6 +209,10 @@ public slots:
                                   CVector<CServerInfo> vecServerInfo )
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
 
+    void OnCLRedServerListReceived ( CHostAddress         InetAddr,
+                                     CVector<CServerInfo> vecServerInfo )
+        { ConnectDlg.SetServerList ( InetAddr, vecServerInfo, true ); }
+
     void OnCLConnClientsListMesReceived ( CHostAddress          InetAddr,
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
@@ -215,11 +229,7 @@ public slots:
 
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
-    void OnCentralServerAddressTypeChanged();
     void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
-
-    void OnDisplayChannelLevelsChanged()
-        { MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() ); }
 
     void OnRecorderStateReceived ( ERecorderState eRecorderState )
         { MainMixerBoard->SetRecorderState ( eRecorderState ); }
@@ -228,7 +238,4 @@ public slots:
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones
-
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 };

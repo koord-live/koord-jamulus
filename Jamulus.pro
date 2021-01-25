@@ -1,9 +1,18 @@
-VERSION = 3.5.11git
+VERSION = 3.6.2dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)
     TARGET = jamulus
+}
+
+# allow detailed version info for intermediate builds (#475)
+contains(VERSION, .*dev.*) {
+    GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
+    VERSION = "$$VERSION"-$$GIT_DESCRIPTION
+    message(building an intermediate version: $$VERSION)
+} else {
+    message(building a final release version: $$VERSION)
 }
 
 CONFIG += qt \
@@ -21,6 +30,7 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
+LRELEASE_DIR = src/res/translation
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
@@ -28,6 +38,7 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_es_ES.ts \
     src/res/translation/translation_nl_NL.ts \
     src/res/translation/translation_pl_PL.ts \
+    src/res/translation/translation_sk_SK.ts \
     src/res/translation/translation_it_IT.ts \
     src/res/translation/translation_sv_SE.ts
 
@@ -45,9 +56,272 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
 
-unix {
+# some depreciated functions need to be kept for older versions to build
+# TODO as soon as we drop support for the old Qt version, remove the following line
+DEFINES += QT_NO_DEPRECATED_WARNINGS
+
+win32 {
+    DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
+    DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
+    HEADERS += windows/sound.h
+    SOURCES += windows/sound.cpp \
+        windows/ASIOSDK2/common/asio.cpp \
+        windows/ASIOSDK2/host/asiodrivers.cpp \
+        windows/ASIOSDK2/host/pc/asiolist.cpp
+    RC_FILE = windows/mainicon.rc
+    INCLUDEPATH += windows/ASIOSDK2/common \
+        windows/ASIOSDK2/host \
+        windows/ASIOSDK2/host/pc
+    mingw* {
+        LIBS += -lole32 \
+            -luser32 \
+            -ladvapi32 \
+            -lwinmm \
+            -lws2_32
+    } else {
+        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93
+        LIBS += ole32.lib \
+            user32.lib \
+            advapi32.lib \
+            winmm.lib \
+            ws2_32.lib
+    }
+
+    # replace ASIO with jack if requested
+    contains(CONFIG, "jackonwindows") {
+        message(Using Jack instead of ASIO.)
+
+        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
+            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+        }
+
+        HEADERS -= windows/sound.h
+        SOURCES -= windows/sound.cpp
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+        DEFINES += WITH_SOUND
+        DEFINES += JACK_REPLACES_ASIO
+        DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
+        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
+        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
+    }
+} else:macx {
+    contains(CONFIG, "server_bundle") {
+        message(The generated application bundle will run a server instance.)
+
+        DEFINES += SERVER_BUNDLE
+        TARGET = $${TARGET}Server
+        MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+        RC_FILE = mac/jamulus-server-icon-2020.icns
+    } else {
+        MACOSX_BUNDLE_ICON_FILE = mainicon.icns
+        RC_FILE = mac/mainicon.icns
+    }
+
+    QT += macextras
+    HEADERS += mac/sound.h
+    SOURCES += mac/sound.cpp
+    HEADERS += mac/activity.h
+    OBJECTIVE_SOURCES += mac/activity.mm
+    CONFIG += x86
+    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
+
+    macx-xcode {
+        QMAKE_INFO_PLIST = mac/Info-xcode.plist
+    } else {
+        QMAKE_INFO_PLIST = mac/Info-make.plist
+    }
+
+    LIBS += -framework CoreFoundation \
+        -framework CoreServices \
+        -framework CoreAudio \
+        -framework CoreMIDI \
+        -framework AudioToolbox \
+        -framework AudioUnit \
+        -framework Foundation
+
+    # replace coreaudio with jack if requested
+    contains(CONFIG, "jackonmac") {
+        message(Using Jack instead of CoreAudio.)
+
+        !exists(/usr/include/jack/jack.h) {
+            !exists(/usr/local/include/jack/jack.h) {
+                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+            }
+        }
+
+        HEADERS -= mac/sound.h
+        SOURCES -= mac/sound.cpp
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+        DEFINES += WITH_SOUND
+        DEFINES += JACK_REPLACES_COREAUDIO
+        INCLUDEPATH += /usr/local/include
+        LIBS += /usr/local/lib/libjack.dylib
+    }
+} else:ios {
+    QMAKE_INFO_PLIST = ios/Info.plist
+    QT += macextras
+    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
+    HEADERS += ios/ios_app_delegate.h
+    HEADERS += ios/sound.h
+    OBJECTIVE_SOURCES += ios/sound.mm
+    QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus
+    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
+    LIBS += -framework CoreFoundation \
+        -framework CoreServices \
+        -framework AVFoundation \
+        -framework CoreMIDI \
+        -framework AudioToolbox \
+        -framework Foundation
+} else:android {
+    # we want to compile with C++14
+    CONFIG += c++14
+
+    QT += androidextras
+
+    # enabled only for debugging on android devices
+    DEFINES += ANDROIDDEBUG
+
+    target.path = /tmp/your_executable # path on device
+    INSTALLS += target
+
+    HEADERS += android/sound.h \
+        android/ring_buffer.h
+
+    SOURCES += android/sound.cpp \
+        android/androiddebug.cpp
+
+    LIBS += -lOpenSLES
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+    OTHER_FILES += android/AndroidManifest.xml
+
+    # if compiling for android you need to use Oboe library which is included as a git submodule
+    # make sure you git pull with submodules to pull the latest Oboe library
+    OBOE_SOURCES = libs/oboe/src/aaudio/AAudioLoader.cpp \
+        libs/oboe/src/aaudio/AudioStreamAAudio.cpp \
+        libs/oboe/src/common/AudioSourceCaller.cpp \
+        libs/oboe/src/common/AudioStream.cpp \
+        libs/oboe/src/common/AudioStreamBuilder.cpp \
+        libs/oboe/src/common/DataConversionFlowGraph.cpp \
+        libs/oboe/src/common/FilterAudioStream.cpp \
+        libs/oboe/src/common/FixedBlockAdapter.cpp \
+        libs/oboe/src/common/FixedBlockReader.cpp \
+        libs/oboe/src/common/FixedBlockWriter.cpp \
+        libs/oboe/src/common/LatencyTuner.cpp \
+        libs/oboe/src/common/QuirksManager.cpp \
+        libs/oboe/src/common/SourceFloatCaller.cpp \
+        libs/oboe/src/common/SourceI16Caller.cpp \
+        libs/oboe/src/common/StabilizedCallback.cpp \
+        libs/oboe/src/common/Trace.cpp \
+        libs/oboe/src/common/Utilities.cpp \
+        libs/oboe/src/common/Version.cpp \
+        libs/oboe/src/fifo/FifoBuffer.cpp \
+        libs/oboe/src/fifo/FifoController.cpp \
+        libs/oboe/src/fifo/FifoControllerBase.cpp \
+        libs/oboe/src/fifo/FifoControllerIndirect.cpp \
+        libs/oboe/src/flowgraph/ChannelCountConverter.cpp \
+        libs/oboe/src/flowgraph/ClipToRange.cpp \
+        libs/oboe/src/flowgraph/FlowGraphNode.cpp \
+        libs/oboe/src/flowgraph/ManyToMultiConverter.cpp \
+        libs/oboe/src/flowgraph/MonoToMultiConverter.cpp \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.cpp \
+        libs/oboe/src/flowgraph/RampLinear.cpp \
+        libs/oboe/src/flowgraph/SampleRateConverter.cpp \
+        libs/oboe/src/flowgraph/SinkFloat.cpp \
+        libs/oboe/src/flowgraph/SinkI16.cpp \
+        libs/oboe/src/flowgraph/SinkI24.cpp \
+        libs/oboe/src/flowgraph/SourceFloat.cpp \
+        libs/oboe/src/flowgraph/SourceI16.cpp \
+        libs/oboe/src/flowgraph/SourceI24.cpp \
+        libs/oboe/src/flowgraph/resampler/IntegerRatio.cpp \
+        libs/oboe/src/flowgraph/resampler/LinearResampler.cpp \
+        libs/oboe/src/flowgraph/resampler/MultiChannelResampler.cpp \
+        libs/oboe/src/flowgraph/resampler/PolyphaseResampler.cpp \
+        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerMono.cpp \
+        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerStereo.cpp \
+        libs/oboe/src/flowgraph/resampler/SincResampler.cpp \
+        libs/oboe/src/flowgraph/resampler/SincResamplerStereo.cpp \
+        libs/oboe/src/opensles/AudioInputStreamOpenSLES.cpp \
+        libs/oboe/src/opensles/AudioOutputStreamOpenSLES.cpp \
+        libs/oboe/src/opensles/AudioStreamBuffered.cpp \
+        libs/oboe/src/opensles/AudioStreamOpenSLES.cpp \
+        libs/oboe/src/opensles/EngineOpenSLES.cpp \
+        libs/oboe/src/opensles/OpenSLESUtilities.cpp \
+        libs/oboe/src/opensles/OutputMixerOpenSLES.cpp
+
+    OBOE_HEADERS = libs/oboe/src/aaudio/AAudioLoader.h \
+        libs/oboe/src/aaudio/AudioStreamAAudio.h \
+        libs/oboe/src/common/AudioClock.h \
+        libs/oboe/src/common/AudioSourceCaller.h \
+        libs/oboe/src/common/DataConversionFlowGraph.h \
+        libs/oboe/src/common/FilterAudioStream.h \
+        libs/oboe/src/common/FixedBlockAdapter.h \
+        libs/oboe/src/common/FixedBlockReader.h \
+        libs/oboe/src/common/FixedBlockWriter.h \
+        libs/oboe/src/common/MonotonicCounter.h \
+        libs/oboe/src/common/OboeDebug.h \
+        libs/oboe/src/common/QuirksManager.h \
+        libs/oboe/src/common/SourceFloatCaller.h \
+        libs/oboe/src/common/SourceI16Caller.h \
+        libs/oboe/src/common/Trace.h \
+        libs/oboe/src/fifo/FifoBuffer.h \
+        libs/oboe/src/fifo/FifoController.h \
+        libs/oboe/src/fifo/FifoControllerBase.h \
+        libs/oboe/src/fifo/FifoControllerIndirect.h \
+        libs/oboe/src/flowgraph/ChannelCountConverter.h \
+        libs/oboe/src/flowgraph/ClipToRange.h \
+        libs/oboe/src/flowgraph/FlowGraphNode.h \
+        libs/oboe/src/flowgraph/ManyToMultiConverter.h \
+        libs/oboe/src/flowgraph/MonoToMultiConverter.h \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.h \
+        libs/oboe/src/flowgraph/RampLinear.h \
+        libs/oboe/src/flowgraph/SampleRateConverter.h \
+        libs/oboe/src/flowgraph/SinkFloat.h \
+        libs/oboe/src/flowgraph/SinkI16.h \
+        libs/oboe/src/flowgraph/SinkI24.h \
+        libs/oboe/src/flowgraph/SourceFloat.h \
+        libs/oboe/src/flowgraph/SourceI16.h \
+        libs/oboe/src/flowgraph/SourceI24.h \
+        libs/oboe/src/flowgraph/resampler/HyperbolicCosineWindow.h \
+        libs/oboe/src/flowgraph/resampler/IntegerRatio.h \
+        libs/oboe/src/flowgraph/resampler/LinearResampler.h \
+        libs/oboe/src/flowgraph/resampler/MultiChannelResampler.h \
+        libs/oboe/src/flowgraph/resampler/PolyphaseResampler.h \
+        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerMono.h \
+        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerStereo.h \
+        libs/oboe/src/flowgraph/resampler/SincResampler.h \
+        libs/oboe/src/flowgraph/resampler/SincResamplerStereo.h \
+        libs/oboe/src/opensles/AudioInputStreamOpenSLES.h \
+        libs/oboe/src/opensles/AudioOutputStreamOpenSLES.h \
+        libs/oboe/src/opensles/AudioStreamBuffered.h \
+        libs/oboe/src/opensles/AudioStreamOpenSLES.h \
+        libs/oboe/src/opensles/EngineOpenSLES.h \
+        libs/oboe/src/opensles/OpenSLESUtilities.h \
+        libs/oboe/src/opensles/OutputMixerOpenSLES.h
+
+    INCLUDEPATH_OBOE = libs/oboe/include/ \
+        libs/oboe/src/
+
+    DISTFILES_OBOE += libs/oboe/AUTHORS \
+        libs/oboe/CONTRIBUTING \
+        libs/oboe/LICENSE \
+        libs/oboe/README
+
+        INCLUDEPATH += $$INCLUDEPATH_OBOE
+        HEADERS += $$OBOE_HEADERS
+        SOURCES += $$OBOE_SOURCES
+        DISTFILES += $$DISTFILES_OBOE
+} else:unix {
     # we want to compile with C++11
     CONFIG += c++11
+
+    # --as-needed avoids linking the final binary against unnecessary runtime
+    # libs. Most g++ versions already do that by default.
+    # However, Debian buster does not and would link against libQt5Concurrent
+    # unnecessarily without this workaround (#741):
+    QMAKE_LFLAGS += -Wl,--as-needed
 
     HEADERS += linux/sound.h
     SOURCES += linux/sound.cpp
@@ -385,7 +659,7 @@ win32 | unix | macx {
 
 DISTFILES += ChangeLog \
     COPYING \
-    INSTALL.md \
+    CONTRIBUTING.md \
     README.md \
     distributions/jamulus.desktop.in \
     distributions/jamulus.png \
@@ -398,6 +672,7 @@ DISTFILES += ChangeLog \
     src/res/translation/translation_pl_PL.qm \
     src/res/translation/translation_it_IT.qm \
     src/res/translation/translation_sv_SE.qm \
+    src/res/translation/translation_sk_SK.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -411,6 +686,9 @@ DISTFILES += ChangeLog \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/IndicatorGreen.png \
+    src/res/IndicatorYellow.png \
+    src/res/IndicatorRed.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
@@ -425,6 +703,7 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
+    src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
@@ -442,9 +721,12 @@ DISTFILES += ChangeLog \
     src/res/instruments/keyboard.png \
     src/res/instruments/listener.png \
     src/res/instruments/microphone.png \
+    src/res/instruments/mountaindulcimer.png \
     src/res/instruments/none.png \
+    src/res/instruments/rapping.png \
     src/res/instruments/recorder.png \
     src/res/instruments/saxophone.png \
+    src/res/instruments/scratching.png \
     src/res/instruments/streamer.png \
     src/res/instruments/synthesizer.png \
     src/res/instruments/trombone.png \
@@ -760,3 +1042,11 @@ contains(CONFIG, "opus_shared_lib") {
     SOURCES += $$SOURCES_OPUS
     DISTFILES += $$DISTFILES_OPUS
 }
+
+# disable version check if requested (#370)
+contains(CONFIG, "disable_version_check") {
+    message(The version check is disabled.)
+    DEFINES += DISABLE_VERSION_CHECK
+}
+
+ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64

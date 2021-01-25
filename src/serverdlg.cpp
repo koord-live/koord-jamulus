@@ -29,9 +29,8 @@
 CServerDlg::CServerDlg ( CServer*         pNServP,
                          CServerSettings* pNSetP,
                          const bool       bStartMinimized,
-                         QWidget*         parent,
-                         Qt::WindowFlags  f )
-    : QDialog                  ( parent, f ),
+                         QWidget*         parent )
+    : CBaseDlg                 ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
       pServer                  ( pNServP ),
       pSettings                ( pNSetP ),
       BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),
@@ -58,11 +57,6 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
         "check box is checked, the server will be "
         "started when the operating system starts up and is automatically "
         "minimized to a system task bar icon." ) );
-
-    // CC licence dialog switch
-    chbUseCCLicence->setWhatsThis ( "<b>" + tr ( "Show Creative Commons Licence "
-        "Dialog" ) + ":</b> " + tr ( "If enabled, a Creative Commons BY-NC-SA 4.0 Licence "
-        "dialog is shown each time a new user connects the server." ) );
 
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
@@ -248,10 +242,12 @@ lvwClients->setMinimumHeight ( 140 );
     // central server address type combo box
     cbxCentServAddrType->clear();
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ALL_GENRES ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE3 ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
@@ -297,16 +293,6 @@ lvwClients->setMinimumHeight ( 140 );
     else
     {
         chbRegisterServer->setCheckState ( Qt::Unchecked );
-    }
-
-    // update show Creative Commons licence check box
-    if ( pServer->GetLicenceType() == LT_CREATIVECOMMONS )
-    {
-        chbUseCCLicence->setCheckState ( Qt::Checked );
-    }
-    else
-    {
-        chbUseCCLicence->setCheckState ( Qt::Unchecked );
     }
 
     // update start minimized check box (only available for Windows)
@@ -392,9 +378,6 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged,
         this, &CServerDlg::OnStartOnOSStartStateChanged );
-
-    QObject::connect ( chbUseCCLicence, &QCheckBox::stateChanged,
-        this, &CServerDlg::OnUseCCLicenceStateChanged );
 
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableRecorderStateChanged );
@@ -492,18 +475,6 @@ void CServerDlg::OnStartOnOSStartStateChanged ( int value )
     // update registry and server setting (for ini file)
     pServer->SetAutoRunMinimized ( bCurAutoStartMinState );
     ModifyAutoStartEntry         ( bCurAutoStartMinState );
-}
-
-void CServerDlg::OnUseCCLicenceStateChanged ( int value )
-{
-    if ( value == Qt::Checked )
-    {
-        pServer->SetLicenceType ( LT_CREATIVECOMMONS );
-    }
-    else
-    {
-        pServer->SetLicenceType ( LT_NO_LICENCE );
-    }
 }
 
 void CServerDlg::OnRegisterServerStateChanged ( int value )

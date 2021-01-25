@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QTimer>
 #include "client.h"
+#include "util.h"
 
 
 /* Definitions ****************************************************************/
@@ -40,14 +41,13 @@
 
 
 /* Classes ********************************************************************/
-class CAnalyzerConsole : public QDialog
+class CAnalyzerConsole : public CBaseDlg
 {
     Q_OBJECT
 
 public:
-    CAnalyzerConsole ( CClient*        pNCliP,
-                       QWidget*        parent = nullptr,
-                       Qt::WindowFlags f = nullptr );
+    CAnalyzerConsole ( CClient* pNCliP,
+                       QWidget* parent = nullptr );
 
 
 protected:

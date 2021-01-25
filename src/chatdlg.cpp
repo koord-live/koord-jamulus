@@ -26,8 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
-    QDialog ( parent, f )
+CChatDlg::CChatDlg ( QWidget* parent ) :
+    CBaseDlg ( parent, Qt::Window ) // use Qt::Window to get min/max window buttons
 {
     setupUi ( this );
 
@@ -78,6 +78,9 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 
     QObject::connect ( butSend, &QPushButton::clicked,
         this, &CChatDlg::OnSendText );
+
+    QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked,
+        this, &CChatDlg::OnAnchorClicked );
 }
 
 void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
@@ -108,52 +111,32 @@ void CChatDlg::OnClearChatHistory()
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
-// TEST do the below implementation with just one line
-//      -> problem with the short form: URLs are not checked and no check for "href="
-//txvChatWindow->append ( strChatText.replace ( QRegExp ( "((?:https?|ftp)://\\S+)" ), "<a href=\"\\1\">\\1</a>" ) );
-
-    // analyze strChatText to check if hyperlink (limit ourselves to https://)
-    const int iIdxHttps = strChatText.indexOf ( "https://" );
-    const int iIdxHref  = strChatText.indexOf ( "href=" );
-
-    // do not replace the hyperlinks if any HTML code for a hyperlink was found
-    if ( ( iIdxHttps >= 0 ) && ( iIdxHref < 0 ) )
-    {
-        int iIdxSpace = strChatText.indexOf ( " ", iIdxHttps );
-
-        if ( iIdxSpace < 0 )
-        {
-            iIdxSpace = strChatText.length();
-        }
-
-        // drop "/" if last character of url text
-        const int iCutSlash = ( strChatText.at ( iIdxSpace - 1 ) == '/' ) ? 1 : 0;
-
-        // as entered by the user
-        const QString strURL_name = strChatText.mid ( iIdxHttps, iIdxSpace - iIdxHttps - iCutSlash );
-        QUrl          URL         = QUrl::fromUserInput ( strURL_name );
-
-        QString new_strChatText;
-
-        if ( URL.isValid() )
-        {
-            new_strChatText.append ( strChatText.left ( iIdxHttps ) + "<a href=\"" + URL.toString() + "\">" +
-                                     strURL_name + "</a> " + strChatText.right ( strChatText.length() - iIdxSpace ) );
-        }
-        else
-        {
-            // no change
-            new_strChatText.append ( strChatText );
-        }
-
-        txvChatWindow->append ( new_strChatText );
-    }
-    else
-    {
-        // add new text in chat window
-        txvChatWindow->append ( strChatText );
-    }
-
     // notify accessibility plugin that text has changed
     QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
+
+    // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
+    // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
+    // coding hisself and we should not mess with that)
+    if ( !strChatText.contains ( QRegExp ( "href\\s*=|src\\s*=" ) ) )
+    {
+        // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
+        // character and the + means that matches the previous element one or more times.)
+        strChatText.replace ( QRegExp ( "(https?://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
+    }
+
+    // add new text in chat window
+    txvChatWindow->append ( strChatText );
+}
+
+void CChatDlg::OnAnchorClicked ( const QUrl& Url )
+{
+    // only allow http(s) URLs to be opened in an external browser
+    if ( Url.scheme() == QLatin1String ( "https" ) || Url.scheme() == QLatin1String ( "http" ) )
+    {
+        if ( QMessageBox::question ( this, APP_NAME, tr ( "Do you want to open the link" ) + " <b>" + Url.toString() +
+                                     "</b> " + tr ( "in an external browser?" ), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
+        {
+            QDesktopServices::openUrl ( Url );
+        }
+    }
 }

@@ -1,6 +1,7 @@
 ![Homepage picture](src/res/homepage/jamulusbannersmall.png)
 
 [![Build Status](https://travis-ci.org/corrados/jamulus.svg?branch=master)](https://travis-ci.org/corrados/jamulus)
+![CodeQL](https://github.com/corrados/jamulus/workflows/CodeQL/badge.svg)
 
 Jamulus - Internet Jam Session Software
 =======================================
@@ -25,13 +26,13 @@ The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon
 Installation and Getting Started
 --------------------------------
 
-[Please see this overview](https://github.com/corrados/jamulus/wiki/Getting-Started) containing instructions for installing and using Jamulus for your platform.
+[Please see this overview](https://jamulus.io/wiki/Getting-Started) containing instructions for installing and using Jamulus for your platform.
 
 
 Help
 ----
 
-Official documentation for Jamulus is on the [GitHub wiki](https://github.com/corrados/jamulus/wiki)
+Official documentation for Jamulus is on the [Jamulus homepage](https://jamulus.io)
 
 See also the [discussion forums](https://sourceforge.net/p/llcon/discussion). If you have issues, feel free to ask for help there.
 
@@ -41,7 +42,7 @@ Bugs and feature requests can be [reported here](https://github.com/corrados/jam
 Compilation
 -----------
 
-[Please see these instructions](https://github.com/corrados/jamulus/wiki/Compiling)
+[Please see these instructions](https://jamulus.io/wiki/Compiling)
 
 
 Contributing
