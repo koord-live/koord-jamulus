@@ -471,6 +471,20 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Autoconnect on startup - jamulus URI  --------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-x",
+                                 "--autoconnect",
+                                 strArgument ) )
+        {
+            strConnOnStartupAddress = NetworkUtil::FixJamAddress ( strArgument );
+            tsConsole << "- autoconnect on startup to address: " << strConnOnStartupAddress << endl;
+            CommandLineOptions << "--autoconnect";
+            continue;
+        }
 
         // Mute stream on startup ----------------------------------------------
         if ( GetFlagArgument ( argv,
@@ -812,6 +826,7 @@ QString UsageArguments ( char **argv )
         "  -M, --mutestream      starts the application in muted state\n"
         "      --mutemyown       mute me in my personal mix (headless only)\n"
         "  -c, --connect         connect to given server address on startup\n"
+        "  -x, --autoconnect     autoconnect to given server address on startup\n"
         "  -j, --nojackconnect   disable auto Jack connections\n"
         "  --ctrlmidich          MIDI controller channel to listen\n"
         "  --clientname          client name (window title and jack client name)\n"

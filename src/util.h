@@ -1114,6 +1114,7 @@ public:
                                       CHostAddress& HostAddress );
 
     static QString      FixAddress ( const QString& strAddress );
+    static QString      FixJamAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
                                                   const QString&   strCentralServerAddress );
