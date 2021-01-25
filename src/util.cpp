@@ -1071,6 +1071,12 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
     return strAddress.simplified().replace ( " ", "" );
 }
 
+QString NetworkUtil::FixJamAddress ( const QString& strAddress )
+{
+    // remove all spaces from the address string
+    return strAddress.simplified().replace ( " ", "" ).replace ("jamulus://", "");
+}
+
 
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
