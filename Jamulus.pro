@@ -1,4 +1,4 @@
-VERSION = 3.6.2dev
+VERSION = 3.8.0dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -8,17 +8,21 @@ contains(CONFIG, "noupcasename") {
 
 # allow detailed version info for intermediate builds (#475)
 contains(VERSION, .*dev.*) {
-    GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
-    VERSION = "$$VERSION"-$$GIT_DESCRIPTION
-    message(building an intermediate version: $$VERSION)
+    exists(".git/config") {
+        GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
+        VERSION = "$$VERSION"-$$GIT_DESCRIPTION
+        message("building version \"$$VERSION\" (intermediate in git repository)")
+    } else {
+        VERSION = "$$VERSION"-nogit
+        message("building version \"$$VERSION\" (intermediate without git repository)")
+    }
 } else {
-    message(building a final release version: $$VERSION)
+    message("building version \"$$VERSION\" (release)")
 }
 
 CONFIG += qt \
     thread \
-    lrelease \
-    release
+    lrelease
 
 QT += network \
     xml \
@@ -49,11 +53,10 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/celt \
     libs/opus/silk \
     libs/opus/silk/float \
-    libs/opus/silk/fixed
+    libs/opus/silk/fixed \
+    libs/opus
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
-    OPUS_BUILD \
-    USE_ALLOCA \
     CUSTOM_MODES \
     _REENTRANT
 
@@ -80,7 +83,7 @@ win32 {
             -lwinmm \
             -lws2_32
     } else {
-        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93
+        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/jamulussoftware/jamulus/issues/93
         LIBS += ole32.lib \
             user32.lib \
             advapi32.lib \
@@ -90,22 +93,35 @@ win32 {
 
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
-        message(Using Jack instead of ASIO.)
-
-        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
-            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+        contains(QT_ARCH, "i386") {
+            exists("C:/Program Files (x86)") {
+                message("Cross compilation build")
+                programfilesdir = "C:/Program Files (x86)"
+            } else {
+                message("Native i386 build")
+                programfilesdir = "C:/Program Files"
+            }
+            libjackname = "libjack.lib"
+        } else {
+            message("Native x86_64 build")
+            programfilesdir = "C:/Program Files"
+            libjackname = "libjack64.lib"
+        }
+        !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
+            message("Warning: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
         }
 
         HEADERS -= windows/sound.h
         SOURCES -= windows/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_ASIO
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
-        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
+        INCLUDEPATH += "$${programfilesdir}/JACK2/include"
+        LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
     }
+
 } else:macx {
     contains(CONFIG, "server_bundle") {
         message(The generated application bundle will run a server instance.)
@@ -148,7 +164,7 @@ win32 {
 
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+                 message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
 
@@ -156,7 +172,7 @@ win32 {
         SOURCES -= mac/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
         LIBS += /usr/local/lib/libjack.dylib
@@ -168,7 +184,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -335,7 +351,10 @@ win32 {
     DEFINES += HAVE_STDINT_H
 
     # only include jack support if CONFIG nosound is not set
-    !contains(CONFIG, "nosound") {
+    contains(CONFIG, "nosound") {
+        message(Restricting build to server-only due to CONFIG+=nosound.)
+        DEFINES += SERVER_ONLY
+    } else {
         message(Jack Audio Interface Enabled.)
 
         contains(CONFIG, "raspijamulus") {
@@ -346,7 +365,7 @@ win32 {
             PKGCONFIG += jack
         }
 
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
     }
 
     isEmpty(PREFIX) {
@@ -367,15 +386,15 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
-        desktop.files = distributions/jamulus.desktop
+        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in distributions/jamulus-server.desktop.in
+        desktop.files = distributions/jamulus.desktop distributions/jamulus-server.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/jamulus.png
+        icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
 
         INSTALLS += target desktop icons
     }
@@ -395,9 +414,9 @@ HEADERS += src/buffer.h \
     src/channel.h \
     src/client.h \
     src/global.h \
-    src/multicolorled.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
+    src/threadpool.h \
     src/server.h \
     src/serverlist.h \
     src/serverlogging.h \
@@ -418,7 +437,8 @@ HEADERS_GUI = src/audiomixerboard.h \
     src/clientdlg.h \
     src/serverdlg.h \
     src/levelmeter.h \
-    src/analyzerconsole.h
+    src/analyzerconsole.h \
+    src/multicolorled.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
@@ -489,7 +509,8 @@ HEADERS_OPUS_ARM = libs/opus/celt/arm/armcpu.h \
 HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/pitch_sse.h \
     libs/opus/celt/x86/vq_sse.h \
-    libs/opus/celt/x86/x86cpu.h
+    libs/opus/celt/x86/x86cpu.h \
+    $$files(libs/opus/silk/x86/*.h)
 
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
@@ -650,43 +671,54 @@ SOURCES_OPUS = libs/opus/celt/bands.c \
 
 SOURCES_OPUS_ARM = libs/opus/celt/arm/armcpu.c \
     libs/opus/celt/arm/arm_celt_map.c \
-    libs/opus/silk/arm/arm_silk_map.c
+    libs/opus/silk/arm/arm_silk_map.c \
+    libs/opus/silk/arm/arm_silk_map.c \
+    libs/opus/silk/arm/biquad_alt_neon_intr.c \
+    libs/opus/silk/arm/LPC_inv_pred_gain_neon_intr.c \
+    libs/opus/silk/arm/NSQ_del_dec_neon_intr.c \
+    libs/opus/silk/arm/NSQ_neon.c \
+    libs/opus/celt/arm/celt_neon_intr.c \
+    libs/opus/celt/arm/pitch_neon_intr.c \
+    libs/opus/celt/arm/celt_fft_ne10.c \
+    libs/opus/celt/arm/celt_mdct_ne10.c
 
-SOURCES_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
-    libs/opus/celt/x86/pitch_sse.c \
-    libs/opus/celt/x86/pitch_sse2.c \
-    libs/opus/celt/x86/pitch_sse4_1.c \
-    libs/opus/celt/x86/vq_sse2.c \
+SOURCES_OPUS_X86_SSE = libs/opus/celt/x86/x86cpu.c \
     libs/opus/celt/x86/x86_celt_map.c \
-    libs/opus/celt/x86/x86cpu.c
+    libs/opus/celt/x86/pitch_sse.c
+SOURCES_OPUS_X86_SSE2 = libs/opus/celt/x86/pitch_sse2.c \
+     libs/opus/celt/x86/vq_sse2.c
+SOURCES_OPUS_X86_SSE4 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
+     libs/opus/celt/x86/pitch_sse4_1.c \
+     libs/opus/silk/x86/NSQ_sse4_1.c \
+     libs/opus/silk/x86/NSQ_del_dec_sse4_1.c \
+     libs/opus/silk/x86/x86_silk_map.c \
+     libs/opus/silk/x86/VAD_sse4_1.c \
+     libs/opus/silk/x86/VQ_WMat_EC_sse4_1.c
 
-android {
-    contains(ANDROID_ARCHITECTURE, arm) | contains(ANDROID_ARCHITECTURE, arm64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_ARM
-        SOURCE_OPUS += $$SOURCES_OPUS_ARM
-    } else:contains(ANDROID_ARCHITECTURE, x86) | contains(ANDROID_ARCHITECTURE, x86_64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_X86
-        SOURCE_OPUS += $$SOURCES_OPUS_X86
-    }
-} else:win32 | unix | macx {
-    contains(QT_ARCH, arm) | contains(QT_ARCH, arm64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_ARM
-        SOURCE_OPUS += $$SOURCES_OPUS_ARM
-    } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_X86
-        SOURCE_OPUS += $$SOURCES_OPUS_X86
-    }
-    win32 {
-        HEADERS_OPUS += libs/opus/win32/config.h
-    }
+contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
+    HEADERS_OPUS += $$HEADERS_OPUS_ARM
+    SOURCES_OPUS_ARCH += $$SOURCES_OPUS_ARM
+    DEFINES_OPUS += OPUS_ARM_PRESUME_NEON=1 OPUS_ARM_PRESUME_NEON_INTR=1
+    contains(QT_ARCH, arm64-v8a):DEFINES_OPUS += OPUS_ARM_PRESUME_AARCH64_NEON_INTR
+} else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
+    HEADERS_OPUS += $$HEADERS_OPUS_X86
+    SOURCES_OPUS_ARCH += $$SOURCES_OPUS_X86_SSE $$SOURCES_OPUS_X86_SSE2 $$SOURCES_OPUS_X86_SSE4
+    DEFINES_OPUS += OPUS_X86_MAY_HAVE_SSE OPUS_X86_MAY_HAVE_SSE2 OPUS_X86_MAY_HAVE_SSE4_1
+    # x86_64 implies SSE2
+    contains(QT_ARCH, x86_64):DEFINES_OPUS += OPUS_X86_PRESUME_SSE=1 OPUS_X86_PRESUME_SSE2=1
+    DEFINES_OPUS += CPU_INFO_BY_C
 }
+DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
 
 DISTFILES += ChangeLog \
     COPYING \
     CONTRIBUTING.md \
     README.md \
     distributions/jamulus.desktop.in \
+    distributions/jamulus-server.desktop.in \
     distributions/jamulus.png \
+    distributions/jamulus.svg \
+    distributions/jamulus-server.svg \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \
@@ -713,6 +745,8 @@ DISTFILES += ChangeLog \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
+    src/res/IndicatorYellowFancy.png \
+    src/res/IndicatorRedFancy.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
@@ -729,6 +763,8 @@ DISTFILES += ChangeLog \
     src/res/fronticon.png \
     src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
+    src/res/transparent1x1.png \
+    src/res/mutediconorange.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \
@@ -1061,10 +1097,45 @@ contains(CONFIG, "opus_shared_lib") {
         DEFINES += USE_OPUS_SHARED_LIB
     }
 } else {
+    DEFINES += $$DEFINES_OPUS
     INCLUDEPATH += $$INCLUDEPATH_OPUS
     HEADERS += $$HEADERS_OPUS
     SOURCES += $$SOURCES_OPUS
     DISTFILES += $$DISTFILES_OPUS
+
+    contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
+        msvc {
+            # According to opus/win32/config.h, "no special compiler
+            # flags necessary" when using msvc.  It always supports
+            # SSE intrinsics, but doesn't auto-vectorize.
+            SOURCES += $$SOURCES_OPUS_ARCH
+        } else {
+            # Arch-specific files need special compiler flags, but we
+            # can't use those flags for other files because otherwise we
+            # might end up with vectorized code that the CPU doesn't
+            # support.  For windows, libs/opus/win32/config.h says no
+            # compiler flags are needed.
+            sse_cc.name = sse_cc
+            sse_cc.input = SOURCES_OPUS_X86_SSE
+            sse_cc.dependency_type = TYPE_C
+            sse_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse_cc.commands = ${CC} -msse $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
+            sse_cc.variable_out = OBJECTS
+            sse2_cc.name = sse2_cc
+            sse2_cc.input = SOURCES_OPUS_X86_SSE2
+            sse2_cc.dependency_type = TYPE_C
+            sse2_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse2_cc.commands = ${CC} -msse2 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
+            sse2_cc.variable_out = OBJECTS
+            sse4_cc.name = sse4_cc
+            sse4_cc.input = SOURCES_OPUS_X86_SSE4
+            sse4_cc.dependency_type = TYPE_C
+            sse4_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse4_cc.commands = ${CC} -msse4 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
+            sse4_cc.variable_out = OBJECTS
+            QMAKE_EXTRA_COMPILERS += sse_cc sse2_cc sse4_cc
+        }
+    }
 }
 
 # disable version check if requested (#370)
@@ -1074,3 +1145,4 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+

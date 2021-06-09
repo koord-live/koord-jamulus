@@ -24,31 +24,28 @@
 
 #include <QCoreApplication>
 #include <QDir>
-#include <QTextStream>
 #include "global.h"
 #ifndef HEADLESS
-# include <QApplication>
-# include <QMessageBox>
-# include "clientdlg.h"
-# include "serverdlg.h"
+#    include <QApplication>
+#    include <QMessageBox>
+#    include "clientdlg.h"
+#    include "serverdlg.h"
 #endif
 #include "settings.h"
 #include "testbench.h"
 #include "util.h"
 #ifdef ANDROID
-# include <QtAndroidExtras/QtAndroid>
+#    include <QtAndroidExtras/QtAndroid>
 #endif
-#if defined ( Q_OS_MACX )
-# include "mac/activity.h"
+#if defined( Q_OS_MACX )
+#    include "mac/activity.h"
 #endif
-
 
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
 
-    QTextStream&   tsConsole = *( ( new ConsoleWriterFactory() )->get() );
     QString        strArgument;
     double         rDbleArgument;
     QList<QString> CommandLineOptions;
@@ -57,9 +54,9 @@ int main ( int argc, char** argv )
     // arguments
 #if defined( SERVER_BUNDLE ) && ( defined( Q_OS_MACX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
-    bool         bIsClient                   = false;
+    bool bIsClient = false;
 #else
-    bool         bIsClient                   = true;
+    bool bIsClient = true;
 #endif
     bool         bUseGUI                     = true;
     bool         bStartMinimized             = false;
@@ -71,11 +68,13 @@ int main ( int argc, char** argv )
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
+    bool         bDelayPan                   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
+    quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strMIDISetup                = "";
     QString      strConnOnStartupAddress     = "";
@@ -85,9 +84,19 @@ int main ( int argc, char** argv )
     QString      strRecordingDirName         = "";
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
+    QString      strServerPublicIP           = "";
+    QString      strServerBindIP             = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
+
+#if !defined( HEADLESS ) && defined( _WIN32 )
+    if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
+    {
+        freopen ( "CONOUT$", "w", stdout );
+        freopen ( "CONOUT$", "w", stderr );
+    }
+#endif
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -95,143 +104,97 @@ int main ( int argc, char** argv )
     for ( int i = 1; i < argc; i++ )
     {
         // Server mode flag ----------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-s",
-                               "--server" ) )
+        if ( GetFlagArgument ( argv, i, "-s", "--server" ) )
         {
             bIsClient = false;
-            tsConsole << "- server mode chosen" << endl;
+            qInfo() << "- server mode chosen";
             CommandLineOptions << "--server";
             continue;
         }
 
-
         // Use GUI flag --------------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-n",
-                               "--nogui" ) )
+        if ( GetFlagArgument ( argv, i, "-n", "--nogui" ) )
         {
             bUseGUI = false;
-            tsConsole << "- no GUI mode chosen" << endl;
+            qInfo() << "- no GUI mode chosen";
             CommandLineOptions << "--nogui";
             continue;
         }
 
-
         // Use licence flag ----------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-L",
-                               "--licence" ) )
+        if ( GetFlagArgument ( argv, i, "-L", "--licence" ) )
         {
             // right now only the creative commons licence is supported
             eLicenceType = LT_CREATIVECOMMONS;
-            tsConsole << "- licence required" << endl;
+            qInfo() << "- licence required";
             CommandLineOptions << "--licence";
             continue;
         }
 
-
         // Use 64 samples frame size mode --------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-F",
-                               "--fastupdate" ) )
+        if ( GetFlagArgument ( argv, i, "-F", "--fastupdate" ) )
         {
             bUseDoubleSystemFrameSize = false; // 64 samples frame size
-            tsConsole << "- using " << SYSTEM_FRAME_SIZE_SAMPLES << " samples frame size mode" << endl;
+            qInfo() << qUtf8Printable ( QString ( "- using %1 samples frame size mode" ).arg ( SYSTEM_FRAME_SIZE_SAMPLES ) );
             CommandLineOptions << "--fastupdate";
             continue;
         }
 
-
         // Use multithreading --------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-T",
-                               "--multithreading" ) )
+        if ( GetFlagArgument ( argv, i, "-T", "--multithreading" ) )
         {
             bUseMultithreading = true;
-            tsConsole << "- using multithreading" << endl;
+            qInfo() << "- using multithreading";
             CommandLineOptions << "--multithreading";
             continue;
         }
 
-
         // Maximum number of channels ------------------------------------------
-        if ( GetNumericArgument ( tsConsole,
-                                  argc,
-                                  argv,
-                                  i,
-                                  "-u",
-                                  "--numchannels",
-                                  1,
-                                  MAX_NUM_CHANNELS,
-                                  rDbleArgument ) )
+        if ( GetNumericArgument ( argc, argv, i, "-u", "--numchannels", 1, MAX_NUM_CHANNELS, rDbleArgument ) )
         {
             iNumServerChannels = static_cast<int> ( rDbleArgument );
 
-            tsConsole << "- maximum number of channels: "
-                << iNumServerChannels << endl;
+            qInfo() << qUtf8Printable ( QString ( "- maximum number of channels: %1" ).arg ( iNumServerChannels ) );
 
             CommandLineOptions << "--numchannels";
             continue;
         }
 
-
         // Start minimized -----------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-z",
-                               "--startminimized" ) )
+        if ( GetFlagArgument ( argv, i, "-z", "--startminimized" ) )
         {
             bStartMinimized = true;
-            tsConsole << "- start minimized enabled" << endl;
+            qInfo() << "- start minimized enabled";
             CommandLineOptions << "--startminimized";
             continue;
         }
 
-
         // Disconnect all clients on quit --------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-d",
-                               "--discononquit" ) )
+        if ( GetFlagArgument ( argv, i, "-d", "--discononquit" ) )
         {
             bDisconnectAllClientsOnQuit = true;
-            tsConsole << "- disconnect all clients on quit" << endl;
+            qInfo() << "- disconnect all clients on quit";
             CommandLineOptions << "--discononquit";
             continue;
         }
 
-
         // Disabling auto Jack connections -------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-j",
-                               "--nojackconnect" ) )
+        if ( GetFlagArgument ( argv, i, "-j", "--nojackconnect" ) )
         {
             bNoAutoJackConnect = true;
-            tsConsole << "- disable auto Jack connections" << endl;
+            qInfo() << "- disable auto Jack connections";
             CommandLineOptions << "--nojackconnect";
             continue;
         }
 
-
         // Disable translations ------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-t",
-                               "--notranslation" ) )
+        if ( GetFlagArgument ( argv, i, "-t", "--notranslation" ) )
         {
             bUseTranslation = false;
-            tsConsole << "- translations disabled" << endl;
+            qInfo() << "- translations disabled";
             CommandLineOptions << "--notranslation";
             continue;
         }
-
 
         // Show all registered servers in the server list ----------------------
         // Undocumented debugging command line argument: Show all registered
@@ -243,11 +206,10 @@ int main ( int argc, char** argv )
                                "--showallservers" ) )
         {
             bShowComplRegConnList = true;
-            tsConsole << "- show all registered servers in server list" << endl;
+            qInfo() << "- show all registered servers in server list";
             CommandLineOptions << "--showallservers";
             continue;
         }
-
 
         // Show analyzer console -----------------------------------------------
         // Undocumented debugging command line argument: Show the analyzer
@@ -258,15 +220,13 @@ int main ( int argc, char** argv )
                                "--showanalyzerconsole" ) )
         {
             bShowAnalyzerConsole = true;
-            tsConsole << "- show analyzer console" << endl;
+            qInfo() << "- show analyzer console";
             CommandLineOptions << "--showanalyzerconsole";
             continue;
         }
 
-
         // Controller MIDI channel ---------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
+        if ( GetStringArgument ( argc,
                                  argv,
                                  i,
                                  "--ctrlmidich", // no short form
@@ -274,66 +234,50 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strMIDISetup = strArgument;
-            tsConsole << "- MIDI controller settings: " << strMIDISetup << endl;
+            qInfo() << qUtf8Printable ( QString ( "- MIDI controller settings: %1" ).arg ( strMIDISetup ) );
             CommandLineOptions << "--ctrlmidich";
             continue;
         }
 
-
         // Use logging ---------------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-l",
-                                 "--log",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
         {
             strLoggingFileName = strArgument;
-            tsConsole << "- logging file name: " << strLoggingFileName << endl;
+            qInfo() << qUtf8Printable ( QString ( "- logging file name: %1" ).arg ( strLoggingFileName ) );
             CommandLineOptions << "--log";
             continue;
         }
 
-
         // Port number ---------------------------------------------------------
-        if ( GetNumericArgument ( tsConsole,
-                                  argc,
-                                  argv,
-                                  i,
-                                  "-p",
-                                  "--port",
-                                  0,
-                                  65535,
-                                  rDbleArgument ) )
+        if ( GetNumericArgument ( argc, argv, i, "-p", "--port", 0, 65535, rDbleArgument ) )
         {
             iPortNumber            = static_cast<quint16> ( rDbleArgument );
             bCustomPortNumberGiven = true;
-            tsConsole << "- selected port number: " << iPortNumber << endl;
+            qInfo() << qUtf8Printable ( QString ( "- selected port number: %1" ).arg ( iPortNumber ) );
             CommandLineOptions << "--port";
             continue;
         }
 
+        // Quality of Service --------------------------------------------------
+        if ( GetNumericArgument ( argc, argv, i, "-Q", "--qos", 0, 255, rDbleArgument ) )
+        {
+            iQosNumber = static_cast<quint16> ( rDbleArgument );
+            qInfo() << qUtf8Printable ( QString ( "- selected QoS value: %1" ).arg ( iQosNumber ) );
+            CommandLineOptions << "--qos";
+            continue;
+        }
 
         // HTML status file ----------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-m",
-                                 "--htmlstatus",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
         {
             strHTMLStatusFileName = strArgument;
-            tsConsole << "- HTML status file name: " << strHTMLStatusFileName << endl;
+            qInfo() << qUtf8Printable ( QString ( "- HTML status file name: %1" ).arg ( strHTMLStatusFileName ) );
             CommandLineOptions << "--htmlstatus";
             continue;
         }
 
-
         // Client Name ---------------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
+        if ( GetStringArgument ( argc,
                                  argv,
                                  i,
                                  "--clientname", // no short form
@@ -341,27 +285,19 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strClientName = strArgument;
-            tsConsole << "- client name: " << strClientName << endl;
+            qInfo() << qUtf8Printable ( QString ( "- client name: %1" ).arg ( strClientName ) );
             CommandLineOptions << "--clientname";
             continue;
         }
 
-
         // Recording directory -------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-R",
-                                 "--recording",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-R", "--recording", strArgument ) )
         {
             strRecordingDirName = strArgument;
-            tsConsole << "- recording directory name: " << strRecordingDirName << endl;
+            qInfo() << qUtf8Printable ( QString ( "- recording directory name: %1" ).arg ( strRecordingDirName ) );
             CommandLineOptions << "--recording";
             continue;
         }
-
 
         // Disable recording on startup ----------------------------------------
         if ( GetFlagArgument ( argv,
@@ -370,103 +306,112 @@ int main ( int argc, char** argv )
                                "--norecord" ) )
         {
             bDisableRecording = true;
-            tsConsole << "- recording will not be enabled" << endl;
+            qInfo() << "- recording will not take place until enabled";
             CommandLineOptions << "--norecord";
             continue;
         }
 
+        // Enable delay panning on startup -------------------------------------
+        if ( GetFlagArgument ( argv, i, "-P", "--delaypan" ) )
+        {
+            bDelayPan = true;
+            qInfo() << "- starting with delay panning";
+            CommandLineOptions << "--delaypan";
+            continue;
+        }
 
-        // Central server ------------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
+        // Directory server ----------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-e", "--directoryserver", strArgument ) )
+        {
+            strCentralServer = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strCentralServer ) );
+            CommandLineOptions << "--directoryserver";
+            continue;
+        }
+
+        // Central server ** D E P R E C A T E D ** ----------------------------
+        if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "-e",
+                                 "--centralserver", // no short form
                                  "--centralserver",
                                  strArgument ) )
         {
             strCentralServer = strArgument;
-            tsConsole << "- central server: " << strCentralServer << endl;
-            CommandLineOptions << "--centralserver";
+            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strCentralServer ) );
+            CommandLineOptions << "--directoryserver";
             continue;
         }
 
-
-        // Server info ---------------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
+        // Server Public IP ----------------------------------------------------
+        if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "-o",
-                                 "--serverinfo",
+                                 "--serverpublicip", // no short form
+                                 "--serverpublicip",
                                  strArgument ) )
         {
+            strServerPublicIP = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server public IP: %1" ).arg ( strServerPublicIP ) );
+            CommandLineOptions << "--serverpublicip";
+            continue;
+        }
+
+        // Server Bind IP --------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--serverbindip", // no short form
+                                 "--serverbindip",
+                                 strArgument ) )
+        {
+            strServerBindIP = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server bind IP: %1" ).arg ( strServerBindIP ) );
+            CommandLineOptions << "--serverbindip";
+            continue;
+        }
+
+        // Server info ---------------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-o", "--serverinfo", strArgument ) )
+        {
             strServerInfo = strArgument;
-            tsConsole << "- server info: " << strServerInfo << endl;
+            qInfo() << qUtf8Printable ( QString ( "- server info: %1" ).arg ( strServerInfo ) );
             CommandLineOptions << "--serverinfo";
             continue;
         }
 
-
         // Server list filter --------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-f",
-                                 "--listfilter",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-f", "--listfilter", strArgument ) )
         {
             strServerListFilter = strArgument;
-            tsConsole << "- server list filter: " << strServerListFilter << endl;
+            qInfo() << qUtf8Printable ( QString ( "- server list filter: %1" ).arg ( strServerListFilter ) );
             CommandLineOptions << "--listfilter";
             continue;
         }
 
-
         // Server welcome message ----------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-w",
-                                 "--welcomemessage",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-w", "--welcomemessage", strArgument ) )
         {
             strWelcomeMessage = strArgument;
-            tsConsole << "- welcome message: " << strWelcomeMessage << endl;
+            qInfo() << qUtf8Printable ( QString ( "- welcome message: %1" ).arg ( strWelcomeMessage ) );
             CommandLineOptions << "--welcomemessage";
             continue;
         }
 
-
         // Initialization file -------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-i",
-                                 "--inifile",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
         {
             strIniFileName = strArgument;
-            tsConsole << "- initialization file name: " << strIniFileName << endl;
+            qInfo() << qUtf8Printable ( QString ( "- initialization file name: %1" ).arg ( strIniFileName ) );
             CommandLineOptions << "--inifile";
             continue;
         }
 
-
         // Connect on startup --------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-c",
-                                 "--connect",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-c", "--connect", strArgument ) )
         {
             strConnOnStartupAddress = NetworkUtil::FixAddress ( strArgument );
-            tsConsole << "- connect on startup to address: " << strConnOnStartupAddress << endl;
+            qInfo() << qUtf8Printable ( QString ( "- connect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
             CommandLineOptions << "--connect";
             continue;
         }
@@ -487,17 +432,13 @@ int main ( int argc, char** argv )
         }
 
         // Mute stream on startup ----------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-M",
-                               "--mutestream" ) )
+        if ( GetFlagArgument ( argv, i, "-M", "--mutestream" ) )
         {
             bMuteStream = true;
-            tsConsole << "- mute stream activated" << endl;
+            qInfo() << "- mute stream activated";
             CommandLineOptions << "--mutestream";
             continue;
         }
-
 
         // For headless client mute my own signal in personal mix --------------
         if ( GetFlagArgument ( argv,
@@ -506,51 +447,42 @@ int main ( int argc, char** argv )
                                "--mutemyown" ) )
         {
             bMuteMeInPersonalMix = true;
-            tsConsole << "- mute me in my personal mix" << endl;
+            qInfo() << "- mute me in my personal mix";
             CommandLineOptions << "--mutemyown";
             continue;
         }
 
-
         // Version number ------------------------------------------------------
-        if ( ( !strcmp ( argv[i], "--version" ) ) ||
-             ( !strcmp ( argv[i], "-v" ) ) )
+        if ( ( !strcmp ( argv[i], "--version" ) ) || ( !strcmp ( argv[i], "-v" ) ) )
         {
-            tsConsole << GetVersionAndNameStr ( false ) << endl;
+            qCritical() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
             exit ( 1 );
         }
-
 
         // Help (usage) flag ---------------------------------------------------
-        if ( ( !strcmp ( argv[i], "--help" ) ) ||
-             ( !strcmp ( argv[i], "-h" ) ) ||
-             ( !strcmp ( argv[i], "-?" ) ) )
+        if ( ( !strcmp ( argv[i], "--help" ) ) || ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
             const QString strHelp = UsageArguments ( argv );
-            tsConsole << strHelp << endl;
-            exit ( 1 );
+            qInfo() << qUtf8Printable ( strHelp );
+            exit ( 0 );
         }
 
-
         // Unknown option ------------------------------------------------------
-        tsConsole << argv[0] << ": ";
-        tsConsole << "Unknown option '" <<
-            argv[i] << "' -- use '--help' for help" << endl;
+        qCritical() << qUtf8Printable ( QString ( "%1: Unknown option '%2' -- use '--help' for help" ).arg ( argv[0] ).arg ( argv[i] ) );
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
-#if !( defined ( Q_OS_MACX ) )
+#if !( defined( Q_OS_MACX ) )
         exit ( 1 );
 #endif
     }
-
 
     // Dependencies ------------------------------------------------------------
 #ifdef HEADLESS
     if ( bUseGUI )
     {
         bUseGUI = false;
-        tsConsole << "No GUI support compiled. Running in headless mode." << endl;
+        qWarning() << "No GUI support compiled. Running in headless mode.";
     }
     Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
     Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
@@ -558,21 +490,51 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
+#ifdef SERVER_ONLY
+    if ( bIsClient )
+    {
+        qCritical() << "Only --server mode is supported in this build with nosound.";
+        exit ( 1 );
+    }
+#endif
+
     // the inifile is not supported for the headless server mode
     if ( !bIsClient && !bUseGUI && !strIniFileName.isEmpty() )
     {
-        tsConsole << "No initialization file support in headless server mode." << endl;
+        qWarning() << "No initialization file support in headless server mode.";
     }
 
     // mute my own signal in personal mix is only supported for headless mode
     if ( bIsClient && bUseGUI && bMuteMeInPersonalMix )
     {
         bMuteMeInPersonalMix = false;
-        tsConsole << "Mute my own signal in my personal mix is only supported in headless mode." << endl;
+        qWarning() << "Mute my own signal in my personal mix is only supported in headless mode.";
     }
 
-    // per definition: if we are in "GUI" server mode and no central server
-    // address is given, we use the default central server address
+    if ( !strServerPublicIP.isEmpty() )
+    {
+        QHostAddress InetAddr;
+        if ( !InetAddr.setAddress ( strServerPublicIP ) )
+        {
+            qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
+        }
+        if ( strCentralServer.isEmpty() || bIsClient )
+        {
+            qWarning() << "Server Public IP will only take effect when registering a server with a directory server.";
+        }
+    }
+
+    if ( !strServerBindIP.isEmpty() )
+    {
+        QHostAddress InetAddr;
+        if ( !InetAddr.setAddress ( strServerBindIP ) )
+        {
+            qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
+        }
+    }
+
+    // per definition: if we are in "GUI" server mode and no directory server
+    // address is given, we use the default directory server address
     if ( !bIsClient && bUseGUI && strCentralServer.isEmpty() )
     {
         strCentralServer = DEFAULT_SERVER_ADDRESS;
@@ -585,23 +547,19 @@ int main ( int argc, char** argv )
         iPortNumber += 10; // increment by 10
     }
 
-
     // Application/GUI setup ---------------------------------------------------
     // Application object
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
-# if defined ( Q_OS_IOS )
-    bIsClient = false;
-    bUseGUI = true;
+#    if defined( Q_OS_IOS )
+    bUseGUI        = true;
 
     // bUseMultithreading = true;
-    QApplication* pApp =  new QApplication ( argc, argv );
-# else
-    QCoreApplication* pApp = bUseGUI
-        ? new QApplication ( argc, argv )
-        : new QCoreApplication ( argc, argv );
-# endif
+    QApplication* pApp = new QApplication ( argc, argv );
+#    else
+    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
+#    endif
 #endif
 
 #ifdef ANDROID
@@ -630,7 +588,7 @@ int main ( int argc, char** argv )
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
-#if defined ( Q_OS_MACX )
+#if defined( Q_OS_MACX )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.
     CActivity activity;
@@ -639,12 +597,12 @@ int main ( int argc, char** argv )
 #endif
 
     // init resources
-    Q_INIT_RESOURCE(resources);
+    Q_INIT_RESOURCE ( resources );
 
-
+    // clang-format off
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
-
+    // clang-format on
 
     try
     {
@@ -652,12 +610,8 @@ int main ( int argc, char** argv )
         {
             // Client:
             // actual client object
-            CClient Client ( iPortNumber,
-                             strConnOnStartupAddress,
-                             strMIDISetup,
-                             bNoAutoJackConnect,
-                             strClientName,
-                             bMuteMeInPersonalMix );
+            CClient
+                Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, strMIDISetup, bNoAutoJackConnect, strClientName, bMuteMeInPersonalMix );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -691,7 +645,7 @@ int main ( int argc, char** argv )
 #endif
             {
                 // only start application without using the GUI
-                tsConsole << GetVersionAndNameStr ( false ) << endl;
+                qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
                 pApp->exec();
             }
@@ -702,10 +656,13 @@ int main ( int argc, char** argv )
             // actual server object
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
+                             strServerBindIP,
                              iPortNumber,
+                             iQosNumber,
                              strHTMLStatusFileName,
                              strCentralServer,
                              strServerInfo,
+                             strServerPublicIP,
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
@@ -713,6 +670,7 @@ int main ( int argc, char** argv )
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
+                             bDelayPan,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -733,10 +691,7 @@ int main ( int argc, char** argv )
                 Server.UpdateServerList();
 
                 // GUI object for the server
-                CServerDlg ServerDlg ( &Server,
-                                       &Settings,
-                                       bStartMinimized,
-                                       nullptr );
+                CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
 
                 // show dialog (if not the minimized flag is set)
                 if ( !bStartMinimized )
@@ -750,7 +705,10 @@ int main ( int argc, char** argv )
 #endif
             {
                 // only start application without using the GUI
-                tsConsole << GetVersionAndNameStr ( false ) << endl;
+                qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // enable server list if a directory server is defined
+                Server.SetServerListEnabled ( !strCentralServer.isEmpty() );
 
                 // update serverlist
                 Server.UpdateServerList();
@@ -766,80 +724,88 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
         if ( bUseGUI )
         {
-            QMessageBox::critical ( nullptr,
-                                    APP_NAME,
-                                    generr.GetErrorText(),
-                                    "Quit",
-                                    nullptr );
+            QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
         }
         else
 #endif
         {
-            tsConsole << generr.GetErrorText() << endl;
+            qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( generr.GetErrorText() ) );
+            exit ( 1 );
         }
     }
 
-#if defined ( Q_OS_MACX )
+#if defined( Q_OS_MACX )
     activity.EndActivity();
 #endif
 
     return 0;
 }
 
-
 /******************************************************************************\
 * Command Line Argument Parsing                                                *
 \******************************************************************************/
-QString UsageArguments ( char **argv )
+QString UsageArguments ( char** argv )
 {
-    return
-        "Usage: " + QString ( argv[0] ) + " [option] [optional argument]\n"
-        "\nRecognized options:\n"
-        "  -h, -?, --help        display this help text and exit\n"
-        "  -i, --inifile         initialization file name (not\n"
-        "                        supported for headless server mode)\n"
-        "  -n, --nogui           disable GUI\n"
-        "  -p, --port            set your local port number\n"
-        "  -t, --notranslation   disable translation (use englisch language)\n"
-        "  -v, --version         output version information and exit\n"
-        "\nServer only:\n"
-        "  -d, --discononquit    disconnect all clients on quit\n"
-        "  -e, --centralserver   address of the central server\n"
-        "                        (or 'localhost' to be a central server)\n"
-        "  -f, --listfilter      server list whitelist filter in the format:\n"
-        "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
-        "  -F, --fastupdate      use 64 samples frame size mode\n"
-        "  -l, --log             enable logging, set file name\n"
-        "  -L, --licence         show an agreement window before users can connect\n"
-        "  -m, --htmlstatus      enable HTML status file, set file name\n"
-        "  -o, --serverinfo      infos of this server in the format:\n"
-        "                        [name];[city];[country as QLocale ID]\n"
-        "  -R, --recording       sets directory to contain recorded jams\n"
-        "      --norecord        disables recording (when enabled by default by -R)\n"
-        "  -s, --server          start server\n"
-        "  -T, --multithreading  use multithreading to make better use of\n"
-        "                        multi-core CPUs and support more clients\n"
-        "  -u, --numchannels     maximum number of channels\n"
-        "  -w, --welcomemessage  welcome message on connect\n"
-        "  -z, --startminimized  start minimizied\n"
-        "\nClient only:\n"
-        "  -M, --mutestream      starts the application in muted state\n"
-        "      --mutemyown       mute me in my personal mix (headless only)\n"
-        "  -c, --connect         connect to given server address on startup\n"
-        "  -x, --autoconnect     autoconnect to given server address on startup\n"
-        "  -j, --nojackconnect   disable auto Jack connections\n"
-        "  --ctrlmidich          MIDI controller channel to listen\n"
-        "  --clientname          client name (window title and jack client name)\n"
-        "\nExample: " + QString ( argv[0] ) + " -s --inifile myinifile.ini\n";
+    // clang-format off
+    return "\n"
+           "Usage: " + QString ( argv[0] ) + " [option] [optional argument]\n"
+           "\n"
+           "General options:\n"
+           "  -h, -?, --help        display this help text and exit\n"
+           "  -i, --inifile         initialization file name\n"
+           "                        (not supported for headless server mode)\n"
+           "  -n, --nogui           disable GUI\n"
+           "  -p, --port            set the local port number\n"
+           "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
+           "                        (see the Jamulus website to enable QoS on Windows)\n"
+           "  -t, --notranslation   disable translation (use English language)\n"
+           "  -v, --version         output version information and exit\n"
+           "\n"
+           "Server only:\n"
+           "  -d, --discononquit    disconnect all clients on quit\n"
+           "  -e, --directoryserver address of the directory server with which to register\n"
+           "                        (or 'localhost' to host a server list on this server)\n"
+           "  -f, --listfilter      server list whitelist filter in the format:\n"
+           "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
+           "  -F, --fastupdate      use 64 samples frame size mode\n"
+           "  -l, --log             enable logging, set file name\n"
+           "  -L, --licence         show an agreement window before users can connect\n"
+           "  -m, --htmlstatus      enable HTML status file, set file name\n"
+           "  -o, --serverinfo      infos of this server in the format:\n"
+           "                        [name];[city];[country as QLocale ID]\n"
+           "  -P, --delaypan        start with delay panning enabled\n"
+           "  -R, --recording       sets directory to contain recorded jams\n"
+           "      --norecord        disables recording (when enabled by default by -R)\n"
+           "  -s, --server          start server\n"
+           "  -T, --multithreading  use multithreading to make better use of\n"
+           "                        multi-core CPUs and support more clients\n"
+           "  -u, --numchannels     maximum number of channels\n"
+           "  -w, --welcomemessage  welcome message on connect\n"
+           "  -z, --startminimized  start minimizied\n"
+           "      --serverpublicip  specify your public IP address when\n"
+           "                        running a slave and your own directory server\n"
+           "                        behind the same NAT\n"
+           "      --serverbindip    specify the IP address the server will bind to\n"
+           "\n"
+           "Client only:\n"
+           "  -M, --mutestream      starts the application in muted state\n"
+           "      --mutemyown       mute me in my personal mix (headless only)\n"
+           "  -c, --connect         connect to given server address on startup\n"
+           "  -j, --nojackconnect   disable auto JACK connections\n"
+           "      --ctrlmidich      MIDI controller channel to listen\n"
+           "      --clientname      client name (window title and JACK client name)\n"
+           "\n"
+           "Example: " + QString ( argv[0] ) + " -s --inifile myinifile.ini\n"
+           "\n"
+           "For more information and localized help see:\n"
+           "\n"
+           "https://jamulus.io/wiki/Command-Line-Options\n";
+    // clang-format on
 }
 
-bool GetFlagArgument ( char**  argv,
-                       int&    i,
-                       QString strShortOpt,
-                       QString strLongOpt )
+bool GetFlagArgument ( char** argv, int& i, QString strShortOpt, QString strLongOpt )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) ||
-         ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
         return true;
     }
@@ -849,21 +815,13 @@ bool GetFlagArgument ( char**  argv,
     }
 }
 
-bool GetStringArgument ( QTextStream& tsConsole,
-                         int          argc,
-                         char**       argv,
-                         int&         i,
-                         QString      strShortOpt,
-                         QString      strLongOpt,
-                         QString&     strArg )
+bool GetStringArgument ( int argc, char** argv, int& i, QString strShortOpt, QString strLongOpt, QString& strArg )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) ||
-         ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
         if ( ++i >= argc )
         {
-            tsConsole << argv[0] << ": ";
-            tsConsole << "'" << strLongOpt << "' needs a string argument" << endl;
+            qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( argv[0] ).arg ( strLongOpt ) );
             exit ( 1 );
         }
 
@@ -877,42 +835,29 @@ bool GetStringArgument ( QTextStream& tsConsole,
     }
 }
 
-bool GetNumericArgument ( QTextStream& tsConsole,
-                          int          argc,
-                          char**       argv,
-                          int&         i,
-                          QString      strShortOpt,
-                          QString      strLongOpt,
-                          double       rRangeStart,
-                          double       rRangeStop,
-                          double&      rValue )
+bool GetNumericArgument ( int     argc,
+                          char**  argv,
+                          int&    i,
+                          QString strShortOpt,
+                          QString strLongOpt,
+                          double  rRangeStart,
+                          double  rRangeStop,
+                          double& rValue )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) ||
-         ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
+        QString errmsg = "%1: '%2' needs a numeric argument between '%3' and '%4'.";
         if ( ++i >= argc )
         {
-            tsConsole << argv[0] << ": ";
-
-            tsConsole << "'" <<
-                strLongOpt << "' needs a numeric argument between " <<
-                rRangeStart << " and " << rRangeStop << endl;
-
+            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( strLongOpt ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 
-        char *p;
+        char* p;
         rValue = strtod ( argv[i], &p );
-        if ( *p ||
-             ( rValue < rRangeStart ) ||
-             ( rValue > rRangeStop ) )
+        if ( *p || ( rValue < rRangeStart ) || ( rValue > rRangeStop ) )
         {
-            tsConsole << argv[0] << ": ";
-
-            tsConsole << "'" <<
-                strLongOpt << "' needs a numeric argument between " <<
-                rRangeStart << " and " << rRangeStop << endl;
-
+            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( strLongOpt ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 

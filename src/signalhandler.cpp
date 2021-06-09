@@ -61,7 +61,8 @@
 
 #include "signalhandler.h"
 
-class CSignalHandlerSingleton : public CSignalHandler {
+class CSignalHandlerSingleton : public CSignalHandler
+{
 public:
     inline CSignalHandlerSingleton() : CSignalHandler() {}
 };
@@ -75,14 +76,17 @@ CSignalHandler* CSignalHandler::getSingletonP() { return singleton; }
 
 bool CSignalHandler::emitSignal ( int sigNum )
 {
-    return QMetaObject::invokeMethod( singleton, "HandledSignal", Qt::QueuedConnection, Q_ARG( int, sigNum ) );
+    return QMetaObject::invokeMethod ( singleton, "HandledSignal", Qt::QueuedConnection, Q_ARG ( int, sigNum ) );
 }
 
 #ifndef _WIN32
-void CSignalHandler::OnSocketNotify( int socket )
+void CSignalHandler::OnSocketNotify ( int socket )
 {
     int sigNum;
-    if ( ::read ( socket, &sigNum, sizeof ( int ) ) == sizeof ( int ) )
+    // The following read() triggers a Codacy/flawfinder finding:
+    // "Check buffer boundaries if used in a loop including recursive loops (CWE-120, CWE-20)"
+    // Investigation has shown that this is a false positive as the proper buffer size is enforced.
+    if ( ::read ( socket, &sigNum, sizeof ( int ) ) == sizeof ( int ) ) // Flawfinder: ignore
     {
         emitSignal ( sigNum );
     }
@@ -91,10 +95,7 @@ void CSignalHandler::OnSocketNotify( int socket )
 
 // ----------------------------------------------------------
 
-CSignalBase::CSignalBase ( CSignalHandler* pSignalHandler ) :
-    pSignalHandler ( pSignalHandler )
-{
-}
+CSignalBase::CSignalBase ( CSignalHandler* pSignalHandler ) : pSignalHandler ( pSignalHandler ) {}
 
 CSignalBase::~CSignalBase() = default;
 
@@ -108,25 +109,18 @@ CSignalBase* CSignalBase::withSignalHandler ( CSignalHandler* pSignalHandler )
 }
 
 #ifdef _WIN32
-CSignalWin::CSignalWin ( CSignalHandler* nPSignalHandler ) :
-    CSignalBase ( nPSignalHandler ),
-    lock ( QReadWriteLock::Recursive )
+CSignalWin::CSignalWin ( CSignalHandler* nPSignalHandler ) : CSignalBase ( nPSignalHandler ), lock ( QReadWriteLock::Recursive )
 {
     SetConsoleCtrlHandler ( signalHandler, true );
 }
 
-CSignalWin::~CSignalWin() {
-    SetConsoleCtrlHandler ( signalHandler, false );
-}
+CSignalWin::~CSignalWin() { SetConsoleCtrlHandler ( signalHandler, false ); }
 
-QReadWriteLock* CSignalWin::getLock() const
-{
-    return &lock;
-}
+QReadWriteLock* CSignalWin::getLock() const { return &lock; }
 
 BOOL WINAPI CSignalWin::signalHandler ( _In_ DWORD )
 {
-    auto self = getSelf<CSignalWin>();
+    auto        self = getSelf<CSignalWin>();
     QReadLocker lock ( self->getLock() );
     return self->pSignalHandler->emitSignal ( -1 );
 }
@@ -134,12 +128,11 @@ BOOL WINAPI CSignalWin::signalHandler ( _In_ DWORD )
 #else
 int CSignalUnix::socketPair[2];
 
-CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) :
-    CSignalBase ( nPSignalHandler )
+CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) : CSignalBase ( nPSignalHandler )
 {
     if ( ::socketpair ( AF_UNIX, SOCK_STREAM, 0, socketPair ) == 0 )
     {
-        socketNotifier = new QSocketNotifier ( socketPair[ 1 ], QSocketNotifier::Read );
+        socketNotifier = new QSocketNotifier ( socketPair[1], QSocketNotifier::Read );
 
         QObject::connect ( socketNotifier, &QSocketNotifier::activated, nPSignalHandler, &CSignalHandler::OnSocketNotify );
 
@@ -152,7 +145,8 @@ CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) :
     }
 }
 
-CSignalUnix::~CSignalUnix() {
+CSignalUnix::~CSignalUnix()
+{
     setSignalHandled ( SIGUSR1, false );
     setSignalHandled ( SIGUSR2, false );
     setSignalHandled ( SIGINT, false );
@@ -182,7 +176,7 @@ bool CSignalUnix::setSignalHandled ( int sigNum, bool state )
 
 void CSignalUnix::signalHandler ( int sigNum )
 {
-    const auto res = ::write ( socketPair[ 0 ], &sigNum, sizeof ( int ) );
+    const auto res = ::write ( socketPair[0], &sigNum, sizeof ( int ) );
     Q_UNUSED ( res );
 }
 #endif

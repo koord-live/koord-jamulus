@@ -1,27 +1,283 @@
 
+### 3.8.0dev <- NOTE: the release version number will be 3.8.1 ###
 
+- CLI: Jamulus now shows a link to the Website for translated content (#1759).
+  (contributed by @henkdegroot)
+  
+- Client: JACK support on Windows has been improved (#1718).
+  (contributed by @jujudusud, @henkdegroot)
 
+- Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722).
+  (contrbuted by @henkdegroot)
+  
+### 3.8.0 (2021-06-02) ###
 
-### 3.6.2git <- NOTE: the release version number will be 3.7.0 ###
+- The term "Central server" has been replaced with "Directory server" (#1407, #1715, #1629).
+  Note that the program will still accept the --centralserver option for backward
+  compatibility with existing system startup scripts, but its usage is deprecated.
+  (contributed by @pljones, @softins)
 
-- introduced new server lists: Any Genre 2, Choral/Barbershop (#875)
+- Mac: Generate build with Qt 5.15.2 for better compatibility with Big Sur (#1687, #1768).
+  We still build a legacy version with Qt 5.9.9 to support older versions of macOS:
+  * Users of 10.13 (High sierra) or newer should use the standard build with Qt 5.15.2
+  * Users of Yosemite, El Capitan or Sierra should use the legacy build with Qt 5.9.9
+  (contributed by @softins)
 
-- show --clientname as first word in title to avoid clipping in Windows task bar (#789)
+- GUI: Settings window has been reorganized into tabs (#1415, #1554, #1542, #1588):
+    * User Profile window has been integrated into the settings window.
+    * Input Pan has been moved to the newly created Advanced tab and removed from main window.
+  (contributed by @dcorson-ticino-com, @pljones)
 
-- improved Windows installer, coded by ann0see and doloopuntil (#792, #841)
+- GUI: Moved the Ping and Delay stats from the Settings window to the main window (#1762):
+  This was partly to work around a Mac issue with updates to the settings window (#1643)
+  and is actually an improvement anyway, as the settings window does not need to remain open.
+  (contributed by @dcorson-ticino-com and @softins)
 
-- support http links in the chat dialog, coded by hoffie (#879)
+- GUI: Added "About Qt" to the help menu to display version of Qt (#1685, #1692).
+  (contributed by @softins)
 
-- support Github actions for CodeQL, Publish Release, Autobuild Flatpak,
-  coded by pljones, ann0see, ranfdev
+- GUI: Corrected the operation of What's This in the settings dialog (#1622, #1635).
+  (contributed by @dcorson-ticino-com)
 
-- more detailed version number of unreleased version, coded by nefarius2001 (#475)
+- GUI: Improved the muted speaker icon display (#1691).
+  (contributed by @henkdegroot)
 
+- Added new icons for Linux desktop use (#1672).
+  (contributed by @jujudusud)
 
-TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
+- GUI: Corrected handling of custom directory server in the server, to prevent
+  unintended registration with a directory server (#1624, #1627).
+  (contributed by @softins)
 
+- GUI: Corrected alignment of Mute icon above fader (#811, #1312, #1640).
+  (contributed by @vimpostor)
 
+- GUI: Support for more than two mixer rows has been added (#1549, #1560).
+  (contributed by @pljones)
 
+- GUI: --clientname also works in dialog titles now (#1352, 1370).
+  (contributed by @dcorson-ticino-com)
+
+- GUI: Translations have been updated
+  * Dutch, by @henkdegroot (#1562, #1623, #1714, #1557)
+  * French, by @jujudusud (#1648, #1708)
+  * German, by @rolamos (#1677, #1810)
+  * Italian, by @dzpex (#1620)
+  * Polish, by @SeeLook (#1619)
+  * Portuguese Brazilian, by @melcon (#1671, #1807)
+  * Portuguese European, by @Snayler (#1689)
+  * Slovak, by @jose1711 (#1647)
+  * Spanish, by @ignotus666 (#1621, #1730, #1808)
+  * Swedish, by @genesisproject2020 (#1664, #1696)
+
+- Network: Support for DSCP Quality of Service flags has been added (#1310).
+  This is supposed to lead to improved network performance.
+  It is enabled by default.
+  On Windows, this requires additional configuration in order to work.
+  Please see the Tips & Tricks page on the website for a setup guide for Windows.
+  (contributed by @DavidSavinkoff)
+
+- Client: Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
+  (contributed by @JohannesBrx)
+
+- Client: Basic audio feedback detection has been added (#1179).
+  (contributed by @JohannesBrx)
+
+- Client: Support for input gain boost has been added (#1222, #1030)
+  (contributed by @hoffie)
+
+- Client: Grouping support has been extended to allow for up to eight groups (#1551).
+  (contributed by @pljones)
+
+- Client: A hint regarding non-default Jack support has been added (#1397, #1438).
+  (contributed by @djfun)
+
+- Server: Support for Delay Panning has been added (#332, #567, #1151, #1417, #1744):
+  This feature can be enabled on servers using the new --delaypan option.
+  Enabling this feature will slightly increase server CPU usage.
+  It can create a much more realistic spatial sound impression for clients
+  that are set to Stereo or Mono-in/Stereo-out mode.
+  (contributed by @DetlefHennings, @Hk1020, @softins, @henkdegroot)
+
+- Server: Multi-threading performance has been improved (#960).
+  (contributed by @menzels, @softins)
+
+- Server: Half-connected clients will no longer receive audio (#1243, #1589):
+  Note: This breaks compatibility with client versions before 3.3.0 (Feb 2013).
+  If you update your server, ensure that all clients use 3.3.0 or later as well.
+  (contributed by @softins)
+
+- Server: HTML status file is now emptied on exit (#1423, #1427).
+  (contributed by @hoffie, @drummer1154)
+
+- Server: An explicit bind address can now be specified (#141, #1561).
+  This can be done by the new --serverbindip option.
+  (contributed by @buv)
+
+- Recorder: Compatibility with third-party tools such as Audacity has been improved (#1384, #1424, #1437).
+  Non-ASCII characters are now stripped out when creating filenames.
+  (contributed by @softins, @gilgongo, @reinhardwh)
+
+- Recorder: Failures to start recording no longer result in crashes (#1163, #1289, #1463).
+  (contributed by @hoffie, @softins, @pljones)
+
+- Recorder: Logging has been improved (#1284, #1463).
+  (contributed by @hoffie, @drummer1154)
+
+- Bug fix: The mute indicator is now also shown in mono mode (#1074).
+  (contributed by @npostavs)
+
+- Bug fix: Channel mapping on Windows now only resets if the sound card or the numbers of channels changed (#1347).
+  (contributed by @ann0see)
+
+- Bug fix: Jamulus client should now close itself correctly if a non-working device was selected (#872).
+  (contributed by @npostavs)
+
+- Bug fix: Server no longer crashes while changing the recording directory (#1501, #1573).
+  (contributed by @henkdegroot, @hoffie, @softins)
+
+- Bug fix: Example systemd unit has been fixed to avoid crashing when sending signals (#1515, #1518).
+  (contributed by @softins, @helgeerbe, @gilgongo)
+
+- Bug fix: The Windows installer now correctly compiles in a path with spaces (#864, #1319).
+  (contributed by @henkdegroot)
+
+- Performance: Opus encoding/decoding now uses machine-specific optimizations (#1105).
+  (contributed by @npostavs)
+
+- Performance: Timer configuration for Windows servers has been improved (#1536).
+  (contributed by @npostavs)
+
+- iOS support is being worked on (#1450).
+  (contributed by @jeroenvv)
+
+- Github autobuild for Mac now uses Xcode 11.7 and SDK 10.15 for compatibility with Qt5 (#1655).
+  (contributed by @softins)
+
+- Build: Creation of debug builds has been simplified (#1516).
+  (contributed by @hoffie)
+
+- Internal: Constants for JACK usage have been renamed (#1429).
+  (contributed by @djfun)
+
+- Internal: Legacy IP address variables have been cleaned up (#1400).
+  (contributed by @wferi)
+
+- Internal: Added automatic code formatting with clang-format (#901, #1127, #1751).
+  (contributed by @passing)
+
+- Internal: New pull requests will now be checked for coding style automatically (#1735).
+  (contributed by @passing)
+
+- Internal: Windows deploy script has been aligned to autobuilds (#1720).
+  (contributed by @henkdegroot)
+
+### 3.7.0 (2021-03-17) ###
+
+- Server lists have been reorganized to make room for more servers (#875):
+  * Default has been renamed to Any Genre 1.
+  * Any Genre has been renamed to Any Genre 2.
+  * Any Genre 3 has been added.
+  * Choral/Barbershop has been added.
+  * Classical/Folk/Choral has been renamed to Classical/Folk.
+
+- Central server addresses have been moved to the jamulus.io domain (#919).
+  The fischvolk.de addresses are deprecated.
+
+- GUI: If a name is provided using --clientname, that name is shown first in the window title, to avoid clipping in the Windows task bar (#789).
+
+- GUI: Translations have been updated:
+  * Dutch, by @jerogee (#1110)
+  * French, by @trebmuh & @jujudusud (#1199 & #1113)
+  * German, by @rolamos (#1097)
+  * Italian, by @dzpex (#1112)
+  * Polish, by @SeeLook (#1099)
+  * Portugese, by @melcon & @Snayler (#1141 & #1168)
+  * Slovak, by @jose1711 (#1104)
+  * Spanish, by @ignotus666 (#1152)
+  * Swedish, by @genesisproject2020 (#1182 & #1106)
+
+- Active recording state is now highlighted in the mixerboard title (#968).
+  (contributed by @dcorson-ticino-com)
+
+- Client window makes it more obvious when not connected to a server by graying out input levels and showing a message (#847, #983).
+  (contributed by @ann0see)
+
+- Screensaver and screen blanking are now prevented on Macs (#834).
+  (contributed by @jerogee)
+
+- Windows installer has been improved (#792, #841).
+  Note: If you are using ASIO4ALL, we strongly suggest that you take a screenshot
+  of your ASIO4ALL settings before upgrading. The installer will try its best to
+  migrate your settings, but it may fail to do so when using custom
+  installation paths.
+  (contributed by @ann0see and @doloopuntil)
+
+- Windows installer interface now supports English, Dutch, French, German, Italian, Polish, Portuguese, Spanish and Swedish.
+  (contributed by @jerogee, @jujudusud, @ann0see, @dzpex, @SeeLook, @Snayler,
+  @melcon, @ignotus666 and @genesisproject2020)
+
+- Windows ASIO Setup button placement has been improved to be below the driver selection (#977).
+  (contributed by @mulyaj and @ann0see)
+
+- Chat dialog has gained support for auto-linking http addresses (#879).
+  (contributed by @hoffie)
+
+- Chat messages no longer allow HTML-formatted chat messages due to security reasons (#939).
+  HTML formatting in Welcome messages will continue to work.
+  (contributed by @atsampson)
+
+- Mixerboard background image quality in the Fancy skin has been improved (#970).
+  (contributed by @passing)
+
+- MIDI controller logic has been improved to support fader, pan, mute and solo buttons in --ctrlmidich syntax (#945).
+  Mute & solo buttons are only for toggle-type controllers and do not support
+  headless operation yet.
+  (contributed by @dakhubgit)
+
+- Servers connected to central servers behind the same NAT can now be made accessible to public clients via the newly added --serverpublicip option (#954).
+  (contributed by @hoffie)
+
+- External IP detection no longer generates traffic to Cloudflare (#633, #1092).
+  (contributed by @atsampson and @hoffie)
+
+- Version update detection has been improved (#1155):
+    * The check now uses two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
+    * The server version is now ignored if it is not a release, due to a
+      suffix such as dev, beta or rc.
+  (contributed by @softins)
+
+- Official Ubuntu/Debian packages are now built and published as part of the release (#1100).
+  The packages are compatible with Ubuntu 18.04 or later.
+  (contributed by @ann0see)
+
+- Experimental .apk installation packages for Android are now provided (#880).
+  (contributed by @nefarius2001)
+
+- Bug fix: A suspected memory leak has been solved by removing usage of ConsoleWriterFactory (#926).
+  (contributed by @pljones)
+
+- Bug fix: Changing ASIO driver properties like switching input/outputs in ASIO4ALL now resets input/output channel mapping in Jamulus again (#796).
+  This was done to solve a bug with ASIO4ALL introduced in the last version.
+
+- Bug fix: Fader levels, mute and solo state are now restored properly when reconnecting to a restarted server (#955, #1010).
+  This is a server-side fix.
+  (contributed by @hoffie)
+
+- Bug fix: Multiple memory leaks in the server's recording feature have been fixed (#1073).
+  (contributed by @softins)
+
+- Bug fix: Menu accelerator keys have been fixed in multiple translations (#1165).
+  (contributed by @softins)
+
+- Bug fix: Windows sound driver lacked driverInfo initialisation (#1194).
+  (coded by @npostavs)
+
+- Internal build and release process have been re-designed, automated and moved to Github.
+  (contributed by @pljones, @nefarius2001, @ann0see, @ranfdev)
+
+- Internal development builds now contain a detailed version number (#475).
+  (contributed by @nefarius2001)
 
 
 ### 3.6.2 (2020-12-12) ###
@@ -572,7 +828,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 
 - removed unnecessary settings and LED indicators
 
-- bug fix: the fader level could not be changed if the fader was on solo  
+- bug fix: the fader level could not be changed if the fader was on solo
 
 
 ### 3.3.3 (2013-12-30) ###
@@ -607,7 +863,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - improved server performance under Linux
 
 - changed the network buffer for improved OPUS PLC performance
-  
+
 - added protocol overhead for DSL line for upload rate calculation
 
 - fixed outstanding renaming from llcon to Jamulus
