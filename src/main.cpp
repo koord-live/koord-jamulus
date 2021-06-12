@@ -417,16 +417,10 @@ int main ( int argc, char** argv )
         }
 
         // Autoconnect on startup - jamulus URI  --------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-x",
-                                 "--autoconnect",
-                                 strArgument ) )
+        if ( GetStringArgument ( argc, argv, i, "-x", "--autoconnect", strArgument ) )
         {
             strConnOnStartupAddress = NetworkUtil::FixJamAddress ( strArgument );
-            tsConsole << "- autoconnect on startup to address: " << strConnOnStartupAddress << endl;
+            qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
             CommandLineOptions << "--autoconnect";
             continue;
         }

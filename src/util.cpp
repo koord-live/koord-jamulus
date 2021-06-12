@@ -793,7 +793,7 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
     // remove all spaces from the address string
-    return strAddress.simplified().replace ( " ", "" ).replace ("jamulus://", "");
+    return strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
 }
 
 // Return whether the given HostAdress is within a private IP range
