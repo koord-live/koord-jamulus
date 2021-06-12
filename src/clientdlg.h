@@ -125,6 +125,7 @@ protected:
 
 public slots:
     void OnConnectDisconBut();
+    void OnNewStartClicked();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
     void OnTimerCheckAudioDeviceOk();

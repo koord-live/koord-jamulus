@@ -96,6 +96,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
 
+    // connect/disconnect button
+    butNewStart->setWhatsThis ( "<b>" + tr ( "Start New Session Button" ) + ":</b> " +
+                               tr ( "Opens default browser at Koord.Live to start a new private session." ) );
+
+    butNewStart->setAccessibleName ( tr ( "Start New Private Session button" ) );
+
     // reverberation level
     QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
                            tr ( "Reverb can be applied to one local mono audio channel or to both "
@@ -224,6 +230,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // init connection button text
     butConnect->setText ( tr ( "C&onnect" ) );
+
+    // init new session button text
+    butNewStart->setText ( tr ( "Start New Sesh" ) );
 
     // init input level meter bars
     lbrInputLevelL->SetValue ( 0 );
@@ -416,6 +425,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Connections -------------------------------------------------------------
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
+    QObject::connect ( butNewStart, &QPushButton::clicked, this, &CClientDlg::OnNewStartClicked );
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
@@ -730,6 +740,12 @@ void CClientDlg::OnConnectDisconBut()
     {
         ShowConnectionSetupDialog();
     }
+}
+
+void CClientDlg::OnNewStartClicked()
+{
+    // just open website for now
+    QDesktopServices::openUrl(QUrl("https://koord.live/session", QUrl::TolerantMode));
 }
 
 void CClientDlg::OnClearAllStoredSoloMuteSettings()

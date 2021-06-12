@@ -170,6 +170,13 @@ Var bRunApp
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "DisplayIcon"     "$INSTDIR\${APP_EXE},0"
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "UninstallString" '"$INSTDIR\${UNINSTALL_EXE}"'
 
+    ; Add the registry keys so that Koord Jamulus handles koord:// URLs
+    WriteRegExpandStr "HKCR" "koord" "" "URL: koord Protocol"
+    WriteRegExpandStr "HKCR" "koord" "URL Protocol" ""
+    WriteRegExpandStr "HKCR" "koord\shell" "" ""
+    WriteRegExpandStr "HKCR" "koord\shell\open" "" ""
+    WriteRegExpandStr "HKCR" "koord\shell\open\command" "" '"c:\Program Files\Jamulus\Jamulus.exe" "-x" "%1"'
+
     ; Add the uninstaller
     WriteUninstaller "$INSTDIR\${UNINSTALL_EXE}"
 
