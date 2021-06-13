@@ -74,7 +74,7 @@ LED bar:      lbr
 // version and application name (use version from qt prject file)
 #undef VERSION
 #define VERSION  APP_VERSION
-#define APP_NAME "Jamulus"
+#define APP_NAME "Koord-Jamulus"
 
 // Windows registry key name of auto run entry for the server
 #define AUTORUN_SERVER_REG_NAME "Jamulus server"
@@ -358,3 +358,5 @@ bool GetNumericArgument ( int     argc,
                           double  rRangeStart,
                           double  rRangeStop,
                           double& rValue );
+
+bool event (QEvent *event);

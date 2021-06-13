@@ -229,10 +229,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     OnTimerStatus();
 
     // init connection button text
-    butConnect->setText ( tr ( "C&onnect" ) );
+    butConnect->setText ( tr ( "C&onnect to..." ) );
 
     // init new session button text
-    butNewStart->setText ( tr ( "Start New Sesh" ) );
+    butNewStart->setText ( tr ( "&New Session" ) );
 
     // init input level meter bars
     lbrInputLevelL->SetValue ( 0 );
