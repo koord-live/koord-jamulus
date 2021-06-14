@@ -60,7 +60,7 @@ public:
 // is this the right ifdef or should it be ...
 // #    if defined( __APPLE__ ) || defined( __MACOSX )
 // ?
-//#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACX )
     // add event handler for koord:// url
     bool event(QEvent *event) override
     {
@@ -95,39 +95,10 @@ public:
                 pApp = new QApplication (i, strthing);
             }
 
-#ifdef ANDROID
-            // special Android coded needed for record audio permission handling
-            auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
-
-            if ( result == QtAndroid::PermissionResult::Denied )
-            {
-                QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
-
-                if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
-                {
-                    return 0;
-                }
-            }
-#endif
-
-#ifdef _WIN32
-            // set application priority class -> high priority
-            SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
-
-            // For accessible support we need to add a plugin to qt. The plugin has to
-            // be located in the install directory of the software by the installer.
-            // Here, we set the path to our application path.
-            QDir ApplDir ( QApplication::applicationDirPath() );
-            pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
-#endif
-
-#if defined( Q_OS_MACX )
             // On OSX we need to declare an activity to ensure the process doesn't get
             // throttled by OS level Nap, Sleep, and Thread Priority systems.
             CActivity activity;
-
             activity.BeginActivity();
-#endif
 
             // init resources
             Q_INIT_RESOURCE ( resources );
@@ -170,7 +141,7 @@ public:
 
         return QApplication::event(event);
     }
-//#endif
+#endif
 };
 
 int main ( int argc, char** argv )
