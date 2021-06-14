@@ -3,7 +3,7 @@ VERSION = 3.8.0dev
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)
-    TARGET = jamulus
+    TARGET = koord-jamulus
 }
 
 # allow detailed version info for intermediate builds (#475)
@@ -386,15 +386,15 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in distributions/jamulus-server.desktop.in
-        desktop.files = distributions/jamulus.desktop distributions/jamulus-server.desktop
+        QMAKE_SUBSTITUTES += distributions/koordjamulus.desktop.in distributions/jamulus-server.desktop.in
+        desktop.files = distributions/koordjamulus.desktop distributions/jamulus-server.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
+        icons.files = distributions/koordjamulus.png distributions/koordjamulus.svg distributions/jamulus-server.svg
 
         INSTALLS += target desktop icons
     }
@@ -714,10 +714,10 @@ DISTFILES += ChangeLog \
     COPYING \
     CONTRIBUTING.md \
     README.md \
-    distributions/jamulus.desktop.in \
+    distributions/koordjamulus.desktop.in \
     distributions/jamulus-server.desktop.in \
-    distributions/jamulus.png \
-    distributions/jamulus.svg \
+    distributions/koordjamulus.png \
+    distributions/koordjamulus.svg \
     distributions/jamulus-server.svg \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
