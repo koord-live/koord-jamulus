@@ -23,7 +23,6 @@
 \******************************************************************************/
 
 #include <QCoreApplication>
-#include <QFileOpenEvent>
 #include <QtDebug>
 #include <QDir>
 #include "global.h"
@@ -40,7 +39,8 @@
 #    include <QtAndroidExtras/QtAndroid>
 #endif
 #if defined( Q_OS_MACX )
-#    include "mac/activity.h"
+#   include "mac/activity.h"
+#   include <QFileOpenEvent>
 #endif
 
 // Implementation **************************************************************
