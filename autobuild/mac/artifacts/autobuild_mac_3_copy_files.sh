@@ -27,9 +27,9 @@ echo ""
 
 echo ""
 echo ""
-artifact_deploy_filename=jamulus_${jamulus_buildversionstring}_mac${BUILD_SUFFIX}.dmg
+artifact_deploy_filename=koord-jamulus_${jamulus_buildversionstring}_mac${BUILD_SUFFIX}.dmg
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Jamulus-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
+mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Koord-Jamulus-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
 
 
 echo ""
