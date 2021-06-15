@@ -9,7 +9,7 @@ cp -r debian ..
 cd ..
 
 # get the jamulus version from pro file
-VERSION=$(cat Jamulus.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
+VERSION=$(cat Koord-Jamulus.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
 
 # patch changelog (with hack)
 

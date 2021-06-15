@@ -2,7 +2,7 @@
 cd ..
 
 make distclean
-qmake Jamulus.pro
+qmake Koord-Jamulus.pro
 make
 make dist
 
