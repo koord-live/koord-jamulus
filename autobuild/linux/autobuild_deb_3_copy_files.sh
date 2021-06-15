@@ -41,19 +41,19 @@ echo ""
 
 
 
-#move/rename headless first, so wildcard pattern matches only one file each
-echo ""
-echo ""
-artifact_deploy_filename_1=jamulus_headless_${jamulus_buildversionstring}_ubuntu_amd64.deb
-echo "Move/Rename the built file to deploy/${artifact_deploy_filename_1}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/../jamulus-headless*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_1}"
+# #move/rename headless first, so wildcard pattern matches only one file each
+# echo ""
+# echo ""
+# artifact_deploy_filename_1=koord-jamulus_headless_${jamulus_buildversionstring}_ubuntu_amd64.deb
+# echo "Move/Rename the built file to deploy/${artifact_deploy_filename_1}"
+# mv "${THIS_JAMULUS_PROJECT_PATH}"/../koord-jamulus-headless*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_1}"
 
 #move/rename normal second
 echo ""
 echo ""
-artifact_deploy_filename_2=jamulus_${jamulus_buildversionstring}_ubuntu_amd64.deb
+artifact_deploy_filename_2=koord-jamulus_${jamulus_buildversionstring}_ubuntu_amd64.deb
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename_2}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/../jamulus*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_2}"
+mv "${THIS_JAMULUS_PROJECT_PATH}"/../koord-jamulus*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_2}"
 
 
 echo ""
@@ -69,5 +69,5 @@ github_output_value()
   echo "::set-output name=${1}::${2}"
 }
 
-github_output_value artifact_1 ${artifact_deploy_filename_1}
+# github_output_value artifact_1 ${artifact_deploy_filename_1}
 github_output_value artifact_2 ${artifact_deploy_filename_2}

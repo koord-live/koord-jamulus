@@ -33,9 +33,9 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
 
 # Rename the file
 echo "rename"
-$artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win.exe"
+$artifact_deploy_filename = "koord-jamulus_${Env:jamulus_buildversionstring}_win.exe"
 echo "rename deploy file to $artifact_deploy_filename"
-cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
+cp "$jamulus_project_path\deploy\Koord-Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
 
 
 

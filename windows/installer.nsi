@@ -1,4 +1,4 @@
-; Jamulus NSIS Installer with Modern User Interface
+; Koord-Jamulus NSIS Installer with Modern User Interface
 
 ; Includes
 !include "x64.nsh"                             ; 64bit architecture support
@@ -175,7 +175,7 @@ Var bRunApp
     WriteRegStr "HKCR" "koord" "URL Protocol" ""
     WriteRegStr "HKCR" "koord\shell" "" ""
     WriteRegStr "HKCR" "koord\shell\open" "" ""
-    WriteRegStr "HKCR" "koord\shell\open\command" "" '"c:\Program Files\Jamulus\Jamulus.exe" "-x" "%1"'
+    WriteRegStr "HKCR" "koord\shell\open\command" "" '"c:\Program Files\Koord-Jamulus\Koord-Jamulus.exe" "-x" "%1"'
 
     ; Add the uninstaller
     WriteUninstaller "$INSTDIR\${UNINSTALL_EXE}"
@@ -209,8 +209,8 @@ Var bRunApp
 !define UnSelectSection '!insertmacro SecUnSelect'
 
 Section "Install_64Bit" INST_64
-    ; check if old, wrongly installed Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
-    IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" 0 continueinstall
+    ; check if old, wrongly installed Koord-Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
+    IfFileExists "$PROGRAMFILES32\Koord-Jamulus\Uninstall.exe" 0 continueinstall
 
         MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
             goto removeold
@@ -220,7 +220,7 @@ Section "Install_64Bit" INST_64
             goto removeold
 
         removeold: ; Remove it
-            ExecWait '"$PROGRAMFILES32\Jamulus\Uninstall.exe" /S' $0
+            ExecWait '"$PROGRAMFILES32\Koord-Jamulus\Uninstall.exe" /S' $0
             ${IfNot} $0 == 0
                 MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
                 goto quit
@@ -324,7 +324,7 @@ Function .onInit
 
 FunctionEnd
 
-; Ensure Jamulus is installed into a new folder only, unless Jamulus is already installed there
+; Ensure Koord-Jamulus is installed into a new folder only, unless Koord-Jamulus is already installed there
 Function ValidateDestinationFolder
 
     ${If} ${FileExists} "$INSTDIR\*"

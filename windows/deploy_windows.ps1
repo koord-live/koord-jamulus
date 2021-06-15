@@ -17,7 +17,7 @@ $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
 $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
-$AppName = "Jamulus"
+$AppName = "Koord-Jamulus"
 
 # Stop at all errors
 $ErrorActionPreference = "Stop"
@@ -211,7 +211,7 @@ Function Initialize-Build-Environment
     Remove-Item -Path $EnvDump -Force
 }
 
-# Build Jamulus x86_64 and x86
+# Build Koord-Jamulus x86_64 and x86
 Function Build-App
 {
     param(
@@ -236,7 +236,7 @@ Function Build-App
     Set-Location -Path $RootPath
 }
 
-# Build and deploy Jamulus 64bit and 32bit variants
+# Build and deploy Koord-Jamulus 64bit and 32bit variants
 function Build-App-Variants
 {
     param(

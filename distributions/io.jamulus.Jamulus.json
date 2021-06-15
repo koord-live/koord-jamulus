@@ -1,11 +1,11 @@
 {
-  "app-id": "io.jamulus.Jamulus",
+  "app-id": "live.koord.Koord-Jamulus",
   "runtime": "org.kde.Platform",
   "runtime-version": "5.15",
   "sdk": "org.kde.Sdk",
-  "command": "Jamulus",
-  "rename-desktop-file": "jamulus.desktop",
-  "rename-icon": "jamulus",
+  "command": "Koord-Jamulus",
+  "rename-desktop-file": "koord-jamulus.desktop",
+  "rename-icon": "koord-jamulus",
   "finish-args": [
     "--share=ipc",
     "--socket=x11",
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "name": "jamulus",
+      "name": "koord-jamulus",
       "buildsystem": "qmake",
       "sources": [
         {

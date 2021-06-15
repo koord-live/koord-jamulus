@@ -126,10 +126,10 @@ win32 {
     contains(CONFIG, "server_bundle") {
         message(The generated application bundle will run a server instance.)
 
-        DEFINES += SERVER_BUNDLE
-        TARGET = $${TARGET}Server
-        MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
-        RC_FILE = mac/jamulus-server-icon-2020.icns
+        # DEFINES += SERVER_BUNDLE
+        # TARGET = $${TARGET}Server
+        # MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+        # RC_FILE = mac/jamulus-server-icon-2020.icns
     } else {
         MACOSX_BUNDLE_ICON_FILE = mainicon.icns
         RC_FILE = mac/mainicon.icns
@@ -141,7 +141,7 @@ win32 {
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_TARGET_BUNDLE_PREFIX = com.koordlive.koordjamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
     macx-xcode {
@@ -184,7 +184,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = com.koordlive.koordjamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -386,15 +386,15 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/koordjamulus.desktop.in distributions/jamulus-server.desktop.in
-        desktop.files = distributions/koordjamulus.desktop distributions/jamulus-server.desktop
+        QMAKE_SUBSTITUTES += distributions/koordjamulus.desktop.in
+        desktop.files = distributions/koordjamulus.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/koordjamulus.png distributions/koordjamulus.svg distributions/jamulus-server.svg
+        icons.files = distributions/koordjamulus.png distributions/koordjamulus.svg
 
         INSTALLS += target desktop icons
     }
@@ -715,10 +715,8 @@ DISTFILES += ChangeLog \
     CONTRIBUTING.md \
     README.md \
     distributions/koordjamulus.desktop.in \
-    distributions/jamulus-server.desktop.in \
     distributions/koordjamulus.png \
     distributions/koordjamulus.svg \
-    distributions/jamulus-server.svg \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \
