@@ -45,6 +45,11 @@
 
 // Implementation **************************************************************
 
+// is this the right ifdef or should it be ...
+// #    if defined( __APPLE__ ) || defined( __MACOSX )
+// note: below class definition doesn't compile on Linux
+#if defined( Q_OS_MACX )
+
 // POC:
 // HACKED duplicated selected code from int main()
 // Adding this for MacOS custom URL handler
@@ -57,10 +62,7 @@ public:
     {
     }
 
-// is this the right ifdef or should it be ...
-// #    if defined( __APPLE__ ) || defined( __MACOSX )
-// ?
-#if defined( Q_OS_MACX )
+
     // add event handler for koord:// url
     bool event(QEvent *event) override
     {
@@ -141,8 +143,8 @@ public:
 
         return QApplication::event(event);
     }
-#endif
 };
+#endif
 
 int main ( int argc, char** argv )
 {
