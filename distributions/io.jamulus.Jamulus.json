@@ -4,7 +4,7 @@
   "runtime-version": "5.15",
   "sdk": "org.kde.Sdk",
   "command": "Koord-Jamulus",
-  "rename-desktop-file": "koord-jamulus.desktop",
+  "rename-desktop-file": "koordjamulus.desktop",
   "rename-icon": "koord-jamulus",
   "finish-args": [
     "--share=ipc",

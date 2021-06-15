@@ -70,9 +70,9 @@ fi
 cleanup
 
 # Build Jamulus client and server
-# build_app server_app "CONFIG+=server_bundle"
+build_app server_app "CONFIG+=server_bundle"
 build_app client_app
 
 # Create versioned installer image
-# build_installer_image "${client_app}" "${server_app}"
+build_installer_image "${client_app}" "${server_app}"
 build_installer_image "${client_app}"
