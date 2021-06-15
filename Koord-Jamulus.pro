@@ -126,10 +126,10 @@ win32 {
     contains(CONFIG, "server_bundle") {
         message(The generated application bundle will run a server instance.)
 
-        # DEFINES += SERVER_BUNDLE
-        # TARGET = $${TARGET}Server
-        # MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
-        # RC_FILE = mac/jamulus-server-icon-2020.icns
+         DEFINES += SERVER_BUNDLE
+         TARGET = $${TARGET}Server
+         MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+         RC_FILE = mac/jamulus-server-icon-2020.icns
     } else {
         MACOSX_BUNDLE_ICON_FILE = mainicon.icns
         RC_FILE = mac/mainicon.icns
