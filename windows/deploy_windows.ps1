@@ -4,7 +4,8 @@ param(
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
-    [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
+    # [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
+    [string] $AsioSDKUrl = "https://koorddl.ams3.digitaloceanspaces.com/Jam-20200920-184542218/asiosdk2.3.zip",
     [string] $NsisName = "nsis-3.06.1",
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
