@@ -2,7 +2,7 @@ VERSION = 3.8.0dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
-    message(The target name is jamulus instead of Jamulus.)
+    message(The target name is koord-jamulus instead of Koord-Jamulus.)
     TARGET = koord-jamulus
 }
 
@@ -396,7 +396,14 @@ win32 {
         icons.path = $$ICONSDIR
         icons.files = distributions/koordjamulus.png distributions/koordjamulus.svg
 
-        INSTALLS += target desktop icons
+        isEmpty(MIMEPKGDIR) {
+            MIMEPKGDIR = share/mime/packages
+        }
+        MIMEPKGDIR = $$absolute_path($$MIMEPKGDIR, $$PREFIX)
+        mimepkg.path = $$MIMEPKGDIR
+        mimepkg.files = distributions/koordjamulus.xml
+
+        INSTALLS += target desktop icons mimepkg
     }
 }
 
