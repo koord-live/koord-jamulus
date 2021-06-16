@@ -792,8 +792,15 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
-    // remove all spaces from the address string
-    return strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
+    QRegExp rx("(?:[0-9]{1,3}\.){3}[0-9]{1,3}");
+    int pos = rx.indexIn(strAddress);
+    QStringList list = rx.capturedTexts();
+    QString ipAddress = list[0];  // only 1 IP address in the string!
+    return ipAddress;
+//    // remove all spaces from the address string
+//    const QString tmpAddr = strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
+//    return tmpAddr.simplified().replace( "/", "");
+// //    return strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
 }
 
 // Return whether the given HostAdress is within a private IP range

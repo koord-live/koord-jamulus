@@ -49,6 +49,7 @@
 #include "clientsettingsdlg.h"
 #include "chatdlg.h"
 #include "connectdlg.h"
+#include "basicconnectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
 #if defined( __APPLE__ ) || defined( __MACOSX )
@@ -121,6 +122,7 @@ protected:
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
+    CBasicConnectDlg   BasicConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
 
 public slots:

@@ -357,15 +357,15 @@ win32 {
     } else {
         message(Jack Audio Interface Enabled.)
 
-        contains(CONFIG, "raspijamulus") {
-            message(Using Jack Audio in raspijamulus.sh mode.)
-            LIBS += -ljack
-        } else {
-            CONFIG += link_pkgconfig
-            PKGCONFIG += jack
-        }
+#        contains(CONFIG, "raspijamulus") {
+#            message(Using Jack Audio in raspijamulus.sh mode.)
+#            LIBS += -ljack
+#        } else {
+#            CONFIG += link_pkgconfig
+#            PKGCONFIG += jack
+#        }
 
-        DEFINES += WITH_JACK
+#        DEFINES += WITH_JACK
     }
 
     isEmpty(PREFIX) {
@@ -418,6 +418,7 @@ FORMS_GUI = src/clientdlgbase.ui \
     src/aboutdlgbase.ui
 
 HEADERS += src/buffer.h \
+    src/basicconnectdlg.h \
     src/channel.h \
     src/client.h \
     src/global.h \
@@ -520,6 +521,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     $$files(libs/opus/silk/x86/*.h)
 
 SOURCES += src/buffer.cpp \
+    src/basicconnectdlg.cpp \
     src/channel.cpp \
     src/client.cpp \
     src/main.cpp \
@@ -1150,4 +1152,7 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+
+FORMS += \
+    src/basicconnectdlgbase.ui
 
