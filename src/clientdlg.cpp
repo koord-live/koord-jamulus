@@ -536,7 +536,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
-    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+    QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -667,7 +667,7 @@ void CClientDlg::UpdateRevSelection()
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
 
-void CClientDlg::OnConnectDlgAccepted()
+void CClientDlg::OnBasicConnectDlgAccepted()
 {
     // We had an issue that the accepted signal was emit twice if a list item was double
     // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
@@ -675,12 +675,12 @@ void CClientDlg::OnConnectDlgAccepted()
     if ( bConnectDlgWasShown )
     {
         // get the address from the connect dialog
-        QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
+        QString strSelectedAddress = BasicConnectDlg.GetSelectedAddress();
 
         // only store new host address in our data base if the address is
         // not empty and it was not a server list item (only the addresses
         // typed in manually are stored by definition)
-        if ( !strSelectedAddress.isEmpty() && !ConnectDlg.GetServerListItemWasChosen() )
+        if ( !strSelectedAddress.isEmpty() )
         {
             // store new address at the top of the list, if the list was already
             // full, the last element is thrown out
@@ -690,28 +690,19 @@ void CClientDlg::OnConnectDlgAccepted()
         // get name to be set in audio mixer group box title
         QString strMixerBoardLabel;
 
-        if ( ConnectDlg.GetServerListItemWasChosen() )
-        {
-            // in case a server in the server list was chosen,
-            // display the server name of the server list
-            strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
-        }
-        else
-        {
-            // an item of the server address combo box was chosen,
-            // just show the address string as it was entered by the
-            // user
-            strMixerBoardLabel = strSelectedAddress;
+        // an item of the server address combo box was chosen,
+        // just show the address string as it was entered by the
+        // user
+        strMixerBoardLabel = strSelectedAddress;
 
-            // special case: if the address is empty, we substitute the default
-            // directory server address so that a user which just pressed the connect
-            // button without selecting an item in the table or manually entered an
-            // address gets a successful connection
-            if ( strSelectedAddress.isEmpty() )
-            {
-                strSelectedAddress = DEFAULT_SERVER_ADDRESS;
-                strMixerBoardLabel = tr ( "Directory Server" );
-            }
+        // special case: if the address is empty, we substitute the default
+        // directory server address so that a user which just pressed the connect
+        // button without selecting an item in the table or manually entered an
+        // address gets a successful connection
+        if ( strSelectedAddress.isEmpty() )
+        {
+            strSelectedAddress = DEFAULT_SERVER_ADDRESS;
+            strMixerBoardLabel = tr ( "Directory Server" );
         }
 
         // first check if we are already connected, if this is the case we have to

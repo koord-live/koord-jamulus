@@ -224,7 +224,7 @@ public slots:
         MainMixerBoard->SetChannelLevels ( vecLevelList );
     }
 
-    void OnConnectDlgAccepted();
+    void OnBasicConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
