@@ -1335,16 +1335,16 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
 
-#ifdef _WIN32
-        // Workaround QT-Windows problem: This should not be necessary since in the
-        // background frame the style sheet for QRadioButton was already set. But it
-        // seems that it is only applied if the style was set to default and then back
-        // to GD_ORIGINAL. This seems to be a QT related issue...
-        rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                       "font:  bold;" );
-        rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                       "font:  bold;" );
-#endif
+//#ifdef _WIN32
+//        // Workaround QT-Windows problem: This should not be necessary since in the
+//        // background frame the style sheet for QRadioButton was already set. But it
+//        // seems that it is only applied if the style was set to default and then back
+//        // to GD_ORIGINAL. This seems to be a QT related issue...
+//        rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
+//                                       "font:  bold;" );
+//        rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
+//                                       "font:  bold;" );
+//#endif
 
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED );
@@ -1356,11 +1356,11 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
         // reset style sheet and set original parameters
         backgroundFrame->setStyleSheet ( "" );
 
-#ifdef _WIN32
-        // Workaround QT-Windows problem: See above description
-        rbtReverbSelL->setStyleSheet ( "" );
-        rbtReverbSelR->setStyleSheet ( "" );
-#endif
+//#ifdef _WIN32
+//        // Workaround QT-Windows problem: See above description
+//        rbtReverbSelL->setStyleSheet ( "" );
+//        rbtReverbSelR->setStyleSheet ( "" );
+//#endif
 
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );

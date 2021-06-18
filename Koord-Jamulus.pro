@@ -357,15 +357,15 @@ win32 {
     } else {
         message(Jack Audio Interface Enabled.)
 
-#        contains(CONFIG, "raspijamulus") {
-#            message(Using Jack Audio in raspijamulus.sh mode.)
-#            LIBS += -ljack
-#        } else {
-#            CONFIG += link_pkgconfig
-#            PKGCONFIG += jack
-#        }
+        contains(CONFIG, "raspijamulus") {
+            message(Using Jack Audio in raspijamulus.sh mode.)
+            LIBS += -ljack
+        } else {
+            CONFIG += link_pkgconfig
+            PKGCONFIG += jack
+        }
 
-#        DEFINES += WITH_JACK
+        DEFINES += WITH_JACK
     }
 
     isEmpty(PREFIX) {
@@ -418,7 +418,6 @@ FORMS_GUI = src/clientdlgbase.ui \
     src/aboutdlgbase.ui
 
 HEADERS += src/buffer.h \
-    src/basicconnectdlg.h \
     src/channel.h \
     src/client.h \
     src/global.h \
@@ -442,6 +441,7 @@ HEADERS_GUI = src/audiomixerboard.h \
     src/chatdlg.h \
     src/clientsettingsdlg.h \
     src/connectdlg.h \
+    src/basicconnectdlg.h \
     src/clientdlg.h \
     src/serverdlg.h \
     src/levelmeter.h \
@@ -521,7 +521,6 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     $$files(libs/opus/silk/x86/*.h)
 
 SOURCES += src/buffer.cpp \
-    src/basicconnectdlg.cpp \
     src/channel.cpp \
     src/client.cpp \
     src/main.cpp \
@@ -543,6 +542,7 @@ SOURCES_GUI = src/audiomixerboard.cpp \
     src/chatdlg.cpp \
     src/clientsettingsdlg.cpp \
     src/connectdlg.cpp \
+    src/basicconnectdlg.cpp \
     src/clientdlg.cpp \
     src/serverdlg.cpp \
     src/multicolorled.cpp \

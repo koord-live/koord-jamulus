@@ -792,8 +792,8 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
-    QRegExp rx("(?:[0-9]{1,3}\.){3}[0-9]{1,3}");
-    int pos = rx.indexIn(strAddress);
+    QRegExp rx("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
+    rx.indexIn(strAddress);
     QStringList list = rx.capturedTexts();
     QString ipAddress = list[0];  // only 1 IP address in the string!
     return ipAddress;
