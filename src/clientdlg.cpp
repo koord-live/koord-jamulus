@@ -113,21 +113,21 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                 "channel selector to right and move the fader upwards until the "
                                 "desired reverb level is reached." );
 
-//    lblAudioReverb->setWhatsThis ( strAudReverb );
-//    sldAudioReverb->setWhatsThis ( strAudReverb );
+   lblAudioReverb->setWhatsThis ( strAudReverb );
+   sldAudioReverb->setWhatsThis ( strAudReverb );
 
-//    sldAudioReverb->setAccessibleName ( tr ( "Reverb effect level setting" ) );
+   sldAudioReverb->setAccessibleName ( tr ( "Reverb effect level setting" ) );
 
-    // reverberation channel selectionFixJamAddress
+    // reverberation channel selection
     QString strRevChanSel = "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " +
                             tr ( "With these radio buttons the audio input channel on which the "
                                  "reverb effect is applied can be chosen. Either the left "
                                  "or right input channel can be selected." );
 
-//    rbtReverbSelL->setWhatsThis ( strRevChanSel );
-//    rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
-//    rbtReverbSelR->setWhatsThis ( strRevChanSel );
-//    rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
+   rbtReverbSelL->setWhatsThis ( strRevChanSel );
+   rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
+   rbtReverbSelR->setWhatsThis ( strRevChanSel );
+   rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
 
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " + tr ( "Shows the current audio delay status:" ) +
@@ -244,10 +244,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ledDelay->Reset();
 
     // init audio reverberation
-//    sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
-//    const int iCurAudReverb = pClient->GetReverbLevel();
-//    sldAudioReverb->setValue ( iCurAudReverb );
-//    sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
+   sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
+   const int iCurAudReverb = pClient->GetReverbLevel();
+   sldAudioReverb->setValue ( iCurAudReverb );
+   sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
     // init input boost
     pClient->SetInputBoost ( pSettings->iInputBoost );
@@ -448,12 +448,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
 
-//    QObject::connect ( sldAudioReverb, &QSlider::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
+   QObject::connect ( sldAudioReverb, &QSlider::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
 
-//    // radio buttons
-//    QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
+   // radio buttons
+   QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
 
-//    QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
+   QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
 
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
@@ -536,6 +536,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
+    // QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
     QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
 
     // Initializations which have to be done after the signals are connected ---
@@ -545,7 +546,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // restore connect dialog
     if ( pSettings->bWindowWasShownConnect )
     {
-        ShowConnectionSetupDialog();
+        // ShowConnectionSetupDialog();
+        ShowBasicConnectionSetupDialog();
     }
 
     // mute stream on startup (must be done after the signal connections)
@@ -580,15 +582,18 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pSettings->vecWindowPosMain     = saveGeometry();
     pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
     pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
+    // pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
     pSettings->vecWindowPosConnect  = BasicConnectDlg.saveGeometry();
 
     pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
     pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
+    // pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
     pSettings->bWindowWasShownConnect  = BasicConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
     ChatDlg.close();
+    // ConnectDlg.close();
     BasicConnectDlg.close();
     AnalyzerConsole.close();
 
@@ -643,28 +648,90 @@ void CClientDlg::UpdateRevSelection()
     {
         // for stereo make channel selection invisible since
         // reverberation effect is always applied to both channels
-//        rbtReverbSelL->setVisible ( false );
-//        rbtReverbSelR->setVisible ( false );
+       rbtReverbSelL->setVisible ( false );
+       rbtReverbSelR->setVisible ( false );
     }
     else
     {
         // make radio buttons visible
-//        rbtReverbSelL->setVisible ( true );
-//        rbtReverbSelR->setVisible ( true );
+       rbtReverbSelL->setVisible ( true );
+       rbtReverbSelR->setVisible ( true );
 
         // update value
         if ( pClient->IsReverbOnLeftChan() )
         {
-//            rbtReverbSelL->setChecked ( true );
+           rbtReverbSelL->setChecked ( true );
         }
         else
         {
-//            rbtReverbSelR->setChecked ( true );
+           rbtReverbSelR->setChecked ( true );
         }
     }
 
     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
+}
+
+void CClientDlg::OnConnectDlgAccepted()
+{
+    // We had an issue that the accepted signal was emit twice if a list item was double
+    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
+    // we process the accepted signal only once after the dialog was initially shown.
+    if ( bConnectDlgWasShown )
+    {
+        // get the address from the connect dialog
+        QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
+
+        // only store new host address in our data base if the address is
+        // not empty and it was not a server list item (only the addresses
+        // typed in manually are stored by definition)
+        if ( !strSelectedAddress.isEmpty() && !ConnectDlg.GetServerListItemWasChosen() )
+        {
+            // store new address at the top of the list, if the list was already
+            // full, the last element is thrown out
+            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+        }
+
+        // get name to be set in audio mixer group box title
+        QString strMixerBoardLabel;
+
+        if ( ConnectDlg.GetServerListItemWasChosen() )
+        {
+            // in case a server in the server list was chosen,
+            // display the server name of the server list
+            strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
+        }
+        else
+        {
+            // an item of the server address combo box was chosen,
+            // just show the address string as it was entered by the
+            // user
+            strMixerBoardLabel = strSelectedAddress;
+
+            // special case: if the address is empty, we substitute the default
+            // directory server address so that a user which just pressed the connect
+            // button without selecting an item in the table or manually entered an
+            // address gets a successful connection
+            if ( strSelectedAddress.isEmpty() )
+            {
+                strSelectedAddress = DEFAULT_SERVER_ADDRESS;
+                strMixerBoardLabel = tr ( "Directory Server" );
+            }
+        }
+
+        // first check if we are already connected, if this is the case we have to
+        // disconnect the old server first
+        if ( pClient->IsRunning() )
+        {
+            Disconnect();
+        }
+
+        // initiate connection
+        Connect ( strSelectedAddress, strMixerBoardLabel );
+
+        // reset flag
+        bConnectDlgWasShown = false;
+    }
 }
 
 void CClientDlg::OnBasicConnectDlgAccepted()
@@ -730,7 +797,7 @@ void CClientDlg::OnConnectDisconBut()
     }
     else
     {
-        ShowConnectionSetupDialog();
+        ShowBasicConnectionSetupDialog();
     }
 }
 
@@ -936,6 +1003,18 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 }
 
 void CClientDlg::ShowConnectionSetupDialog()
+{
+    // show connect dialog
+    bConnectDlgWasShown = true;
+    ConnectDlg.show();
+    ConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
+
+    // make sure dialog is upfront and has focus
+    ConnectDlg.raise();
+    ConnectDlg.activateWindow();
+}
+
+void CClientDlg::ShowBasicConnectionSetupDialog()
 {
     // show connect dialog
     bConnectDlgWasShown = true;
@@ -1335,16 +1414,16 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
 
-//#ifdef _WIN32
-//        // Workaround QT-Windows problem: This should not be necessary since in the
-//        // background frame the style sheet for QRadioButton was already set. But it
-//        // seems that it is only applied if the style was set to default and then back
-//        // to GD_ORIGINAL. This seems to be a QT related issue...
-//        rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
-//                                       "font:  bold;" );
-//        rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
-//                                       "font:  bold;" );
-//#endif
+#ifdef _WIN32
+       // Workaround QT-Windows problem: This should not be necessary since in the
+       // background frame the style sheet for QRadioButton was already set. But it
+       // seems that it is only applied if the style was set to default and then back
+       // to GD_ORIGINAL. This seems to be a QT related issue...
+       rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
+                                      "font:  bold;" );
+       rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
+                                      "font:  bold;" );
+#endif
 
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED );
@@ -1356,11 +1435,11 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
         // reset style sheet and set original parameters
         backgroundFrame->setStyleSheet ( "" );
 
-//#ifdef _WIN32
-//        // Workaround QT-Windows problem: See above description
-//        rbtReverbSelL->setStyleSheet ( "" );
-//        rbtReverbSelR->setStyleSheet ( "" );
-//#endif
+#ifdef _WIN32
+       // Workaround QT-Windows problem: See above description
+       rbtReverbSelL->setStyleSheet ( "" );
+       rbtReverbSelR->setStyleSheet ( "" );
+#endif
 
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
