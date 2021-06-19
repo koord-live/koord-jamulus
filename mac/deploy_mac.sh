@@ -68,7 +68,7 @@ build_client_installer_image()
 
     # Build installer image
     "${dmgbuild_bin}" -s "${macdeploy_path}/deployment_settings.py" -D background="${resources_path}/installerbackground.png" \
-        -D app_path="${deploy_path}/$1.app"
+        -D app_path="${deploy_path}/$1.app" \
         -D license="${root_path}/COPYING" "$1 Installer" "${deploy_path}/$1-${app_version}-installer-mac.dmg"
 }
 
