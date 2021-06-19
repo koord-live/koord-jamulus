@@ -28,11 +28,11 @@ def validate_key_path(key, example):
 
 # Path of the applications to deploy
 app_path = validate_key_path("app_path", "Jamulus.app")
-server_path = validate_key_path("server_path", "JamulusServer.app")
+# server_path = validate_key_path("server_path", "JamulusServer.app")
 
 # Name of the applications to deploy
 app_name = os.path.basename(app_path)
-server_name = os.path.basename(server_path)
+# server_name = os.path.basename(server_path)
 
 # Volume format (see hdiutil create -help)
 format = defines.get("format", "UDBZ")
@@ -42,8 +42,8 @@ size = defines.get('size', None)
 
 # Files to include
 files = [
-    app_path,
-    server_path
+    app_path
+    # server_path
 ]
 
 # Symlinks to create
@@ -65,7 +65,7 @@ include_list_view_settings = False
 # Where to put the icons
 icon_locations = {
     app_name: (630, 210),
-    server_name: (530, 210),
+    # server_name: (530, 210),
     "Applications": (820, 210)
 }
 
