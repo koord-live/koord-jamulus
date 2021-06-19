@@ -45,109 +45,109 @@
 
 // Implementation **************************************************************
 
-// is this the right ifdef or should it be ...
-// #    if defined( __APPLE__ ) || defined( __MACOSX )
-// note: below class definition doesn't compile on Linux
-#if defined( Q_OS_MACX )
+//// is this the right ifdef or should it be ...
+//// #    if defined( __APPLE__ ) || defined( __MACOSX )
+//// note: below class definition doesn't compile on Linux
+//#if defined( Q_OS_MACX )
 
-// POC:
-// HACKED duplicated selected code from int main()
-// Adding this for MacOS custom URL handler
-// as per https://doc.qt.io/qt-5/qfileopenevent.html#macos-example
-class KJApplication : public QApplication
-{
-public:
-    KJApplication(int &argc=0, char **argv=0)
-}
+//// POC:
+//// HACKED duplicated selected code from int main()
+//// Adding this for MacOS custom URL handler
+//// as per https://doc.qt.io/qt-5/qfileopenevent.html#macos-example
+//class KJApplication : public QApplication
+//{
+//public:
+//    KJApplication(int &argc=0, char **argv=0)
+//}
 
-KJApplication::KJApplication( int &argc, char **argv )
-    : QApplication(argc, argv)
-{
-    // all main int main stuff ?
+//KJApplication::KJApplication( int &argc, char **argv )
+//    : QApplication(argc, argv)
+//{
+//    // all main int main stuff ?
 
 
-    // add event handler for koord:// url
-    bool event(QEvent *event) override
-    {
-        if (event->type() == QEvent::FileOpen) {
-            QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-            qDebug() << "Open URL" << openEvent->url();
+//    // add event handler for koord:// url
+//    bool event(QEvent *event) override
+//    {
+//        if (event->type() == QEvent::FileOpen) {
+//            QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
+//            qDebug() << "Open URL" << openEvent->url();
 
-            // Set up QApplication with normal GUI, autoconnect options ...
-            QString      strConnOnStartupAddress     = openEvent->url().toString();
-            quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
-            quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
-            QString      strMIDISetup                = "";
-            bool         bNoAutoJackConnect          = false;
-            QString      strClientName               = "";
-            bool         bMuteMeInPersonalMix        = false;
-            // more
-            QString      strIniFileName              = "";
-            QList<QString> CommandLineOptions;
-            bool         bUseTranslation             = true;
-            bool         bShowComplRegConnList       = false;
-            bool         bShowAnalyzerConsole       = false;
-            bool         bMuteStream       = false;
+//            // Set up QApplication with normal GUI, autoconnect options ...
+//            QString      strConnOnStartupAddress     = openEvent->url().toString();
+//            quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
+//            quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
+//            QString      strMIDISetup                = "";
+//            bool         bNoAutoJackConnect          = false;
+//            QString      strClientName               = "";
+//            bool         bMuteMeInPersonalMix        = false;
+//            // more
+//            QString      strIniFileName              = "";
+//            QList<QString> CommandLineOptions;
+//            bool         bUseTranslation             = true;
+//            bool         bShowComplRegConnList       = false;
+//            bool         bShowAnalyzerConsole       = false;
+//            bool         bMuteStream       = false;
 
-            // set only option we need
-            CommandLineOptions << "--autoconnect";
+//            // set only option we need
+//            CommandLineOptions << "--autoconnect";
 
-            QCoreApplication* pApp = QCoreApplication::instance();
-            if (pApp == nullptr) {
-                // ?? set args here "artificially"?
-                int i = 2;
-                char *strthing[2];
-                pApp = new QApplication (i, strthing);
-            }
+//            QCoreApplication* pApp = QCoreApplication::instance();
+//            if (pApp == nullptr) {
+//                // ?? set args here "artificially"?
+//                int i = 2;
+//                char *strthing[2];
+//                pApp = new QApplication (i, strthing);
+//            }
 
-            // On OSX we need to declare an activity to ensure the process doesn't get
-            // throttled by OS level Nap, Sleep, and Thread Priority systems.
-            CActivity activity;
-            activity.BeginActivity();
+//            // On OSX we need to declare an activity to ensure the process doesn't get
+//            // throttled by OS level Nap, Sleep, and Thread Priority systems.
+//            CActivity activity;
+//            activity.BeginActivity();
 
-            // init resources
-            Q_INIT_RESOURCE ( resources );
+//            // init resources
+//            Q_INIT_RESOURCE ( resources );
 
-            try {
-                // Client:
-                // actual client object
-                CClient
-                    Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, strMIDISetup, bNoAutoJackConnect, strClientName, bMuteMeInPersonalMix );
-                // load settings from init-file (command line options override)
-                CClientSettings Settings ( &Client, strIniFileName );
-                Settings.Load ( CommandLineOptions );
-                // load translation
-                if ( bUseTranslation )
-                {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                    CInstPictures::UpdateTableOnLanguageChange();
-                }
+//            try {
+//                // Client:
+//                // actual client object
+//                CClient
+//                    Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, strMIDISetup, bNoAutoJackConnect, strClientName, bMuteMeInPersonalMix );
+//                // load settings from init-file (command line options override)
+//                CClientSettings Settings ( &Client, strIniFileName );
+//                Settings.Load ( CommandLineOptions );
+//                // load translation
+//                if ( bUseTranslation )
+//                {
+//                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+//                    CInstPictures::UpdateTableOnLanguageChange();
+//                }
 
-                // GUI object
-                CClientDlg ClientDlg ( &Client,
-                                       &Settings,
-                                       strConnOnStartupAddress,
-                                       strMIDISetup,
-                                       bShowComplRegConnList,
-                                       bShowAnalyzerConsole,
-                                       bMuteStream,
-                                       nullptr );
+//                // GUI object
+//                CClientDlg ClientDlg ( &Client,
+//                                       &Settings,
+//                                       strConnOnStartupAddress,
+//                                       strMIDISetup,
+//                                       bShowComplRegConnList,
+//                                       bShowAnalyzerConsole,
+//                                       bMuteStream,
+//                                       nullptr );
 
-                // show dialog
-                ClientDlg.show();
-                pApp->exec();
-            }
+//                // show dialog
+//                ClientDlg.show();
+//                pApp->exec();
+//            }
 
-            catch ( const CGenErr& generr ) {
-            // show generic error
-                QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
-            }
-        }
+//            catch ( const CGenErr& generr ) {
+//            // show generic error
+//                QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
+//            }
+//        }
 
-        return QApplication::event(event);
-    }
-};
-#endif
+//        return QApplication::event(event);
+//    }
+//};
+//#endif
 
 int main ( int argc, char** argv )
 {
