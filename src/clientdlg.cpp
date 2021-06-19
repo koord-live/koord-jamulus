@@ -244,10 +244,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ledDelay->Reset();
 
     // init audio reverberation
-   sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
-   const int iCurAudReverb = pClient->GetReverbLevel();
-   sldAudioReverb->setValue ( iCurAudReverb );
-   sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
+    sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
+    const int iCurAudReverb = pClient->GetReverbLevel();
+    sldAudioReverb->setValue ( iCurAudReverb );
+//    sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
     // init input boost
     pClient->SetInputBoost ( pSettings->iInputBoost );
@@ -448,7 +448,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
 
-   QObject::connect ( sldAudioReverb, &QSlider::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
+   QObject::connect ( sldAudioReverb, &QDial::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
 
    // radio buttons
    QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );

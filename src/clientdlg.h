@@ -226,6 +226,7 @@ public slots:
     }
 
     void OnBasicConnectDlgAccepted();
+    void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );

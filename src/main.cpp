@@ -57,10 +57,13 @@
 class KJApplication : public QApplication
 {
 public:
-    KJApplication(int &argc, char **argv)
-        : QApplication(argc, argv)
-    {
-    }
+    KJApplication(int &argc=0, char **argv=0)
+}
+
+KJApplication::KJApplication( int &argc, char **argv )
+    : QApplication(argc, argv)
+{
+    // all main int main stuff ?
 
 
     // add event handler for koord:// url
