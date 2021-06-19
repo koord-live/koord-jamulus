@@ -16,7 +16,7 @@
 !define APP_INSTALL_VALUE "InstallFolder"
 !define APP_INSTALL_ICON  "InstallDtIcon"
 !define APP_RUN           "RunAppAfterInstall"
-!define AUTORUN_NAME      "${APP_NAME} Server"
+; !define AUTORUN_NAME      "${APP_NAME} Server"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
 !define APP_EXE           "${APP_NAME}.exe"
 !define UNINSTALL_EXE     "Uninstall.exe"
@@ -45,7 +45,7 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
 !define MUI_UNICON                     "${WINDOWS_PATH}\mainicon.ico"
-!define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
+; !define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
@@ -151,7 +151,7 @@ Var bRunApp
 
     ; Add the redistribution license
     File "/oname=$INSTDIR\COPYING" "${ROOT_PATH}\COPYING"
-    File "/oname=$INSTDIR\servericon.ico" "${SERVER_ICON}"
+    ; File "/oname=$INSTDIR\servericon.ico" "${SERVER_ICON}"
 
     ; Cleanup
     !delfile "${files}"
@@ -183,7 +183,7 @@ Var bRunApp
     ; Add the Start Menu shortcuts
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"           "$INSTDIR\${APP_EXE}"
-    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\servericon.ico"
+    ; CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\servericon.ico"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Uninstall.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
 !macroend
@@ -431,7 +431,7 @@ FunctionEnd
     !include "${files}"
 
     Delete "$INSTDIR\COPYING"
-    Delete "$INSTDIR\servericon.ico"
+    ; Delete "$INSTDIR\servericon.ico"
     Delete "$INSTDIR\${UNINSTALL_EXE}"
     RMDir  "$INSTDIR"
 
@@ -458,7 +458,7 @@ Section "un.Install"
     RMDir /r "$SMPROGRAMS\${APP_NAME}"
 
     ; There may be an auto run entry in the registry for the server, remove it
-    DeleteRegValue HKCU "${AUTORUN_KEY}" "${AUTORUN_NAME}"
+    ; DeleteRegValue HKCU "${AUTORUN_KEY}" "${AUTORUN_NAME}"
 
     ; Remove the remaining registry keys
     DeleteRegKey HKLM "${APP_UNINSTALL_KEY}"
