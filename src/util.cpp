@@ -386,12 +386,12 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     // general description of software
     txvAbout->setText ( "<p>" +
-                        tr ( "This app enables musicians to perform real-time jam sessions "
-                             "over the internet." ) +
+                        tr ( "Koord-Jamulus makes it easy for musicians to start real-time sessions "
+                             "to play over the internet." ) +
                         "<br>" +
-                        tr ( "There is a server which collects "
-                             " the audio data from each client, mixes the audio data and sends the mix "
-                             " back to each client." ) +
+                        tr ( "It is based on Jamulus, "
+                             " which is a mature and active open-source project "
+                             " dedicated to remote-play audio collaboration." ) +
                         "</p>"
                         "<p><font face=\"courier\">" // GPL header text
                         "This program is free software; you can redistribute it and/or modify "
