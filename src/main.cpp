@@ -531,6 +531,21 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // If single argument ie argc=2 check to see if direct exec of koord url --------------------------------------
+        if ( argc == 2) {
+            // if argv[1] matches "koord://{IPv4_addr}"
+            QRegExp rx("(^koord\\:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3})");
+            int pos = rx.indexIn(argv[1]);
+            if (pos > -1) { //match
+                // add -x {IPv4_addr} tp CommandLineOptions
+                QStringList list = rx.capturedTexts();
+                strConnOnStartupAddress = list[0];
+                qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
+                CommandLineOptions << "--autoconnect";
+                continue;
+            }
+        }
+
         // Mute stream on startup ----------------------------------------------
         if ( GetFlagArgument ( argv, i, "-M", "--mutestream" ) )
         {
@@ -553,6 +568,12 @@ int main ( int argc, char** argv )
         }
 
         // Version number ------------------------------------------------------
+        if ( ( !strcmp ( argv[i], "--version" ) ) || ( !strcmp ( argv[i], "-v" ) ) )
+        {
+            qCritical() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+            exit ( 1 );
+        }
+
         if ( ( !strcmp ( argv[i], "--version" ) ) || ( !strcmp ( argv[i], "-v" ) ) )
         {
             qCritical() << qUtf8Printable ( GetVersionAndNameStr ( false ) );

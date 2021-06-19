@@ -104,6 +104,7 @@ protected:
 
     bool           bConnected;
     bool           bConnectDlgWasShown;
+    bool           bBasicConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
     ERecorderState eLastRecorderState;
@@ -171,6 +172,7 @@ public slots:
     void OnNumMixerPanelRowsChanged ( int value ) { MainMixerBoard->SetNumMixerPanelRows ( value ); }
 
     void OnSettingsStateChanged ( int value );
+    void OnPubConnectStateChanged ( int value );
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
 

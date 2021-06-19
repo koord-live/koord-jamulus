@@ -37,6 +37,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
+    bBasicConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
@@ -423,6 +424,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
     }
 
+    // basic connection setup window
+    if ( !pSettings->vecWindowPosBasicConnect.isEmpty() && !pSettings->vecWindowPosBasicConnect.isNull() )
+    {
+        BasicConnectDlg.restoreGeometry ( pSettings->vecWindowPosBasicConnect );
+    }
+
     // Connections -------------------------------------------------------------
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
@@ -430,6 +437,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
+
+    QObject::connect ( chbPubJam, &QCheckBox::stateChanged, this, &CClientDlg::OnPubConnectStateChanged );
 
     QObject::connect ( chbChat, &QCheckBox::stateChanged, this, &CClientDlg::OnChatStateChanged );
 
@@ -448,12 +457,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
 
-   QObject::connect ( sldAudioReverb, &QDial::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
+    QObject::connect ( sldAudioReverb, &QDial::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
 
-   // radio buttons
-   QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
+    // radio buttons
+    QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
 
-   QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
+    QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
 
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
@@ -536,7 +545,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
-    // QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
     QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
 
     // Initializations which have to be done after the signals are connected ---
@@ -546,7 +555,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // restore connect dialog
     if ( pSettings->bWindowWasShownConnect )
     {
-        // ShowConnectionSetupDialog();
+         ShowConnectionSetupDialog();
+    }
+
+    // restore basic connect dialog
+    if ( pSettings->bWindowWasShownBasicConnect )
+    {
         ShowBasicConnectionSetupDialog();
     }
 
@@ -582,18 +596,18 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pSettings->vecWindowPosMain     = saveGeometry();
     pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
     pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
-    // pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
-    pSettings->vecWindowPosConnect  = BasicConnectDlg.saveGeometry();
+    pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
+    pSettings->vecWindowPosBasicConnect  = BasicConnectDlg.saveGeometry();
 
     pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
     pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
-    // pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
+    pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
     pSettings->bWindowWasShownConnect  = BasicConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
     ChatDlg.close();
-    // ConnectDlg.close();
+    ConnectDlg.close();
     BasicConnectDlg.close();
     AnalyzerConsole.close();
 
@@ -739,7 +753,7 @@ void CClientDlg::OnBasicConnectDlgAccepted()
     // We had an issue that the accepted signal was emit twice if a list item was double
     // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
     // we process the accepted signal only once after the dialog was initially shown.
-    if ( bConnectDlgWasShown )
+    if ( bBasicConnectDlgWasShown )
     {
         // get the address from the connect dialog
         QString strSelectedAddress = BasicConnectDlg.GetSelectedAddress();
@@ -762,16 +776,6 @@ void CClientDlg::OnBasicConnectDlgAccepted()
         // user
         strMixerBoardLabel = strSelectedAddress;
 
-        // special case: if the address is empty, we substitute the default
-        // directory server address so that a user which just pressed the connect
-        // button without selecting an item in the table or manually entered an
-        // address gets a successful connection
-        if ( strSelectedAddress.isEmpty() )
-        {
-            strSelectedAddress = DEFAULT_SERVER_ADDRESS;
-            strMixerBoardLabel = tr ( "Directory Server" );
-        }
-
         // first check if we are already connected, if this is the case we have to
         // disconnect the old server first
         if ( pClient->IsRunning() )
@@ -783,7 +787,7 @@ void CClientDlg::OnBasicConnectDlgAccepted()
         Connect ( strSelectedAddress, strMixerBoardLabel );
 
         // reset flag
-        bConnectDlgWasShown = false;
+        bBasicConnectDlgWasShown = false;
     }
 }
 
@@ -1017,7 +1021,7 @@ void CClientDlg::ShowConnectionSetupDialog()
 void CClientDlg::ShowBasicConnectionSetupDialog()
 {
     // show connect dialog
-    bConnectDlgWasShown = true;
+    bBasicConnectDlgWasShown = true;
     BasicConnectDlg.show();
     BasicConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
 
@@ -1073,6 +1077,19 @@ void CClientDlg::OnSettingsStateChanged ( int value )
     else
     {
         ClientSettingsDlg.hide();
+    }
+}
+
+void CClientDlg::OnPubConnectStateChanged ( int value )
+{
+    if ( !bConnectDlgWasShown )
+    {
+        ShowConnectionSetupDialog();
+    }
+    else
+    {
+        bConnectDlgWasShown = false;
+        ConnectDlg.close();
     }
 }
 
@@ -1377,6 +1394,19 @@ void CClientDlg::UpdateDisplay()
         chbChat->blockSignals ( true );
         chbChat->setChecked ( true );
         chbChat->blockSignals ( false );
+    }
+
+    if ( chbPubJam->isChecked() && !ConnectDlg.isVisible() )
+    {
+        chbPubJam->blockSignals ( true );
+        chbPubJam->setChecked ( false );
+        chbPubJam->blockSignals ( false );
+    }
+    if ( !chbPubJam->isChecked() && ConnectDlg.isVisible() )
+    {
+        chbPubJam->blockSignals ( true );
+        chbPubJam->setChecked ( true );
+        chbPubJam->blockSignals ( false );
     }
 }
 
