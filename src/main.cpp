@@ -534,12 +534,11 @@ int main ( int argc, char** argv )
         // If single argument ie argc=2 check to see if direct exec of koord url --------------------------------------
         if ( argc == 2) {
             // if argv[1] matches "koord://{IPv4_addr}"
-            QRegExp rx("(^koord\\:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3})");
+            QRegExp rx("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
             int pos = rx.indexIn(argv[1]);
-            if (pos > -1) { //match
-                // add -x {IPv4_addr} tp CommandLineOptions
-                QStringList list = rx.capturedTexts();
-                strConnOnStartupAddress = list[0];
+            if (pos != -1) { //match
+                // add -x {IPv4_addr} to CommandLineOptions
+                strConnOnStartupAddress = rx.cap(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
                 CommandLineOptions << "--autoconnect";
                 continue;
