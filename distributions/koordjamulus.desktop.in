@@ -15,6 +15,6 @@ Terminal=false
 Type=Application
 Categories=AudioVideo;Audio;Mixer;Qt;Network;Application;
 Keywords=jam;play;live;online;music;conference;
-Exec=koord-jamulus %U
+Exec=koord-jamulus %u
 Encoding=UTF-8
 MimeType=x-scheme-handler/koord;
