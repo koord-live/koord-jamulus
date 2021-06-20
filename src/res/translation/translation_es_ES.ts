@@ -2796,7 +2796,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Jamulus...</source>
+        <source>&amp;About Koord-Jamulus...</source>
         <translation>&amp;Acerca de Jamulus...</translation>
     </message>
     <message>

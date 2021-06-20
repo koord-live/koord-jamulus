@@ -2743,7 +2743,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Jamulus...</source>
+        <source>&amp;About Koord-Jamulus...</source>
         <translation>&amp;Over Jamulus...</translation>
     </message>
     <message>

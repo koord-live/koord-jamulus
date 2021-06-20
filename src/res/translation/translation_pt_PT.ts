@@ -2763,7 +2763,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Jamulus...</source>
+        <source>&amp;About Koord-Jamulus...</source>
         <translation type="unfinished">&amp;Sobre o Jamulus...</translation>
     </message>
     <message>

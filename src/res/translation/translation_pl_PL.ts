@@ -2410,7 +2410,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Jamulus...</source>
+        <source>&amp;About Koord-Jamulus...</source>
         <translation type="unfinished">&amp;O programie Jamulus...</translation>
     </message>
     <message>

@@ -2755,7 +2755,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Jamulus...</source>
+        <source>&amp;About Koord-Jamulus...</source>
         <translation type="unfinished">Ü&amp;ber Jamulus...</translation>
     </message>
     <message>
