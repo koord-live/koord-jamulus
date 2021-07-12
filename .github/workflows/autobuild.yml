@@ -124,14 +124,6 @@ jobs:
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
 
-           - config_name:           MacOS Legacy (artifacts)
-             target_os:             macos
-             building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.9.9"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
-             cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
-             uses_codeql:           false
-
            - config_name:           iOS (artifacts)
              target_os:             ios
              building_on_os:        macos-10.15
