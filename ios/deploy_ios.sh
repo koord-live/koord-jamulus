@@ -3,7 +3,7 @@ set -e
 
 root_path="$(pwd)"
 project_path="${root_path}/Koord-Jamulus.pro"
-macdeploy_path="${root_path}/mac"
+# macdeploy_path="${root_path}/mac"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
@@ -22,14 +22,14 @@ cleanup()
 build_app()
 {
     # Build Jamulus
-    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2}
+    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release ios" ${@:2}
     local target_name="$(cat "${build_path}/Makefile" | sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p')"
     local job_count="$(sysctl -n hw.ncpu)"
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
-    # Add Qt deployment dependencies
-    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    # # Add Qt deployment dependencies
+    # macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
     mv "${build_path}/${target_name}.app" "${deploy_path}"
 
     # Cleanup
