@@ -3,6 +3,7 @@ param(
     [string] $QtInstallPath = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
+    [string] $QtCompile64RT = "msvc2019_winrt_x64",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",
@@ -160,6 +161,11 @@ Function Initialize-Build-Environment
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
         $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64\bin"
     }
+    else if ($BuildArch -Eq "x86_64RT")
+    {
+        $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
+        $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64RT\bin"
+    }
     else
     {
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars32.bat"
@@ -244,7 +250,7 @@ function Build-App-Variants
         [string] $QtInstallPath
     )
 
-    foreach ($_ in ("x86_64", "x86"))
+    foreach ($_ in ("x86_64", "x86_64RT", "x86"))
     {
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
