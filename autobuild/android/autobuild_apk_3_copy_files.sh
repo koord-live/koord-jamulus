@@ -22,7 +22,7 @@ ls "${THIS_JAMULUS_PROJECT_PATH}"/android-build/build/outputs/apk/debug/
 echo ""
 
 
-artifact_deploy_filename=jamulus_${jamulus_buildversionstring}_android.apk
+artifact_deploy_filename=koord-jamulus_${jamulus_buildversionstring}_android.apk
 echo ""
 echo ""
 echo "move to ${artifact_deploy_filename}"
