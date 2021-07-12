@@ -17,6 +17,7 @@ Set-Location -Path "$PSScriptRoot\..\"
 $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
 $DeployPath = "$RootPath\deploy"
+$AppxDeployPath = "$RootPath\xdeploy"
 $WindowsPath ="$RootPath\windows"
 $AppName = "Koord-Jamulus"
 
@@ -161,7 +162,7 @@ Function Initialize-Build-Environment
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
         $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64\bin"
     }
-    else if ($BuildArch -Eq "x86_64RT")
+    elseif ($BuildArch -Eq "x86_64RT")
     {
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
         $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64RT\bin"
@@ -242,6 +243,31 @@ Function Build-App
     Set-Location -Path $RootPath
 }
 
+# Build Koord-Jamulus x86_64 for appx / Store
+Function Build-AppX
+{
+    param(
+        [Parameter(Mandatory=$true)]
+        [string] $BuildConfig,
+        [Parameter(Mandatory=$true)]
+        [string] $BuildArch
+    )
+
+    Invoke-Native-Command -Command "$Env:QtQmakePath" `
+        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
+        "-o", "$BuildPath\Makefile")
+
+    Set-Location -Path $BuildPath
+    Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
+        -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$AppxDeployPath\$BuildArch",
+        "$BuildPath\$BuildConfig\$AppName.exe")
+
+    Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$AppxDeployPath\$BuildArch" -Force
+    Invoke-Native-Command -Command "nmake" -Arguments ("clean")
+    Set-Location -Path $RootPath
+}
+
 # Build and deploy Koord-Jamulus 64bit and 32bit variants
 function Build-App-Variants
 {
@@ -250,11 +276,19 @@ function Build-App-Variants
         [string] $QtInstallPath
     )
 
-    foreach ($_ in ("x86_64", "x86_64RT", "x86"))
+    foreach ($_ in ("x86_64", "x86"))
     {
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
         Build-App -BuildConfig "release" -BuildArch $_
+        $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
+    }
+
+    foreach ($_ in ("x86_64RT"))
+    {
+        $OriginalEnv = Get-ChildItem Env:
+        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
+        Build-AppX -BuildConfig "release" -BuildArch $_
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
 }
