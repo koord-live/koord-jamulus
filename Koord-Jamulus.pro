@@ -188,6 +188,12 @@ win32 {
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
+    
+    macx-xcode {
+        QMAKE_INFO_PLIST = mac/Info-xcode.plist
+    } else {
+        QMAKE_INFO_PLIST = mac/Info-make.plist
+    }
 } else:android {
     # we want to compile with C++14
     CONFIG += c++14
