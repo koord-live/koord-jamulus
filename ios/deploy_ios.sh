@@ -30,7 +30,7 @@ build_app()
 
     # # Add Qt deployment dependencies
     # macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
-    mv "${build_path}/${target_name}.app" "${deploy_path}"
+    mv "${build_path}/Release-iphonesimulator/${target_name}.app" "${deploy_path}"
 
     # Cleanup
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
