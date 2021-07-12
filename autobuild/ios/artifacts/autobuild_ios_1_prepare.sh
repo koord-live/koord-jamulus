@@ -22,7 +22,7 @@ python3 -m pip install aqtinstall
 python3 -m aqt install --outputdir /usr/local/opt/qt ${QT_VER} mac ios
 
 # add the qt binaries to the path
-export -p PATH=/usr/local/opt/qt/${QT_VER}/clang_64/bin:"${PATH}"
+export -p PATH=/usr/local/opt/qt/${QT_VER}/ios/bin:"${PATH}"
 echo "::set-env name=PATH::${PATH}"
 echo "the path is ${PATH}"
 
