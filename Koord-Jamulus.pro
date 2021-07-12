@@ -178,7 +178,6 @@ win32 {
         LIBS += /usr/local/lib/libjack.dylib
     }
 } else:ios {
-    QMAKE_INFO_PLIST = ios/Info.plist
     QT += macextras
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
