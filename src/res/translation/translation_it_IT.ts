@@ -2748,7 +2748,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Koord-Jamulus...</source>
+        <source>&amp;About Koord-RealTime...</source>
         <translation type="unfinished">I&amp;nformazioni su Jamulus...</translation>
     </message>
     <message>

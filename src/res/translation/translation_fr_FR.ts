@@ -2367,7 +2367,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Koord-Jamulus...</source>
+        <source>&amp;About Koord-RealTime...</source>
         <translation>À &amp;propos de Jamulus...</translation>
     </message>
     <message>

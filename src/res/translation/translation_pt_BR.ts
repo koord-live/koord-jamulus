@@ -2773,7 +2773,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Koord-Jamulus...</source>
+        <source>&amp;About Koord-RealTime...</source>
         <translation>&amp;Sobre o Jamulus...</translation>
     </message>
     <message>

@@ -1,11 +1,11 @@
 {
-  "app-id": "live.koord.Koord-Jamulus",
+  "app-id": "live.koord.Koord-RealTime",
   "runtime": "org.kde.Platform",
   "runtime-version": "5.15",
   "sdk": "org.kde.Sdk",
-  "command": "Koord-Jamulus",
-  "rename-desktop-file": "koordjamulus.desktop",
-  "rename-icon": "koord-jamulus",
+  "command": "Koord-RealTime",
+  "rename-desktop-file": "koordrealtime.desktop",
+  "rename-icon": "koord-realtime",
   "finish-args": [
     "--share=ipc",
     "--socket=x11",
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "name": "koord-jamulus",
+      "name": "koord-realtime",
       "buildsystem": "qmake",
       "sources": [
         {

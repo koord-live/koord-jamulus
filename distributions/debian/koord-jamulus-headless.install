@@ -1,2 +1,2 @@
-usr/bin/koord-jamulus-headless
-debian/koord-jamulus-headless.service lib/systemd/system
+usr/bin/koord-realtime-headless
+debian/koord-realtime-headless.service lib/systemd/system

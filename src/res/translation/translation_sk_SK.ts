@@ -2383,7 +2383,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../../util.cpp" line="599"/>
-        <source>&amp;About Koord-Jamulus...</source>
+        <source>&amp;About Koord-RealTime...</source>
         <translation type="unfinished">&amp;O programe Jamulus...</translation>
     </message>
     <message>
