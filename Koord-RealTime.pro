@@ -141,7 +141,7 @@ win32 {
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = com.koordlive.koordjamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = com.koordlive.koordrealtime
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
     macx-xcode {
@@ -183,7 +183,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.koordlive.koordjamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = com.koordlive.koordrealtime
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
@@ -387,22 +387,22 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/koordjamulus.desktop.in
-        desktop.files = distributions/koordjamulus.desktop
+        QMAKE_SUBSTITUTES += distributions/koordrealtime.desktop.in
+        desktop.files = distributions/koordrealtime.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/koordjamulus.png distributions/koordjamulus.svg
+        icons.files = distributions/koordrealtime.png distributions/koordrealtime.svg
 
         isEmpty(MIMEPKGDIR) {
             MIMEPKGDIR = share/mime/packages
         }
         MIMEPKGDIR = $$absolute_path($$MIMEPKGDIR, $$PREFIX)
         mimepkg.path = $$MIMEPKGDIR
-        mimepkg.files = distributions/koordjamulus.xml
+        mimepkg.files = distributions/koordrealtime.xml
 
         INSTALLS += target desktop icons mimepkg
     }
@@ -724,9 +724,9 @@ DISTFILES += ChangeLog \
     COPYING \
     CONTRIBUTING.md \
     README.md \
-    distributions/koordjamulus.desktop.in \
-    distributions/koordjamulus.png \
-    distributions/koordjamulus.svg \
+    distributions/koordrealtime.desktop.in \
+    distributions/koordrealtime.png \
+    distributions/koordrealtime.svg \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \
