@@ -16,6 +16,7 @@ Set-Location -Path "$PSScriptRoot\..\"
 # Global constants
 $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
+$Deploy32Path = "$RootPath\deploy32"
 $DeployPath = "$RootPath\deploy"
 $AppxDeployPath = "$RootPath\xdeploy"
 $WindowsPath ="$RootPath\windows"
@@ -232,6 +233,10 @@ Function Build-App
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
         "-o", "$BuildPath\Makefile")
 
+    if ($BuildArch == "x86")
+    {
+        $DeployPath = $Deploy32Path
+    }
     Set-Location -Path $BuildPath
     Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
@@ -276,8 +281,8 @@ function Build-App-Variants
         [string] $QtInstallPath
     )
 
-    # foreach ($_ in ("x86_64", "x86"))
-    foreach ($_ in ("x86_64")) # only build x64, it's 2021 ffs
+    foreach ($_ in ("x86_64", "x86"))
+    # foreach ($_ in ("x86_64"))
     {
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
