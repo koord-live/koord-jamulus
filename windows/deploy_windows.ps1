@@ -277,7 +277,7 @@ function Build-App-Variants
     )
 
     # foreach ($_ in ("x86_64", "x86"))
-    foreach ($_ in ("x86_64"))
+    foreach ($_ in ("x86_64")) # only build x64, it's 2021 ffs
     {
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
@@ -285,13 +285,13 @@ function Build-App-Variants
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
 
-    foreach ($_ in ("x86_64RT"))
-    {
-        $OriginalEnv = Get-ChildItem Env:
-        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
-        Build-AppX -BuildConfig "release" -BuildArch $_
-        $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
-    }
+    # foreach ($_ in ("x86_64RT"))
+    # {
+    #     $OriginalEnv = Get-ChildItem Env:
+    #     Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
+    #     Build-AppX -BuildConfig "release" -BuildArch $_
+    #     $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
+    # }
 }
 
 # Build Windows installer

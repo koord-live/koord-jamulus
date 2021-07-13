@@ -31,14 +31,16 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
 ###  PROCEDURE  ###
 ###################
 
-# Rename the file
-echo "rename"
+# Rename the files
+echo "rename exe file"
 $artifact_deploy_filename = "koord-jamulus_${Env:jamulus_buildversionstring}_win.exe"
-$winrt_artifact_deploy_filename = "koord-jamulus_${Env:jamulus_buildversionstring}_win.appx"
 echo "rename deploy file to $artifact_deploy_filename"
 cp "$jamulus_project_path\deploy\Koord-Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
-echo "rename appx deploy file to $winrt_artifact_deploy_filename"
-cp "$jamulus_project_path\xdeploy\Koord-Jamulus*" "$jamulus_project_path\deploy\$winrt_artifact_deploy_filename"
+
+# echo "rename appx file"
+# $winrt_artifact_deploy_filename = "koord-jamulus_${Env:jamulus_buildversionstring}_win.appx"
+# echo "rename appx deploy file to $winrt_artifact_deploy_filename"
+# cp "$jamulus_project_path\xdeploy\Koord-Jamulus*" "$jamulus_project_path\deploy\$winrt_artifact_deploy_filename"
 
 
 
