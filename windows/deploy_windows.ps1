@@ -3,7 +3,6 @@ param(
     [string] $QtInstallPath = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
-    [string] $QtCompile64RT = "winrt_x64_msvc2019",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",
@@ -16,9 +15,7 @@ Set-Location -Path "$PSScriptRoot\..\"
 # Global constants
 $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
-$Deploy32Path = "$RootPath\deploy32"
 $DeployPath = "$RootPath\deploy"
-$AppxDeployPath = "$RootPath\xdeploy"
 $WindowsPath ="$RootPath\windows"
 $AppName = "Koord-Jamulus"
 
@@ -163,11 +160,6 @@ Function Initialize-Build-Environment
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
         $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64\bin"
     }
-    elseif ($BuildArch -Eq "x86_64RT")
-    {
-        $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
-        $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64RT\bin"
-    }
     else
     {
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars32.bat"
@@ -233,10 +225,6 @@ Function Build-App
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
         "-o", "$BuildPath\Makefile")
 
-    if ($BuildArch == "x86")
-    {
-        $DeployPath = $Deploy32Path
-    }
     Set-Location -Path $BuildPath
     Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
@@ -244,31 +232,6 @@ Function Build-App
         "$BuildPath\$BuildConfig\$AppName.exe")
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
-    Invoke-Native-Command -Command "nmake" -Arguments ("clean")
-    Set-Location -Path $RootPath
-}
-
-# Build Koord-Jamulus x86_64 for appx / Store
-Function Build-AppX
-{
-    param(
-        [Parameter(Mandatory=$true)]
-        [string] $BuildConfig,
-        [Parameter(Mandatory=$true)]
-        [string] $BuildArch
-    )
-
-    Invoke-Native-Command -Command "$Env:QtQmakePath" `
-        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
-        "-o", "$BuildPath\Makefile")
-
-    Set-Location -Path $BuildPath
-    Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
-    Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
-        -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$AppxDeployPath\$BuildArch",
-        "$BuildPath\$BuildConfig\$AppName.exe")
-
-    Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$AppxDeployPath\$BuildArch" -Force
     Invoke-Native-Command -Command "nmake" -Arguments ("clean")
     Set-Location -Path $RootPath
 }
@@ -282,21 +245,12 @@ function Build-App-Variants
     )
 
     foreach ($_ in ("x86_64", "x86"))
-    # foreach ($_ in ("x86_64"))
     {
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
         Build-App -BuildConfig "release" -BuildArch $_
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
-
-    # foreach ($_ in ("x86_64RT"))
-    # {
-    #     $OriginalEnv = Get-ChildItem Env:
-    #     Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
-    #     Build-AppX -BuildConfig "release" -BuildArch $_
-    #     $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
-    # }
 }
 
 # Build Windows installer
