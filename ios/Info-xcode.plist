@@ -54,5 +54,18 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<!-- Add URL Handler for koord:// URLs -->
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>Koord-Jamulus</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>koord</string>
+                </array>
+            </dict>
+        </array>
 </dict>
 </plist>
