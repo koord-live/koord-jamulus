@@ -62,7 +62,25 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     long lNumInChanPrev  = lNumInChan;
     long lNumOutChanPrev = lNumOutChan;
 
-    loadAsioDriver ( cDriverNames[iDriverIdx] );
+    // if ASIO driver set to "KoordASIO-builtin", do trick to circumvent loadAsioDriver
+    if ( cDriverNames[iDriverIdx] == "KoordASIO-builtin")
+    {
+        // asiodrivers.h -> asiolist.h
+        // 	LPASIODRVSTRUCT	lpdrvlist; <-- list of LPASIODRVSTRUCTs
+        LPASIODRVSTRUCT	lpdrv = 0;
+        IASIO			*iasio;
+        //FIXME - naively assume that iDriverIdx corresponds to ASIODRVSTRUCT->drvId
+        if ((lpdrv = getDrvStruct(iDriverIdx,lpdrvlist)) != 0) {
+            if (lpdrv->asiodrv && lpdrv->drvname == "KoordASIO-builtin") {
+                asioDriver = (IASIO *)lpdrvlist->asiodrv;
+                theAsioDriver = asioDriver;
+            }
+        }
+    }
+    else
+    {
+        loadAsioDriver ( cDriverNames[iDriverIdx] );
+    }
 
     // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
     // should be set, but we haven't being doing that and it seems to work
@@ -549,15 +567,24 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     loadAsioDriver ( cDummyName ); // to initialize external object
     lNumDevs = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
 
-    // in case we do not have a driver available, throw error
-    if ( lNumDevs == 0 )
+    // add "KoordASIO-builtin" to top of cDriverNames array
+    char* copyList; 
+    copyList[0] = "KoordASIO-builtin";
+    for ( i = 0; i < cDriverNames.length; i++ )
     {
-        throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
-                        QString ( tr ( "Please install an ASIO driver before running %1. "
-                                       "If you own a device with ASIO support, install its official ASIO driver. "
-                                       "If not, you'll need to download and install a universal driver like ASIO4ALL." ) )
-                            .arg ( APP_NAME ) );
-    }
+        copyList[i+1] = cDriverNames[i];
+    }    
+
+    // we should always have a driver now...
+    // // in case we do not have a driver available, throw error
+    // if ( lNumDevs == 0 )
+    // {
+    //     throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
+    //                     QString ( tr ( "Please install an ASIO driver before running %1. "
+    //                                    "If you own a device with ASIO support, install its official ASIO driver. "
+    //                                    "If not, you'll need to download and install a universal driver like ASIO4ALL." ) )
+    //                         .arg ( APP_NAME ) );
+    // }
     asioDrivers->removeCurrentDriver();
 
     // copy driver names to base class but internally we still have to use
