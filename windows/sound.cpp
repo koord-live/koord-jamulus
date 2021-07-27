@@ -32,6 +32,8 @@
 // external references
 extern AsioDrivers* asioDrivers;
 bool                loadAsioDriver ( char* name );
+extern IASIO*       theAsioDriver;
+
 
 // pointer to our sound object
 CSound* pSound;
@@ -587,7 +589,7 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     for ( i = 0; i < lNumDevs; i++ )
     {
         // put KoordASIO-builtin in to driver name list
-        strDriverName[0] = "KoordASIO-builtin";
+        strDriverNames[0] = "KoordASIO-builtin";
         strDriverNames[i+1] = cDriverNames[i];
     }
 
