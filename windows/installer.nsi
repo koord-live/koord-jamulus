@@ -35,8 +35,8 @@ OutFile      "${DEPLOY_PATH}\${APP_NAME}-${APP_VERSION}-installer-win.exe"
 Caption      "${APP_NAME} ${APP_VERSION} Installer"
 BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
- ; Additional plugin location (for nsProcess)
-!addplugindir "${WINDOWS_PATH}"
+;  ; Additional plugin location (for nsProcess)
+; !addplugindir "${WINDOWS_PATH}"
 
 ; Add support for copying registry keys
 
@@ -60,7 +60,7 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 !define MUI_PAGE_CUSTOMFUNCTION_PRE AbortOnRunningApp
 !insertmacro MUI_PAGE_WELCOME
 
-Page Custom ASIOCheckInstalled ExitASIOInstalled
+; Page Custom ASIOCheckInstalled ExitASIOInstalled
 
 !insertmacro MUI_PAGE_LICENSE "${ROOT_PATH}\COPYING"
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateDestinationFolder
@@ -91,13 +91,14 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 
 !macro _AbortOnRunningApp
 
-    nsProcess::_FindProcess "${APP_EXE}"
-    Pop $R0
+    ; nsProcess::_FindProcess "${APP_EXE}"
+    ; Pop $R0
 
-    ${If} $R0 = 0
-        MessageBox MB_OK|MB_ICONEXCLAMATION "$(RUNNING_APP_MSG)" /sd IDOK
-        Quit
-    ${EndIf}
+    ; ${If} $R0 = 0
+    ;     MessageBox MB_OK|MB_ICONEXCLAMATION "$(RUNNING_APP_MSG)" /sd IDOK
+    ;     Quit
+    ; ${EndIf}
+    MessageBox MB_OK|MB_ICONEXCLAMATION "$(RUNNING_APP_MSG)" /sd IDOK
 
 !macroend
 
@@ -226,30 +227,30 @@ Section "Install_64Bit" INST_64
                 goto quit
             ${EndIf}
 
-            ; Copy old ASIO4ALL registry configuration
+            ; ; Copy old ASIO4ALL registry configuration
 
-            IntOp $0 0 + 0
-            EnumStart:
-                EnumRegKey $R1 HKEY_USERS "" $0 ; foreach user
-                IntOp $0 $0 + 1
-                StrCmp $R1 ".DEFAULT" EnumStart
-                StrCmp $R1 "" EnumEnd
+            ; IntOp $0 0 + 0
+            ; EnumStart:
+            ;     EnumRegKey $R1 HKEY_USERS "" $0 ; foreach user
+            ;     IntOp $0 $0 + 1
+            ;     StrCmp $R1 ".DEFAULT" EnumStart
+            ;     StrCmp $R1 "" EnumEnd
 
-                ; check if new key already exists. If this is the case, we'll not continue
-                ClearErrors
-                EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9" 0
-                IfErrors 0 EnumStart ; if the above line gives an error, it cannot find the key --> We'll continue
+            ;     ; check if new key already exists. If this is the case, we'll not continue
+            ;     ClearErrors
+            ;     EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9" 0
+            ;     IfErrors 0 EnumStart ; if the above line gives an error, it cannot find the key --> We'll continue
 
-                ; check if old key exists. If this is true, we'll continue and move the content of the old one to the new one.
-                ClearErrors
-                EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" 0
-                IfErrors EnumStart 0 ; if the above line gives an error, it cannot find the key --> skip this user
+            ;     ; check if old key exists. If this is true, we'll continue and move the content of the old one to the new one.
+            ;     ClearErrors
+            ;     EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" 0
+            ;     IfErrors EnumStart 0 ; if the above line gives an error, it cannot find the key --> skip this user
 
-                ; copy the registry key
-                ${COPY_REGISTRY_KEY} HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9"
+            ;     ; copy the registry key
+            ;     ${COPY_REGISTRY_KEY} HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9"
 
-                goto EnumStart
-            EnumEnd:
+            ;     goto EnumStart
+            ; EnumEnd:
 
             goto continueinstall
 
@@ -372,45 +373,45 @@ Function createdesktopshortcut
    CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
 FunctionEnd
 
-Function ASIOCheckInstalled
+; Function ASIOCheckInstalled
 
-    ; insert ASIO install page if no ASIO driver was found
-    ClearErrors
-    EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+;     ; insert ASIO install page if no ASIO driver was found
+;     ClearErrors
+;     EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
 
-    IfErrors 0 ASIOExists
-        !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
-        nsDialogs::Create 1018
-        Pop $Dialog
-        ${If} $Dialog == error
-            Abort
-        ${Endif}
+;     IfErrors 0 ASIOExists
+;         !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
+;         nsDialogs::Create 1018
+;         Pop $Dialog
+;         ${If} $Dialog == error
+;             Abort
+;         ${Endif}
 
-        ${NSD_CreateLabel} 0 0 100% 20u "$(ASIO_DRIVER_EXPLAIN)"
-        Pop $Label
-        ${NSD_CreateButton} 0 21u 100% 15u "$(ASIO_DRIVER_MORE_INFO)"
-        Pop $Button
-        ${NSD_OnClick} $Button OpenASIOHelpPage
+;         ${NSD_CreateLabel} 0 0 100% 20u "$(ASIO_DRIVER_EXPLAIN)"
+;         Pop $Label
+;         ${NSD_CreateButton} 0 21u 100% 15u "$(ASIO_DRIVER_MORE_INFO)"
+;         Pop $Button
+;         ${NSD_OnClick} $Button OpenASIOHelpPage
 
-        nsDialogs::Show
+;         nsDialogs::Show
 
-    ASIOExists:
+;     ASIOExists:
 
-FunctionEnd
+; FunctionEnd
 
-Function OpenASIOHelpPage
-    ExecShell "open" "$(ASIO_DRIVER_MORE_INFO_URL)"
-FunctionEnd
+; Function OpenASIOHelpPage
+;     ExecShell "open" "$(ASIO_DRIVER_MORE_INFO_URL)"
+; FunctionEnd
 
-Function ExitASIOInstalled
-    ClearErrors
-    EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
-    IfErrors 0 SkipMessage
-        MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
-            Abort
-   SkipMessage:
+; Function ExitASIOInstalled
+;     ClearErrors
+;     EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+;     IfErrors 0 SkipMessage
+;         MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
+;             Abort
+;    SkipMessage:
 
-FunctionEnd
+; FunctionEnd
 
 ; Uninstaller
 !macro un.InstallFiles buildArch
