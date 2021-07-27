@@ -287,22 +287,13 @@ function Build-App-Variants
         [string] $QtInstallPath
     )
 
-    # # foreach ($_ in ("x86_64", "x86"))
-    # foreach ($_ in ("x86_64"))
-    # {
-    #     $OriginalEnv = Get-ChildItem Env:
-    #     Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
-    #     Build-App -BuildConfig "release" -BuildArch $_
-    #     $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
-    # }
-    
-    # do 64bit only
-    $archbin="x86_64"
-    $OriginalEnv = Get-ChildItem Env:
-    Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $archbin
-    Build-App -BuildConfig "release" -BuildArch $archbin
-    $OriginalEnv | % { Set-Item "Env:$($archbin.Name)" $archbin.Value }
-    
+    foreach ($_ in ("x86_64", "x86"))
+    {
+        $OriginalEnv = Get-ChildItem Env:
+        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
+        Build-App -BuildConfig "release" -BuildArch $_
+        $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
+    }
 }
 
 # Build Windows installer
