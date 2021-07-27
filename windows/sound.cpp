@@ -26,6 +26,7 @@
 \******************************************************************************/
 
 #include "sound.h"
+#include "..\KoordASIO\src\flexasio\FlexASIO\cflexasio.h"
 
 /* Implementation *************************************************************/
 // external references
@@ -62,8 +63,18 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     long lNumInChanPrev  = lNumInChan;
     long lNumOutChanPrev = lNumOutChan;
 
-    loadAsioDriver ( cDriverNames[iDriverIdx] );
-
+    // Hack-load internal ASIO driver, rather than reading from ASIO SDK driver list
+    if (strDriverName == "KoordASIO-builtin")
+    {
+        auto* const asioDriver = CreateFlexASIO();
+	    if (asioDriver == nullptr) abort();
+        theAsioDriver = asioDriver;
+    }
+    else
+    {
+        loadAsioDriver ( cDriverNames[iDriverIdx] );
+    }
+    
     // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
     // should be set, but we haven't being doing that and it seems to work
     // okay...
@@ -82,17 +93,28 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        // Reset channel mapping if the sound card name has changed or the number of channels has changed
-        if ( ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) || ( lNumInChanPrev != lNumInChan ) || ( lNumOutChanPrev != lNumOutChan ) )
+        if (strDriverName == "KoordASIO-builtin") 
         {
-            // In order to fix https://github.com/jamulussoftware/jamulus/issues/796
-            // this code runs after a change in the ASIO driver (not when changing the ASIO input selection.)
+            if ( ( strCurDevName.compare ( strDriverName ) != 0 ) || ( lNumInChanPrev != lNumInChan ) || ( lNumOutChanPrev != lNumOutChan ) )
+            {
+                ResetChannelMapping();
+                strCurDevName = strDriverName;
+            }
+        }
+        else 
+        {
+            // Reset channel mapping if the sound card name has changed or the number of channels has changed
+            if ( ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) || ( lNumInChanPrev != lNumInChan ) || ( lNumOutChanPrev != lNumOutChan ) )
+            {
+                // In order to fix https://github.com/jamulussoftware/jamulus/issues/796
+                // this code runs after a change in the ASIO driver (not when changing the ASIO input selection.)
 
-            // mapping to the defaults (first two available channels)
-            ResetChannelMapping();
+                // mapping to the defaults (first two available channels)
+                ResetChannelMapping();
 
-            // store ID of selected driver if initialization was successful
-            strCurDevName = cDriverNames[iDriverIdx];
+                // store ID of selected driver if initialization was successful
+                strCurDevName = cDriverNames[iDriverIdx];
+            }
         }
     }
     else
@@ -564,7 +586,9 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     // the char* variable because of the ASIO API :-(
     for ( i = 0; i < lNumDevs; i++ )
     {
-        strDriverNames[i] = cDriverNames[i];
+        // put KoordASIO-builtin in to driver name list
+        strDriverName[0] = "KoordASIO-builtin";
+        strDriverNames[i+1] = cDriverNames[i];
     }
 
     // init device index as not initialized (invalid)
