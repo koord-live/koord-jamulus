@@ -1,5 +1,6 @@
 param(
     # Replace default path with system Qt installation folder if necessary
+    [string] $QtPath = "C:\Qt",
     [string] $QtInstallPath = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
@@ -170,6 +171,7 @@ Function Initialize-Build-Environment
 
     # Setup Qt executables paths for later calls
     Set-Item Env:QtQmakePath "$QtMsvcSpecPath\qmake.exe"
+    Set-Item Env:QtCmakePath  "$QtPath\Tools\CMake_64\bin\cmake.exe"
     Set-Item Env:QtWinDeployPath "$QtMsvcSpecPath\windeployqt.exe"
 
     ""
@@ -193,6 +195,13 @@ Function Initialize-Build-Environment
     if (-Not (Test-Path -Path $Env:QtQmakePath))
     {
         Throw "The Qt binaries for Microsoft Visual C++ 2017 or above could not be located at $QtMsvcSpecPath. " + `
+            "Please install Qt with support for MSVC 2017 or above before running this script," + `
+            "then call this script with the Qt install location, for example C:\Qt\5.15.2"
+    }
+
+    if (-Not (Test-Path -Path $Env:QtCmakePath))
+    {
+        Throw "The Qt binaries for CMake for Microsoft Visual C++ 2017 or above could not be located at $QtPath. " + `
             "Please install Qt with support for MSVC 2017 or above before running this script," + `
             "then call this script with the Qt install location, for example C:\Qt\5.15.2"
     }
@@ -223,17 +232,62 @@ Function Build-App
         [string] $BuildArch
     )
 
+    # Build kdasioconfig Qt project with CMake / nmake
+    Invoke-Native-Command -Command "$Env:QtCmakePath" `
+        -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake'", `
+            "-DCMAKE_BUILD_TYPE=Release", `
+            "-S", "$RootPath\KoordASIO\src\kdasioconfig", `
+            "-B", "$BuildPath\$BuildConfig\kdasioconfig", `
+            "-G", "NMake Makefiles")
+    Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
+    # Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    Invoke-Native-Command -Command "nmake"
+
+    # Build FlexASIO dlls with CMake / nmake
+    Invoke-Native-Command -Command "$Env:QtCmakePath" `
+        -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\KoordASIO\src\dechamps_cpputil:$RootPath\KoordASIO\src\dechamps_ASIOUtil'", `
+            "-DCMAKE_BUILD_TYPE=Release", `
+            "-S", "$RootPath\KoordASIO\src", `
+            "-B", "$BuildPath\$BuildConfig\flexasio", `
+            "-G", "NMake Makefiles")
+    Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
+    Invoke-Native-Command -Command "nmake"
+
+    # Now build rest of Koord-Realtime
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
         "-o", "$BuildPath\Makefile")
 
+    # Compile
     Set-Location -Path $BuildPath
     Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+
+    # Collect Qt DLLs - should cover kdasioconfig as well
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
-        -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$DeployPath\$BuildArch",
+        -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
+        "--no-system-d3d-compiler",  "--no-opengl-sw", `
         "$BuildPath\$BuildConfig\$AppName.exe")
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
+
+    # Transfer VS dist DLLs for x64
+    Copy-Item -Path "$VsDistFile64Path\*" -Destination "$DeployPath\$BuildArch"
+        # Also add KoordASIO build files:
+            # kdasioconfig files inc qt dlls now in 
+                # D:/a/KoordASIO/KoordASIO/deploy/x86_64/
+                    # - kdasioconfig.exe
+                    # all qt dlls etc ...
+            # flexasio files in:
+                # D:\a\KoordASIO\KoordASIO\build\flexasio\install\bin
+                    # - FlexASIO.dll
+                    # - portaudio_x64.dll 
+    # Move kdasioconfig.exe to deploy dir
+    Move-Item -Path "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe" -Destination "$DeployPath\$BuildArch" -Force
+    # Move 2 x FlexASIO dlls to deploy dir, rename DLL here for separation
+    Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\KoordASIO.dll" -Destination "$DeployPath\$BuildArch" -Force
+    Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\portaudio_x64.dll" -Destination "$DeployPath\$BuildArch" -Force
+
+    # clean up
     Invoke-Native-Command -Command "nmake" -Arguments ("clean")
     Set-Location -Path $RootPath
 }
