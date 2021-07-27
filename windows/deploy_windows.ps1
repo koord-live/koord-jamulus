@@ -6,9 +6,7 @@ param(
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
-    [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
-    [string] $VsDistFile64Path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.29.30036\x64\Microsoft.VC142.CRT"
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
 
 # change directory to the directory above (if needed)
@@ -223,58 +221,17 @@ Function Build-App
         [string] $BuildArch
     )
 
-    # Build kdasioconfig Qt project with CMake / nmake
-    Invoke-Native-Command -Command "$Env:QtCmakePath" `
-        -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake'", `
-            "-DCMAKE_BUILD_TYPE=Release", `
-            "-S", "$RootPath\KoordASIO\src\kdasioconfig", `
-            "-B", "$BuildPath\$BuildConfig\kdasioconfig", `
-            "-G", "NMake Makefiles")
-    Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
-    # Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
-    Invoke-Native-Command -Command "nmake"
-
-    # Build FlexASIO dlls with CMake / nmake
-    Invoke-Native-Command -Command "$Env:QtCmakePath" `
-        -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\KoordASIO\src\dechamps_cpputil:$RootPath\KoordASIO\src\dechamps_ASIOUtil'", `
-            "-DCMAKE_BUILD_TYPE=Release", `
-            "-S", "$RootPath\KoordASIO\src", `
-            "-B", "$BuildPath\$BuildConfig\flexasio", `
-            "-G", "NMake Makefiles")
-    Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
-    Invoke-Native-Command -Command "nmake"
-
-    # Now build rest of Koord-Realtime
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
         "-o", "$BuildPath\Makefile")
+
     Set-Location -Path $BuildPath
     Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
-        -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch",
+        -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$DeployPath\$BuildArch",
         "$BuildPath\$BuildConfig\$AppName.exe")
+
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
-
-    # Transfer VS dist DLLs for x64
-    Copy-Item -Path "$VsDistFile64Path\*" -Destination "$DeployPath\$BuildArch"
-
-    # all build files:
-        # kdasioconfig files inc qt dlls now in 
-            # D:/a/KoordASIO/KoordASIO/deploy/x86_64/
-                # - kdasioconfig.exe
-                # all qt dlls etc ...
-        # flexasio files in:
-            # D:\a\KoordASIO\KoordASIO\build\flexasio\install\bin
-                # - FlexASIO.dll
-                # - portaudio_x64.dll 
-
-    # Move kdasioconfig.exe to deploy dir
-    Move-Item -Path "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe" -Destination "$DeployPath\$BuildArch" -Force
-    # Move 2 x FlexASIO dlls to deploy dir, rename DLL here for separation
-    Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\KoordASIO.dll" -Destination "$DeployPath\$BuildArch" -Force
-    Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\portaudio_x64.dll" -Destination "$DeployPath\$BuildArch" -Force
-
-    # clean up
     Invoke-Native-Command -Command "nmake" -Arguments ("clean")
     Set-Location -Path $RootPath
 }

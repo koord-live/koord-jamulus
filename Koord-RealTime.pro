@@ -88,13 +88,7 @@ win32 {
             user32.lib \
             advapi32.lib \
             winmm.lib \
-            ws2_32.lib 
-        # also add KoordASIO lib, 64bit only right now
-        # Full path in build will be:
-        # D:\a\koord-realtime\koord-realtime\KoordASIO\build\release\flexasio\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
-        LIBS += -L$$PWD/KoordASIO/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
-        INCLUDEPATH += $$PWD/KoordASIO/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
-        DEPENDPATH += $$PWD/KoordASIO/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+            ws2_32.lib
     }
 
     # replace ASIO with jack if requested
