@@ -253,6 +253,9 @@ Function Build-App
     Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
     Invoke-Native-Command -Command "nmake"
 
+    # get visibility on built files
+    Tree "$RootPath" /a
+
     # Now build rest of Koord-Realtime
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
