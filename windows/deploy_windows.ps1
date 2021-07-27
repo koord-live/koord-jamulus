@@ -254,7 +254,7 @@ Function Build-App
     Invoke-Native-Command -Command "nmake"
 
     # get visibility on built files
-    Tree "$RootPath" /a
+    Tree "$RootPath" /f /a
 
     # Now build rest of Koord-Realtime
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
@@ -265,7 +265,13 @@ Function Build-App
     Set-Location -Path $BuildPath
     Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
 
-    # Collect Qt DLLs - should cover kdasioconfig as well
+    # Collect Qt DLLs
+    # collect for kdasionconfig.exe
+    Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
+        -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
+        "--no-system-d3d-compiler",  "--no-opengl-sw", `
+        "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe")
+    # collect for Koord-RealTime.exe
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler",  "--no-opengl-sw", `

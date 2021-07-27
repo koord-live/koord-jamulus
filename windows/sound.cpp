@@ -590,10 +590,9 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
 
     // copy driver names to base class but internally we still have to use
     // the char* variable because of the ASIO API :-(
+    strDriverNames[0] = "KoordASIO-builtin"; // put KoordASIO-builtin at top of driver name list
     for ( i = 0; i < lNumDevs; i++ )
     {
-        // put KoordASIO-builtin in to driver name list
-        strDriverNames[0] = "KoordASIO-builtin";
         strDriverNames[i+1] = cDriverNames[i];
     }
 

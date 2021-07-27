@@ -57,7 +57,7 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 !define MUI_LANGDLL_REGISTRY_VALUENAME "InstallLanguage"
 
 ; Installer page configuration
-!define MUI_PAGE_CUSTOMFUNCTION_PRE AbortOnRunningApp
+; !define MUI_PAGE_CUSTOMFUNCTION_PRE AbortOnRunningApp
 !insertmacro MUI_PAGE_WELCOME
 
 ; Page Custom ASIOCheckInstalled ExitASIOInstalled
@@ -76,7 +76,7 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller page configuration
-!define MUI_PAGE_CUSTOMFUNCTION_PRE un.AbortOnRunningApp
+; !define MUI_PAGE_CUSTOMFUNCTION_PRE un.AbortOnRunningApp
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -89,18 +89,18 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
 ; Abort the installer/uninstaller if Jamulus is running
 
-!macro _AbortOnRunningApp
-
-    ; nsProcess::_FindProcess "${APP_EXE}"
-    ; Pop $R0
-
-    ; ${If} $R0 = 0
-    ;     MessageBox MB_OK|MB_ICONEXCLAMATION "$(RUNNING_APP_MSG)" /sd IDOK
-    ;     Quit
-    ; ${EndIf}
-    MessageBox MB_OK|MB_ICONEXCLAMATION "$(RUNNING_APP_MSG)" /sd IDOK
-
-!macroend
+;!macro _AbortOnRunningApp
+;
+;    ; nsProcess::_FindProcess "${APP_EXE}"
+;    ; Pop $R0
+;
+;    ; ${If} $R0 = 0
+;    ;     MessageBox MB_OK|MB_ICONEXCLAMATION "$(RUNNING_APP_MSG)" /sd IDOK
+;    ;     Quit
+;    ; ${EndIf}
+;    MessageBox MB_OK|MB_ICONEXCLAMATION "$(RUNNING_APP_MSG)" /sd IDOK
+;
+;!macroend
 
 ; Define Dialog variables
 
@@ -364,9 +364,9 @@ Function FinishPage.Run ; run the app
     Exec '"$WINDIR\explorer.exe" "$INSTDIR\${APP_EXE}"' ; see http://mdb-blog.blogspot.com/2013/01/nsis-lunch-program-as-user-from-uac.html and http://nsis.sourceforge.net/Run_an_application_shortcut_after_an_install
 FunctionEnd
 
-Function AbortOnRunningApp
-    !insertmacro _AbortOnRunningApp
-FunctionEnd
+;Function AbortOnRunningApp
+;    !insertmacro _AbortOnRunningApp
+;FunctionEnd
 
 Function createdesktopshortcut
    WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}" "1" ; remember that icon should be installed next time
@@ -484,6 +484,6 @@ Function un.onInit
 
 FunctionEnd
 
-Function un.AbortOnRunningApp
-    !insertmacro _AbortOnRunningApp
-FunctionEnd
+;Function un.AbortOnRunningApp
+;    !insertmacro _AbortOnRunningApp
+;FunctionEnd
