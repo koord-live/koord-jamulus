@@ -6,8 +6,8 @@ param(
     [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
-    [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
+    [string] $InnoSetupUrl = "https://jrsoftware.org/download.php/is.exe",
+    [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
     [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.29.30036\x64\Microsoft.VC142.CRT"
 )
@@ -20,7 +20,7 @@ $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
 $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
-$AppName = "Koord-RealTime"
+$AppName = "KoordASIO"
 
 # Stop at all errors
 $ErrorActionPreference = "Stop"
@@ -137,8 +137,11 @@ Function Install-Dependencies
     Initialize-Module-Here -m "VSSetup"
     Install-Dependency -Uri $AsioSDKUrl `
         -Name $AsioSDKName -Destination "ASIOSDK2"
-    Install-Dependency -Uri $NsisUrl `
-        -Name $NsisName -Destination "NSIS"
+
+    # assuming Powershell3, install Chocolatey
+    Set-ExecutionPolicy Bypass -Scope Process -Force; iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex
+    # now install Innosetup
+    choco install innosetup
 }
 
 # Setup environment variables and build tool paths
@@ -171,7 +174,8 @@ Function Initialize-Build-Environment
 
     # Setup Qt executables paths for later calls
     Set-Item Env:QtQmakePath "$QtMsvcSpecPath\qmake.exe"
-    Set-Item Env:QtCmakePath  "C:\Qt\Tools\CMake_64\bin\cmake.exe" #FIXME should use $Env:QtPath
+    Set-Item Env:QtCmakePath  "$QtPath\Tools\CMake_64\bin\cmake.exe"
+    Set-Item Env:QtCmakePath  "C:\Qt\Tools\CMake_64\bin\cmake.exe"
     Set-Item Env:QtWinDeployPath "$QtMsvcSpecPath\windeployqt.exe"
 
     ""
@@ -222,7 +226,7 @@ Function Initialize-Build-Environment
     Remove-Item -Path $EnvDump -Force
 }
 
-# Build Koord-RealTime x86_64 and x86
+# Build KoordASIO x86_64 and x86
 Function Build-App
 {
     param(
@@ -236,7 +240,7 @@ Function Build-App
     Invoke-Native-Command -Command "$Env:QtCmakePath" `
         -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake'", `
             "-DCMAKE_BUILD_TYPE=Release", `
-            "-S", "$RootPath\KoordASIO\src\kdasioconfig", `
+            "-S", "$RootPath\src\kdasioconfig", `
             "-B", "$BuildPath\$BuildConfig\kdasioconfig", `
             "-G", "NMake Makefiles")
     Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
@@ -245,57 +249,51 @@ Function Build-App
 
     # Build FlexASIO dlls with CMake / nmake
     Invoke-Native-Command -Command "$Env:QtCmakePath" `
-        -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\KoordASIO\src\dechamps_cpputil:$RootPath\KoordASIO\src\dechamps_ASIOUtil'", `
+        -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\src\dechamps_cpputil:$RootPath\src\dechamps_ASIOUtil'", `
             "-DCMAKE_BUILD_TYPE=Release", `
-            "-S", "$RootPath\KoordASIO\src", `
+            "-S", "$RootPath\src", `
             "-B", "$BuildPath\$BuildConfig\flexasio", `
             "-G", "NMake Makefiles")
     Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
     Invoke-Native-Command -Command "nmake"
 
-    # get visibility on built files
-    Tree "$RootPath" /a
-
-    # Now build rest of Koord-Realtime
-    Invoke-Native-Command -Command "$Env:QtQmakePath" `
-        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
-        "-o", "$BuildPath\Makefile")
-
-    # Compile
-    Set-Location -Path $BuildPath
-    Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
-
-    # Collect Qt DLLs - should cover kdasioconfig as well
+    # Collect necessary Qt dlls for kdasioconfig
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler",  "--no-opengl-sw", `
-        "$BuildPath\$BuildConfig\$AppName.exe")
+        "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe")
 
-    Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
+    Tree "$VsDistFile64Redist" /a
 
     # Transfer VS dist DLLs for x64
     Copy-Item -Path "$VsDistFile64Path\*" -Destination "$DeployPath\$BuildArch"
-        # Also add KoordASIO build files:
-            # kdasioconfig files inc qt dlls now in 
-                # D:/a/KoordASIO/KoordASIO/deploy/x86_64/
-                    # - kdasioconfig.exe
-                    # all qt dlls etc ...
-            # flexasio files in:
-                # D:\a\KoordASIO\KoordASIO\build\flexasio\install\bin
-                    # - FlexASIO.dll
-                    # - portaudio_x64.dll 
+
+    # all build files:
+        # kdasioconfig files inc qt dlls now in 
+            # D:/a/KoordASIO/KoordASIO/deploy/x86_64/
+                # - kdasioconfig.exe
+                # all qt dlls etc ...
+        # flexasio files in:
+            # D:\a\KoordASIO\KoordASIO\build\flexasio\install\bin
+                # - FlexASIO.dll
+                # - portaudio_x64.dll 
+
     # Move kdasioconfig.exe to deploy dir
     Move-Item -Path "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe" -Destination "$DeployPath\$BuildArch" -Force
     # Move 2 x FlexASIO dlls to deploy dir, rename DLL here for separation
     Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\KoordASIO.dll" -Destination "$DeployPath\$BuildArch" -Force
     Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\portaudio_x64.dll" -Destination "$DeployPath\$BuildArch" -Force
+    # move InnoSetup script to deploy dir
+    Move-Item -Path "$WindowsPath\kdinstaller.iss" -Destination "$RootPath" -Force
 
-    # clean up
+    Get-ChildItem -Recurse $RootPath
+
     Invoke-Native-Command -Command "nmake" -Arguments ("clean")
     Set-Location -Path $RootPath
+
 }
 
-# Build and deploy Koord-RealTime 64bit and 32bit variants
+# Build and deploy KoordASIO 64bit and 32bit variants
 function Build-App-Variants
 {
     param(
@@ -304,7 +302,7 @@ function Build-App-Variants
     )
 
     # foreach ($_ in ("x86_64", "x86"))
-    foreach ($_ in ("x86_64"))
+    foreach ($_ in ("x86_64")) # only build x64 now
     {
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
@@ -316,7 +314,7 @@ function Build-App-Variants
 # Build Windows installer
 Function Build-Installer
 {
-    foreach ($_ in Get-Content -Path "$RootPath\$AppName.pro")
+    foreach ($_ in Get-Content -Path "$RootPath\kdASIOVersion.txt")
     {
         if ($_ -Match "^VERSION *= *(.*)$")
         {
@@ -325,38 +323,22 @@ Function Build-Installer
         }
     }
 
-    Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
-        -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
-        "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
-        "$WindowsPath\installer.nsi")
+    # Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+    #     -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+    #     "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
+    #     "$WindowsPath\installer.nsi")
+
+    #FIXME for 64bit build only
+    Set-Location -Path "$RootPath"
+    # /Program Files (x86)/Inno Setup 6/ISCC.exe
+    Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
+        -Arguments ("$RootPath\kdinstaller.iss", `
+         "/FKoordASIO-${AppVersion}")
+
 }
 
-# # Build and copy NS-Process dll
-# Function Build-NSProcess
-# {
-#     param(
-#         [Parameter(Mandatory=$true)]
-#         [string] $QtInstallPath
-#     )
-#     if (!(Test-Path -path "$WindowsPath\nsProcess.dll")) {
-
-#         echo "Building nsProcess..."
-
-#         $OriginalEnv = Get-ChildItem Env:
-#         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch "x86"
-    
-#         Invoke-Native-Command -Command "msbuild" `
-#             -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
-#             "/p:Platform=Win32")
-   
-#         Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
-#         Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
-#         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
-#     }
-# }
 
 Clean-Build-Environment
 Install-Dependencies
 Build-App-Variants -QtInstallPath $QtInstallPath
-# Build-NSProcess -QtInstallPath $QtInstallPath
 Build-Installer
