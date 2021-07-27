@@ -52,6 +52,10 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         {
             iDriverIdx = i;
         }
+        else if (strDriverName == "KoordASIO-builtin")
+        {
+            iDriverIdx = 0;  // we hardcoded this earlier
+        }
     }
 
     // if the selected driver was not found, return an error message
