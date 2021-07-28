@@ -52,10 +52,10 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         {
             iDriverIdx = i + 1; // adjust for offset due to built-in driver
         }
-        else if (strDriverName == "KoordASIO-builtin")
-        {
-            iDriverIdx = 0;  // we hardcoded this earlier
-        }
+    }
+    if (strDriverName == "KoordASIO-builtin")
+    {
+        iDriverIdx = 0;  // we hardcoded this earlier
     }
 
     // if the selected driver was not found, return an error message
@@ -78,7 +78,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     }
     else
     {
-        loadAsioDriver ( cDriverNames[iDriverIdx] );
+        loadAsioDriver ( cDriverNames[iDriverIdx - 1] ); // adjust for offset
     }
     
     // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
@@ -119,7 +119,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
                 ResetChannelMapping();
 
                 // store ID of selected driver if initialization was successful
-                strCurDevName = cDriverNames[iDriverIdx];
+                strCurDevName = cDriverNames[iDriverIdx - 1];
             }
         }
     }
@@ -597,9 +597,9 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
         strDriverNames[i + 1] = cDriverNames[i];
     }
     // strDriverNames should look something like:
-    // strDriverNames[0] = "KoordASIO-builtin"
-    // strDriverNames[1] = "ASIO4ALL"
-    // strDriverNames[2] = "Focusrite ASIO"
+    // 0 - strDriverNames[0] = "KoordASIO-builtin" --> no cDriverNames entry
+    // 1 - strDriverNames[1] = "ASIO4ALL" --> cDriverNames[0]
+    // 2 - strDriverNames[2] = "Focusrite ASIO" --> cDriverNames[1]
 
     // init device index as not initialized (invalid)
     strCurDevName = "";
