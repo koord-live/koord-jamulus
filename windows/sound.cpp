@@ -50,7 +50,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     {
         if ( strDriverName.compare ( cDriverNames[i] ) == 0 )
         {
-            iDriverIdx = i;
+            iDriverIdx = i + 1; // adjust for offset due to built-in driver
         }
         else if (strDriverName == "KoordASIO-builtin")
         {
@@ -591,11 +591,15 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
 
     // copy driver names to base class but internally we still have to use
     // the char* variable because of the ASIO API :-(    
+    strDriverNames[0] = "KoordASIO-builtin"; // put KoordASIO-builtin at start of driver name list
     for ( i = 0; i < lNumDevs; i++ )
     {
-        strDriverNames[i] = cDriverNames[i];
+        strDriverNames[i + 1] = cDriverNames[i];
     }
-    strDriverNames[lNumDevs] = "KoordASIO-builtin"; // put KoordASIO-builtin at end of driver name list
+    // strDriverNames should look something like:
+    // strDriverNames[0] = "KoordASIO-builtin"
+    // strDriverNames[1] = "ASIO4ALL"
+    // strDriverNames[2] = "Focusrite ASIO"
 
     // init device index as not initialized (invalid)
     strCurDevName = "";
