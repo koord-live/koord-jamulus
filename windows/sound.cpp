@@ -577,24 +577,25 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     loadAsioDriver ( cDummyName ); // to initialize external object
     lNumDevs = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
 
-    // in case we do not have a driver available, throw error
-    if ( lNumDevs == 0 )
-    {
-        throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
-                        QString ( tr ( "Please install an ASIO driver before running %1. "
-                                       "If you own a device with ASIO support, install its official ASIO driver. "
-                                       "If not, you'll need to download and install a universal driver like ASIO4ALL." ) )
-                            .arg ( APP_NAME ) );
-    }
+    /* We KNOW we have a driver available now, so we don't need this */
+    // // in case we do not have a driver available, throw error
+    // if ( lNumDevs == 0 )
+    // {
+    //     throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
+    //                     QString ( tr ( "Please install an ASIO driver before running %1. "
+    //                                    "If you own a device with ASIO support, install its official ASIO driver. "
+    //                                    "If not, you'll need to download and install a universal driver like ASIO4ALL." ) )
+    //                         .arg ( APP_NAME ) );
+    // }
     asioDrivers->removeCurrentDriver();
 
     // copy driver names to base class but internally we still have to use
-    // the char* variable because of the ASIO API :-(
-    strDriverNames[0] = "KoordASIO-builtin"; // put KoordASIO-builtin at top of driver name list
+    // the char* variable because of the ASIO API :-(    
     for ( i = 0; i < lNumDevs; i++ )
     {
-        strDriverNames[i+1] = cDriverNames[i];
+        strDriverNames[i] = cDriverNames[i];
     }
+    strDriverNames[lNumDevs] = "KoordASIO-builtin"; // put KoordASIO-builtin at end of driver name list
 
     // init device index as not initialized (invalid)
     strCurDevName = "";
