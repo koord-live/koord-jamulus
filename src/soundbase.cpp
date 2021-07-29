@@ -79,8 +79,9 @@ QStringList CSoundBase::GetDevNames()
     // put all device names in the string list
 #ifdef WIN32    
     for ( int iDev = 0; iDev < lNumDevs+1; iDev++ ) // account for extra ASIO built-in driver
-else
+#else
     for ( int iDev = 0; iDev < lNumDevs; iDev++ )
+#endif
     {
         slDevNames << strDriverNames[iDev];
     }
