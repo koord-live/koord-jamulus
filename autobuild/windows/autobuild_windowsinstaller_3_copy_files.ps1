@@ -33,9 +33,9 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
 
 # Rename the files
 echo "rename exe file"
-$artifact_deploy_filename = "koord-realtime_${Env:jamulus_buildversionstring}_win.exe"
+$artifact_deploy_filename = "Koord-RealTime_${Env:jamulus_buildversionstring}_win64.exe"
 echo "rename deploy file to $artifact_deploy_filename"
-cp "$jamulus_project_path\deploy\Koord-RealTime*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
+cp "$jamulus_project_path\Output\Koord-RealTime-*.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
 
 # echo "rename appx file"
 # $winrt_artifact_deploy_filename = "koord-realtime_${Env:jamulus_buildversionstring}_win.appx"
