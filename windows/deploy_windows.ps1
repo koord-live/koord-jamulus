@@ -6,8 +6,7 @@ param(
     [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
-    [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
+    [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
     [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.29.30036\x64\Microsoft.VC142.CRT"
 )
@@ -137,8 +136,11 @@ Function Install-Dependencies
     Initialize-Module-Here -m "VSSetup"
     Install-Dependency -Uri $AsioSDKUrl `
         -Name $AsioSDKName -Destination "ASIOSDK2"
-    Install-Dependency -Uri $NsisUrl `
-        -Name $NsisName -Destination "NSIS"
+    
+    # assuming Powershell3, install Chocolatey
+    Set-ExecutionPolicy Bypass -Scope Process -Force; iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex
+    # now install Innosetup
+    choco install innosetup
 }
 
 # Setup environment variables and build tool paths
@@ -296,6 +298,9 @@ Function Build-App
     Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\KoordASIO.dll" -Destination "$DeployPath\$BuildArch" -Force
     Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\portaudio_x64.dll" -Destination "$DeployPath\$BuildArch" -Force
 
+    # move InnoSetup script to deploy dir
+    Move-Item -Path "$WindowsPath\kdinstaller.iss" -Destination "$RootPath" -Force
+
     # clean up
     Invoke-Native-Command -Command "nmake" -Arguments ("clean")
     Set-Location -Path $RootPath
@@ -331,10 +336,17 @@ Function Build-Installer
         }
     }
 
-    Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
-        -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
-        "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
-        "$WindowsPath\installer.nsi")
+    # Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+    #     -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+    #     "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
+    #     "$WindowsPath\installer.nsi")
+
+    #FIXME for 64bit build only
+    Set-Location -Path "$RootPath"
+    # /Program Files (x86)/Inno Setup 6/ISCC.exe
+    Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
+        -Arguments ("$RootPath\kdinstaller.iss", `
+         "/FKoord-RealTime-${AppVersion}")
 }
 
 # # Build and copy NS-Process dll
