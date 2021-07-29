@@ -808,7 +808,7 @@ void CClientDlg::OnConnectDisconBut()
 void CClientDlg::OnNewStartClicked()
 {
     // just open website for now
-    QDesktopServices::openUrl(QUrl("https://test.koord.live", QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl("https://koord.live", QUrl::TolerantMode));
 }
 
 void CClientDlg::OnClearAllStoredSoloMuteSettings()
