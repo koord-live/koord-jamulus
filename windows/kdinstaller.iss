@@ -25,5 +25,8 @@ WizardSmallImageFile=windows\koord-realtime-small.bmp
 ; install everything else in deploy dir, including portaudio.dll, kdasioconfig.exe and all Qt dll deps
 Source:"deploy\x86_64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 64bit; Check: Is64BitInstallMode
 
+[Icons]
+Name: "{group}\Koord-RealTime"; Filename: "{app}\Koord-RealTime.exe"; WorkingDir: "{app}"
+
 [Run]
 Filename: "{app}\Koord-RealTime.exe"; Description: "Launch Koord-RealTime"; Flags: postinstall nowait skipifsilent unchecked
