@@ -24,7 +24,6 @@ $AppName = "Koord-RealTime"
 # Stop at all errors
 $ErrorActionPreference = "Stop"
 
-
 # Execute native command with errorlevel handling
 Function Invoke-Native-Command {
     Param(
@@ -127,7 +126,7 @@ Function Install-Dependency
     Remove-Item -Path $TempFileName -Force
 }
 
-# Install VSSetup (Visual Studio detection), ASIO SDK and NSIS Installer
+# Install VSSetup (Visual Studio detection), ASIO SDK and InnoSetup
 Function Install-Dependencies
 {
     if (-not (Get-PackageProvider -Name nuget).Name -eq "nuget") {
@@ -242,7 +241,6 @@ Function Build-App
             "-B", "$BuildPath\$BuildConfig\kdasioconfig", `
             "-G", "NMake Makefiles")
     Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
-    # Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
     Invoke-Native-Command -Command "nmake"
 
     # Build FlexASIO dlls with CMake / nmake
@@ -294,7 +292,7 @@ Function Build-App
                     # - portaudio_x64.dll 
     # Move kdasioconfig.exe to deploy dir
     Move-Item -Path "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe" -Destination "$DeployPath\$BuildArch" -Force
-    # Move 2 x FlexASIO dlls to deploy dir, rename DLL here for separation
+    # Move 2 x FlexASIO dlls to deploy dir
     Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\KoordASIO.dll" -Destination "$DeployPath\$BuildArch" -Force
     Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\portaudio_x64.dll" -Destination "$DeployPath\$BuildArch" -Force
 
@@ -336,11 +334,6 @@ Function Build-Installer
         }
     }
 
-    # Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
-    #     -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
-    #     "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
-    #     "$WindowsPath\installer.nsi")
-
     #FIXME for 64bit build only
     Set-Location -Path "$RootPath"
     # /Program Files (x86)/Inno Setup 6/ISCC.exe
@@ -349,32 +342,7 @@ Function Build-Installer
          "/FKoord-RealTime-${AppVersion}")
 }
 
-# # Build and copy NS-Process dll
-# Function Build-NSProcess
-# {
-#     param(
-#         [Parameter(Mandatory=$true)]
-#         [string] $QtInstallPath
-#     )
-#     if (!(Test-Path -path "$WindowsPath\nsProcess.dll")) {
-
-#         echo "Building nsProcess..."
-
-#         $OriginalEnv = Get-ChildItem Env:
-#         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch "x86"
-    
-#         Invoke-Native-Command -Command "msbuild" `
-#             -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
-#             "/p:Platform=Win32")
-   
-#         Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
-#         Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
-#         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
-#     }
-# }
-
 Clean-Build-Environment
 Install-Dependencies
 Build-App-Variants -QtInstallPath $QtInstallPath
-# Build-NSProcess -QtInstallPath $QtInstallPath
 Build-Installer
