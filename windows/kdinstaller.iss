@@ -27,6 +27,14 @@ Source:"deploy\x86_64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 
 
 [Icons]
 Name: "{group}\Koord-RealTime"; Filename: "{app}\Koord-RealTime.exe"; WorkingDir: "{app}"
+Name: "{group}\KoordASIO Config"; Filename: "{app}\kdasioconfig.exe"; WorkingDir: "{app}"
 
 [Run]
+Filename: "{app}\kdasioconfig.exe"; Description: "Run KoordASIO-builtin Config"; Flags: postinstall nowait skipifsilent
 Filename: "{app}\Koord-RealTime.exe"; Description: "Launch Koord-RealTime"; Flags: postinstall nowait skipifsilent unchecked
+
+; install reg key to locate builtin kdasioconfig at runtime
+[Registry]
+Root: HKLM64; Subkey: "Software\Koord"; Flags: uninsdeletekeyifempty
+Root: HKLM64; Subkey: "Software\Koord\KoordASIOi"; Flags: uninsdeletekey
+Root: HKLM64; Subkey: "Software\Koord\KoordASIOi\Install"; ValueType: string; ValueName: "InstallPath"; ValueData: "{app}"
