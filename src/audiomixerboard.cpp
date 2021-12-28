@@ -886,11 +886,11 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     pScrollArea                  = new CMixerBoardScrollArea ( this );
     pMainLayout                  = new QGridLayout ( pMixerWidget );
 
-    setAccessibleName ( "Personal Mix at the Server groupbox" );
-    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + ":</b> " +
-                   tr ( "When connected to a server, the controls here allow you to set your "
+    setAccessibleName ( "Personal Session Mix groupbox" );
+    setWhatsThis ( "<b>" + tr ( "Personal Session Mix" ) + ":</b> " +
+                   tr ( "When connected to a session, the controls here allow you to set your "
                         "local mix without affecting what others hear from you. The title shows "
-                        "the server name and, when known, whether it is actively recording." ) );
+                        "the session name and, when known, whether it is actively recording." ) );
 
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -961,7 +961,9 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     if ( strServerName.isEmpty() )
     {
         // no connection or connection was reset: show default title
-        setTitle ( tr ( "Server" ) );
+        //FIXME Don't want this hardcoding!
+        //setTitle ( tr ( "Session Channels" ) );
+
     }
     else
     {

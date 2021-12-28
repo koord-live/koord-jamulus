@@ -517,6 +517,9 @@ else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, st
     // window position of the connect window
     vecWindowPosConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
 
+    // window position of the basic connect window
+    vecWindowPosBasicConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposbascon_base64" ) );
+
     // visibility state of the settings window
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisset", bValue ) )
     {
@@ -533,6 +536,12 @@ else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, st
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winviscon", bValue ) )
     {
         bWindowWasShownConnect = bValue;
+    }
+
+    // visibility state of the connect window
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisbascon", bValue ) )
+    {
+        bWindowWasShownBasicConnect = bValue;
     }
 
     // selected Settings Tab
@@ -718,6 +727,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // window position of the connect window
     PutIniSetting ( IniXMLDocument, "client", "winposcon_base64", ToBase64 ( vecWindowPosConnect ) );
 
+    // window position of the basic connect window
+    PutIniSetting ( IniXMLDocument, "client", "winposbascon_base64", ToBase64 ( vecWindowPosBasicConnect ) );
+
     // visibility state of the settings window
     SetFlagIniSet ( IniXMLDocument, "client", "winvisset", bWindowWasShownSettings );
 
@@ -726,6 +738,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // visibility state of the connect window
     SetFlagIniSet ( IniXMLDocument, "client", "winviscon", bWindowWasShownConnect );
+
+    // visibility state of the basic connect window
+    SetFlagIniSet ( IniXMLDocument, "client", "winvisbascon", bWindowWasShownBasicConnect );
 
     // Settings Tab
     SetNumericIniSet ( IniXMLDocument, "client", "settingstab", iSettingsTab );

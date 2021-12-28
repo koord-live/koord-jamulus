@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>436</width>
-    <height>524</height>
+    <height>545</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -1300,7 +1300,6 @@
   <tabstop>chbEnableOPUS64</tabstop>
   <tabstop>cbxCustomDirectories</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
-  <tabstop>cbxInputBoost</tabstop>
   <tabstop>chbDetectFeedback</tabstop>
   <tabstop>sldAudioPan</tabstop>
  </tabstops>

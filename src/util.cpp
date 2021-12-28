@@ -386,12 +386,12 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     // general description of software
     txvAbout->setText ( "<p>" +
-                        tr ( "This app enables musicians to perform real-time jam sessions "
-                             "over the internet." ) +
+                        tr ( "Koord-RealTime makes it easy for musicians to start real-time sessions "
+                             "to play over the internet." ) +
                         "<br>" +
-                        tr ( "There is a server which collects "
-                             " the audio data from each client, mixes the audio data and sends the mix "
-                             " back to each client." ) +
+                        tr ( "It is based on Jamulus, "
+                             " which is a mature and active open-source project "
+                             " dedicated to remote-play audio collaboration." ) +
                         "</p>"
                         "<p><font face=\"courier\">" // GPL header text
                         "This program is free software; you can redistribute it and/or modify "
@@ -602,7 +602,7 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
-    pAction = addAction ( tr ( "&About Jamulus..." ), this, SLOT ( OnHelpAbout() ) );
+    pAction = addAction ( tr ( "&About Koord-RealTime..." ), this, SLOT ( OnHelpAbout() ) );
     pAction->setMenuRole ( QAction::AboutRole ); // required for Mac
     pAction = addAction ( tr ( "About &Qt..." ), this, SLOT ( OnHelpAboutQt() ) );
     pAction->setMenuRole ( QAction::AboutQtRole ); // required for Mac
@@ -872,6 +872,19 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 {
     // remove all spaces from the address string
     return strAddress.simplified().replace ( " ", "" );
+}
+
+QString NetworkUtil::FixJamAddress ( const QString& strAddress )
+{
+    QRegExp rx("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
+    rx.indexIn(strAddress);
+    QStringList list = rx.capturedTexts();
+    QString ipAddress = list[0];  // only 1 IP address in the string!
+    return ipAddress;
+//    // remove all spaces from the address string
+//    const QString tmpAddr = strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
+//    return tmpAddr.simplified().replace( "/", "");
+// //    return strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
 }
 
 // Return whether the given HostAdress is within a private IP range

@@ -37,5 +37,18 @@
         <!-- Temporarily opt out of Dark Mode as Qt 5.9 does not support it well, see https://bugreports.qt.io/browse/QTBUG-68891 -->
         <key>NSRequiresAquaSystemAppearance</key>
         <string>true</string>
+
+        <!-- Add URL Handler for koord:// URLs -->
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>Koord-RealTime</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>koord</string>
+                </array>
+            </dict>
+        </array>
     </dict>
 </plist>

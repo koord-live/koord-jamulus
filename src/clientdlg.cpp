@@ -38,6 +38,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
+    bBasicConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
@@ -46,6 +47,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
     ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
+    BasicConnectDlg ( pNSetP, parent ),
     AnalyzerConsole ( pNCliP, parent )
 {
     setupUi ( this );
@@ -99,6 +101,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
 
+    // connect/disconnect button
+    butNewStart->setWhatsThis ( "<b>" + tr ( "Start New Session Button" ) + ":</b> " +
+                               tr ( "Opens default browser at Koord.Live to start a new private session." ) );
+
+    butNewStart->setAccessibleName ( tr ( "Start New Private Session button" ) );
+
     // reverberation level
     QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
                            tr ( "Reverb can be applied to one local mono audio channel or to both "
@@ -109,10 +117,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                 "channel selector to right and move the fader upwards until the "
                                 "desired reverb level is reached." );
 
-    lblAudioReverb->setWhatsThis ( strAudReverb );
-    sldAudioReverb->setWhatsThis ( strAudReverb );
+   lblAudioReverb->setWhatsThis ( strAudReverb );
+   sldAudioReverb->setWhatsThis ( strAudReverb );
 
-    sldAudioReverb->setAccessibleName ( tr ( "Reverb effect level setting" ) );
+   sldAudioReverb->setAccessibleName ( tr ( "Reverb effect level setting" ) );
 
     // reverberation channel selection
     QString strRevChanSel = "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " +
@@ -120,10 +128,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                  "reverb effect is applied can be chosen. Either the left "
                                  "or right input channel can be selected." );
 
-    rbtReverbSelL->setWhatsThis ( strRevChanSel );
-    rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
-    rbtReverbSelR->setWhatsThis ( strRevChanSel );
-    rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
+   rbtReverbSelL->setWhatsThis ( strRevChanSel );
+   rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
+   rbtReverbSelR->setWhatsThis ( strRevChanSel );
+   rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
 
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " + tr ( "Shows the current audio delay status:" ) +
@@ -231,7 +239,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     OnTimerStatus();
 
     // init connection button text
-    butConnect->setText ( tr ( "C&onnect" ) );
+    butConnect->setText ( tr ( "C&onnect to..." ) );
+
+    // init new session button text
+//    butNewStart->setText ( tr ( "&New Session" ) );
+    // FIXME DON'T hardcode here!
+//    butNewStart->setText ( tr ( "Create" ) );
 
     // init input level meter bars
     lbrInputLevelL->SetValue ( 0 );
@@ -245,7 +258,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
     sldAudioReverb->setValue ( iCurAudReverb );
-    sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
+//    sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
     // init input boost
     pClient->SetInputBoost ( pSettings->iInputBoost );
@@ -439,12 +452,21 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
     }
 
+    // basic connection setup window
+    if ( !pSettings->vecWindowPosBasicConnect.isEmpty() && !pSettings->vecWindowPosBasicConnect.isNull() )
+    {
+        BasicConnectDlg.restoreGeometry ( pSettings->vecWindowPosBasicConnect );
+    }
+
     // Connections -------------------------------------------------------------
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
+    QObject::connect ( butNewStart, &QPushButton::clicked, this, &CClientDlg::OnNewStartClicked );
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
+
+    QObject::connect ( chbPubJam, &QCheckBox::stateChanged, this, &CClientDlg::OnPubConnectStateChanged );
 
     QObject::connect ( chbChat, &QCheckBox::stateChanged, this, &CClientDlg::OnChatStateChanged );
 
@@ -463,7 +485,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
 
-    QObject::connect ( sldAudioReverb, &QSlider::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
+    QObject::connect ( sldAudioReverb, &QDial::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
 
     // radio buttons
     QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
@@ -551,6 +573,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+    QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -559,7 +582,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // restore connect dialog
     if ( pSettings->bWindowWasShownConnect )
     {
-        ShowConnectionSetupDialog();
+         ShowConnectionSetupDialog();
+    }
+
+    // restore basic connect dialog
+    if ( pSettings->bWindowWasShownBasicConnect )
+    {
+        ShowBasicConnectionSetupDialog();
     }
 
     // mute stream on startup (must be done after the signal connections)
@@ -595,15 +624,18 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
     pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
     pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
+    pSettings->vecWindowPosBasicConnect  = BasicConnectDlg.saveGeometry();
 
     pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
     pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
     pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
+    pSettings->bWindowWasShownConnect  = BasicConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
     ChatDlg.close();
     ConnectDlg.close();
+    BasicConnectDlg.close();
     AnalyzerConsole.close();
 
     // if connected, terminate connection
@@ -657,23 +689,23 @@ void CClientDlg::UpdateRevSelection()
     {
         // for stereo make channel selection invisible since
         // reverberation effect is always applied to both channels
-        rbtReverbSelL->setVisible ( false );
-        rbtReverbSelR->setVisible ( false );
+       rbtReverbSelL->setVisible ( false );
+       rbtReverbSelR->setVisible ( false );
     }
     else
     {
         // make radio buttons visible
-        rbtReverbSelL->setVisible ( true );
-        rbtReverbSelR->setVisible ( true );
+       rbtReverbSelL->setVisible ( true );
+       rbtReverbSelR->setVisible ( true );
 
         // update value
         if ( pClient->IsReverbOnLeftChan() )
         {
-            rbtReverbSelL->setChecked ( true );
+           rbtReverbSelL->setChecked ( true );
         }
         else
         {
-            rbtReverbSelR->setChecked ( true );
+           rbtReverbSelR->setChecked ( true );
         }
     }
 
@@ -743,6 +775,49 @@ void CClientDlg::OnConnectDlgAccepted()
     }
 }
 
+void CClientDlg::OnBasicConnectDlgAccepted()
+{
+    // We had an issue that the accepted signal was emit twice if a list item was double
+    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
+    // we process the accepted signal only once after the dialog was initially shown.
+    if ( bBasicConnectDlgWasShown )
+    {
+        // get the address from the connect dialog
+        QString strSelectedAddress = BasicConnectDlg.GetSelectedAddress();
+
+        // only store new host address in our data base if the address is
+        // not empty and it was not a server list item (only the addresses
+        // typed in manually are stored by definition)
+        if ( !strSelectedAddress.isEmpty() )
+        {
+            // store new address at the top of the list, if the list was already
+            // full, the last element is thrown out
+            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+        }
+
+        // get name to be set in audio mixer group box title
+        QString strMixerBoardLabel;
+
+        // an item of the server address combo box was chosen,
+        // just show the address string as it was entered by the
+        // user
+        strMixerBoardLabel = strSelectedAddress;
+
+        // first check if we are already connected, if this is the case we have to
+        // disconnect the old server first
+        if ( pClient->IsRunning() )
+        {
+            Disconnect();
+        }
+
+        // initiate connection
+        Connect ( strSelectedAddress, strMixerBoardLabel );
+
+        // reset flag
+        bBasicConnectDlgWasShown = false;
+    }
+}
+
 void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
@@ -753,8 +828,14 @@ void CClientDlg::OnConnectDisconBut()
     }
     else
     {
-        ShowConnectionSetupDialog();
+        ShowBasicConnectionSetupDialog();
     }
+}
+
+void CClientDlg::OnNewStartClicked()
+{
+    // just open website for now
+    QDesktopServices::openUrl(QUrl("https://koord.live", QUrl::TolerantMode));
 }
 
 void CClientDlg::OnClearAllStoredSoloMuteSettings()
@@ -964,6 +1045,18 @@ void CClientDlg::ShowConnectionSetupDialog()
     ConnectDlg.activateWindow();
 }
 
+void CClientDlg::ShowBasicConnectionSetupDialog()
+{
+    // show connect dialog
+    bBasicConnectDlgWasShown = true;
+    BasicConnectDlg.show();
+    BasicConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
+
+    // make sure dialog is upfront and has focus
+    BasicConnectDlg.raise();
+    BasicConnectDlg.activateWindow();
+}
+
 void CClientDlg::ShowGeneralSettings ( int iTab )
 {
     // open general settings dialog
@@ -1011,6 +1104,19 @@ void CClientDlg::OnSettingsStateChanged ( int value )
     else
     {
         ClientSettingsDlg.hide();
+    }
+}
+
+void CClientDlg::OnPubConnectStateChanged ( int value )
+{
+    if ( !bConnectDlgWasShown )
+    {
+        ShowConnectionSetupDialog();
+    }
+    else
+    {
+        bConnectDlgWasShown = false;
+        ConnectDlg.close();
     }
 }
 
@@ -1316,6 +1422,19 @@ void CClientDlg::UpdateDisplay()
         chbChat->setChecked ( true );
         chbChat->blockSignals ( false );
     }
+
+    if ( chbPubJam->isChecked() && !ConnectDlg.isVisible() )
+    {
+        chbPubJam->blockSignals ( true );
+        chbPubJam->setChecked ( false );
+        chbPubJam->blockSignals ( false );
+    }
+    if ( !chbPubJam->isChecked() && ConnectDlg.isVisible() )
+    {
+        chbPubJam->blockSignals ( true );
+        chbPubJam->setChecked ( true );
+        chbPubJam->blockSignals ( false );
+    }
 }
 
 void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -1328,7 +1447,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
     {
     case GD_ORIGINAL:
         backgroundFrame->setStyleSheet (
-            "QFrame#backgroundFrame { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
+            "QFrame#backgroundFrame { border-image:  url(:/png/main/res/background.png) 34px 30px 40px 40px;"
             "                         border-top:    34px transparent;"
             "                         border-bottom: 40px transparent;"
             "                         border-left:   30px transparent;"
@@ -1353,14 +1472,14 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         font:           bold; }" );
 
 #ifdef _WIN32
-        // Workaround QT-Windows problem: This should not be necessary since in the
-        // background frame the style sheet for QRadioButton was already set. But it
-        // seems that it is only applied if the style was set to default and then back
-        // to GD_ORIGINAL. This seems to be a QT related issue...
-        rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                       "font:  bold;" );
-        rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                       "font:  bold;" );
+       // Workaround QT-Windows problem: This should not be necessary since in the
+       // background frame the style sheet for QRadioButton was already set. But it
+       // seems that it is only applied if the style was set to default and then back
+       // to GD_ORIGINAL. This seems to be a QT related issue...
+       rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
+                                      "font:  bold;" );
+       rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
+                                      "font:  bold;" );
 #endif
 
         ledBuffers->SetType ( CMultiColorLED::MT_LED );
@@ -1372,9 +1491,9 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
         backgroundFrame->setStyleSheet ( "" );
 
 #ifdef _WIN32
-        // Workaround QT-Windows problem: See above description
-        rbtReverbSelL->setStyleSheet ( "" );
-        rbtReverbSelR->setStyleSheet ( "" );
+       // Workaround QT-Windows problem: See above description
+       rbtReverbSelL->setStyleSheet ( "" );
+       rbtReverbSelR->setStyleSheet ( "" );
 #endif
 
         ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );

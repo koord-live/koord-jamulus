@@ -38,20 +38,16 @@ switch ($BuildOption)
 ###  PROCEDURE  ###
 ###################
 
-# Rename the file
-echo "rename"
-if ($BuildOption -ne "")
-{
-    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win_${BuildOption}.exe"
-}
-else
-{
-    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win.exe"
-}
-
+# Rename the files
+echo "rename exe file"
+$artifact_deploy_filename = "Koord-RealTime_${Env:jamulus_buildversionstring}_win64.exe"
 echo "rename deploy file to $artifact_deploy_filename"
-cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
+cp "$jamulus_project_path\Output\Koord-RealTime-*.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
 
+# echo "rename appx file"
+# $winrt_artifact_deploy_filename = "koord-realtime_${Env:jamulus_buildversionstring}_win.appx"
+# echo "rename appx deploy file to $winrt_artifact_deploy_filename"
+# cp "$jamulus_project_path\xdeploy\Koord-RealTime*" "$jamulus_project_path\deploy\$winrt_artifact_deploy_filename"
 
 Function github_output_value
 {

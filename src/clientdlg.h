@@ -49,6 +49,7 @@
 #include "clientsettingsdlg.h"
 #include "chatdlg.h"
 #include "connectdlg.h"
+#include "basicconnectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
 #if defined( __APPLE__ ) || defined( __MACOSX )
@@ -89,6 +90,7 @@ protected:
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void SetMyWindowTitle ( const int iNumClients );
     void ShowConnectionSetupDialog();
+    void ShowBasicConnectionSetupDialog();
     void ShowGeneralSettings ( int iTab );
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
@@ -104,6 +106,7 @@ protected:
 
     bool           bConnected;
     bool           bConnectDlgWasShown;
+    bool           bBasicConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
     bool           bEnableIPv6;
@@ -124,10 +127,12 @@ protected:
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
+    CBasicConnectDlg   BasicConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
 
 public slots:
     void OnConnectDisconBut();
+    void OnNewStartClicked();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
     void OnTimerCheckAudioDeviceOk();
@@ -153,7 +158,7 @@ public slots:
 
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
-    void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
+    void OnOpenConnectionSetupDialog() { ShowBasicConnectionSetupDialog(); }
     void OnOpenUserProfileSettings();
     void OnOpenAudioNetSettings();
     void OnOpenAdvancedSettings();
@@ -175,6 +180,7 @@ public slots:
     void OnNumMixerPanelRowsChanged ( int value ) { MainMixerBoard->SetNumMixerPanelRows ( value ); }
 
     void OnSettingsStateChanged ( int value );
+    void OnPubConnectStateChanged ( int value );
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
 
@@ -229,6 +235,7 @@ public slots:
         MainMixerBoard->SetChannelLevels ( vecLevelList );
     }
 
+    void OnBasicConnectDlgAccepted();
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
