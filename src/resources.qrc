@@ -106,6 +106,7 @@
         <file>res/publicjam_txt.png</file>
         <file>res/chatbox_txt.png</file>
         <file>res/input_txt.png</file>
+        <file>res/reverb_knob_label.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>

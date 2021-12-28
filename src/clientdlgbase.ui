@@ -300,66 +300,94 @@ QCheckBox::indicator {
                        </property>
                       </widget>
                      </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="reverbControlHoriz">
                      <item>
-                      <layout class="QHBoxLayout" name="reverbLRHoriz">
+                      <layout class="QVBoxLayout" name="verticalLayout_4">
                        <item>
-                        <widget class="QRadioButton" name="rbtReverbSelL">
-                         <property name="layoutDirection">
-                          <enum>Qt::RightToLeft</enum>
+                        <widget class="QLabel" name="label_6">
+                         <property name="minimumSize">
+                          <size>
+                           <width>80</width>
+                           <height>0</height>
+                          </size>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color: rgb(251, 143, 0);</string>
+                          <string notr="true">image: url(:/png/main/res/reverb_knob_label.png);</string>
                          </property>
                          <property name="text">
-                          <string>L</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QRadioButton" name="rbtReverbSelR">
-                         <property name="styleSheet">
-                          <string notr="true">color: rgb(251, 143, 0);</string>
-                         </property>
-                         <property name="text">
-                          <string>R</string>
+                          <string/>
                          </property>
                         </widget>
                        </item>
                       </layout>
                      </item>
                      <item>
-                      <layout class="QHBoxLayout" name="reverbKnobHoriz">
+                      <layout class="QVBoxLayout" name="verticalLayout_6">
                        <item>
-                        <spacer>
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Minimum</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>0</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
+                        <layout class="QHBoxLayout" name="reverbLRHoriz">
+                         <item>
+                          <widget class="QRadioButton" name="rbtReverbSelL">
+                           <property name="layoutDirection">
+                            <enum>Qt::RightToLeft</enum>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">color: rgb(251, 143, 0);</string>
+                           </property>
+                           <property name="text">
+                            <string>L</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QRadioButton" name="rbtReverbSelR">
+                           <property name="styleSheet">
+                            <string notr="true">color: rgb(251, 143, 0);</string>
+                           </property>
+                           <property name="text">
+                            <string>R</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
                        </item>
                        <item>
-                        <widget class="QDial" name="sldAudioReverb">
-                         <property name="maximumSize">
-                          <size>
-                           <width>40</width>
-                           <height>40</height>
-                          </size>
-                         </property>
-                         <property name="wrapping">
-                          <bool>false</bool>
-                         </property>
-                         <property name="notchesVisible">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
+                        <layout class="QHBoxLayout" name="reverbKnobHoriz">
+                         <item>
+                          <spacer>
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <property name="sizeType">
+                            <enum>QSizePolicy::Minimum</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>0</width>
+                             <height>20</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                         <item>
+                          <widget class="QDial" name="sldAudioReverb">
+                           <property name="maximumSize">
+                            <size>
+                             <width>40</width>
+                             <height>40</height>
+                            </size>
+                           </property>
+                           <property name="wrapping">
+                            <bool>false</bool>
+                           </property>
+                           <property name="notchesVisible">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
                        </item>
                       </layout>
                      </item>
@@ -381,54 +409,6 @@ QCheckBox::indicator {
                       <string/>
                      </property>
                     </widget>
-                   </item>
-                   <item>
-                    <layout class="QHBoxLayout" name="pingtimeHorizBox">
-                     <item>
-                      <widget class="QLabel" name="lblPingVal">
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
-                       </property>
-                       <property name="frameShape">
-                        <enum>QFrame::Box</enum>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLabel" name="lblDelayVal">
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
-                       </property>
-                       <property name="frameShape">
-                        <enum>QFrame::Box</enum>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
                    </item>
                    <item>
                     <layout class="QHBoxLayout" name="ledHorizBox">
@@ -453,7 +433,7 @@ QCheckBox::indicator {
                         </size>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">image: url(:/png/main/res/led.png);</string>
+                        <string notr="true"/>
                        </property>
                       </widget>
                      </item>
@@ -477,8 +457,83 @@ QCheckBox::indicator {
                          <height>14</height>
                         </size>
                        </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="pingtimeHorizBox">
+                     <item>
+                      <widget class="QLabel" name="lblPingVal">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="layoutDirection">
+                        <enum>Qt::LeftToRight</enum>
+                       </property>
                        <property name="styleSheet">
-                        <string notr="true">image: url(:/png/main/res/led.png);</string>
+                        <string notr="true">QLabel {
+    border: 2px solid darkkhaki;
+	background: black;
+    padding: 5px;
+    border-radius: 3px;
+    opacity: 200;
+}</string>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::Box</enum>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblDelayVal">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="layoutDirection">
+                        <enum>Qt::LeftToRight</enum>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QLabel {
+    border: 2px solid darkkhaki;
+	background: black;
+    padding: 5px;
+    border-radius: 3px;
+    opacity: 200;
+}</string>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::Box</enum>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                        </property>
                       </widget>
                      </item>
