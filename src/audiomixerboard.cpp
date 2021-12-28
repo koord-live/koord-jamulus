@@ -920,7 +920,9 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     if ( strServerName.isEmpty() )
     {
         // no connection or connection was reset: show default title
-        setTitle ( tr ( "Session Channels" ) );
+        //FIXME Don't want this hardcoding!
+        //setTitle ( tr ( "Session Channels" ) );
+
     }
     else
     {

@@ -234,7 +234,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     butConnect->setText ( tr ( "C&onnect to..." ) );
 
     // init new session button text
-    butNewStart->setText ( tr ( "&New Session" ) );
+//    butNewStart->setText ( tr ( "&New Session" ) );
+    // FIXME DON'T hardcode here!
+//    butNewStart->setText ( tr ( "Create" ) );
 
     // init input level meter bars
     lbrInputLevelL->SetValue ( 0 );
@@ -1420,7 +1422,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
     {
     case GD_ORIGINAL:
         backgroundFrame->setStyleSheet (
-            "QFrame#backgroundFrame { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
+            "QFrame#backgroundFrame { border-image:  url(:/png/main/res/background.png) 34px 30px 40px 40px;"
             "                         border-top:    34px transparent;"
             "                         border-bottom: 40px transparent;"
             "                         border-left:   30px transparent;"
