@@ -24,4 +24,4 @@
 	url = ../../vdellamea/jamulus-server-remote
 [submodule "KoordASIO"]
 	path = KoordASIO
-	url = git@github.com:koord-live/KoordASIO.git
+	url = https://github.com/koord-live/KoordASIO.git
