@@ -12,7 +12,6 @@
         <file alias="translation_sv">res/translation/translation_sv_SE.qm</file>
         <file alias="translation_zh_CN">res/translation/translation_zh_CN.qm</file>
     </qresource>
-
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
         <file>res/CLEDGreenArrow.png</file>
@@ -103,7 +102,6 @@
         <file>res/fronticonserver.png</file>
         <file>res/background.png</file>
         <file>res/mute_btn_off.png</file>
-        <file>res/settings_btn.png</file>
         <file>res/krt_logo.png</file>
         <file>res/orange_btn.png</file>
         <file>res/create_btn.png</file>
@@ -116,6 +114,11 @@
         <file>res/chatbox_txt.png</file>
         <file>res/input_txt.png</file>
         <file>res/reverb_knob_label.png</file>
+        <file>res/general_btn_off.png</file>
+        <file>res/general_btn_on.png</file>
+        <file>res/mute_btn_on.png</file>
+        <file>res/solo_btn_off.png</file>
+        <file>res/solo_btn_on.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>
