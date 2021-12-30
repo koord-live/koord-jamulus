@@ -1180,7 +1180,8 @@ void CAudioMixerBoard::UpdateTitle()
     QString strEscServerName = strServerName;
     strEscServerName.replace ( "&", "&&" );
 
-    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strEscServerName );
+    //FIXME let's not do hard-coding like this
+    setTitle ( strTitlePrefix + tr ( "SESSION Mix at: " ) + strEscServerName );
     setAccessibleName ( title() );
 }
 

@@ -1465,9 +1465,9 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QCheckBox::indicator {   width:          38px;"
             "                         height:         21px; }"
             "QCheckBox::indicator:unchecked {"
-            "                         image:          url(:/png/fader/res/ledbuttonnotpressed.png); }"
+            "                         image:          url(:/png/main/res/general_btn_off.png); }"
             "QCheckBox::indicator:checked {"
-            "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
+            "                         image:          url(:/png/main/res/general_btn_on.png); }"
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
 
