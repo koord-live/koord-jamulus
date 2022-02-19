@@ -1,5 +1,5 @@
 {
-  "app-id": "live.koord.Koord-RealTime",
+  "app-id": "live.koord.koordrealtime",
   "runtime": "org.kde.Platform",
   "runtime-version": "5.15",
   "sdk": "org.kde.Sdk",
