@@ -139,10 +139,11 @@
                  <item>
                   <widget class="QLabel" name="lblInputLEDMeter">
                    <property name="styleSheet">
-                    <string notr="true">image: url(:/png/main/res/input_txt.png);</string>
+                    <string notr="true">font: 9pt &quot;Sans Serif&quot;;
+text-decoration: underline;</string>
                    </property>
                    <property name="text">
-                    <string/>
+                    <string>INPUT</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -251,28 +252,39 @@
                    </item>
                   </layout>
                  </item>
-                 <item alignment="Qt::AlignHCenter">
-                  <widget class="QCheckBox" name="chbLocalMute">
-                   <property name="enabled">
-                    <bool>true</bool>
+                 <item>
+                  <layout class="QHBoxLayout" name="muteBtnBox">
+                   <property name="spacing">
+                    <number>6</number>
                    </property>
-                   <property name="sizeIncrement">
-                    <size>
-                     <width>0</width>
-                     <height>0</height>
-                    </size>
+                   <property name="sizeConstraint">
+                    <enum>QLayout::SetDefaultConstraint</enum>
                    </property>
-                   <property name="baseSize">
-                    <size>
-                     <width>0</width>
-                     <height>0</height>
-                    </size>
+                   <property name="leftMargin">
+                    <number>6</number>
                    </property>
-                   <property name="layoutDirection">
-                    <enum>Qt::LeftToRight</enum>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QCheckBox::indicator:unchecked {
+                   <item>
+                    <widget class="QCheckBox" name="chbLocalMute">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="sizeIncrement">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="layoutDirection">
+                      <enum>Qt::LeftToRight</enum>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QCheckBox::indicator:unchecked {
     image: url(:/png/main/res/mute_btn_off.png);
 }
 QCheckBox::indicator:checked {
@@ -282,14 +294,16 @@ QCheckBox::indicator {
 	width:          38px; 
 	height:         38px; 
 }</string>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="checkable">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="checkable">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
                </item>
@@ -315,10 +329,11 @@ QCheckBox::indicator {
                      <item>
                       <widget class="QLabel" name="lblAudioReverb">
                        <property name="styleSheet">
-                        <string notr="true">image: url(:/png/main/res/reverb_txt.png);</string>
+                        <string notr="true">font: 9pt &quot;Sans Serif&quot;;
+text-decoration: underline;</string>
                        </property>
                        <property name="text">
-                        <string/>
+                        <string>REVERB</string>
                        </property>
                        <property name="textFormat">
                         <enum>Qt::PlainText</enum>
@@ -332,26 +347,6 @@ QCheckBox::indicator {
                    </item>
                    <item>
                     <layout class="QHBoxLayout" name="reverbControlHoriz">
-                     <item>
-                      <layout class="QVBoxLayout" name="verticalLayout_4">
-                       <item>
-                        <widget class="QLabel" name="label_6">
-                         <property name="minimumSize">
-                          <size>
-                           <width>80</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">image: url(:/png/main/res/reverb_knob_label.png);</string>
-                         </property>
-                         <property name="text">
-                          <string/>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </item>
                      <item>
                       <layout class="QVBoxLayout" name="verticalLayout_6">
                        <item>
@@ -383,22 +378,6 @@ QCheckBox::indicator {
                        </item>
                        <item>
                         <layout class="QHBoxLayout" name="reverbKnobHoriz">
-                         <item>
-                          <spacer>
-                           <property name="orientation">
-                            <enum>Qt::Horizontal</enum>
-                           </property>
-                           <property name="sizeType">
-                            <enum>QSizePolicy::Minimum</enum>
-                           </property>
-                           <property name="sizeHint" stdset="0">
-                            <size>
-                             <width>0</width>
-                             <height>20</height>
-                            </size>
-                           </property>
-                          </spacer>
-                         </item>
                          <item>
                           <widget class="QDial" name="sldAudioReverb">
                            <property name="maximumSize">
@@ -435,63 +414,77 @@ QCheckBox::indicator {
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label">
+                    <widget class="QLabel" name="lblConnMonitor">
                      <property name="styleSheet">
-                      <string notr="true">image: url(:/png/main/res/latency_txt.png);</string>
+                      <string notr="true"/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>Connection Monitor</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <layout class="QHBoxLayout" name="ledHorizBox">
-                     <item>
-                      <widget class="QFrame" name="frame_3">
-                       <property name="maximumSize">
-                        <size>
-                         <width>38</width>
-                         <height>30</height>
-                        </size>
+                    <layout class="QGridLayout" name="gridConnMonitor">
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="lblDelay">
+                       <property name="styleSheet">
+                        <string notr="true">font: 9pt &quot;Sawasdee&quot;;</string>
                        </property>
-                       <property name="frameShape">
-                        <enum>QFrame::StyledPanel</enum>
+                       <property name="text">
+                        <string>Delay (ms)</string>
                        </property>
-                       <property name="frameShadow">
-                        <enum>QFrame::Raised</enum>
-                       </property>
-                       <widget class="CMultiColorLED" name="ledDelay" native="true">
-                        <property name="geometry">
-                         <rect>
-                          <x>0</x>
-                          <y>0</y>
-                          <width>35</width>
-                          <height>25</height>
-                         </rect>
-                        </property>
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>35</width>
-                          <height>25</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">border-color: rgb(255, 255, 255);</string>
-                        </property>
-                       </widget>
                       </widget>
                      </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <layout class="QHBoxLayout" name="pingtimeHorizBox">
-                     <item>
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="lblJitter">
+                       <property name="styleSheet">
+                        <string notr="true">font: 9pt &quot;Sawasdee&quot;;</string>
+                       </property>
+                       <property name="text">
+                        <string>Jitter</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QLabel" name="lblPingVal">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>40</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="layoutDirection">
+                        <enum>Qt::LeftToRight</enum>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QLabel {
+	background: black;
+    padding: 5px;
+    border-radius: 3px;
+    opacity: 200;
+}</string>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::Box</enum>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
                       <widget class="QLabel" name="lblDelayVal">
                        <property name="minimumSize">
                         <size>
@@ -523,9 +516,80 @@ QCheckBox::indicator {
                         <string/>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        <set>Qt::AlignCenter</set>
                        </property>
                       </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="lblPing">
+                       <property name="styleSheet">
+                        <string notr="true">font: 9pt &quot;Sawasdee&quot;;</string>
+                       </property>
+                       <property name="text">
+                        <string>Ping (ms)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="2">
+                      <layout class="QHBoxLayout" name="horizontalLayout_3">
+                       <item>
+                        <widget class="CMultiColorLED" name="ledDelay" native="true">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>35</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::LeftToRight</enum>
+                         </property>
+                         <property name="autoFillBackground">
+                          <bool>false</bool>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">border-color: rgb(255, 255, 255);</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item row="2" column="2">
+                      <layout class="QHBoxLayout" name="horizontalLayout_4">
+                       <item>
+                        <widget class="CMultiColorLED" name="ledBuffers" native="true">
+                         <property name="enabled">
+                          <bool>true</bool>
+                         </property>
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>35</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="autoFillBackground">
+                          <bool>false</bool>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QLabel {
+	border-color: white;
+	border-width: 2px;
+}</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </item>
                     </layout>
                    </item>
@@ -611,10 +675,11 @@ QCheckBox::indicator {
                       </size>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">image: url(:/png/main/res/settings_txt.png);</string>
+                      <string notr="true">
+</string>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>Settings</string>
                      </property>
                     </widget>
                    </item>
@@ -644,10 +709,10 @@ QCheckBox::indicator {
                    <item>
                     <widget class="QLabel" name="label_3">
                      <property name="styleSheet">
-                      <string notr="true">image: url(:/png/main/res/chatbox_txt.png);</string>
+                      <string notr="true"/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>Chat Box</string>
                      </property>
                     </widget>
                    </item>
@@ -677,10 +742,10 @@ QCheckBox::indicator {
                    <item>
                     <widget class="QLabel" name="label_5">
                      <property name="styleSheet">
-                      <string notr="true">image: url(:/png/main/res/publicjam_txt.png);</string>
+                      <string notr="true"/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>Public Jam</string>
                      </property>
                     </widget>
                    </item>
@@ -719,10 +784,11 @@ QCheckBox::indicator {
                  <item>
                   <widget class="QLabel" name="label_4">
                    <property name="styleSheet">
-                    <string notr="true">image: url(:/png/main/res/private_sessions.png);</string>
+                    <string notr="true">font: 9pt &quot;Sans Serif&quot;;
+text-decoration: underline;</string>
                    </property>
                    <property name="text">
-                    <string/>
+                    <string>PRIVATE SESSIONS</string>
                    </property>
                   </widget>
                  </item>
@@ -905,7 +971,7 @@ QCheckBox::indicator {
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="lblPoweredBy">
         <property name="styleSheet">
          <string notr="true">color: rgb(251, 143, 0);</string>
         </property>
@@ -984,31 +1050,6 @@ QCheckBox::indicator {
        <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="lblPing">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>60</y>
-        <width>0</width>
-        <height>0</height>
-       </rect>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-     </widget>
      <widget class="QLabel" name="lblPingUnit">
       <property name="geometry">
        <rect>
@@ -1032,107 +1073,6 @@ QCheckBox::indicator {
       </property>
       <property name="text">
        <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lblDelay">
-      <property name="geometry">
-       <rect>
-        <x>576</x>
-        <y>60</y>
-        <width>0</width>
-        <height>0</height>
-       </rect>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="CMultiColorLED" name="ledBuffers" native="true">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>35</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>35</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel {
-	border-color: white;
-	border-width: 2px;
-}</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lblPingVal">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>40</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>40</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel {
-	background: black;
-    padding: 5px;
-    border-radius: 3px;
-    opacity: 200;
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </widget>
