@@ -135,6 +135,19 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
+                <spacer name="horizontalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
                 <layout class="QVBoxLayout" name="inputBox">
                  <item>
                   <widget class="QLabel" name="lblInputLEDMeter">
@@ -306,6 +319,19 @@ QCheckBox::indicator {
                   </layout>
                  </item>
                 </layout>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
                <item>
                 <widget class="Line" name="line_3">
@@ -591,6 +617,44 @@ text-decoration: underline;</string>
                        </item>
                       </layout>
                      </item>
+                     <item row="2" column="1">
+                      <widget class="QLabel" name="label">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>40</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QLabel" name="label_6">
+                       <property name="minimumSize">
+                        <size>
+                         <width>35</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>35</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
                     </layout>
                    </item>
                   </layout>
@@ -657,8 +721,8 @@ QCheckBox::indicator:checked {
 	image: url(:/png/main/res/general_btn_on.png);
 }
 QCheckBox::indicator { 
-	width:          38px; 
-	height:         38px; 
+	width:          28px; 
+	height:         28px; 
 }</string>
                      </property>
                      <property name="text">
@@ -697,8 +761,8 @@ QCheckBox::indicator:checked {
 	image: url(:/png/main/res/general_btn_on.png);
 }
 QCheckBox::indicator { 
-	width:          38px; 
-	height:         38px; 
+	width:          28px; 
+	height:         28px; 
 }</string>
                      </property>
                      <property name="text">
@@ -730,8 +794,8 @@ QCheckBox::indicator:checked {
 	image: url(:/png/main/res/general_btn_on.png);
 }
 QCheckBox::indicator { 
-	width:          38px; 
-	height:         38px; 
+	width:          28px; 
+	height:         28px; 
 }</string>
                      </property>
                      <property name="text">
@@ -789,6 +853,9 @@ text-decoration: underline;</string>
                    </property>
                    <property name="text">
                     <string>PRIVATE SESSIONS</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
                    </property>
                   </widget>
                  </item>

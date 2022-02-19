@@ -215,7 +215,11 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
                                 "                  padding-left:   -34px;"
                                 "                  padding-top:    -10px;"
                                 "                  padding-bottom: -15px; }"
-                                "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
+                                "QSlider::handle { image: url(:/png/fader/res/faderhandle.png);"
+                                "                  padding-left:   -4px;"
+                                "                  padding-top:    -2px;"
+                                "                  padding-bottom: -0px; }" 
+                                );
 
         pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
         pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
