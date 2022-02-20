@@ -555,23 +555,23 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // If single argument ie argc=2 check to see if direct exec of koord url --------------------------------------
+        // If single argument ie argc=2 check to see if direct exec of /usr/share/applications/koordrealtime.desktopkoord url --------------------------------------
         if ( argc == 2) {
             // if argv[1] matches "koord://{IPv4_addr}"
-            QRegExp rx("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
+            QRegExp rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
             // gen2 url - if argv[1] matches "koord://{IPv4_addr}:{port}"
-            QRegExp rx_m("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
-            int pos = rx.indexIn(argv[1]); // match gen1 url
-            int pos_m = rx_m.indexIn(argv[1]); // match gen2 url
-            if (pos_m != -1) { // try to match gen2 url first
+            QRegExp rx_gen2("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
+            int pos_gen1 = rx_gen1.indexIn(argv[1]); // match gen1 url
+            int pos_gen2 = rx_gen2.indexIn(argv[1]); // match gen2 url
+            if (pos_gen2 != -1) { // try to match gen2 url first
                 // add -x {IPv4_addr} to CommandLineOptions
-                strConnOnStartupAddress = rx.cap(1);
+                strConnOnStartupAddress = rx_gen2.cap(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
                 CommandLineOptions << "--autoconnect";
                 continue;
-            } else if (pos != -1) { // if no joy, try to match gen1 url
+            } else if (pos_gen1 != -1) { // if no joy, try to match gen1 url
                 // add -x {IPv4_addr} to CommandLineOptions
-                strConnOnStartupAddress = rx_m.cap(1);
+                strConnOnStartupAddress = rx_gen1.cap(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
                 CommandLineOptions << "--autoconnect";
                 continue;

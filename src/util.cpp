@@ -876,10 +876,21 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
-    QRegExp rx("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
-    rx.indexIn(strAddress);
-    QStringList list = rx.capturedTexts();
-    QString ipAddress = list[0];  // only 1 IP address in the string!
+    QRegExp rx_gen1("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
+    int pos_gen1 = rx_gen1.indexIn(strAddress);
+
+    QRegExp rx_gen2("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5}");
+    int pos_gen2 = rx_gen2.indexIn(strAddress);
+
+    // as in main.cpp we need to check gen2-style urls first
+    if (pos_gen2 != -1) {
+        QStringList list = rx_gen2.capturedTexts();
+        QString ipAddress = list[0];  // only 1 IP address in the string!
+    } else if (pos_gen1 != -1) {
+        QStringList list = rx_gen1.capturedTexts();
+        QString ipAddress = list[0];  // only 1 IP address in the string!
+    }
+
     return ipAddress;
 //    // remove all spaces from the address string
 //    const QString tmpAddr = strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
