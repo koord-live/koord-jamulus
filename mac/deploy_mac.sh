@@ -110,7 +110,8 @@ fi
 cleanup
 
 # Build Jamulus client and server
-build_app server_app "CONFIG+=server_bundle"
+# Just build client for Mac
+# build_app server_app "CONFIG+=server_bundle"
 build_app client_app
 
 # Create versioned installer image
