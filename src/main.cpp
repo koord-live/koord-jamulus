@@ -560,16 +560,16 @@ int main ( int argc, char** argv )
             // if argv[1] matches "koord://{IPv4_addr}"
             QRegExp rx("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
             // gen2 url - if argv[1] matches "koord://{IPv4_addr}:{port}"
-            QRegExp rx_m("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:(0-9){3,5})");
+            QRegExp rx_m("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
             int pos = rx.indexIn(argv[1]); // match gen1 url
             int pos_m = rx_m.indexIn(argv[1]); // match gen2 url
-            if (pos != -1) { // match gen1
+            if (pos_m != -1) { // try to match gen2 url first
                 // add -x {IPv4_addr} to CommandLineOptions
                 strConnOnStartupAddress = rx.cap(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
                 CommandLineOptions << "--autoconnect";
                 continue;
-            } else if (pos_m != -1) { // match gen2
+            } else if (pos != -1) { // if no joy, try to match gen1 url
                 // add -x {IPv4_addr} to CommandLineOptions
                 strConnOnStartupAddress = rx_m.cap(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
