@@ -30,7 +30,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -215,20 +215,6 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
-                   <widget class="QLabel" name="lblSkin">
-                    <property name="text">
-                     <string>Skin</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblMeterStyle">
-                    <property name="text">
-                     <string>Meter Style</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
                    <widget class="QLabel" name="lblLanguage">
                     <property name="text">
                      <string>Language</string>
@@ -246,12 +232,6 @@
                 </item>
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_7">
-                  <item>
-                   <widget class="QComboBox" name="cbxSkin"/>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="cbxMeterStyle"/>
-                  </item>
                   <item>
                    <widget class="CLanguageComboBox" name="cbxLanguage">
                     <property name="minimumSize">
@@ -1279,8 +1259,6 @@
   <tabstop>pcbxCountry</tabstop>
   <tabstop>pedtCity</tabstop>
   <tabstop>pcbxSkill</tabstop>
-  <tabstop>cbxSkin</tabstop>
-  <tabstop>cbxMeterStyle</tabstop>
   <tabstop>cbxLanguage</tabstop>
   <tabstop>spnMixerRows</tabstop>
   <tabstop>cbxSoundcard</tabstop>
