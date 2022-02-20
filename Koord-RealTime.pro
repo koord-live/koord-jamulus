@@ -411,7 +411,8 @@ win32 {
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/koordrealtime.png distributions/koordrealtime.svg
+        # icons.files = distributions/koordrealtime.png distributions/koordrealtime.svg
+        icons.files = distributions/koordrealtime.png
 
         isEmpty(MIMEPKGDIR) {
             MIMEPKGDIR = share/mime/packages
