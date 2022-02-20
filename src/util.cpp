@@ -886,12 +886,13 @@ QString NetworkUtil::FixJamAddress ( const QString& strAddress )
     if (pos_gen2 != -1) {
         QStringList list = rx_gen2.capturedTexts();
         QString ipAddress = list[0];  // only 1 IP address in the string!
+        return ipAddress;
     } else if (pos_gen1 != -1) {
         QStringList list = rx_gen1.capturedTexts();
         QString ipAddress = list[0];  // only 1 IP address in the string!
+        return ipAddress;
     }
 
-    return ipAddress;
 //    // remove all spaces from the address string
 //    const QString tmpAddr = strAddress.simplified().replace ( " ", "" ).replace ("koord://", "");
 //    return tmpAddr.simplified().replace( "/", "");
