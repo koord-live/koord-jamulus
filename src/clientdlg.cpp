@@ -239,7 +239,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     OnTimerStatus();
 
     // init connection button text
-    butConnect->setText ( tr ( "C&onnect to..." ) );
+    butConnect->setText ( tr ( "C&onnect" ) );
 
     // init new session button text
 //    butNewStart->setText ( tr ( "&New Session" ) );
