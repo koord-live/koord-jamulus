@@ -47,6 +47,9 @@ build_app()
     local target_name="$(cat "${build_path}/Makefile" | sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p')"
     local job_count="$(sysctl -n hw.ncpu)"
 
+    # Get Jamulus version
+    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
     # Add Qt deployment dependencies
@@ -57,6 +60,11 @@ build_app()
     fi
     mv "${build_path}/${target_name}.app" "${deploy_path}"
 
+    # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
+    #  This is typical for building a Mac App Store archive.
+    productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
+    mv "${build_path}/KoordRT_${app_version}.pkg" "${deploy_path}"
+
     # Cleanup
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
@@ -65,21 +73,21 @@ build_app()
 }
 
 
-build_installer_image()
-{
-    # Install dmgbuild (for the current user), this is required to build the installer image
-    python -m ensurepip --user --default-pip
-    python -m pip install --user dmgbuild==1.4.2
-    local dmgbuild_bin="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
+# build_installer_image()
+# {
+#     # Install dmgbuild (for the current user), this is required to build the installer image
+#     python -m ensurepip --user --default-pip
+#     python -m pip install --user dmgbuild==1.4.2
+#     local dmgbuild_bin="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
 
-    # Get Jamulus version
-    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+#     # Get Jamulus version
+#     local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
 
-    # Build installer image
-    "${dmgbuild_bin}" -s "${macdeploy_path}/deployment_settings.py" -D background="${resources_path}/installerbackground.png" \
-        -D app_path="${deploy_path}/$1.app" -D server_path="${deploy_path}/$2.app" \
-        -D license="${root_path}/COPYING" "$1 Installer" "${deploy_path}/$1-${app_version}-installer-mac.dmg"
-}
+#     # Build installer image
+#     "${dmgbuild_bin}" -s "${macdeploy_path}/deployment_settings.py" -D background="${resources_path}/installerbackground.png" \
+#         -D app_path="${deploy_path}/$1.app" -D server_path="${deploy_path}/$2.app" \
+#         -D license="${root_path}/COPYING" "$1 Installer" "${deploy_path}/$1-${app_version}-installer-mac.dmg"
+# }
 
 build_client_installer_image()
 {

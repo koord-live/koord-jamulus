@@ -28,9 +28,10 @@ echo ""
 echo ""
 echo ""
 artifact_deploy_filename=koord-realtime_${jamulus_buildversionstring}_mac${BUILD_SUFFIX}.dmg
-echo "Move/Rename the built file to deploy/${artifact_deploy_filename}"
+artifactpkg_deploy_filename=KoordRT_${jamulus_buildversionstring}_${BUILD_SUFFIX}.pkg
+echo "Move/Rename the built files to deploy/${artifact_deploy_filename}"
 mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Koord-RealTime-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
-
+mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/KoordRT_*.pkg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifactpkg_deploy_filename}"
 
 echo ""
 echo ""
@@ -46,3 +47,4 @@ github_output_value()
 }
 
 github_output_value artifact_1 ${artifact_deploy_filename}
+github_output_value artifact_2 ${artifactpkg_deploy_filename}
