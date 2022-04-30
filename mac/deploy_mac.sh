@@ -58,11 +58,12 @@ build_app()
     else
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
     fi
-    mv "${build_path}/${target_name}.app" "${deploy_path}"
-
+    
     # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
     #  This is typical for building a Mac App Store archive.
     productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
+    # move things
+    mv "${build_path}/${target_name}.app" "${deploy_path}"
     mv "${build_path}/KoordRT_${app_version}.pkg" "${deploy_path}"
 
     # Cleanup
