@@ -233,7 +233,7 @@ jobs:
         uses: devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
           product-path: deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
-          primary-bundle-id: live.koord.koordrealtime
+          primary-bundle-id: live.koord.koordrt
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
       # Apply successful notarization

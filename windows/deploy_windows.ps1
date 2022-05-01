@@ -20,7 +20,7 @@ $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
 $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
-$AppName = "Koord-RealTime"
+$AppName = "Koord-RT"
 
 # Stop at all errors
 $ErrorActionPreference = "Stop"
@@ -224,7 +224,7 @@ Function Initialize-Build-Environment
     Remove-Item -Path $EnvDump -Force
 }
 
-# Build Koord-RealTime x86_64 and x86
+# Build Koord-RT x86_64 and x86
 Function Build-App
 {
     param(
@@ -272,7 +272,7 @@ Function Build-App
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler",  "--no-opengl-sw", `
         "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe")
-    # collect for Koord-RealTime.exe
+    # collect for Koord-RT.exe
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler",  "--no-opengl-sw", `
@@ -305,7 +305,7 @@ Function Build-App
     Set-Location -Path $RootPath
 }
 
-# Build and deploy Koord-RealTime 64bit and 32bit variants
+# Build and deploy Koord-RT 64bit and 32bit variants
 function Build-App-Variants
 {
     param(
@@ -344,7 +344,7 @@ Function Build-Installer
     # /Program Files (x86)/Inno Setup 6/ISCC.exe
     Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
         -Arguments ("$RootPath\kdinstaller.iss", `
-         "/FKoord-RealTime-${AppVersion}")
+         "/FKoord-RT-${AppVersion}")
 }
 
 Clean-Build-Environment

@@ -14,7 +14,7 @@ VERSION=$(cat Koord-RealTime.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
 # patch changelog (with hack)
 
 DATE=$(date "+%a, %d %b %Y %T" )
-echo "koord-realtime (${VERSION}-0) UNRELEASED; urgency=medium" > debian/changelog
+echo "koord-rt (${VERSION}-0) UNRELEASED; urgency=medium" > debian/changelog
 echo "" >> debian/changelog
 perl .github/actions_scripts/getChangelog.pl ChangeLog ${VERSION} >> debian/changelog
 echo "" >> debian/changelog

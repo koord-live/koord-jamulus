@@ -1,11 +1,11 @@
 {
-  "app-id": "live.koord.koordrealtime",
+  "app-id": "live.koord.koordrt",
   "runtime": "org.kde.Platform",
   "runtime-version": "5.15",
   "sdk": "org.kde.Sdk",
-  "command": "Koord-RealTime",
-  "rename-desktop-file": "koordrealtime.desktop",
-  "rename-icon": "koord-realtime",
+  "command": "Koord-RT",
+  "rename-desktop-file": "koordrt.desktop",
+  "rename-icon": "koord-rt",
   "finish-args": [
     "--share=ipc",
     "--socket=x11",
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "name": "koord-realtime",
+      "name": "koord-rt",
       "buildsystem": "qmake",
       "sources": [
         {

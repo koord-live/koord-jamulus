@@ -555,7 +555,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // If single argument ie argc=2 check to see if direct exec of /usr/share/applications/koordrealtime.desktopkoord url --------------------------------------
+        // If single argument ie argc=2 check to see if direct exec of /usr/share/applications/koordrt.desktopkoord url --------------------------------------
         if ( argc == 2) {
             // if argv[1] matches "koord://{IPv4_addr}"
             QRegExp rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");

@@ -2,8 +2,8 @@ VERSION = 3.8.1dev-k01
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
-    message(The target name is koord-realtime instead of Koord-RealTime.)
-    TARGET = koord-realtime
+    message(The target name is koordrt instead of KoordRT.)
+    TARGET = koordrt
 }
 
 # allow detailed version info for intermediate builds (#475)
@@ -92,7 +92,7 @@ win32 {
             ws2_32.lib
         # also add KoordASIO lib, 64bit only right now
         # Full path in build will be:
-        # D:\a\koord-realtime\koord-realtime\KoordASIO\build\release\flexasio\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
+        # D:\a\koord-rt\koord-rt\KoordASIO\build\release\flexasio\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
         LIBS += -L$$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
         INCLUDEPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
         DEPENDPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
@@ -148,7 +148,7 @@ win32 {
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = live.koord.koordrealtime
+    QMAKE_TARGET_BUNDLE_PREFIX = live.koord
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
     OSX_ENTITLEMENTS.files = Jamulus.entitlements
@@ -199,7 +199,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = live.koord.koordrealtime
+    QMAKE_TARGET_BUNDLE_PREFIX = live.koord
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
@@ -403,23 +403,23 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/koordrealtime.desktop.in
-        desktop.files = distributions/koordrealtime.desktop
+        QMAKE_SUBSTITUTES += distributions/koordrt.desktop.in
+        desktop.files = distributions/koordrt.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        # icons.files = distributions/koordrealtime.png distributions/koordrealtime.svg
-        icons.files = distributions/koordrealtime.png
+        # icons.files = distributions/koordrt.png distributions/koordrt.svg
+        icons.files = distributions/koordrt.png
 
         isEmpty(MIMEPKGDIR) {
             MIMEPKGDIR = share/mime/packages
         }
         MIMEPKGDIR = $$absolute_path($$MIMEPKGDIR, $$PREFIX)
         mimepkg.path = $$MIMEPKGDIR
-        mimepkg.files = distributions/koordrealtime.xml
+        mimepkg.files = distributions/koordrt.xml
 
         INSTALLS += target desktop icons mimepkg
     }
@@ -741,9 +741,9 @@ DISTFILES += ChangeLog \
     COPYING \
     CONTRIBUTING.md \
     README.md \
-    distributions/koordrealtime.desktop.in \
-    distributions/koordrealtime.png \
-    distributions/koordrealtime.svg \
+    distributions/koordrt.desktop.in \
+    distributions/koordrt.png \
+    distributions/koordrt.svg \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \

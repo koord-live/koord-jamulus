@@ -1,2 +1,0 @@
-usr/bin/koord-realtime-headless
-debian/koord-realtime-headless.service lib/systemd/system
