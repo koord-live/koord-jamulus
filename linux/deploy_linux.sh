@@ -2,7 +2,7 @@
 cd ..
 
 make distclean
-qmake Koord-RealTime.pro
+qmake Koord-RT.pro
 make
 make dist
 

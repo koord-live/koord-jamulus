@@ -2,7 +2,7 @@
 set -e
 
 root_path="$(pwd)"
-project_path="${root_path}/Koord-RealTime.pro"
+project_path="${root_path}/Koord-RT.pro"
 # macdeploy_path="${root_path}/mac"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"

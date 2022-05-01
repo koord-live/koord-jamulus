@@ -18,7 +18,7 @@ import subprocess
 # get the jamulus version from the .pro file
 def get_jamulus_version(repo_path_on_disk):
     jamulus_version = ""
-    with open (repo_path_on_disk + '/Koord-RealTime.pro','r') as f:
+    with open (repo_path_on_disk + '/Koord-RT.pro','r') as f:
         pro_content = f.read()
     pro_content = pro_content.replace('\r','')
     pro_lines = pro_content.split('\n')

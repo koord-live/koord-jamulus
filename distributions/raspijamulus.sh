@@ -79,7 +79,7 @@ fi
 
 # compile Jamulus with external Opus library
 cd ..
-qmake "CONFIG+=opus_shared_lib raspijamulus headless" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Koord-RealTime.pro
+qmake "CONFIG+=opus_shared_lib raspijamulus headless" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Koord-RT.pro
 make -j${NCORES}
 
 # get first USB audio sound card device

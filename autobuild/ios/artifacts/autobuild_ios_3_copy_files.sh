@@ -27,9 +27,9 @@ echo ""
 
 echo ""
 echo ""
-artifact_deploy_filename=koord-rt_${jamulus_buildversionstring}_ios${BUILD_SUFFIX}.app
+artifact_deploy_filename=Koord-RT_${jamulus_buildversionstring}_ios${BUILD_SUFFIX}.app
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Koord-RT*.app "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
+mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Koord-RealTime*.app "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
 
 
 echo ""

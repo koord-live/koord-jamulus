@@ -42,7 +42,7 @@ switch ($BuildOption)
 echo "rename exe file"
 $artifact_deploy_filename = "Koord-RT_${Env:jamulus_buildversionstring}_win64.exe"
 echo "rename deploy file to $artifact_deploy_filename"
-cp "$jamulus_project_path\Output\Koord-RT-*.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
+cp "$jamulus_project_path\Output\Koord-RealTime-*.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
 
 # echo "rename appx file"
 # $winrt_artifact_deploy_filename = "koord-rt_${Env:jamulus_buildversionstring}_win.appx"
