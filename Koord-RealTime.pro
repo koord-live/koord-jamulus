@@ -2,8 +2,8 @@ VERSION = 3.8.1dev-k01
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
-    message(The target name is koordrt instead of KoordRT.)
-    TARGET = koordrt
+    message(The target name is koord-rt instead of Koord-RT.)
+    TARGET = koord-rt
 }
 
 # allow detailed version info for intermediate builds (#475)
