@@ -1,5 +1,5 @@
 [Unit]
-Description=Koord-RealTime headless server
+Description=Koord-RT headless server
 After=network.target
 StartLimitIntervalSec=0
 
@@ -16,14 +16,14 @@ IOSchedulingPriority=0
 
 #### Change this to publish this server, set genre, location and other parameters.
 #### See https://jamulus.io/wiki/Command-Line-Options ####
-ExecStart=/bin/sh -c 'exec /usr/bin/koord-realtime-headless -s -n'
+ExecStart=/bin/sh -c 'exec /usr/bin/koord-rt-headless -s -n'
 
 
 Restart=on-failure
 RestartSec=30
 StandardOutput=journal
 StandardError=inherit
-SyslogIdentifier=koord-realtime
+SyslogIdentifier=koord-rt
 
 
 [Install]

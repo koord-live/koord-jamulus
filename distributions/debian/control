@@ -1,4 +1,4 @@
-Source: koord-realtime
+Source: koord-rt
 Section: sound
 Priority: optional
 Maintainer: "danryu" <contact@koord.live>
@@ -12,7 +12,7 @@ Homepage: https://koord.live
 Vcs-Git: git://github.com/koord-live/koord-realtime.git
 Vcs-Browser: https://github.com/koord-live/koord-realtime
 
-Package: koord-realtime
+Package: koord-rt
 Architecture: any
 Depends: libc6 (>= 2.17), libgcc1 (>= 1:3.0), libjack-jackd2-0 (>= 1.9.5~dfsg-14) | libjack-0.116, libqt5core5a (>= 5.5.0), libqt5gui5 (>= 5.0.2) | libqt5gui5-gles (>= 5.0.2), libqt5network5 (>= 5.0.2), libqt5widgets5 (>= 5.2.0), libqt5xml5 (>= 5.0.2), libstdc++6 (>= 5.2)
 Recommends: qjackctl
@@ -20,7 +20,7 @@ Description: Low latency Audio Server/Client
  Jamulus made for the Koord.live web service. The Jamulus software enables 
  musicians to perform real-time jam sessions over the internet.
 
-Package: koord-realtime-headless
+Package: koord-rt-headless
 Architecture: any
 Depends:
  ${shlibs:Depends},

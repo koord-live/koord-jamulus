@@ -27,10 +27,10 @@ echo ""
 
 echo ""
 echo ""
-artifact_deploy_filename=koord-realtime_${jamulus_buildversionstring}_mac${BUILD_SUFFIX}.dmg
+artifact_deploy_filename=koord-rt_${jamulus_buildversionstring}_mac${BUILD_SUFFIX}.dmg
 artifactpkg_deploy_filename=KoordRT_${jamulus_buildversionstring}_${BUILD_SUFFIX}.pkg
 echo "Move/Rename the built files to deploy/${artifact_deploy_filename}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Koord-RealTime-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
+mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Koord-RT-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
 mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/KoordRT_*.pkg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifactpkg_deploy_filename}"
 
 echo ""

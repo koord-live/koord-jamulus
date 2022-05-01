@@ -44,16 +44,16 @@ echo ""
 #move/rename headless first, so wildcard pattern matches only one file each
 echo ""
 echo ""
-artifact_deploy_filename_1=koord-realtime_headless_${jamulus_buildversionstring}_ubuntu_amd64.deb
+artifact_deploy_filename_1=koord-rt_headless_${jamulus_buildversionstring}_ubuntu_amd64.deb
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename_1}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/../koord-realtime-headless*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_1}"
+mv "${THIS_JAMULUS_PROJECT_PATH}"/../koord-rt-headless*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_1}"
 
 #move/rename normal second
 echo ""
 echo ""
-artifact_deploy_filename_2=koord-realtime_${jamulus_buildversionstring}_ubuntu_amd64.deb
+artifact_deploy_filename_2=koord-rt_${jamulus_buildversionstring}_ubuntu_amd64.deb
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename_2}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/../koord-realtime*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_2}"
+mv "${THIS_JAMULUS_PROJECT_PATH}"/../koord-rt*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_2}"
 
 
 echo ""
