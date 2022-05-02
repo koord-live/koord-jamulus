@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -24,7 +24,7 @@
 
 #pragma once
 
-#ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
+#ifndef JACK_ON_WINDOWS // these headers are not available in Windows OS
 #    include <unistd.h>
 #    include <sys/ioctl.h>
 #endif

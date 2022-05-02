@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -37,6 +37,7 @@
 #include <QLayout>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QActionGroup>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
@@ -52,10 +53,8 @@
 #include "basicconnectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
-#if defined( __APPLE__ ) || defined( __MACOSX )
-#    if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
-#        include <QtMac>
-#    endif
+#if defined( Q_OS_MACX )
+#    include "mac/badgelabel.h"
 #endif
 
 /* Definitions ****************************************************************/
@@ -151,6 +150,8 @@ public slots:
     void OnControllerInFaderIsSolo ( const int iChannelIdx, const bool bIsSolo ) { MainMixerBoard->SetFaderIsSolo ( iChannelIdx, bIsSolo ); }
 
     void OnControllerInFaderIsMute ( const int iChannelIdx, const bool bIsMute ) { MainMixerBoard->SetFaderIsMute ( iChannelIdx, bIsMute ); }
+
+    void OnControllerInMuteMyself ( const bool bMute ) { chbLocalMute->setChecked ( bMute ); }
 
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVersion );
 

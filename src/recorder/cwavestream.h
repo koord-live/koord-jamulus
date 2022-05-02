@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2020
+ * Copyright (c) 2020-2022
  *
  * Author(s):
  *  pljones
@@ -25,6 +25,8 @@
 #pragma once
 
 #include <QDataStream>
+#include <QString>
+#include <QIODevice>
 
 namespace recorder
 {

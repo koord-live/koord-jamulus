@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -40,28 +40,25 @@
 #include "util.h"
 #include "buffer.h"
 #include "signalhandler.h"
-#ifdef LLCON_VST_PLUGIN
-#    include "vstsound.h"
+
+#if defined( _WIN32 ) && !defined( JACK_ON_WINDOWS )
+#    include "../windows/sound.h"
 #else
-#    if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
-#        include "../windows/sound.h"
+#    if ( defined( Q_OS_MACX ) ) && !defined( JACK_REPLACES_COREAUDIO )
+#        include "../mac/sound.h"
 #    else
-#        if ( defined( Q_OS_MACX ) ) && !defined( JACK_REPLACES_COREAUDIO )
-#            include "../mac/sound.h"
+#        if defined( Q_OS_IOS )
+#            include "../ios/sound.h"
 #        else
-#            if defined( Q_OS_IOS )
-#                include "../ios/sound.h"
+#            ifdef ANDROID
+#                include "../android/sound.h"
 #            else
-#                ifdef ANDROID
-#                    include "../android/sound.h"
-#                else
-#                    include "../linux/sound.h"
-#                    ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
-#                        include <sched.h>
-#                        include <netdb.h>
-#                    endif
-#                    include <socket.h>
+#                include "../linux/sound.h"
+#                ifndef JACK_ON_WINDOWS // these headers are not available in Windows OS
+#                    include <sched.h>
+#                    include <netdb.h>
 #                endif
+#                include <socket.h>
 #            endif
 #        endif
 #    endif
@@ -75,6 +72,10 @@
 
 // audio reverberation range
 #define AUD_REVERB_MAX 100
+
+// default delay period between successive gain updates (ms)
+// this will be increased to double the ping time if connected to a distant server
+#define DEFAULT_GAIN_DELAY_PERIOD_MS 50
 
 // OPUS number of coded bytes per audio packet
 // TODO we have to use new numbers for OPUS to avoid that old CELT packets
@@ -239,6 +240,8 @@ public:
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
     void SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader );
+    void OnTimerRemoteChanGain();
+    void StartDelayTimer();
 
     void SetRemoteChanPan ( const int iId, const float fPan ) { Channel.SetRemoteChanPan ( iId, fPan ); }
 
@@ -271,11 +274,6 @@ public:
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
-
-#ifdef LLCON_VST_PLUGIN
-    // VST version must have direct access to sound object
-    CSound* GetSound() { return &Sound; }
-#endif
 
 protected:
     // callback function must be static, otherwise it does not work
@@ -362,6 +360,15 @@ protected:
     // for ping measurement
     QElapsedTimer PreciseTime;
 
+    // for gain rate limiting
+    QMutex MutexGain;
+    QTimer TimerGain;
+    int    minGainId;
+    int    maxGainId;
+    float  oldGain[MAX_NUM_CHANNELS];
+    float  newGain[MAX_NUM_CHANNELS];
+    int    iCurPingTime;
+
     CSignalHandler* pSignalHandler;
 
 protected slots:
@@ -393,6 +400,7 @@ protected slots:
     void OnControllerInPanValue ( int iChannelIdx, int iValue );
     void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
+    void OnControllerInMuteMyself ( bool bMute );
     void OnClientIDReceived ( int iChanID );
 
 signals:
@@ -423,4 +431,5 @@ signals:
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
+    void ControllerInMuteMyself ( bool bMute );
 };

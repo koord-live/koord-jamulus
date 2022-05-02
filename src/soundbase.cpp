@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -28,11 +28,12 @@
 // a single character to an EMidiCtlType
 char const sMidiCtlChar[] = {
     // Has to follow order of EMidiCtlType
-    /* [EMidiCtlType::Fader] = */ 'f',
-    /* [EMidiCtlType::Pan]   = */ 'p',
-    /* [EMidiCtlType::Solo]  = */ 's',
-    /* [EMidiCtlType::Mute]  = */ 'm',
-    /* [EMidiCtlType::None]  = */ '\0' };
+    /* [EMidiCtlType::Fader]       = */ 'f',
+    /* [EMidiCtlType::Pan]         = */ 'p',
+    /* [EMidiCtlType::Solo]        = */ 's',
+    /* [EMidiCtlType::Mute]        = */ 'm',
+    /* [EMidiCtlType::MuteMyself]  = */ 'o',
+    /* [EMidiCtlType::None]        = */ '\0' };
 
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
@@ -159,8 +160,8 @@ QString CSoundBase::SetDev ( const QString strDevName )
         if ( !strDevName.isEmpty() )
         {
             strReturn = tr ( "The previously selected audio device "
-                             "is no longer available or the driver has changed to an incompatible state."
-                             "We'll attempt to find a valid audio device, but this new audio device may cause feedback."
+                             "is no longer available or the driver has changed to an incompatible state. "
+                             "We'll attempt to find a valid audio device, but this new audio device may cause feedback. "
                              "Before connecting to a server, please check your audio device settings." );
         }
 
@@ -179,7 +180,7 @@ QString CSoundBase::SetDev ( const QString strDevName )
             }
             sErrorMessage += "</ul>";
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( WITH_JACK )
             // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
             // offer the user under Windows that we open the driver setups of all registered
             // ASIO drivers
@@ -394,6 +395,12 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                         {
                             // We depend on toggles reflecting the desired state
                             emit ControllerInFaderIsMute ( cCtrl.iChannel, iValue >= 0x40 );
+                        }
+                        break;
+                        case MuteMyself:
+                        {
+                            // We depend on toggles reflecting the desired state to Mute Myself
+                            emit ControllerInMuteMyself ( iValue >= 0x40 );
                         }
                         break;
                         default:

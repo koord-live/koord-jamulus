@@ -1,16 +1,28 @@
-param(
+param (
     # Replace default path with system Qt installation folder if necessary
     [string] $QtPath = "C:\Qt",
     [string] $QtInstallPath = "C:\Qt\5.15.2",
+
+    [string] $QtInstallPath32 = "C:\Qt\5.15.2",
+    [string] $QtInstallPath64 = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
-    # [string] $AsioSDKName = "ASIOSDK2.3.3",
+    # Important:
+    # - Do not update ASIO SDK without checking for license-related changes.
+    # - Do not copy (parts of) the ASIO SDK into the Jamulus source tree without
+    #   further consideration as it would make the license situation more complicated.
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
+    # [string] $NsisName = "nsis-3.08",
+    # [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.08/nsis-3.08.zip",
     [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
     [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.29.30133\x64\Microsoft.VC142.CRT"
+    [string] $BuildOption = ""
 )
+
+# Fail early on all errors
+$ErrorActionPreference = "Stop"
 
 # change directory to the directory above (if needed)
 Set-Location -Path "$PSScriptRoot\..\"
@@ -59,13 +71,10 @@ Function Get-RedirectedUrl {
     )
 
     $request = [System.Net.WebRequest]::Create($url)
-    $request.AllowAutoRedirect=$false
+    $request.AllowAutoRedirect=$true
     $response=$request.GetResponse()
-
-    if ($response.StatusCode -eq "Found")
-    {
-        $response.GetResponseHeader("Location")
-    }
+    $response.ResponseUri.AbsoluteUri
+    $response.Close()
 }
 
 function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402
@@ -148,8 +157,6 @@ Function Initialize-Build-Environment
 {
     param(
         [Parameter(Mandatory=$true)]
-        [string] $QtInstallPath,
-        [Parameter(Mandatory=$true)]
         [string] $BuildArch
     )
 
@@ -163,12 +170,10 @@ Function Initialize-Build-Environment
     if ($BuildArch -Eq "x86_64")
     {
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
-        $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64\bin"
     }
     else
     {
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars32.bat"
-        $QtMsvcSpecPath = "$QtInstallPath\$QtCompile32\bin"
     }
 
     # Setup Qt executables paths for later calls
@@ -182,30 +187,11 @@ Function Initialize-Build-Environment
     $VcVarsBin
     "**********************************************************************"
     ""
-    "**********************************************************************"
-    "Using Qt binaries for Visual C++ located at"
-    $QtMsvcSpecPath
-    "**********************************************************************"
-    ""
 
     if (-Not (Test-Path -Path $VcVarsBin))
     {
         Throw "Microsoft Visual Studio ($BuildArch variant) is not installed. " + `
             "Please install Visual Studio 2017 or above it before running this script."
-    }
-
-    if (-Not (Test-Path -Path $Env:QtQmakePath))
-    {
-        Throw "The Qt binaries for Microsoft Visual C++ 2017 or above could not be located at $QtMsvcSpecPath. " + `
-            "Please install Qt with support for MSVC 2017 or above before running this script," + `
-            "then call this script with the Qt install location, for example C:\Qt\5.15.2"
-    }
-
-    if (-Not (Test-Path -Path $Env:QtCmakePath))
-    {
-        Throw "The Qt binaries for CMake for Microsoft Visual C++ 2017 or above could not be located at $QtPath. " + `
-            "Please install Qt with support for MSVC 2017 or above before running this script," + `
-            "then call this script with the Qt install location, for example C:\Qt\5.15.2"
     }
 
     # Import environment variables set by vcvarsXX.bat into current scope
@@ -224,7 +210,37 @@ Function Initialize-Build-Environment
     Remove-Item -Path $EnvDump -Force
 }
 
-# Build Koord-RT x86_64 and x86
+# Setup Qt environment variables and build tool paths
+Function Initialize-Qt-Build-Environment
+{
+    param(
+        [Parameter(Mandatory=$true)]
+        [string] $QtInstallPath,
+        [Parameter(Mandatory=$true)]
+        [string] $QtCompile
+    )
+
+    $QtMsvcSpecPath = "$QtInstallPath\$QtCompile\bin"
+
+    # Setup Qt executables paths for later calls
+    Set-Item Env:QtQmakePath "$QtMsvcSpecPath\qmake.exe"
+    Set-Item Env:QtWinDeployPath "$QtMsvcSpecPath\windeployqt.exe"
+
+    "**********************************************************************"
+    "Using Qt binaries for Visual C++ located at"
+    $QtMsvcSpecPath
+    "**********************************************************************"
+    ""
+
+    if (-Not (Test-Path -Path $Env:QtQmakePath))
+    {
+        Throw "The Qt binaries for Microsoft Visual C++ 2017 or above could not be located at $QtMsvcSpecPath. " + `
+            "Please install Qt with support for MSVC 2017 or above before running this script," + `
+            "then call this script with the Qt install location, for example C:\Qt\5.15.2"
+    }
+}
+
+# Build Jamulus x86_64 and x86
 Function Build-App
 {
     param(
@@ -264,10 +280,16 @@ Function Build-App
 
     # Compile
     Set-Location -Path $BuildPath
-    Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
-
-    # Collect Qt DLLs
-    # collect for kdasionconfig.exe
+    if (Get-Command "jom.exe" -ErrorAction SilentlyContinue)
+    {
+        echo "Building with jom /J ${Env:NUMBER_OF_PROCESSORS}"
+        Invoke-Native-Command -Command "jom" -Arguments ("/J", "${Env:NUMBER_OF_PROCESSORS}", "$BuildConfig")
+    }
+    else
+    {
+        echo "Building with nmake (install Qt jom if you want parallel builds)"
+        Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    }
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler",  "--no-opengl-sw", `
@@ -308,16 +330,20 @@ Function Build-App
 # Build and deploy Koord-RT 64bit and 32bit variants
 function Build-App-Variants
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [string] $QtInstallPath
-    )
-
     # foreach ($_ in ("x86_64", "x86"))
-    foreach ($_ in ("x86_64"))
+    foreach ($_ in ("x86_64")
     {
         $OriginalEnv = Get-ChildItem Env:
-        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
+        if ($_ -eq "x86")
+        {
+            Initialize-Build-Environment -BuildArch $_
+            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath32 -QtCompile $QtCompile32
+        }
+        else
+        {
+            Initialize-Build-Environment -BuildArch $_
+            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile $QtCompile64
+        }
         Build-App -BuildConfig "release" -BuildArch $_
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }

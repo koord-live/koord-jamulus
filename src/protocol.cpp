@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -502,11 +502,8 @@ void CProtocol::SendMessage()
             vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
             vecMessage = SendMessQueue.front().vecMessage;
 
-            // start time-out timer if not active
-            if ( !TimerSendMess.isActive() )
-            {
-                TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
-            }
+            // start or restart the ack timeout
+            TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
 
             bSendMess = true;
         }
@@ -1155,7 +1152,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInf
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
 
         // country (2 bytes)
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].eCountry ), 2 );
+        PutCountryOnStream ( vecData, iPos, vecChanInfo[i].eCountry );
 
         // instrument (4 bytes)
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iInstrument ), 4 );
@@ -1194,7 +1191,7 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
         const int iChanID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // country (2 bytes)
-        const QLocale::Country eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+        const QLocale::Country eCountry = GetCountryFromStream ( vecData, iPos );
 
         // instrument (4 bytes)
         const int iInstrument = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
@@ -1264,7 +1261,7 @@ void CProtocol::CreateChanInfoMes ( const CChannelCoreInfo ChanInfo )
     CVector<uint8_t> vecData ( iEntrLen );
 
     // country (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ChanInfo.eCountry ), 2 );
+    PutCountryOnStream ( vecData, iPos, ChanInfo.eCountry );
 
     // instrument (4 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ChanInfo.iInstrument ), 4 );
@@ -1294,7 +1291,7 @@ bool CProtocol::EvaluateChanInfoMes ( const CVector<uint8_t>& vecData )
     }
 
     // country (2 bytes)
-    ChanInfo.eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+    ChanInfo.eCountry = GetCountryFromStream ( vecData, iPos );
 
     // instrument (4 bytes)
     ChanInfo.iInstrument = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
@@ -1776,7 +1773,7 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr, const 
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( LInetAddr.iPort ), 2 );
 
     // country (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
+    PutCountryOnStream ( vecData, iPos, ServerInfo.eCountry );
 
     // maximum number of connected clients (1 byte)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.iMaxNumClients ), 1 );
@@ -1814,7 +1811,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr, cons
     LInetAddr.iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // country (2 bytes)
-    RecServerInfo.eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+    RecServerInfo.eCountry = GetCountryFromStream ( vecData, iPos );
 
     // maximum number of connected clients (1 byte)
     RecServerInfo.iMaxNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
@@ -1890,7 +1887,7 @@ void CProtocol::CreateCLRegisterServerExMes ( const CHostAddress& InetAddr, cons
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( LInetAddr.iPort ), 2 );
 
     // country (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
+    PutCountryOnStream ( vecData, iPos, ServerInfo.eCountry );
 
     // maximum number of connected clients (1 byte)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.iMaxNumClients ), 1 );
@@ -1934,7 +1931,7 @@ bool CProtocol::EvaluateCLRegisterServerExMes ( const CHostAddress& InetAddr, co
     LInetAddr.iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // country (2 bytes)
-    RecServerInfo.eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+    RecServerInfo.eCountry = GetCountryFromStream ( vecData, iPos );
 
     // maximum number of connected clients (1 byte)
     RecServerInfo.iMaxNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
@@ -2048,7 +2045,7 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress& InetAddr, const CVec
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
 
         // country (2 bytes)
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].eCountry ), 2 );
+        PutCountryOnStream ( vecData, iPos, vecServerInfo[i].eCountry );
 
         // maximum number of connected clients (1 byte)
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].iMaxNumClients ), 1 );
@@ -2090,7 +2087,7 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress& InetAddr, const CV
         const quint16 iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // country (2 bytes)
-        const QLocale::Country eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+        const QLocale::Country eCountry = GetCountryFromStream ( vecData, iPos );
 
         // maximum number of connected clients (1 byte)
         const int iMaxNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
@@ -2399,7 +2396,7 @@ void CProtocol::CreateCLConnClientsListMes ( const CHostAddress& InetAddr, const
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
 
         // country (2 bytes)
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].eCountry ), 2 );
+        PutCountryOnStream ( vecData, iPos, vecChanInfo[i].eCountry );
 
         // instrument (4 bytes)
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iInstrument ), 4 );
@@ -2438,7 +2435,7 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, con
         const int iChanID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // country (2 bytes)
-        const QLocale::Country eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+        const QLocale::Country eCountry = GetCountryFromStream ( vecData, iPos );
 
         // instrument (4 bytes)
         const int iInstrument = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
@@ -2772,6 +2769,12 @@ bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn, int& iPos, 
     return false; // no error
 }
 
+QLocale::Country CProtocol::GetCountryFromStream ( const CVector<uint8_t>& vecIn, int& iPos )
+{
+    unsigned short iCountryCode = GetValFromStream ( vecIn, iPos, 2 );
+    return CLocale::WireFormatCountryCodeToQtCountry ( iCountryCode );
+}
+
 void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut, const int iCnt, const int iID, const CVector<uint8_t>& vecData )
 {
     int i;
@@ -2883,4 +2886,10 @@ void CProtocol::PutStringUTF8OnStream ( CVector<uint8_t>& vecIn, int& iPos, cons
         // byte-by-byte copying of the utf-8 string data
         PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( sStringUTF8[j] ), 1 );
     }
+}
+
+void CProtocol::PutCountryOnStream ( CVector<uint8_t>& vecIn, int& iPos, QLocale::Country eCountry )
+{
+    unsigned short iCountryCode = CLocale::QtCountryToWireFormatCountryCode ( eCountry );
+    PutValOnStream ( vecIn, iPos, iCountryCode, 2 );
 }

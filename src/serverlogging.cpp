@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -70,8 +70,8 @@ void CServerLogging::operator<< ( const QString& sNewStr )
     {
         // append new line in logging file
         QTextStream out ( &File );
-        out << sNewStr << endl;
-        File.flush();
+        out << sNewStr << '\n';
+        out.flush();
     }
 }
 
