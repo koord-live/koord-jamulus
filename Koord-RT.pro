@@ -376,7 +376,8 @@ FORMS_GUI = src/aboutdlgbase.ui \
     FORMS_GUI += src/clientdlgbase.ui \
         src/clientsettingsdlgbase.ui \
         src/chatdlgbase.ui \
-        src/connectdlgbase.ui
+        src/connectdlgbase.ui \
+        src/basicconnectdlgbase.ui
 }
 
 HEADERS += src/buffer.h \
@@ -412,6 +413,7 @@ HEADERS_GUI = src/serverdlg.h
         src/chatdlg.h \
         src/clientsettingsdlg.h \
         src/connectdlg.h \
+        src/basicconnectdlg.h \
         src/clientdlg.h \
         src/levelmeter.h \
         src/analyzerconsole.h \
@@ -521,6 +523,7 @@ SOURCES_GUI = src/serverdlg.cpp
         src/chatdlg.cpp \
         src/clientsettingsdlg.cpp \
         src/connectdlg.cpp \
+        src/basicconnectdlg.cpp \
         src/clientdlg.cpp \
         src/multicolorled.cpp \
         src/levelmeter.cpp \
