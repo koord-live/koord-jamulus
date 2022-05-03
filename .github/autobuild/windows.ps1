@@ -143,7 +143,7 @@ Function Pass-Artifact-to-Job
     $artifact = "koord-rt_${JamulusVersion}_win${ArtifactSuffix}.exe"
 
     echo "Copying artifact to ${artifact}"
-    move ".\deploy\Koord-RT*installer-win.exe" ".\deploy\${artifact}"
+    move ".\deploy\Koord-RT*.exe" ".\deploy\${artifact}"
     if ( !$? )
     {
         throw "move failed with exit code $LastExitCode"
