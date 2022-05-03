@@ -7,15 +7,15 @@ TARGET_ARCH="${TARGET_ARCH:-amd64}"
 
 cp -r distributions/debian .
 
-# get the jamulus version from pro file
-VERSION=$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)
+# get the koord-rt version from pro file
+VERSION=$(grep -oP 'VERSION = \K\w[^\s\\]*' Koord-RT.pro)
 
 export DEBFULLNAME=GitHubActions DEBEMAIL=noemail@example.com
 
 # Generate Changelog
 echo -n generating changelog
 rm -f debian/changelog
-dch --create --package jamulus --empty --newversion "${VERSION}" ''
+dch --create --package koord-rt --empty --newversion "${VERSION}" ''
 perl .github/actions_scripts/getChangelog.pl ChangeLog "${VERSION}" --line-per-entry | while read -r entry
 do
     echo -n .

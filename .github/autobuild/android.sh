@@ -87,7 +87,7 @@ build_app_as_apk() {
 
 pass_artifact_to_job() {
     mkdir deploy
-    local artifact="jamulus_${JAMULUS_BUILD_VERSION}_android.apk"
+    local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_android.apk"
     echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact}"
     mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"

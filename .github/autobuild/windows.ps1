@@ -133,10 +133,10 @@ Function Pass-Artifact-to-Job
         default         { "" }
     }
 
-    $artifact = "jamulus_${JamulusVersion}_win${ArtifactSuffix}.exe"
+    $artifact = "koord-rt_${JamulusVersion}_win${ArtifactSuffix}.exe"
 
     echo "Copying artifact to ${artifact}"
-    move ".\deploy\Jamulus*installer-win.exe" ".\deploy\${artifact}"
+    move ".\deploy\Koord-RT*installer-win.exe" ".\deploy\${artifact}"
     if ( !$? )
     {
         throw "move failed with exit code $LastExitCode"

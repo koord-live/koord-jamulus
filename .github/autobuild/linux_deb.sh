@@ -64,14 +64,14 @@ pass_artifacts_to_job() {
     mkdir deploy
 
     # rename headless first, so wildcard pattern matches only one file each
-    local artifact_1="jamulus_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+    local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
     echo "Moving headless build artifact to deploy/${artifact_1}"
-    mv ../jamulus-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_1}"
+    mv ../koord-rt-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_1}"
     echo "::set-output name=artifact_1::${artifact_1}"
 
-    local artifact_2="jamulus_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+    local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
     echo "Moving regular build artifact to deploy/${artifact_2}"
-    mv ../jamulus*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
+    mv ../koord-rt*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
     echo "::set-output name=artifact_2::${artifact_2}"
 }
 

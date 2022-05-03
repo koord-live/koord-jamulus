@@ -37,9 +37,9 @@ build_app_as_ipa() {
 }
 
 pass_artifact_to_job() {
-    local artifact="jamulus_${JAMULUS_BUILD_VERSION}_iOSUnsigned${ARTIFACT_SUFFIX:-}.ipa"
+    local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_iOSUnsigned${ARTIFACT_SUFFIX:-}.ipa"
     echo "Moving build artifact to deploy/${artifact}"
-    mv ./deploy/Jamulus.ipa "./deploy/${artifact}"
+    mv ./deploy/Koord-RT.ipa "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
 }
 
