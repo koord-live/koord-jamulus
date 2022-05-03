@@ -355,13 +355,13 @@ win32 {
         icons_svg.path = $$ICONSDIR_SVG
         icons_svg.files = distributions/koordrt.svg
 
-        isEmpty(MIMEPKGDIR) {
-            MIMEPKGDIR = share/mime/packages
+        isEmpty(MANDIR) {
+            MANDIR = share/man/man1
         }
-        MIMEPKGDIR = $$absolute_path($$MIMEPKGDIR, $$PREFIX)
-        mimepkg.path = $$MIMEPKGDIR
-        mimepkg.files = distributions/koordrt.xml
-
+        MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
+        man.path = $$MANDIR
+        man.files = distributions/Jamulus.1
+        
         INSTALLS += target desktop icons icons_svg man
     }
 }
