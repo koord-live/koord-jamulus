@@ -41,8 +41,8 @@ Function Install-Qt
         "windows",
         "desktop",
         "$QtVersion",
-        "$QtArch",
-        "--archives", "qtbase", "qttools", "qttranslations"
+        "$QtArch"
+        # "--archives", "qtbase", "qttools", "qttranslations"
     )
     aqt install-qt @Args
     if ( !$? )
@@ -54,6 +54,9 @@ Function Install-Qt
             throw "Qt installation with args @Args failed with exit code $LastExitCode"
         }
     }
+
+    # Above should do:
+    # aqt install --outputdir C:\Qt 5.15.2 windows desktop win64_msvc2019_64
 
     # add vcredist and cmake - for Koord-RT build
     aqt install-tool windows desktop --outputdir C:\Qt tools_vcredist qt.tools.vcredist_msvc2019_x64
