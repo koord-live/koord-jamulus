@@ -81,7 +81,7 @@ build_app_as_apk() {
     "${QT_DIR}/bin/qmake" -spec android-clang
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
-    "${QT_DIR}"/bin/androiddeployqt --input android-Jamulus-deployment-settings.json --output "${BUILD_DIR}" \
+    "${QT_DIR}"/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json --output "${BUILD_DIR}" \
         --android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}" --gradle
 }
 

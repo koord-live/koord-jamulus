@@ -331,7 +331,7 @@ Function Build-App
 function Build-App-Variants
 {
     # foreach ($_ in ("x86_64", "x86"))
-    foreach ($_ in ("x86_64")
+    foreach ($_ in ("x86_64"))
     {
         $OriginalEnv = Get-ChildItem Env:
         if ($_ -eq "x86")
