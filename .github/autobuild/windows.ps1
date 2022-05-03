@@ -54,6 +54,10 @@ Function Install-Qt
             throw "Qt installation with args @Args failed with exit code $LastExitCode"
         }
     }
+
+    # add vcredist and cmake - for Koord-RT build
+    aqt install-tool windows desktop --outputdir C:\Qt tools_vcredist qt.tools.vcredist_msvc2019_x64
+    aqt install-tool windows desktop --outputdir C:\Qt tools_cmake qt.tools.cmake.win64
 }
 
 Function Ensure-Qt

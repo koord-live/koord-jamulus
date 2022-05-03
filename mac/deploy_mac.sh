@@ -87,7 +87,7 @@ build_app()
 build_installer_image()
 {
     local client_target_name="${1}"
-    local server_target_name="${2}"
+    # local server_target_name="${2}"
 
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
@@ -108,7 +108,6 @@ build_installer_image()
       --text-size 12 \
       --icon-size 72 \
       --icon "${client_target_name}.app" 630 210 \
-      --icon "${server_target_name}.app" 530 210 \
       --eula "${root_path}/COPYING" \
       "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
       "${deploy_path}/"
