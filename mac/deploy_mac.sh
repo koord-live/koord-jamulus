@@ -84,24 +84,7 @@ build_app()
     esac
 }
 
-
-# build_installer_image()
-# {
-#     # Install dmgbuild (for the current user), this is required to build the installer image
-#     python -m ensurepip --user --default-pip
-#     python -m pip install --user dmgbuild==1.4.2
-#     local dmgbuild_bin="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
-
-#     # Get Jamulus version
-#     local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
-
-#     # Build installer image
-#     "${dmgbuild_bin}" -s "${macdeploy_path}/deployment_settings.py" -D background="${resources_path}/installerbackground.png" \
-#         -D app_path="${deploy_path}/$1.app" -D server_path="${deploy_path}/$2.app" \
-#         -D license="${root_path}/COPYING" "$1 Installer" "${deploy_path}/$1-${app_version}-installer-mac.dmg"
-# }
-
-build_client_installer_image()
+build_installer_image()
 {
     local client_target_name="${1}"
     local server_target_name="${2}"
