@@ -1,3 +1,8 @@
+# Koord RT - a compatible clone of Jamulus for use with koord.live
+
+Below notes refer to upstream project, https://jamulus.io
+--
+
 [![Homepage picture](https://github.com/jamulussoftware/jamuluswebsite/blob/release/assets/img/jamulusbannersmall.png)](https://jamulus.io)
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
