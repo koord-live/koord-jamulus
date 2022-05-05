@@ -124,7 +124,6 @@ jobs:
           #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
           #   run_codeql:             false
 
-
           - config_name:            MacOS (artifacts)
             target_os:              macos
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
