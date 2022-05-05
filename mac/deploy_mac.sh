@@ -10,7 +10,7 @@ deploy_path="${root_path}/deploy"
 cert_name=""
 keychain_pass=""
 
-while getopts 'hsk:' flag; do
+while getopts 'hs:k:' flag; do
     case "${flag}" in
         s)
             cert_name=$OPTARG
