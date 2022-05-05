@@ -45,6 +45,10 @@ prepare_signing() {
     security import certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/codesign
     security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
+    #FIXME bit of extra output
+    echo "Checking found identities..."
+    security find-identity -v 
+
     # Tell Github Workflow that we need notarization & stapling:
     echo "::set-output name=macos_signed::true"
     return 0
