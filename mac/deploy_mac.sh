@@ -73,7 +73,7 @@ build_app()
 
     # move things
     mv "${build_path}/${target_name}.app" "${deploy_path}"
-    mv "${build_path}/KoordRT_${app_version}.pkg" "${deploy_path}"
+    # mv "${build_path}/KoordRT_${app_version}.pkg" "${deploy_path}"
 
     # Cleanup
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
