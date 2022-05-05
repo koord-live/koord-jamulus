@@ -17,6 +17,12 @@ while getopts 'hs:' flag; do
                 echo "Please add the name of the certificate to use: -s \"<name>\""
             fi
             ;;
+        k)
+            keychain_pass=$OPTARG
+            if [[ -z "$keychain_pass" ]]; then
+                echo "Please add keychain password to use: -k \"<name>\""
+            fi
+            ;;
         h)
             echo "Usage: -s <cert name> for signing mac build"
             exit 0
@@ -63,13 +69,14 @@ build_app()
     # don't do any code-signing here
     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -appstore-compliant 
 
-    # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
-    #  This is typical for building a Mac App Store archive.
-    # if [[ -z "$cert_name" ]]; then
-    #     productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
-    # else
-    #     productbuild --sign "${cert_name}" --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
-    # fi
+    Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
+     This is typical for building a Mac App Store archive.
+    if [[ -z "$cert_name" ]]; then
+        productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
+    else
+        security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
+        productbuild --sign "${cert_name}" --keychain build.keychain --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
+    fi
 
     # move things
     mv "${build_path}/${target_name}.app" "${deploy_path}"
