@@ -65,11 +65,11 @@ build_app()
 
     # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
     #  This is typical for building a Mac App Store archive.
-    if [[ -z "$cert_name" ]]; then
-        productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
-    else
-        productbuild --sign "${cert_name}" --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
-    fi
+    # if [[ -z "$cert_name" ]]; then
+    #     productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
+    # else
+    #     productbuild --sign "${cert_name}" --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
+    # fi
 
     # move things
     mv "${build_path}/${target_name}.app" "${deploy_path}"
