@@ -70,8 +70,8 @@ build_app()
     # don't do any code-signing here
     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -appstore-compliant 
 
-    Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
-     This is typical for building a Mac App Store archive.
+    # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
+    #  This is typical for building a Mac App Store archive.
     if [[ -z "$cert_name" ]]; then
         productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
     else
