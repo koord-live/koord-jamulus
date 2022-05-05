@@ -53,13 +53,16 @@ build_app()
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
-    # Add Qt deployment dependencies
-    if [[ -z "$cert_name" ]]; then
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
-    else
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
-    fi
+    # # Add Qt deployment dependencies
+    # if [[ -z "$cert_name" ]]; then
+    #     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    # else
+    #     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
+    # fi
     
+    # don't do any code-signing here
+    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -appstore-compliant 
+
     # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
     #  This is typical for building a Mac App Store archive.
     if [[ -z "$cert_name" ]]; then
