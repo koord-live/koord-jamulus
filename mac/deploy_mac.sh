@@ -8,8 +8,9 @@ resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
 cert_name=""
+keychain_pass=""
 
-while getopts 'hs:' flag; do
+while getopts 'hsk:' flag; do
     case "${flag}" in
         s)
             cert_name=$OPTARG
@@ -74,7 +75,7 @@ build_app()
     if [[ -z "$cert_name" ]]; then
         productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
     else
-        security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
+        security unlock-keychain -p "${keychain_pass}" build.keychain
         productbuild --sign "${cert_name}" --keychain build.keychain --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
     fi
 
