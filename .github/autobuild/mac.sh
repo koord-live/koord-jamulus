@@ -42,7 +42,7 @@ prepare_signing() {
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/codesign
+    security import certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/codesign -T /usr/bin/productbuild
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
     #FIXME bit of extra output
