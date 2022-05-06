@@ -71,12 +71,20 @@ build_app()
     security unlock-keychain -p "${keychain_pass}" build.keychain
 
     # Add Qt deployment dependencies
-    if [[ -z "$macapp_cert_name" ]]; then
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
-    else
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
-    fi
+    # if [[ -z "$macapp_cert_name" ]]; then
+    #     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    # else
+    #     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+    # fi
+    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
 
+    ## Sign code
+    codesign --deep -f -s "${macapp_cert_name}" --options runtime "${build_path}/${target_name}.app"
+    # codesign --deep -f -s "${macapp_cert_name}" --entitlements "Koord-RT.entitlements" --options runtime "${build_path}/${target_name}.app"
+    # verify signature
+    codesign -dv --verbose=4 "${build_path}/${target_name}.app"
+
+    ## Build installer pkg file
     # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
     #  This is typical for building a Mac App Store archive.
     if [[ -z "$cert_name" ]]; then
