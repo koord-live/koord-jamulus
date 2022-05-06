@@ -8,14 +8,21 @@ resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
 cert_name=""
+macapp_cert_name=""
 keychain_pass=""
 
-while getopts 'hs:k:' flag; do
+while getopts 'hs:k:a:' flag; do
     case "${flag}" in
         s)
             cert_name=$OPTARG
             if [[ -z "$cert_name" ]]; then
                 echo "Please add the name of the certificate to use: -s \"<name>\""
+            fi
+            ;;
+        a)
+            macapp_cert_name=$OPTARG
+            if [[ -z "$macapp_cert_name" ]]; then
+                echo "Please add the name of the codesigning certificate to use: -a \"<name>\""
             fi
             ;;
         k)
@@ -60,21 +67,21 @@ build_app()
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
+    #testing 
+    # security unlock-keychain -p "${keychain_pass}" build.keychain
+
     # Add Qt deployment dependencies
-    # if [[ -z "$cert_name" ]]; then
-    #     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
-    # else
-    #     macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
-    # fi
-    # don't do any code-signing here. installer certificate does NOT work for codesigning
-    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -appstore-compliant 
+    if [[ -z "$macapp_cert_name" ]]; then
+        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    else
+        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+    fi
 
     # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
     #  This is typical for building a Mac App Store archive.
     if [[ -z "$cert_name" ]]; then
         productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
     else
-        security unlock-keychain -p "${keychain_pass}" build.keychain
         productbuild --sign "${cert_name}" --keychain build.keychain --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
     fi
 

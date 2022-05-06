@@ -233,6 +233,9 @@ jobs:
           MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
           MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
+          MACAPP_CERTIFICATE:       ${{ secrets.MACAPP_CERT}}
+          MACAPP_CERTIFICATE_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
+          MACAPP_CERTIFICATE_ID:    ${{ secrets.MACAPP_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
