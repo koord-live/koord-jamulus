@@ -67,8 +67,8 @@ build_app()
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
-    #testing 
-    # security unlock-keychain -p "${keychain_pass}" build.keychain
+    # try unlock keychain first
+    security unlock-keychain -p "${keychain_pass}" build.keychain
 
     # Add Qt deployment dependencies
     if [[ -z "$macapp_cert_name" ]]; then
