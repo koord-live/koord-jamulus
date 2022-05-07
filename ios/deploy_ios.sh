@@ -63,7 +63,7 @@ build_ipa()
             CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
             CODE_SIGNING_REQUIRED=YES \
             CODE_SIGNING_ALLOWED=YES \
-            CODE_SIGN_ENTITLEMENTS="Koord-RT.entitlements"
+            CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
     fi
 
     # Generate ipa by copying the .app file from the xcarchive directory
