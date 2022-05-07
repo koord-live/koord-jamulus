@@ -104,48 +104,48 @@ jobs:
         # Think of this like a foreach loop. Basically runs the steps with every combination of
         # the contents of this.
         config:
-          - config_name:            Android .apk (artifact+codeQL)
-            target_os:              android
-            building_on_os:         ubuntu-20.04
-            base_command:           ./.github/autobuild/android.sh
-            run_codeql:             true
-            # Jamulus.pro needs to count git history length for android versioning:
-            checkout_fetch_depth:   '0'
+          # - config_name:            Android .apk (artifact+codeQL)
+          #   target_os:              android
+          #   building_on_os:         ubuntu-20.04
+          #   base_command:           ./.github/autobuild/android.sh
+          #   run_codeql:             true
+          #   # Jamulus.pro needs to count git history length for android versioning:
+          #   checkout_fetch_depth:   '0'
 
-          - config_name:            Linux .deb amd64 (artifacts+codeQL)
-            target_os:              linux
-            building_on_os:         ubuntu-18.04
-            base_command:           ./.github/autobuild/linux_deb.sh
-            run_codeql:             true
+          # - config_name:            Linux .deb amd64 (artifacts+codeQL)
+          #   target_os:              linux
+          #   building_on_os:         ubuntu-18.04
+          #   base_command:           ./.github/autobuild/linux_deb.sh
+          #   run_codeql:             true
 
-          - config_name:            Linux .deb armhf (artifacts)
-            target_os:              linux
-            building_on_os:         ubuntu-18.04
-            base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
-            run_codeql:             false
+          # - config_name:            Linux .deb armhf (artifacts)
+          #   target_os:              linux
+          #   building_on_os:         ubuntu-18.04
+          #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
+          #   run_codeql:             false
 
-          - config_name:            MacOS (artifacts)
-            target_os:              macos
-            # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
-            building_on_os:         macos-10.15
-            base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-            # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
-            run_codeql:             false
-            xcode_version:          12.1.1
+          # - config_name:            MacOS (artifacts)
+          #   target_os:              macos
+          #   # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
+          #   building_on_os:         macos-10.15
+          #   base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
+          #   # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
+          #   run_codeql:             false
+          #   xcode_version:          12.1.1
 
-          # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
-          - config_name:            MacOS Legacy (artifacts+CodeQL)
-            target_os:              macos
-            building_on_os:         macos-10.15
-            base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
-            # Enable CodeQL on mac legacy as this version does not get signed
-            run_codeql:             true
-            # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
-            # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
-            # https://developer.apple.com/support/xcode/
-            # Xcode 12.1.1 is the most-recent 12.1.x release:
-            # https://xcodereleases.com/
-            xcode_version:          12.1.1
+          # # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
+          # - config_name:            MacOS Legacy (artifacts+CodeQL)
+          #   target_os:              macos
+          #   building_on_os:         macos-10.15
+          #   base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
+          #   # Enable CodeQL on mac legacy as this version does not get signed
+          #   run_codeql:             true
+          #   # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
+          #   # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
+          #   # https://developer.apple.com/support/xcode/
+          #   # Xcode 12.1.1 is the most-recent 12.1.x release:
+          #   # https://xcodereleases.com/
+          #   xcode_version:          12.1.1
 
           - config_name:            iOS (artifacts)
             target_os:              ios
@@ -157,11 +157,11 @@ jobs:
             run_codeql:             false
             xcode_version:          12.1.1
 
-          - config_name:            Windows (artifact+codeQL)
-            target_os:              windows
-            building_on_os:         windows-2019
-            base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
-            run_codeql:             true
+          # - config_name:            Windows (artifact+codeQL)
+          #   target_os:              windows
+          #   building_on_os:         windows-2019
+          #   base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
+          #   run_codeql:             true
 
           # - config_name:            Windows JACK (artifact)
           #   target_os:              windows
@@ -235,6 +235,9 @@ jobs:
           MACAPP_CERTIFICATE:       ${{ secrets.MACAPP_CERT}}
           MACAPP_CERTIFICATE_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
           MACAPP_CERTIFICATE_ID:    ${{ secrets.MACAPP_CERT_ID }}
+          IOSDIST_CERTIFICATE:      ${{ secrets.IOSDIST_CERT}}
+          IOSDIST_CERTIFICATE_PWD:  ${{ secrets.IOSDIST_CERT_PWD }}
+          IOSDIST_CERTIFICATE_ID:   ${{ secrets.IOSDIST_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
