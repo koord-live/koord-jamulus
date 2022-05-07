@@ -7,7 +7,6 @@ iosdeploy_path="${root_path}/ios"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
-cert_name=""
 iosdist_cert_name=""
 keychain_pass=""
 
@@ -73,8 +72,8 @@ build_ipa()
     cd build
     zip -0 -y -r Koord-RT.ipa Payload/
 
-    # Make a deploy folder and copy file
-    mkdir ../deploy
+    # copy file
+    # mkdir ../deploy
     mv Koord-RT.ipa ../deploy
 }
 
