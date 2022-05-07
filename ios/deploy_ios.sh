@@ -14,7 +14,7 @@ while getopts 'hs:k:' flag; do
     case "${flag}" in
         s)
             iosdist_cert_name=$OPTARG
-            if [[ -z "$cert_name" ]]; then
+            if [[ -z "$iosdist_cert_name" ]]; then
                 echo "Please add the name of the certificate to use: -s \"<name>\""
             fi
             ;;
@@ -25,7 +25,7 @@ while getopts 'hs:k:' flag; do
             fi
             ;;
         h)
-            echo "Usage: -s <cert name> for signing mac build"
+            echo "Usage: -s <cert name> for signing ios build"
             exit 0
             ;;
         *)
