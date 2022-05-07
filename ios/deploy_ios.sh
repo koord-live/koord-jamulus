@@ -60,6 +60,7 @@ build_ipa()
     else
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
             -archivePath "build/Koord-RT.xcarchive" \
+            -exportOptionsPlist "ios/exportOptionsRelease.plist" \
             CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
             CODE_SIGNING_REQUIRED=YES \
             CODE_SIGNING_ALLOWED=YES \
