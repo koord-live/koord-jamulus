@@ -40,6 +40,7 @@ cleanup()
     rm -rf "${build_path}"
     rm -rf "${deploy_path}"
     mkdir -p "${build_path}"
+    mkdir -p "${build_path}/Exports"
     mkdir -p "${deploy_path}"
 }
 
@@ -58,16 +59,19 @@ build_ipa()
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_ENTITLEMENTS=""
     else
+        # https://developer.apple.com/forums/thread/70326
+        # // Builds the app into an archive
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
-            -archivePath "build/Koord-RT_pre.xcarchive" \
+            -archivePath "build/Koord-RT.xcarchive" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_ENTITLEMENTS=""
 
+        # // Exports the archive according to the export options specified by the plist
         /usr/bin/xcodebuild -exportArchive \
-            -archivePath "build/Koord-RT_pre.xcarchive" \
-            -exportPath  "build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app" \
+            -archivePath "build/Koord-RT.xcarchive" \
+            -exportPath  "build/Exports/Koord-RT_signed.app" \
             -exportOptionsPlist "ios/exportOptionsRelease.plist" \
             CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
             CODE_SIGNING_REQUIRED=YES \
@@ -81,9 +85,16 @@ build_ipa()
     cd build
     zip -0 -y -r Koord-RT.ipa Payload/
 
-    # copy file
+    # do same for signed build
+    mkdir build/Payload_signed
+    cp -r build/Exports/Koord-RT_signed.app build/Payload_signed/
+    cd build 
+    zip -0 -y -r Koord-RT_signed.ipa Payload_signed/
+
+    # copy files
     # mkdir ../deploy
     mv Koord-RT.ipa ../deploy
+    mv Koord-RT_signed.ipa ../deploy
 }
 
 # Cleanup previous deployments

@@ -84,6 +84,11 @@ pass_artifact_to_job() {
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Koord-RT.ipa "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
+
+    local artifact2="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
+    echo "Moving build artifact to deploy/${artifact2}"
+    mv ./deploy/Koord-RT_signed.ipa "./deploy/${artifact2}"
+    echo "::set-output name=artifact_2::${artifact2}"
 }
 
 case "${1:-}" in
