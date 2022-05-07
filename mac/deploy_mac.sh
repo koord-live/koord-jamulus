@@ -72,13 +72,13 @@ build_app()
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
     else
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+        # verify signature
+        codesign -dv --verbose=4 "${build_path}/${target_name}.app"
     fi
 
     ## Sign code
     # codesign --deep -f -s "${macapp_cert_name}" --options runtime "${build_path}/${target_name}.app"
     # codesign --deep -f -s "${macapp_cert_name}" --entitlements "Koord-RT.entitlements" --options runtime "${build_path}/${target_name}.app"
-    # verify signature
-    codesign -dv --verbose=4 "${build_path}/${target_name}.app"
 
     ## Build installer pkg file - for submission to App Store
     if [[ -z "$cert_name" ]]; then
