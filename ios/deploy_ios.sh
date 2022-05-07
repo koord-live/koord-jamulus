@@ -80,12 +80,14 @@ build_ipa()
     fi
 
     # Generate ipa by copying the .app file from the xcarchive directory
+    cd ${root_path}
     mkdir build/Payload
     cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/Payload/
     cd build
     zip -0 -y -r Koord-RT.ipa Payload/
 
     # do same for signed build
+    cd ${root_path}
     mkdir build/Payload_signed
     cp -r build/Exports/Koord-RT_signed.app build/Payload_signed/
     cd build 
