@@ -48,10 +48,14 @@ prepare_signing() {
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import macinst_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/productbuild
-    security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERTIFICATE_PWD}" -T /usr/bin/codesign 
-    security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    security import macinst_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/productbuild
+    security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
+    # security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
+    # set lock timeout on keychain to 6 hours
+    security set-keychain-settings -lut 21600
+    
     #FIXME bit of extra output
     echo "Checking found identities..."
     security find-identity -v 
