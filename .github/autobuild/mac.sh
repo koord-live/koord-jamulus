@@ -56,7 +56,7 @@ prepare_signing() {
     # set lock timeout on keychain to 6 hours
     security set-keychain-settings -lut 21600
     
-    #FIXME bit of extra output
+    # for debug
     echo "Checking found identities..."
     security find-identity -v 
 
@@ -79,11 +79,6 @@ build_app_as_dmg_installer() {
 }
 
 pass_artifact_to_job() {
-    # artifact="koord-rt_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.app"
-    # echo "Moving build artifact to deploy/${artifact}"
-    # mv ./deploy/Koord-RT*.app "./deploy/${artifact}"
-    # echo "::set-output name=artifact_1::${artifact}"
-
     artifact="koord-rt_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Koord-RT-*installer-mac.dmg "./deploy/${artifact}"

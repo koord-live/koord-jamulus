@@ -67,16 +67,12 @@ build_app()
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
-    # try unlock keychain first
-    # security unlock-keychain -p "${keychain_pass}" build.keychain
-
     # Add Qt deployment dependencies
     if [[ -z "$macapp_cert_name" ]]; then
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
     else
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
     fi
-    # macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
 
     ## Sign code
     # codesign --deep -f -s "${macapp_cert_name}" --options runtime "${build_path}/${target_name}.app"
@@ -84,9 +80,7 @@ build_app()
     # verify signature
     codesign -dv --verbose=4 "${build_path}/${target_name}.app"
 
-    ## Build installer pkg file
-    # Build the archive Product.pkg to install Sample.app under /Applications, synthesizing a distribution.
-    #  This is typical for building a Mac App Store archive.
+    ## Build installer pkg file - for submission to App Store
     if [[ -z "$cert_name" ]]; then
         productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
     else
