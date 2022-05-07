@@ -50,7 +50,7 @@ prepare_signing() {
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security import macinst_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/productbuild
     security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERTIFICATE_PWD}" -T /usr/bin/codesign 
-    security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
     #FIXME bit of extra output
     echo "Checking found identities..."
