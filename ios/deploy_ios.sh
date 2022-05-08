@@ -79,7 +79,9 @@ build_ipa()
             DEVELOPMENT_TEAM="TXZ4FR95HG" \
             CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
             CODE_SIGNING_REQUIRED=YES \
-            CODE_SIGNING_ALLOWED=YES
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGN_STYLE="Manual" \
+            PROVISIONING_PROFILE_SPECIFIER="live.koord.Koord-RT"
             # CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
     fi
 
