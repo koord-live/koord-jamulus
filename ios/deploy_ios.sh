@@ -83,24 +83,25 @@ build_ipa()
 
     # Generate ipa by copying the .app file from the xcarchive directory
     cd ${root_path}
-    mkdir build/Payload
+    mkdir -p build/unsigned/Payload
     cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
-    cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/Payload/
-    cd build
+    cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/unsigned/Payload/
+    cd build/unsigned
     zip -0 -y -r Koord-RT.ipa Payload/
 
     # do same for signed build
     cd ${root_path}
-    mkdir build/Payload_signed
+    mkdir -p build/signed/Payload
     cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Exports/Koord-RT_signed.app/
-    cp -r build/Exports/Koord-RT_signed.app build/Payload_signed/
-    cd build 
-    zip -0 -y -r Koord-RT_signed.ipa Payload_signed/
+    cp -r build/Exports/Koord-RT_signed.app build/signed/Payload/
+    cd build/signed
+    zip -0 -y -r Koord-RT_signed.ipa Payload/
 
     # copy files
     # mkdir ../deploy
-    mv Koord-RT.ipa ../deploy
-    mv Koord-RT_signed.ipa ../deploy
+    cd ${root_path}
+    mv build/unsigned/Koord-RT.ipa deploy/
+    mv build/signed/Koord-RT_signed.ipa deploy/
 }
 
 # Cleanup previous deployments
