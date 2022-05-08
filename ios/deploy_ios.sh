@@ -74,15 +74,17 @@ build_ipa()
             -archivePath "build/Koord-RT.xcarchive" \
             -exportPath  "build/Exports/Koord-RT_signed.app" \
             -exportOptionsPlist "ios/exportOptionsRelease.plist" \
+            DEVELOPMENT_TEAM="TXZ4FR95HG" \
             CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
             CODE_SIGNING_REQUIRED=YES \
-            CODE_SIGNING_ALLOWED=YES \
-            CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
+            CODE_SIGNING_ALLOWED=YES
+            # CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
     fi
 
     # Generate ipa by copying the .app file from the xcarchive directory
     cd ${root_path}
     mkdir build/Payload
+    cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
     cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/Payload/
     cd build
     zip -0 -y -r Koord-RT.ipa Payload/
@@ -90,6 +92,7 @@ build_ipa()
     # do same for signed build
     cd ${root_path}
     mkdir build/Payload_signed
+    cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Exports/Koord-RT_signed.app/
     cp -r build/Exports/Koord-RT_signed.app build/Payload_signed/
     cd build 
     zip -0 -y -r Koord-RT_signed.ipa Payload_signed/
