@@ -64,44 +64,44 @@ build_ipa()
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
             -archivePath "build/Koord-RT.xcarchive" \
             DEVELOPMENT_TEAM="TXZ4FR95HG" \
-            CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
-            CODE_SIGNING_REQUIRED=YES \
-            CODE_SIGNING_ALLOWED=YES
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
             # CODE_SIGN_ENTITLEMENTS=""
+
+        cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
 
         # // Exports the archive according to the export options specified by the plist
         /usr/bin/xcodebuild -exportArchive \
             -archivePath "build/Koord-RT.xcarchive" \
-            -exportPath  "build/Exports/Koord-RT_signed.app" \
+            -exportPath  "build/Exports/" \
             -exportOptionsPlist "ios/exportOptionsRelease.plist"
-            # DEVELOPMENT_TEAM="TXZ4FR95HG" \
-            # CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
-            # CODE_SIGNING_REQUIRED=YES \
-            # CODE_SIGNING_ALLOWED=YES
+            DEVELOPMENT_TEAM="TXZ4FR95HG" \
+            CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
+            CODE_SIGNING_REQUIRED=YES \
+            CODE_SIGNING_ALLOWED=YES
             # CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
     fi
 
     # Generate ipa by copying the .app file from the xcarchive directory
     cd ${root_path}
     mkdir -p build/unsigned/Payload
-    cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
     cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/unsigned/Payload/
     cd build/unsigned
     zip -0 -y -r Koord-RT.ipa Payload/
 
     # do same for signed build
-    cd ${root_path}
-    mkdir -p build/signed/Payload
-    cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Exports/Koord-RT_signed.app/
-    cp -r build/Exports/Koord-RT_signed.app build/signed/Payload/
-    cd build/signed
-    zip -0 -y -r Koord-RT_signed.ipa Payload/
+    # cd ${root_path}
+    # mkdir -p build/signed
+    # cp -r build/Exports/Koord-RT.ipa build/signed/
+    # cd build/signed
+    # zip -0 -y -r Koord-RT_signed.ipa Payload/
 
     # copy files
     # mkdir ../deploy
     cd ${root_path}
-    mv build/unsigned/Koord-RT.ipa deploy/
-    mv build/signed/Koord-RT_signed.ipa deploy/
+    mv build/unsigned/Koord-RT.ipa deploy/Koord-RT.ipa
+    mv build/Exports/Koord-RT.ipa deploy/Koord-RT_signed.ipa
 }
 
 # Cleanup previous deployments
