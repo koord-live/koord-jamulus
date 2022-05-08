@@ -5,6 +5,11 @@
 	<key>method</key>
 	<string>app-store</string>
 	<key>teamID</key>
-	<string>TXZ4FR95HG</string>	
+	<string>TXZ4FR95HG</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>Bundle-Id</key>
+		<string>live.koord.Koord-RT</string>
+	</dict>	
 </dict>
 </plist>
