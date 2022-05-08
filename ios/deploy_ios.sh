@@ -64,20 +64,20 @@ build_ipa()
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
             -archivePath "build/Koord-RT.xcarchive" \
             DEVELOPMENT_TEAM="TXZ4FR95HG"
-            # CODE_SIGN_IDENTITY="" \
-            # CODE_SIGNING_REQUIRED=NO \
-            # CODE_SIGNING_ALLOWED=NO \
-            # CODE_SIGN_ENTITLEMENTS=""
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_ENTITLEMENTS=""
 
         # // Exports the archive according to the export options specified by the plist
         /usr/bin/xcodebuild -exportArchive \
             -archivePath "build/Koord-RT.xcarchive" \
             -exportPath  "build/Exports/Koord-RT_signed.app" \
             -exportOptionsPlist "ios/exportOptionsRelease.plist"
-            # CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
-            # CODE_SIGNING_REQUIRED=YES \
-            # CODE_SIGNING_ALLOWED=YES \
-            # CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
+            CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
+            CODE_SIGNING_REQUIRED=YES \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
     fi
 
     # Generate ipa by copying the .app file from the xcarchive directory

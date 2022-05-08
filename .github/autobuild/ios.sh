@@ -39,13 +39,20 @@ prepare_signing() {
     [[ -n "${IOSDIST_CERTIFICATE_ID:-}" ]] || return 1
     [[ -n "${IOSDIST_CERTIFICATE_PWD:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
+    [[ -n "${IOS_PROV_PROFILE_B64:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
     echo "Signing was requested and all dependencies are satisfied"
 
+    # use this as filename for Provisioning Profile
+    IOS_PP_PATH="embedded.mobileprovision"
+
     ## Put the cert to a file
     # IOSDIST_CERTIFICATE - iOS Distribution
     echo "${IOSDIST_CERTIFICATE}" | base64 --decode > iosdist_certificate.p12
+
+    ## Echo Provisioning Profile to file
+    echo -n "${IOS_PROV_PROFILE_B64}" | base64 --decode > $IOS_PP_PATH
 
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
@@ -57,6 +64,10 @@ prepare_signing() {
     # set lock timeout on keychain to 6 hours
     security set-keychain-settings -lut 21600
     
+    # apply provisioning profile
+    mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
     # for debug
     echo "Checking found identities..."
     security find-identity -v 
@@ -76,7 +87,6 @@ build_app_as_ipa() {
         BUILD_ARGS=("-s" "${IOSDIST_CERTIFICATE_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
     ./ios/deploy_ios.sh "${BUILD_ARGS[@]}"
-    # ./ios/deploy_ios.sh
 }
 
 pass_artifact_to_job() {

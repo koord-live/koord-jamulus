@@ -238,6 +238,7 @@ jobs:
           IOSDIST_CERTIFICATE:      ${{ secrets.IOSDIST_CERT}}
           IOSDIST_CERTIFICATE_PWD:  ${{ secrets.IOSDIST_CERT_PWD }}
           IOSDIST_CERTIFICATE_ID:   ${{ secrets.IOSDIST_CERT_ID }}
+          IOS_PROV_PROFILE_B64:     ${{ secrets.IOS_PROVISIONING_PROFILE }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
