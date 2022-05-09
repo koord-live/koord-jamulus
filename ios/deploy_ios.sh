@@ -85,7 +85,7 @@ build_ipa()
             # CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
     fi
 
-    # Generate ipa by copying the .app file from the xcarchive directory
+    # Generate ipa by copying the .app structure from the xcarchive directory
     cd ${root_path}
     mkdir -p build/unsigned/Payload
     cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/unsigned/Payload/
