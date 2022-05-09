@@ -76,10 +76,6 @@ build_app()
         codesign -dv --verbose=4 "${build_path}/${target_name}.app"
     fi
 
-    ## Sign code
-    # codesign --deep -f -s "${macapp_cert_name}" --options runtime "${build_path}/${target_name}.app"
-    # codesign --deep -f -s "${macapp_cert_name}" --entitlements "Koord-RT.entitlements" --options runtime "${build_path}/${target_name}.app"
-
     ## Build installer pkg file - for submission to App Store
     if [[ -z "$cert_name" ]]; then
         productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
@@ -111,7 +107,7 @@ build_app()
 build_installer_image()
 {
     local client_target_name="${1}"
-    # local server_target_name="${2}"
+    local server_target_name="${2}"
 
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
@@ -171,10 +167,8 @@ fi
 cleanup
 
 # Build Jamulus client and server
-# Just build client for Mac
-# build_app server_app "CONFIG+=server_bundle"
+build_app server_app "CONFIG+=server_bundle"
 build_app client_app
 
 # Create versioned installer image 
-# build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
-build_installer_image "${CLIENT_TARGET_NAME}"
+build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
