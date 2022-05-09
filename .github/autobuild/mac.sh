@@ -30,20 +30,35 @@ prepare_signing() {
     [[ -n "${MACOS_CERTIFICATE:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_ID:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_PWD:-}" ]] || return 1
+    [[ -n "${MACAPP_CERTIFICATE:-}" ]] || return 1
+    [[ -n "${MACAPP_CERTIFICATE_ID:-}" ]] || return 1
+    [[ -n "${MACAPP_CERTIFICATE_PWD:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
     echo "Signing was requested and all dependencies are satisfied"
 
-    # Put the cert to a file
-    echo "${MACOS_CERTIFICATE}" | base64 --decode > certificate.p12
+    ## Put the certs to a file
+    # MACOS_CERTIFICATE - Mac Installer Distribution
+    # MACAPP_CERTIFICATE - Mac App Distribution
+    echo "${MACOS_CERTIFICATE}" | base64 --decode > macinst_certificate.p12
+    echo "${MACAPP_CERTIFICATE}" | base64 --decode > macapp_certificate.p12
 
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/codesign
-    security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    security import macinst_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/productbuild
+    security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
+    # security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+
+    # set lock timeout on keychain to 6 hours
+    security set-keychain-settings -lut 21600
+    
+    # for debug
+    echo "Checking found identities..."
+    security find-identity -v 
 
     # Tell Github Workflow that we need notarization & stapling:
     echo "::set-output name=macos_signed::true"
@@ -58,16 +73,21 @@ build_app_as_dmg_installer() {
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
-        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}")
+        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}" "-a" "${MACAPP_CERTIFICATE_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
     ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
 
 pass_artifact_to_job() {
-    artifact="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
+    artifact="koord-rt_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
-    mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"
+    mv ./deploy/Koord-RT-*installer-mac.dmg "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
+
+    artifact2="koord-rt_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
+    echo "Moving build artifact2 to deploy/${artifact2}"
+    mv ./deploy/KoordRT_*.pkg "./deploy/${artifact2}"
+    echo "::set-output name=artifact_2::${artifact2}"
 }
 
 case "${1:-}" in

@@ -1,19 +1,34 @@
 #!/bin/bash
 set -eu
 
-root_path=$(pwd)
-project_path="${root_path}/Jamulus.pro"
+root_path="$(pwd)"
+project_path="${root_path}/Koord-RT.pro"
+macdeploy_path="${root_path}/mac"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
 cert_name=""
+macapp_cert_name=""
+keychain_pass=""
 
-while getopts 'hs:' flag; do
+while getopts 'hs:k:a:' flag; do
     case "${flag}" in
         s)
             cert_name=$OPTARG
             if [[ -z "$cert_name" ]]; then
                 echo "Please add the name of the certificate to use: -s \"<name>\""
+            fi
+            ;;
+        a)
+            macapp_cert_name=$OPTARG
+            if [[ -z "$macapp_cert_name" ]]; then
+                echo "Please add the name of the codesigning certificate to use: -a \"<name>\""
+            fi
+            ;;
+        k)
+            keychain_pass=$OPTARG
+            if [[ -z "$keychain_pass" ]]; then
+                echo "Please add keychain password to use: -k \"<name>\""
             fi
             ;;
         h)
@@ -47,15 +62,34 @@ build_app()
     local job_count
     job_count=$(sysctl -n hw.ncpu)
 
+    # Get Jamulus version
+    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
     # Add Qt deployment dependencies
-    if [[ -z "$cert_name" ]]; then
+    if [[ -z "$macapp_cert_name" ]]; then
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
     else
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
+        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+        # verify signature
+        codesign -dv --verbose=4 "${build_path}/${target_name}.app"
     fi
-    mv "${build_path}/${target_name}.app" "${deploy_path}"
+
+    ## Sign code
+    # codesign --deep -f -s "${macapp_cert_name}" --options runtime "${build_path}/${target_name}.app"
+    # codesign --deep -f -s "${macapp_cert_name}" --entitlements "Koord-RT.entitlements" --options runtime "${build_path}/${target_name}.app"
+
+    ## Build installer pkg file - for submission to App Store
+    if [[ -z "$cert_name" ]]; then
+        productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
+    else
+        productbuild --sign "${cert_name}" --keychain build.keychain --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
+    fi
+
+    # move things
+    mv "${build_path}/${target_name}.app" "${deploy_path}"  # use app file now to create dmg
+    mv "${build_path}/KoordRT_${app_version}.pkg" "${deploy_path}"  # make pkg file available for DL
 
     # Cleanup
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
@@ -77,7 +111,7 @@ build_app()
 build_installer_image()
 {
     local client_target_name="${1}"
-    local server_target_name="${2}"
+    # local server_target_name="${2}"
 
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
@@ -98,7 +132,6 @@ build_installer_image()
       --text-size 12 \
       --icon-size 72 \
       --icon "${client_target_name}.app" 630 210 \
-      --icon "${server_target_name}.app" 530 210 \
       --eula "${root_path}/COPYING" \
       "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
       "${deploy_path}/"
@@ -138,8 +171,10 @@ fi
 cleanup
 
 # Build Jamulus client and server
+# Just build client for Mac
+# build_app server_app "CONFIG+=server_bundle"
 build_app client_app
-build_app server_app "CONFIG+=server_bundle"
 
-# Create versioned installer image
-build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
+# Create versioned installer image 
+# build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
+build_installer_image "${CLIENT_TARGET_NAME}"
