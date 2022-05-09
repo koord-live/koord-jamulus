@@ -1,3 +1,6 @@
+### 3.8.80 (2022-05-09) ###
+
+- Client: Koord-RT - add iOS/macOS signed autobuild, merge from upstream
 
 ### 3.8.2dev <- NOTE: the release version number will be 3.9.0 ###
 
