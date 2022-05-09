@@ -65,6 +65,7 @@ prepare_signing() {
     security set-keychain-settings -lut 21600
     
     # apply provisioning profile
+    #FIXME - maybe redundant?
     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
     cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 

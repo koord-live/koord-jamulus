@@ -48,14 +48,16 @@ build_ipa()
 {
     ## Builds an ipa file for iOS. Should be run from the repo-root
 
-    # Create Xcode file and build
+    # Create Xcode project file
     qmake -spec macx-xcode Koord-RT.pro
 
-    # disable deprecation warnings re legacy build system - XCode 13
+    # disable deprecation warnings re legacy build system - XCode 13 errors on this
     /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
     /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
 
+    # Build
     if [[ -z "$iosdist_cert_name" ]]; then
+        # Build unsigned
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
             -archivePath "build/Koord-RT.xcarchive" \
             CODE_SIGN_IDENTITY="" \
@@ -63,7 +65,8 @@ build_ipa()
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_ENTITLEMENTS=""
     else
-        # https://developer.apple.com/forums/thread/70326
+        # Build signed ipa file
+        # Ref: https://developer.apple.com/forums/thread/70326
         # // Builds the app into an archive
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
             -archivePath "build/Koord-RT.xcarchive" \
@@ -71,8 +74,8 @@ build_ipa()
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
-            # CODE_SIGN_ENTITLEMENTS=""
 
+        #FIXME this may be redundant - since provisioning profile is specified in exportOptionsRelease.plist
         cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
 
         # // Exports the archive according to the export options specified by the plist
