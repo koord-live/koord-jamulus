@@ -2,7 +2,7 @@
 set -eu
 
 root_path="$(pwd)"
-project_path="${root_path}/Koord-RT.pro"
+project_path="${root_path}/Jamulus.pro"
 macdeploy_path="${root_path}/mac"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
@@ -78,14 +78,14 @@ build_app()
 
     ## Build installer pkg file - for submission to App Store
     if [[ -z "$cert_name" ]]; then
-        productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"
+        productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/Jamulus_${app_version}.pkg"
     else
-        productbuild --sign "${cert_name}" --keychain build.keychain --component "${build_path}/${target_name}.app" /Applications "${build_path}/KoordRT_${app_version}.pkg"        
+        productbuild --sign "${cert_name}" --keychain build.keychain --component "${build_path}/${target_name}.app" /Applications "${build_path}/Jamulus_${app_version}.pkg"        
     fi
 
     # move things
     mv "${build_path}/${target_name}.app" "${deploy_path}"  # use app file now to create dmg
-    mv "${build_path}/KoordRT_${app_version}.pkg" "${deploy_path}"  # make pkg file available for DL
+    mv "${build_path}/Jamulus_${app_version}.pkg" "${deploy_path}"  # make pkg file available for DL
 
     # Cleanup
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
@@ -128,6 +128,7 @@ build_installer_image()
       --text-size 12 \
       --icon-size 72 \
       --icon "${client_target_name}.app" 630 210 \
+      --icon "${server_target_name}.app" 530 210 \
       --eula "${root_path}/COPYING" \
       "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
       "${deploy_path}/"
@@ -167,8 +168,8 @@ fi
 cleanup
 
 # Build Jamulus client and server
-build_app server_app "CONFIG+=server_bundle"
 build_app client_app
+build_app server_app "CONFIG+=server_bundle"
 
-# Create versioned installer image 
+# Create versioned installer image
 build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
