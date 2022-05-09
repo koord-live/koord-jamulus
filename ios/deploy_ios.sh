@@ -72,6 +72,7 @@ build_ipa()
         cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
 
         # // Exports the archive according to the export options specified by the plist
+        # export signed installer to build/Exports/Koord-RT.ipa
         /usr/bin/xcodebuild -exportArchive \
             -archivePath "build/Koord-RT.xcarchive" \
             -exportPath  "build/Exports/" \
@@ -81,28 +82,20 @@ build_ipa()
             CODE_SIGNING_REQUIRED=YES \
             CODE_SIGNING_ALLOWED=YES \
             CODE_SIGN_STYLE="Manual"
-            # PROVISIONING_PROFILE_SPECIFIER="live.koord.Koord-RT"
-            # CODE_SIGN_ENTITLEMENTS="ios/Koord-RT.entitlements"
     fi
 
-    # Generate ipa by copying the .app structure from the xcarchive directory
+    # Generate unsigned ipa by copying the .app structure from the xcarchive directory
     cd ${root_path}
     mkdir -p build/unsigned/Payload
     cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/unsigned/Payload/
     cd build/unsigned
     zip -0 -y -r Koord-RT.ipa Payload/
 
-    # do same for signed build
-    # cd ${root_path}
-    # mkdir -p build/signed
-    # cp -r build/Exports/Koord-RT.ipa build/signed/
-    # cd build/signed
-    # zip -0 -y -r Koord-RT_signed.ipa Payload/
-
     # copy files
-    # mkdir ../deploy
     cd ${root_path}
-    mv build/unsigned/Koord-RT.ipa deploy/Koord-RT.ipa
+    # unsigned IPA
+    mv build/unsigned/Koord-RT.ipa deploy/Koord-RT_unsigned.ipa
+    # signed IPA
     mv build/Exports/Koord-RT.ipa deploy/Koord-RT_signed.ipa
 }
 
