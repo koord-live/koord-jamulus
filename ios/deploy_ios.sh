@@ -51,6 +51,10 @@ build_ipa()
     # Create Xcode file and build
     qmake -spec macx-xcode Koord-RT.pro
 
+    # disable deprecation warnings re legacy build system - XCode 13
+    /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+    /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+
     if [[ -z "$iosdist_cert_name" ]]; then
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
             -archivePath "build/Koord-RT.xcarchive" \
