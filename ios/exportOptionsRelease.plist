@@ -8,8 +8,8 @@
 	<string>TXZ4FR95HG</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>Bundle-Id</key>
-		<string>live.koord.Koord-RT</string>
+		<key>live.koord.Koord-RT</key>
+		<string>Release</string>
 	</dict>	
 </dict>
 </plist>
