@@ -155,7 +155,7 @@ jobs:
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
             run_codeql:             false
-            xcode_version:          13.3.1
+            xcode_version:          13.2.1
 
           # - config_name:            Windows (artifact+codeQL)
           #   target_os:              windows
