@@ -75,7 +75,7 @@ build_ipa()
         /usr/bin/xcodebuild -exportArchive \
             -archivePath "build/Koord-RT.xcarchive" \
             -exportPath  "build/Exports/" \
-            -exportOptionsPlist "ios/exportOptionsRelease.plist"
+            -exportOptionsPlist "ios/exportOptionsRelease.plist" \
             DEVELOPMENT_TEAM="TXZ4FR95HG" \
             CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
             CODE_SIGNING_REQUIRED=YES \
