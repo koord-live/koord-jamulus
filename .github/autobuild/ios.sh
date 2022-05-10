@@ -60,8 +60,8 @@ prepare_signing() {
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security import iosdist_certificate.p12 -k build.keychain -P "${IOSDIST_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
-    # add notarization/validation/upload password to keychain
-    xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USER -p $NOTARIZATION_PASSWORD
+    # # add notarization/validation/upload password to keychain
+    # xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USER -p $NOTARIZATION_PASSWORD
     # set lock timeout on keychain to 6 hours
     security set-keychain-settings -lut 21600
     
