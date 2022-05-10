@@ -55,9 +55,13 @@ prepare_signing() {
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
+    # add certs to keychain
     security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
     security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
     security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
+    # add notarization/validation/upload password to keychain
+    xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USER -p $NOTARIZATION_PASSWORD
+    # allow the default keychain access to cli utilities
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
     # set lock timeout on keychain to 6 hours - possibly optional
     security set-keychain-settings -lut 21600
