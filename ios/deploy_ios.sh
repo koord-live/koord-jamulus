@@ -89,6 +89,11 @@ build_ipa()
             CODE_SIGNING_REQUIRED=YES \
             CODE_SIGNING_ALLOWED=YES \
             CODE_SIGN_STYLE="Manual"
+
+        if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
+            xcrun altool --validate-app -f "build/Exports/Koord-RT.ipa" -t ios -p @keychain:APPCONNAUTH
+            xcrun altool --upload-app -f "build/Exports/Koord-RT.ipa" -t ios -p @keychain:APPCONNAUTH
+        fi
     fi
 
     # Generate unsigned ipa by copying the .app structure from the xcarchive directory
