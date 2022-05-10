@@ -92,12 +92,14 @@ build_app()
         
         # Create pkg installer and sign for App Store submission
         productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${app_version}.pkg"        
+    
+        # move created pkg file to prep for download
+        mv "${build_path}/Jamulus_${app_version}.pkg" "${deploy_path}"
     fi
 
-    # move things
-    mv "${build_path}/${target_name}.app" "${deploy_path}"  # use app file now to create dmg
-    mv "${build_path}/Jamulus_${app_version}.pkg" "${deploy_path}"  # make pkg file available for DL
-
+    # move app bundle to prep for dmg creation
+    mv "${build_path}/${target_name}.app" "${deploy_path}"
+    
     # Cleanup
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
