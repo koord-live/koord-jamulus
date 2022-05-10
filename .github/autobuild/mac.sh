@@ -24,41 +24,43 @@ setup() {
 }
 
 prepare_signing() {
+    ##  Certificate types in use:
+    # - MACOS_CERTIFICATE - Developer ID Application - for codesigning for adhoc release
+    # - MAC_STORE_APP_CERT - Mac App Distribution - codesigning for App Store submission
+    # - MAC_STORE_INST_CERT - Mac Installer Distribution - for signing installer pkg file for App Store submission
+
     [[ "${SIGN_IF_POSSIBLE:-0}" == "1" ]] || return 1
 
     # Signing was requested, now check all prerequisites:
     [[ -n "${MACOS_CERTIFICATE:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_ID:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_PWD:-}" ]] || return 1
-    [[ -n "${MACAPP_CERTIFICATE:-}" ]] || return 1
-    [[ -n "${MACAPP_CERTIFICATE_ID:-}" ]] || return 1
-    [[ -n "${MACAPP_CERTIFICATE_PWD:-}" ]] || return 1
+    [[ -n "${MAC_STORE_APP_CERT:-}" ]] || return 1
+    [[ -n "${MAC_STORE_APP_CERT_ID:-}" ]] || return 1
+    [[ -n "${MAC_STORE_APP_CERT_PWD:-}" ]] || return 1
+    [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
+    [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
+    [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
     echo "Signing was requested and all dependencies are satisfied"
 
-    ## Put the certs to a file
-    # MACOS_CERTIFICATE - Mac Installer Distribution
-    # MACAPP_CERTIFICATE - Mac App Distribution
-    echo "${MACOS_CERTIFICATE}" | base64 --decode > macinst_certificate.p12
-    echo "${MACAPP_CERTIFICATE}" | base64 --decode > macapp_certificate.p12
-
+    ## Put the certs to files
+    echo "${MACOS_CERTIFICATE}" | base64 --decode > macos_certificate.p12
+    echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
+    echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
+    
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import macinst_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/productbuild
-    security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
-    # security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
+    security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
+    security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
-
-    # set lock timeout on keychain to 6 hours
+    # set lock timeout on keychain to 6 hours - possibly optional
     security set-keychain-settings -lut 21600
-    
-    # for debug
-    echo "Checking found identities..."
-    security find-identity -v 
 
     # Tell Github Workflow that we need notarization & stapling:
     echo "::set-output name=macos_signed::true"
@@ -73,7 +75,7 @@ build_app_as_dmg_installer() {
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
-        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}" "-a" "${MACAPP_CERTIFICATE_ID}" "-k" "${KEYCHAIN_PASSWORD}")
+        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
     ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }

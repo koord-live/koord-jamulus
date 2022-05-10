@@ -8,9 +8,10 @@ build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
 cert_name=""
 macapp_cert_name=""
+macinst_cert_name=""
 keychain_pass=""
 
-while getopts 'hs:k:a:' flag; do
+while getopts 'hs:k:a:i:' flag; do
     case "${flag}" in
         s)
             cert_name=$OPTARG
@@ -22,6 +23,12 @@ while getopts 'hs:k:a:' flag; do
             macapp_cert_name=$OPTARG
             if [[ -z "$macapp_cert_name" ]]; then
                 echo "Please add the name of the codesigning certificate to use: -a \"<name>\""
+            fi
+            ;;
+        i)
+            macinst_cert_name=$OPTARG
+            if [[ -z "$macinst_cert_name" ]]; then
+                echo "Please add the name of the installer signing certificate to use: -i \"<name>\""
             fi
             ;;
         k)
@@ -67,19 +74,24 @@ build_app()
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
     # Add Qt deployment dependencies
-    if [[ -z "$macapp_cert_name" ]]; then
+    if [[ -z "$cert_name" ]]; then
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
     else
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
-        # verify signature
-        codesign -dv --verbose=4 "${build_path}/${target_name}.app"
+        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
     fi
 
     ## Build installer pkg file - for submission to App Store
-    if [[ -z "$cert_name" ]]; then
-        productbuild --component "${build_path}/${target_name}.app" /Applications "${build_path}/Jamulus_${app_version}.pkg"
+    if [[ -z "$macapp_cert_name" ]]; then
+        echo "No cert to sign for App Store, bypassing..."
     else
-        productbuild --sign "${cert_name}" --keychain build.keychain --component "${build_path}/${target_name}.app" /Applications "${build_path}/Jamulus_${app_version}.pkg"        
+        # Clone the build directory to leave the adhoc signed app untouched
+        cp -a ${build_path} "${build_path}_storesign"
+
+        # Add Qt deployment deps and codesign the app for App Store submission
+        macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+        
+        # Create pkg installer and sign for App Store submission
+        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${app_version}.pkg"        
     fi
 
     # move things
