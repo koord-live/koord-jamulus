@@ -87,9 +87,11 @@ pass_artifact_to_job() {
     echo "::set-output name=artifact_1::${artifact}"
 
     artifact2="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
-    echo "Moving build artifact2 to deploy/${artifact2}"
-    mv ./deploy/Jamulus_*.pkg "./deploy/${artifact2}"
-    echo "::set-output name=artifact_2::${artifact2}"
+    if [ -f ./deploy/Jamulus_*.pkg ]; then
+        echo "Moving build artifact2 to deploy/${artifact2}"
+        mv ./deploy/Jamulus_*.pkg "./deploy/${artifact2}"
+        echo "::set-output name=artifact_2::${artifact2}"
+    fi
 }
 
 case "${1:-}" in
