@@ -94,7 +94,7 @@ build_app()
         productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Koord-RT_${app_version}.pkg"        
     
         # move created pkg file to prep for download
-        mv "${build_path}/Jamulus_${app_version}.pkg" "${deploy_path}"
+        mv "${build_path}/Koord-RT_${app_version}.pkg" "${deploy_path}"
     fi
 
     # move app bundle to prep for dmg creation
