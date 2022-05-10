@@ -232,9 +232,12 @@ jobs:
           MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
           MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
-          MACAPP_CERTIFICATE:       ${{ secrets.MACAPP_CERT}}
-          MACAPP_CERTIFICATE_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
-          MACAPP_CERTIFICATE_ID:    ${{ secrets.MACAPP_CERT_ID }}
+          MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT}}
+          MAC_STORE_APP_CERT_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
+          MAC_STORE_APP_CERT_ID:    ${{ secrets.MACAPP_CERT_ID }}
+          MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT}}
+          MAC_STORE_INST_CERT_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
+          MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
           IOSDIST_CERTIFICATE:      ${{ secrets.IOSDIST_CERT}}
           IOSDIST_CERTIFICATE_PWD:  ${{ secrets.IOSDIST_CERT_PWD }}
           IOSDIST_CERTIFICATE_ID:   ${{ secrets.IOSDIST_CERT_ID }}
