@@ -90,6 +90,7 @@ build_ipa()
             CODE_SIGNING_ALLOWED=YES \
             CODE_SIGN_STYLE="Manual"
 
+        NOTARIZATION_PASSWORD=""
         if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
             xcrun altool --validate-app -f "build/Exports/Koord-RT.ipa" -t ios -p @keychain:APPCONNAUTH
             xcrun altool --upload-app -f "build/Exports/Koord-RT.ipa" -t ios -p @keychain:APPCONNAUTH

@@ -93,7 +93,7 @@ build_app()
         # Create pkg installer and sign for App Store submission
         productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Koord-RT_${app_version}.pkg"        
     
-        # if validate/upload creds are set
+        NOTARIZATION_PASSWORD=""
         if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
             xcrun altool --validate-app -f "${build_path}/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
             xcrun altool --upload-app -f "${build_path}/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
