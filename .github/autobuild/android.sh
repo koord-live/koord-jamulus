@@ -82,7 +82,7 @@ build_app_as_apk() {
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
     "${QT_DIR}"/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json --output "${BUILD_DIR}" \
-        --android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}" --gradle
+        --aab --android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}" --gradle
 }
 
 pass_artifact_to_job() {
