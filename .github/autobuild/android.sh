@@ -74,7 +74,7 @@ setup_qt() {
     fi
 }
 
-build_app_as_apk() {
+build_app_as_aab() {
     local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
     local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
 
@@ -82,15 +82,19 @@ build_app_as_apk() {
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
     "${QT_DIR}"/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json --output "${BUILD_DIR}" \
-        --aab --android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}" --gradle
+        --aab --release --android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}" --gradle
 }
 
 pass_artifact_to_job() {
     mkdir deploy
-    local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_android.apk"
-    echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact}"
-    mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact}"
+    local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_android.aab"
+    # debug to check for filenames
+    ls -alR ${BUILD_DIR}/build/
+    echo "Moving ${BUILD_DIR}/build/outputs/bundle/release/build-release.aab to deploy/${artifact}"
+    mv "./${BUILD_DIR}/build/outputs/bundle/release/build-release.aab" "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
+
+
 }
 
 case "${1:-}" in
@@ -101,7 +105,7 @@ case "${1:-}" in
         setup_qt
         ;;
     build)
-        build_app_as_apk
+        build_app_as_aab
         ;;
     get-artifacts)
         pass_artifact_to_job

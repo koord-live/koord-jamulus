@@ -250,7 +250,7 @@ win32 {
     QT += androidextras
 
     # enabled only for debugging on android devices
-    DEFINES += ANDROIDDEBUG
+    # DEFINES += ANDROIDDEBUG
 
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
