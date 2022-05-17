@@ -98,9 +98,6 @@ build_app()
             xcrun altool --validate-app -f "${build_path}/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
             xcrun altool --upload-app -f "${build_path}/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
         fi
-
-        # move created pkg file to prep for download
-        mv "${build_path}/Koord-RT_${app_version}.pkg" "${deploy_path}"
     fi
 
     # move app bundle to prep for dmg creation
@@ -193,3 +190,7 @@ build_app client_app
 # Create versioned installer image 
 # build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
 build_installer_image "${CLIENT_TARGET_NAME}"
+
+# move created pkg file to prep for download
+# (don't do earlier because otherwise it's bundled into dmg file)
+mv "${build_path}/Koord-RT_*.pkg" "${deploy_path}"
