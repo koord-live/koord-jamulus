@@ -292,6 +292,24 @@ jobs:
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
+      # - name:                       Validate and Upload macOS Release Build
+      #   if:                         >-
+      #                               steps.build.outputs.macos_signed == 'true' &&
+      #                               needs.create_release.outputs.publish_to_release == 'true'
+      #   id:                         validateupload
+      #   run:                        ${{ matrix.config.base_command }} validateupload
+      #   with:
+      #     product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+
+      # - name:                       Validate and Upload iOS Release Build
+      #   if:                         >-
+      #                               steps.build.outputs.macos_signed == 'true' &&
+      #                               needs.create_release.outputs.publish_to_release == 'true'
+      #   id:                         validateupload
+      #   run:                        ${{ matrix.config.base_command }} validateupload
+      #   with:
+      #     product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+
       - name:                       Upload Artifact 1 to Release
         # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
         # If the artifact is missing, this should fail.
