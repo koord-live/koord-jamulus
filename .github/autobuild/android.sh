@@ -78,11 +78,20 @@ build_app_as_aab() {
     local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
     local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
 
+    echo "${GOOGLE_RELEASE_KEYSTORE}" | base64 --decode > android/android_release.keystore
+
     "${QT_DIR}/bin/qmake" -spec android-clang
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
-    "${QT_DIR}"/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json --output "${BUILD_DIR}" \
-        --aab --release --android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}" --gradle
+    "${QT_DIR}"/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
+        --output "${BUILD_DIR}" \
+        --aab \
+        --release \
+        --sign android/android_release.keystore koord \
+            --storepass ${GOOGLE_KEYSTORE_PASS} \
+        --android-platform "${ANDROID_PLATFORM}" \
+        --jdk "${JAVA_HOME}" \
+        --gradle
 }
 
 pass_artifact_to_job() {
