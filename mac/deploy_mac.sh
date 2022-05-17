@@ -109,7 +109,7 @@ build_app()
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
-    cp "${build_path}/${target_name}.app" "${deploy_path}"
+    cp -r "${build_path}/${target_name}.app" "${deploy_path}"
 
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
