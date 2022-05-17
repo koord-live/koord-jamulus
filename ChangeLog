@@ -1,3 +1,7 @@
+### 3.8.81 (2022-05-17) ###
+
+- Client: Koord-RT - fix build issues
+
 ### 3.8.80 (2022-05-09) ###
 
 - Client: Koord-RT - add iOS/macOS signed autobuild, merge from upstream
