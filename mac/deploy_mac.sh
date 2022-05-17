@@ -137,7 +137,8 @@ build_installer_pkg()
 {
     # Get Jamulus version
     local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
-    
+    local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+
     ## Build installer pkg file - for submission to App Store
     if [[ -z "$macapp_cert_name" ]]; then
         echo "No cert to sign for App Store, bypassing..."
