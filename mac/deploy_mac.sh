@@ -110,8 +110,8 @@ build_app()
     # move app bundle to deploy dir to prep for dmg creation
     mv "${build_path}/${target_name}.app" "${deploy_path}"
 
-    # Cleanup
-    make -f "${build_path}/Makefile" -C "${build_path}" distclean
+    # # Cleanup
+    # make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
     # Return app name for installer image
     case "${client_or_server}" in
@@ -126,6 +126,12 @@ build_app()
             exit 1
     esac
 }
+
+# make_clean()
+# {
+#     # Cleanup
+#     make -f "${build_path}/Makefile" -C "${build_path}" distclean
+# }
 
 build_installer_pkg() 
 {
@@ -224,6 +230,9 @@ cleanup
 build_app client_app
 
 build_installer_pkg
+
+# make clean
+make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
 # Create versioned installer image 
 # build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
