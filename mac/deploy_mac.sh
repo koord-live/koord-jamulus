@@ -107,8 +107,9 @@ build_app()
 
     # fi
 
-    # move app bundle to deploy dir to prep for dmg creation
-    mv "${build_path}/${target_name}.app" "${deploy_path}"
+    # copy app bundle to deploy dir to prep for dmg creation
+    # leave original in place for pkg signing if necessary 
+    cp "${build_path}/${target_name}.app" "${deploy_path}"
 
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
