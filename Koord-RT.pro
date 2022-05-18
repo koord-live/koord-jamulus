@@ -224,6 +224,8 @@ win32 {
 
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist
+    QMAKE_ASSET_CATALOGS = ios/Images.xcassets
+    QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
