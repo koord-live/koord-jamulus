@@ -16,9 +16,9 @@ BUILD_DIR=build
 export ANDROID_SDK_ROOT="${ANDROID_BASEDIR}/android-sdk"
 COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
 ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
-# WARNING: Support for ANDROID_NDK_HOME is deprecated and will be removed in the future. Use android.ndkVersion in build.gradle instead.
-# ref: https://bugreports.qt.io/browse/QTBUG-81978?focusedCommentId=497578&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-497578
-ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
+# # WARNING: Support for ANDROID_NDK_HOME is deprecated and will be removed in the future. Use android.ndkVersion in build.gradle instead.
+# # ref: https://bugreports.qt.io/browse/QTBUG-81978?focusedCommentId=497578&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-497578
+# ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
 ANDROID_NDK_HOST="linux-x86_64"
 ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
