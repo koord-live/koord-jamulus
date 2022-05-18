@@ -57,7 +57,7 @@ setup_android_ndk() {
     if [[ -d "${ANDROID_NDK_ROOT}" ]]; then
         echo "Using NDK installation from previous run (actions/cache)"
     else
-        curl -s -o downloadfile "https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip"
+        curl -s -o downloadfile "https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux.zip"
         unzip -q downloadfile
         mv "android-ndk-${ANDROID_NDK_VERSION}" "${ANDROID_NDK_ROOT}"
     fi
