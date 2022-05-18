@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 
-COMMANDLINETOOLS_VERSION=6858069
-ANDROID_NDK_VERSION=r21d
+COMMANDLINETOOLS_VERSION=8512546
+ANDROID_NDK_VERSION=r23b
 ANDROID_PLATFORM=android-30
 ANDROID_BUILD_TOOLS=30.0.2
 AQTINSTALL_VERSION=2.1.0
@@ -18,7 +18,7 @@ COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
 ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
 ANDROID_NDK_HOST="linux-x86_64"
 ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
 
@@ -31,7 +31,7 @@ setup_ubuntu_dependencies() {
     export DEBIAN_FRONTEND="noninteractive"
 
     sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-8-jdk-headless
+    sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-11-jdk-headless
 }
 
 setup_android_sdk() {
