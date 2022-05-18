@@ -8,7 +8,7 @@ TARGET_ARCH="${TARGET_ARCH:-amd64}"
 cp -r distributions/debian .
 
 # get the koord-rt version from pro file
-VERSION=$(grep -oP 'VERSION = \K\w[^\s\\]*' Koord-RT.pro)
+VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord-RT.pro)
 
 export DEBFULLNAME=GitHubActions DEBEMAIL=noemail@example.com
 
