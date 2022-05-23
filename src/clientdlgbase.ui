@@ -150,7 +150,7 @@ text-decoration: underline;</string>
                    </property>
                   </widget>
                  </item>
-                 <item alignment="Qt::AlignHCenter">
+                 <item>
                   <widget class="QGroupBox" name="inputMeterBox">
                    <property name="maximumSize">
                     <size>
@@ -303,116 +303,48 @@ QCheckBox::indicator {
                      </property>
                     </widget>
                    </item>
-                  </layout>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <widget class="Line" name="line_3">
-                 <property name="styleSheet">
-                  <string notr="true">color: rgb(255, 255, 255);</string>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QVBoxLayout" name="reverbLatencyBox">
-                 <item>
-                  <layout class="QVBoxLayout" name="_2">
                    <item>
-                    <layout class="QVBoxLayout" name="reverbBox">
-                     <property name="spacing">
-                      <number>3</number>
+                    <widget class="QCheckBox" name="chbChat">
+                     <property name="styleSheet">
+                      <string notr="true">QCheckBox::indicator:unchecked {
+	image: url(:/png/main/res/general_btn_off.png);
+}
+QCheckBox::indicator:checked {
+	image: url(:/png/main/res/general_btn_on.png);
+}
+QCheckBox::indicator { 
+	width:          28px; 
+	height:         28px; 
+}</string>
                      </property>
-                     <item>
-                      <widget class="QLabel" name="lblAudioReverb">
-                       <property name="styleSheet">
-                        <string notr="true">font: 9pt &quot;Sans Serif&quot;;
-text-decoration: underline;</string>
-                       </property>
-                       <property name="text">
-                        <string>REVERB</string>
-                       </property>
-                       <property name="textFormat">
-                        <enum>Qt::PlainText</enum>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignCenter</set>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <layout class="QHBoxLayout" name="reverbControlHoriz">
-                     <item>
-                      <layout class="QVBoxLayout" name="verticalLayout_6">
-                       <item>
-                        <layout class="QHBoxLayout" name="reverbLRHoriz">
-                         <item>
-                          <widget class="QRadioButton" name="rbtReverbSelL">
-                           <property name="layoutDirection">
-                            <enum>Qt::RightToLeft</enum>
-                           </property>
-                           <property name="styleSheet">
-                            <string notr="true">color: rgb(251, 143, 0);</string>
-                           </property>
-                           <property name="text">
-                            <string>L</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QRadioButton" name="rbtReverbSelR">
-                           <property name="styleSheet">
-                            <string notr="true">color: rgb(251, 143, 0);</string>
-                           </property>
-                           <property name="text">
-                            <string>R</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="reverbKnobHoriz">
-                         <item>
-                          <widget class="QDial" name="sldAudioReverb">
-                           <property name="maximumSize">
-                            <size>
-                             <width>50</width>
-                             <height>50</height>
-                            </size>
-                           </property>
-                           <property name="styleSheet">
-                            <string notr="true">background-color: rgb(251, 143, 0);</string>
-                           </property>
-                           <property name="tracking">
-                            <bool>false</bool>
-                           </property>
-                           <property name="wrapping">
-                            <bool>false</bool>
-                           </property>
-                           <property name="notchesVisible">
-                            <bool>true</bool>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <widget class="Line" name="line">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
+                     <property name="text">
+                      <string/>
                      </property>
                     </widget>
                    </item>
+                   <item>
+                    <widget class="QCheckBox" name="chbSettings">
+                     <property name="styleSheet">
+                      <string notr="true">QCheckBox::indicator:unchecked {
+	image: url(:/png/main/res/general_btn_off.png);
+}
+QCheckBox::indicator:checked {
+	image: url(:/png/main/res/general_btn_on.png);
+}
+QCheckBox::indicator { 
+	width:          28px; 
+	height:         28px; 
+}</string>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="_2">
                    <item>
                     <widget class="QLabel" name="lblConnMonitor">
                      <property name="styleSheet">
@@ -420,7 +352,7 @@ text-decoration: underline;</string>
 text-decoration: underline;</string>
                      </property>
                      <property name="text">
-                      <string>CONNECTION MONITOR</string>
+                      <string>NET CHECK</string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
@@ -639,231 +571,6 @@ text-decoration: underline;</string>
               </layout>
              </widget>
             </item>
-            <item>
-             <widget class="QGroupBox" name="buttonsClusterBox">
-              <property name="styleSheet">
-               <string notr="true">QGroupBox {
-    border: 2px solid gray;
-    border-radius: 10px;
-	color: rgb(255, 255, 255);
-    margin-top: 1ex; /* leave space at the top for the title */
-}</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_7">
-               <item>
-                <layout class="QVBoxLayout" name="verticalLayout_7">
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_2">
-                   <item>
-                    <widget class="QCheckBox" name="chbSettings">
-                     <property name="styleSheet">
-                      <string notr="true">QCheckBox::indicator:unchecked {
-	image: url(:/png/main/res/general_btn_off.png);
-}
-QCheckBox::indicator:checked {
-	image: url(:/png/main/res/general_btn_on.png);
-}
-QCheckBox::indicator { 
-	width:          28px; 
-	height:         28px; 
-}</string>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_2">
-                     <property name="minimumSize">
-                      <size>
-                       <width>55</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true"/>
-                     </property>
-                     <property name="text">
-                      <string>Settings</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_10">
-                   <item>
-                    <widget class="QCheckBox" name="chbChat">
-                     <property name="styleSheet">
-                      <string notr="true">QCheckBox::indicator:unchecked {
-	image: url(:/png/main/res/general_btn_off.png);
-}
-QCheckBox::indicator:checked {
-	image: url(:/png/main/res/general_btn_on.png);
-}
-QCheckBox::indicator { 
-	width:          28px; 
-	height:         28px; 
-}</string>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_3">
-                     <property name="styleSheet">
-                      <string notr="true"/>
-                     </property>
-                     <property name="text">
-                      <string>Chat Box</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_11">
-                   <item>
-                    <widget class="QCheckBox" name="chbPubJam">
-                     <property name="styleSheet">
-                      <string notr="true">QCheckBox::indicator:unchecked {
-	image: url(:/png/main/res/general_btn_off.png);
-}
-QCheckBox::indicator:checked {
-	image: url(:/png/main/res/general_btn_on.png);
-}
-QCheckBox::indicator { 
-	width:          28px; 
-	height:         28px; 
-}</string>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_5">
-                     <property name="styleSheet">
-                      <string notr="true"/>
-                     </property>
-                     <property name="text">
-                      <string>Public Jam</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <widget class="Line" name="line_2">
-                 <property name="styleSheet">
-                  <string notr="true">color: rgb(255, 255, 255);</string>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QVBoxLayout" name="verticalLayout_9">
-                 <item>
-                  <widget class="QLabel" name="label_4">
-                   <property name="styleSheet">
-                    <string notr="true">font: 9pt &quot;Sans Serif&quot;;
-text-decoration: underline;</string>
-                   </property>
-                   <property name="text">
-                    <string>PRIVATE SESSIONS</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="butConnect">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-    background-color: rgb(251, 143, 0);
-    font: bold 14px;
-    padding: 6px;
-}</string>
-                   </property>
-                   <property name="text">
-                    <string>C&amp;onnect</string>
-                   </property>
-                   <property name="autoDefault">
-                    <bool>false</bool>
-                   </property>
-                   <property name="default">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="butNewStart">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-    background-color: rgb(251, 143, 0);
-    font: bold 14px;
-    padding: 6px;
-}</string>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="icon">
-                    <iconset resource="resources.qrc">
-                     <normaloff>:/png/main/res/create_btn.png</normaloff>:/png/main/res/create_btn.png</iconset>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>48</width>
-                     <height>16</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </item>
            </layout>
           </item>
          </layout>
@@ -879,6 +586,84 @@ text-decoration: underline;</string>
 }</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QPushButton" name="butConnect">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(251, 143, 0);
+    font: bold 14px;
+    padding: 6px;
+}</string>
+               </property>
+               <property name="text">
+                <string>J&amp;oin</string>
+               </property>
+               <property name="autoDefault">
+                <bool>false</bool>
+               </property>
+               <property name="default">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="butNewStart">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(251, 143, 0);
+    font: bold 14px;
+    padding: 6px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/png/main/res/create_btn.png</normaloff>:/png/main/res/create_btn.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>48</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item>
             <widget class="QLabel" name="lblGlobalInfoLabel">
              <property name="maximumSize">
@@ -1055,6 +840,194 @@ text-decoration: underline;</string>
       <property name="text">
        <string/>
       </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>78</width>
+        <height>88</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="reverbControlHoriz">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <layout class="QHBoxLayout" name="reverbLRHoriz">
+           <item>
+            <widget class="QRadioButton" name="rbtReverbSelL">
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(251, 143, 0);</string>
+             </property>
+             <property name="text">
+              <string>L</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rbtReverbSelR">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(251, 143, 0);</string>
+             </property>
+             <property name="text">
+              <string>R</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="reverbKnobHoriz">
+           <item>
+            <widget class="QDial" name="sldAudioReverb">
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(251, 143, 0);</string>
+             </property>
+             <property name="tracking">
+              <bool>false</bool>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="notchesVisible">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="reverbBox">
+       <property name="spacing">
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lblAudioReverb">
+         <property name="styleSheet">
+          <string notr="true">font: 9pt &quot;Sans Serif&quot;;
+text-decoration: underline;</string>
+         </property>
+         <property name="text">
+          <string>REVERB</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::PlainText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>106</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_11">
+       <item>
+        <widget class="QCheckBox" name="chbPubJam">
+         <property name="styleSheet">
+          <string notr="true">QCheckBox::indicator:unchecked {
+	image: url(:/png/main/res/general_btn_off.png);
+}
+QCheckBox::indicator:checked {
+	image: url(:/png/main/res/general_btn_on.png);
+}
+QCheckBox::indicator { 
+	width:          28px; 
+	height:         28px; 
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Public Jam</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>59</width>
+        <height>48</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>Settings</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>Chat Box</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
