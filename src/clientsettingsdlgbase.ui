@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>436</width>
-    <height>545</height>
+    <height>561</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>

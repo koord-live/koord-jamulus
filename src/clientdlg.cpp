@@ -239,7 +239,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     OnTimerStatus();
 
     // init connection button text
-    butConnect->setText ( tr ( "C&onnect" ) );
+    butConnect->setText ( tr ( "Join" ) );
 
     // init new session button text
 //    butNewStart->setText ( tr ( "&New Session" ) );
@@ -1351,7 +1351,7 @@ void CClientDlg::Disconnect()
     }
 
     // change connect button text to "connect"
-    butConnect->setText ( tr ( "C&onnect" ) );
+    butConnect->setText ( tr ( "Join" ) );
 
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );

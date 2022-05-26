@@ -24,7 +24,8 @@ CONFIG += qt \
     thread \
     lrelease
 
-QT += network \
+QT += webenginewidgets \
+    network \
     xml \
     concurrent
 
@@ -242,7 +243,7 @@ win32 {
     }
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-    ANDROID_ABIS = arm64-v8a
+    ANDROID_ABIS = arm64-v8a x86_64
     # ANDROID_MIN_SDK_VERSION = 25
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
@@ -1143,8 +1144,6 @@ contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)
     DEFINES += DISABLE_VERSION_CHECK
 }
-
-# ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
 
 # Enable formatting all code via `make clang_format`.
 # Note: When extending the list of file extensions or when adding new code directories,
