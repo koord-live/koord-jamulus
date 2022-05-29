@@ -29,6 +29,7 @@
 #include "global.h"
 #ifndef HEADLESS
 #    include <QApplication>
+#    include <QtWebView/QtWebView>
 #    include <QMessageBox>
 #    include "serverdlg.h"
 #    ifndef SERVER_ONLY
@@ -40,9 +41,9 @@
 #    include "testbench.h"
 #endif
 #include "util.h"
-#ifdef ANDROID
-#    include <QtAndroidExtras/QtAndroid>
-#endif
+//#ifdef ANDROID
+//#    include <QtAndroidExtras/QtAndroid>
+//#endif
 #if defined( Q_OS_MACX )
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
@@ -589,21 +590,42 @@ int main ( int argc, char** argv )
 
         // If single argument ie argc=2 check to see if direct exec of /usr/share/applications/koordrt.desktopkoord url --------------------------------------
         if ( argc == 2) {
+//            // if argv[1] matches "koord://{IPv4_addr}"
+//            QRegExp rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
+//            // gen2 url - if argv[1] matches "koord://{IPv4_addr}:{port}"
+//            QRegExp rx_gen2("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
+//            int pos_gen1 = rx_gen1.indexIn(argv[1]); // match gen1 url
+//            int pos_gen2 = rx_gen2.indexIn(argv[1]); // match gen2 url
+//            if (pos_gen2 != -1) { // try to match gen2 url first
+//                // add -x {IPv4_addr} to CommandLineOptions
+//                strConnOnStartupAddress = rx_gen2.cap(1);
+//                qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
+//                CommandLineOptions << "--autoconnect";
+//                continue;
+//            } else if (pos_gen1 != -1) { // if no joy, try to match gen1 url
+//                // add -x {IPv4_addr} to CommandLineOptions
+//                strConnOnStartupAddress = rx_gen1.cap(1);
+//                qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
+//                CommandLineOptions << "--autoconnect";
+//                continue;
+//            }
+
             // if argv[1] matches "koord://{IPv4_addr}"
-            QRegExp rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
+            QRegularExpression rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
+            QRegularExpressionMatch gen1_match = rx_gen1.match(argv[1]);
             // gen2 url - if argv[1] matches "koord://{IPv4_addr}:{port}"
-            QRegExp rx_gen2("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
-            int pos_gen1 = rx_gen1.indexIn(argv[1]); // match gen1 url
-            int pos_gen2 = rx_gen2.indexIn(argv[1]); // match gen2 url
-            if (pos_gen2 != -1) { // try to match gen2 url first
+            QRegularExpression rx_gen2("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
+            QRegularExpressionMatch gen2_match = rx_gen2.match(argv[1]);
+
+            if (gen2_match.hasMatch()) {
                 // add -x {IPv4_addr} to CommandLineOptions
-                strConnOnStartupAddress = rx_gen2.cap(1);
+                strConnOnStartupAddress = gen2_match.captured(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
                 CommandLineOptions << "--autoconnect";
                 continue;
-            } else if (pos_gen1 != -1) { // if no joy, try to match gen1 url
+            } else if (gen1_match.hasMatch()) { // if no joy, try to match gen1 url
                 // add -x {IPv4_addr} to CommandLineOptions
-                strConnOnStartupAddress = rx_gen1.cap(1);
+                strConnOnStartupAddress = gen1_match.captured(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
                 CommandLineOptions << "--autoconnect";
                 continue;
@@ -909,24 +931,27 @@ int main ( int argc, char** argv )
     // bUseMultithreading = true;
     QApplication* pApp = new QApplication ( argc, argv );
 #    else
+    // need this before new QApplication
+    QtWebView::initialize();
+
     QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
 #    endif
 #endif
 
-#ifdef ANDROID
-    // special Android coded needed for record audio permission handling
-    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
+//#ifdef ANDROID
+//    // special Android coded needed for record audio permission handling
+//    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
 
-    if ( result == QtAndroid::PermissionResult::Denied )
-    {
-        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
+//    if ( result == QtAndroid::PermissionResult::Denied )
+//    {
+//        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
 
-        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
-        {
-            return 0;
-        }
-    }
-#endif
+//        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
+//        {
+//            return 0;
+//        }
+//    }
+//#endif
 
 #ifdef _WIN32
     // set application priority class -> high priority

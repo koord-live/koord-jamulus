@@ -878,20 +878,35 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
-    QRegExp rx_gen1("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
-    int pos_gen1 = rx_gen1.indexIn(strAddress);
+//    QRegExp rx_gen1("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
+//    int pos_gen1 = rx_gen1.indexIn(strAddress);
 
-    QRegExp rx_gen2("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5}");
-    int pos_gen2 = rx_gen2.indexIn(strAddress);
+//    QRegExp rx_gen2("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5}");
+//    int pos_gen2 = rx_gen2.indexIn(strAddress);
 
-    // as in main.cpp we need to check gen2-style urls first
-    if (pos_gen2 != -1) {
-        QStringList list = rx_gen2.capturedTexts();
-        QString ipAddress = list[0];  // only 1 IP address in the string!
+//    // as in main.cpp we need to check gen2-style urls first
+//    if (pos_gen2 != -1) {
+//        QStringList list = rx_gen2.capturedTexts();
+//        QString ipAddress = list[0];  // only 1 IP address in the string!
+//        return ipAddress;
+//    } else if (pos_gen1 != -1) {
+//        QStringList list = rx_gen1.capturedTexts();
+//        QString ipAddress = list[0];  // only 1 IP address in the string!
+//        return ipAddress;
+//    }
+
+
+    QRegularExpression rx_gen1("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
+    QRegularExpressionMatch gen1_match = rx_gen1.match(strAddress);
+
+    QRegularExpression rx_gen2("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5}");
+    QRegularExpressionMatch gen2_match = rx_gen2.match(strAddress);
+
+    if (gen2_match.hasMatch()) {
+        QString ipAddress = gen2_match.captured(0);
         return ipAddress;
-    } else if (pos_gen1 != -1) {
-        QStringList list = rx_gen1.capturedTexts();
-        QString ipAddress = list[0];  // only 1 IP address in the string!
+    } else if (gen1_match.hasMatch()) {
+        QString ipAddress = gen1_match.captured(0);
         return ipAddress;
     }
 

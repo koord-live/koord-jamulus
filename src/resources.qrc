@@ -370,4 +370,7 @@
         <file>res/flags/zm.png</file>
         <file>res/flags/zw.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>webview.qml</file>
+    </qresource>
 </RCC>

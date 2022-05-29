@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "clientdlg.h"
+#include <QtQuickWidgets>
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -51,6 +52,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     AnalyzerConsole ( pNCliP, parent )
 {
     setupUi ( this );
+
+    // Add video webview to videoTab
+    QQuickWidget *m_quickWidget = new QQuickWidget(this) ;
+    m_quickWidget->setSource(QUrl("qrc:/webview.qml"));
+    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    videoTab->layout()->addWidget(m_quickWidget);
 
     // Add help text to controls -----------------------------------------------
     // input level meter
@@ -239,7 +246,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     OnTimerStatus();
 
     // init connection button text
-    butConnect->setText ( tr ( "Join" ) );
+    butConnect->setText ( tr ( "Join..." ) );
 
     // init new session button text
 //    butNewStart->setText ( tr ( "&New Session" ) );
@@ -1351,7 +1358,7 @@ void CClientDlg::Disconnect()
     }
 
     // change connect button text to "connect"
-    butConnect->setText ( tr ( "Join" ) );
+    butConnect->setText ( tr ( "Join..." ) );
 
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );

@@ -63,7 +63,22 @@
       <enum>QFrame::Plain</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_6">
-      <item row="1" column="0" rowspan="2" colspan="2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="1" column="0" rowspan="2" colspan="4">
        <widget class="QTabWidget" name="tabWidget">
         <property name="enabled">
          <bool>true</bool>
@@ -90,7 +105,7 @@ background-color: rgb(47, 54, 56);</string>
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="iconSize">
          <size>
@@ -265,33 +280,6 @@ text-decoration: underline;</string>
                           </widget>
                          </item>
                          <item>
-                          <layout class="QHBoxLayout" name="inputLabelBox">
-                           <property name="spacing">
-                            <number>0</number>
-                           </property>
-                           <item alignment="Qt::AlignRight">
-                            <widget class="QLabel" name="lblLevelMeterLeft">
-                             <property name="text">
-                              <string>L</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item alignment="Qt::AlignLeft">
-                            <widget class="QLabel" name="lblLevelMeterRight">
-                             <property name="text">
-                              <string>R</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                          </layout>
-                         </item>
-                         <item>
                           <layout class="QHBoxLayout" name="muteBtnBox">
                            <property name="spacing">
                             <number>6</number>
@@ -302,42 +290,6 @@ text-decoration: underline;</string>
                            <property name="leftMargin">
                             <number>6</number>
                            </property>
-                           <item>
-                            <layout class="QVBoxLayout" name="verticalLayout_2">
-                             <item>
-                              <widget class="QDial" name="panDial">
-                               <property name="maximumSize">
-                                <size>
-                                 <width>52</width>
-                                 <height>52</height>
-                                </size>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">background-color: rgb(255, 155, 18);</string>
-                               </property>
-                               <property name="minimum">
-                                <number>-99</number>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="panLabel">
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>12</height>
-                                </size>
-                               </property>
-                               <property name="text">
-                                <string>pan</string>
-                               </property>
-                               <property name="alignment">
-                                <set>Qt::AlignCenter</set>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </item>
                            <item>
                             <layout class="QVBoxLayout" name="verticalLayout_4">
                              <item>
@@ -422,8 +374,50 @@ QCheckBox::indicator {
                                  <height>12</height>
                                 </size>
                                </property>
+                               <property name="styleSheet">
+                                <string notr="true">font: 9pt &quot;Sans Serif&quot;;</string>
+                               </property>
                                <property name="text">
                                 <string>mute</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <layout class="QVBoxLayout" name="verticalLayout_2">
+                             <item>
+                              <widget class="QDial" name="panDial">
+                               <property name="maximumSize">
+                                <size>
+                                 <width>52</width>
+                                 <height>52</height>
+                                </size>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">background-color: rgb(255, 155, 18);</string>
+                               </property>
+                               <property name="minimum">
+                                <number>-99</number>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="panLabel">
+                               <property name="maximumSize">
+                                <size>
+                                 <width>16777215</width>
+                                 <height>12</height>
+                                </size>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">font: 9pt &quot;Sans Serif&quot;;</string>
+                               </property>
+                               <property name="text">
+                                <string>pan</string>
                                </property>
                                <property name="alignment">
                                 <set>Qt::AlignCenter</set>
@@ -454,6 +448,9 @@ QCheckBox::indicator {
                                  <width>16777215</width>
                                  <height>12</height>
                                 </size>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">font: 9pt &quot;Sans Serif&quot;;</string>
                                </property>
                                <property name="text">
                                 <string>boost</string>
@@ -492,13 +489,16 @@ text-decoration: underline;</string>
                        </item>
                        <item>
                         <layout class="QGridLayout" name="gridConnMonitor">
+                         <property name="spacing">
+                          <number>0</number>
+                         </property>
                          <item row="1" column="0">
                           <widget class="QLabel" name="lblDelay">
                            <property name="styleSheet">
-                            <string notr="true">font: 9pt &quot;Sawasdee&quot;;</string>
+                            <string notr="true">font: 7pt &quot;Sawasdee&quot;;</string>
                            </property>
                            <property name="text">
-                            <string>Delay</string>
+                            <string>DELAY</string>
                            </property>
                            <property name="alignment">
                             <set>Qt::AlignCenter</set>
@@ -508,10 +508,10 @@ text-decoration: underline;</string>
                          <item row="2" column="0">
                           <widget class="QLabel" name="lblJitter">
                            <property name="styleSheet">
-                            <string notr="true">font: 9pt &quot;Sawasdee&quot;;</string>
+                            <string notr="true">font: 7pt &quot;Sawasdee&quot;;</string>
                            </property>
                            <property name="text">
-                            <string>Jitter</string>
+                            <string>JITTER</string>
                            </property>
                            <property name="alignment">
                             <set>Qt::AlignCenter</set>
@@ -593,10 +593,10 @@ text-decoration: underline;</string>
                          <item row="0" column="0">
                           <widget class="QLabel" name="lblPing">
                            <property name="styleSheet">
-                            <string notr="true">font: 9pt &quot;Sawasdee&quot;;</string>
+                            <string notr="true">font: 7pt &quot;Sawasdee&quot;;</string>
                            </property>
                            <property name="text">
-                            <string>Ping</string>
+                            <string>PING</string>
                            </property>
                            <property name="alignment">
                             <set>Qt::AlignCenter</set>
@@ -800,7 +800,7 @@ text-decoration: underline;</string>
 }</string>
                    </property>
                    <property name="text">
-                    <string>Create</string>
+                    <string>Create!</string>
                    </property>
                    <property name="iconSize">
                     <size>
@@ -1006,7 +1006,7 @@ text-decoration: underline;</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>777</width>
+               <width>795</width>
                <height>873</height>
               </rect>
              </property>
@@ -1743,9 +1743,9 @@ text-decoration: underline;</string>
         </widget>
        </widget>
       </item>
-      <item row="0" column="0">
-       <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0" alignment="Qt::AlignLeft">
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_12">
+        <item>
          <widget class="QFrame" name="frame">
           <property name="enabled">
            <bool>true</bool>
@@ -1758,8 +1758,8 @@ text-decoration: underline;</string>
           </property>
           <property name="minimumSize">
            <size>
-            <width>140</width>
-            <height>40</height>
+            <width>120</width>
+            <height>10</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -1767,6 +1767,9 @@ text-decoration: underline;</string>
             <width>150</width>
             <height>40</height>
            </size>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
           </property>
           <property name="styleSheet">
            <string notr="true">image: url(:/png/main/res/krt_logo.png);</string>
@@ -1778,6 +1781,32 @@ text-decoration: underline;</string>
            <enum>QFrame::Plain</enum>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="minimumSize">
+           <size>
+            <width>1</width>
+            <height>1</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>5</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
@@ -2101,6 +2130,44 @@ QCheckBox::indicator {
       </property>
       <property name="text">
        <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblLevelMeterRight">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>9</width>
+        <height>18</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>R</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblLevelMeterLeft">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>15</width>
+        <height>14</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 9pt &quot;Sans Serif&quot;;</string>
+      </property>
+      <property name="text">
+       <string>LR</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </widget>
