@@ -41,7 +41,8 @@ Function Install-Qt
         "windows",
         "desktop",
         "$QtVersion",
-        "$QtArch"
+        "$QtArch",
+        "--modules qtwebview qtwebsockets qtwebchannel qtpositioning"
         # "--archives", "qtbase", "qttools", "qttranslations"
     )
     aqt install-qt @Args

@@ -26,7 +26,7 @@ setup() {
 
     echo "Installing dependencies..."
     sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev qtbase6-dev qttools6-dev-tools
+    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev-tools
 
     setup_cross_compiler
 }
@@ -44,8 +44,8 @@ setup_cross_compiler() {
     if [[ "${TARGET_ARCH}" == amd64 ]]; then
         return
     fi
-    local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
-    sudo apt install -qq -y --no-install-recommends "g++-${GCC_VERSION}-${ABI_NAME}" "qt6-qmake:${TARGET_ARCH}" "qtbase5-dev:${TARGET_ARCH}" "libjack-jackd2-dev:${TARGET_ARCH}"
+    local GCC_VERSION=11  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
+    sudo apt install -qq -y --no-install-recommends "g++-${GCC_VERSION}-${ABI_NAME}" "qmake6:${TARGET_ARCH}" "qt6-base-dev:${TARGET_ARCH}" "libjack-jackd2-dev:${TARGET_ARCH}"
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
 
