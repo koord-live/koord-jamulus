@@ -34,7 +34,8 @@ setup_ubuntu_dependencies() {
     export DEBIAN_FRONTEND="noninteractive"
 
     sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-11-jdk-headless
+    sudo apt-get -qq --no-install-recommends -y install \
+        build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-11-jdk-headless libicu70
 }
 
 setup_android_sdk() {
