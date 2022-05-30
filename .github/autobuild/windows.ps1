@@ -42,7 +42,8 @@ Function Install-Qt
         "desktop",
         "$QtVersion",
         "$QtArch",
-        "--modules qtwebengine qtwebview qtwebsockets qtwebchannel qtpositioning"
+        "--modules qtwebengine qtwebview qtwebsockets qtwebchannel qtpositioning",
+        "$Msvc64Version"
         # "--archives", "qtbase", "qttools", "qttranslations"
     )
     aqt install-qt @Args

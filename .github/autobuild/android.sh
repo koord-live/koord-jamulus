@@ -84,10 +84,10 @@ build_app_as_aab() {
 
     echo "${GOOGLE_RELEASE_KEYSTORE}" | base64 --decode > android/android_release.keystore
 
-    "${QT_DIR}/bin/qmake" -spec android-clang
+    "${QT_DIR}/${QT_VERSION}/android_armv7/bin/qmake" -spec android-clang
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
-    "${QT_DIR}"/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
+    "${QT_DIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
         --output "${BUILD_DIR}" \
         --aab \
         --release \
