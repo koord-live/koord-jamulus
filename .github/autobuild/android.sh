@@ -73,7 +73,7 @@ setup_qt() {
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
-            --archives qtbase qttools qttranslations \
+            --archives qtbase qtdeclarative qttools qttranslations \
             --modules qtwebview qtwebsockets qtwebchannel qtpositioning 
     fi
 }
