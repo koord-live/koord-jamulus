@@ -41,9 +41,10 @@
 #    include "testbench.h"
 #endif
 #include "util.h"
-//#ifdef ANDROID
+#ifdef ANDROID
 //#    include <QtAndroidExtras/QtAndroid>
-//#endif
+#    include <QtCore/private/qandroidextras_p.h>
+#endif
 #if defined( Q_OS_MACX )
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
@@ -938,8 +939,21 @@ int main ( int argc, char** argv )
 #    endif
 #endif
 
-//#ifdef ANDROID
-//    // special Android coded needed for record audio permission handling
+#ifdef ANDROID
+    // special Android coded needed for record audio permission handling
+//  // Qt6 way of doing permissions:
+    auto permcheck = QtAndroidPrivate::checkPermission( QString ("android.permission.RECORD_AUDIO"));
+
+    if ( permcheck.result() == QtAndroidPrivate::PermissionResult::Denied)
+    {
+        auto reqPermRes = QtAndroidPrivate::requestPermission( "android.permission.RECORD_AUDIO" );
+
+        if ( reqPermRes.result() == QtAndroidPrivate::PermissionResult::Denied)
+        {
+            return 0;
+        }
+    }
+//    // Qt5 way of doing permissions:
 //    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
 
 //    if ( result == QtAndroid::PermissionResult::Denied )
@@ -951,7 +965,7 @@ int main ( int argc, char** argv )
 //            return 0;
 //        }
 //    }
-//#endif
+#endif
 
 #ifdef _WIN32
     // set application priority class -> high priority

@@ -24,7 +24,9 @@ CONFIG += qt \
     thread \
     lrelease
 
-QT += quickwidgets \
+QT += core-private \
+    quickwidgets \
+    webenginecore \
     webview \
     network \
     xml \
@@ -237,6 +239,9 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
     
+    # don't want/need webengine for mobile
+    QT -= webenginecore
+
     macx-xcode {
         QMAKE_INFO_PLIST = ios/Info-xcode.plist
     } else {
@@ -244,8 +249,8 @@ win32 {
     }
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-    # ANDROID_ABIS = arm64-v8a x86_64
-    ANDROID_ABIS = x86_64
+    ANDROID_ABIS = arm64-v8a x86_64
+    # ANDROID_ABIS = x86_64
     # ANDROID_MIN_SDK_VERSION = 25
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
@@ -256,6 +261,9 @@ win32 {
     CONFIG += c++17
 
     # QT += androidextras
+
+    # don't want/need webengine for mobile
+    QT -= webenginecore
 
     # enabled only for debugging on android devices
     # DEFINES += ANDROIDDEBUG

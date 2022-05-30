@@ -188,6 +188,9 @@ background-color: rgb(47, 54, 56);</string>
                     <layout class="QVBoxLayout" name="reverbLatencyBox">
                      <item>
                       <layout class="QVBoxLayout" name="inputNetBox">
+                       <property name="spacing">
+                        <number>3</number>
+                       </property>
                        <item>
                         <layout class="QVBoxLayout" name="inputBox">
                          <item>
@@ -490,7 +493,7 @@ text-decoration: underline;</string>
                        <item>
                         <layout class="QGridLayout" name="gridConnMonitor">
                          <property name="spacing">
-                          <number>0</number>
+                          <number>3</number>
                          </property>
                          <item row="1" column="0">
                           <widget class="QLabel" name="lblDelay">
@@ -522,13 +525,13 @@ text-decoration: underline;</string>
                           <widget class="QLabel" name="lblPingVal">
                            <property name="minimumSize">
                             <size>
-                             <width>0</width>
+                             <width>35</width>
                              <height>0</height>
                             </size>
                            </property>
                            <property name="maximumSize">
                             <size>
-                             <width>40</width>
+                             <width>16777215</width>
                              <height>25</height>
                             </size>
                            </property>
@@ -564,7 +567,7 @@ text-decoration: underline;</string>
                            </property>
                            <property name="maximumSize">
                             <size>
-                             <width>40</width>
+                             <width>16777215</width>
                              <height>25</height>
                             </size>
                            </property>
@@ -619,6 +622,12 @@ text-decoration: underline;</string>
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
                              <property name="layoutDirection">
                               <enum>Qt::LeftToRight</enum>
                              </property>
@@ -651,6 +660,12 @@ text-decoration: underline;</string>
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
                              <property name="autoFillBackground">
                               <bool>false</bool>
                              </property>
@@ -674,7 +689,7 @@ text-decoration: underline;</string>
                            </property>
                            <property name="maximumSize">
                             <size>
-                             <width>40</width>
+                             <width>16777215</width>
                              <height>16777215</height>
                             </size>
                            </property>
@@ -693,7 +708,7 @@ text-decoration: underline;</string>
                            </property>
                            <property name="maximumSize">
                             <size>
-                             <width>35</width>
+                             <width>16777215</width>
                              <height>16777215</height>
                             </size>
                            </property>
