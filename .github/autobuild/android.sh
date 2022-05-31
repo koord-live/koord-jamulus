@@ -15,7 +15,7 @@ ANDROID_BASEDIR="/opt/android"
 BUILD_DIR=build
 export ANDROID_SDK_ROOT="${ANDROID_BASEDIR}/android-sdk"
 COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
-ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
+export ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
 # # WARNING: Support for ANDROID_NDK_HOME is deprecated and will be removed in the future. Use android.ndkVersion in build.gradle instead.
 # # ref: https://bugreports.qt.io/browse/QTBUG-81978?focusedCommentId=497578&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-497578
 # ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
@@ -58,9 +58,11 @@ setup_android_sdk() {
 
 setup_android_ndk() {
     mkdir -p "${ANDROID_BASEDIR}"
+
     if [[ -d "${ANDROID_NDK_ROOT}" ]]; then
         echo "Using NDK installation from previous run (actions/cache)"
     else
+        echo "Installing NDK from dl.google.com to ${ANDROID_NDK_ROOT}..."
         curl -s -o downloadfile "https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip"
         unzip -q downloadfile
         mv "android-ndk-${ANDROID_NDK_VERSION}" "${ANDROID_NDK_ROOT}"
@@ -111,8 +113,6 @@ pass_artifact_to_job() {
     echo "Moving ${BUILD_DIR}/build/outputs/bundle/release/build-release.aab to deploy/${artifact}"
     mv "./${BUILD_DIR}/build/outputs/bundle/release/build-release.aab" "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
-
-
 }
 
 case "${1:-}" in
