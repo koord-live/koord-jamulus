@@ -26,11 +26,11 @@ CONFIG += qt \
 
 QT += core-private \
     quickwidgets \
-    webenginecore \
     webview \
     network \
     xml \
     concurrent
+#    webenginecore \
 
 contains(CONFIG, "nosound") {
     CONFIG -= "nosound"
