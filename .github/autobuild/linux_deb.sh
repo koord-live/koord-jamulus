@@ -34,6 +34,16 @@ setup() {
         qt6-webengine-dev \
         qt6-webview-dev
 
+    # echo "Installing Qt..."
+    # python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+    # # icu needs explicit installation 
+    # # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
+    # python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
+    #     --archives qtbase qtdeclarative qttools qttranslations icu
+    # python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
+    #     --archives qtbase qtdeclarative qttools qttranslations \
+    #     --modules qtwebview qtwebsockets qtwebchannel qtpositioning 
+
     setup_cross_compiler
 }
 
