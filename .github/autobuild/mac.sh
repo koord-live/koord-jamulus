@@ -21,7 +21,7 @@ setup() {
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qttools qttranslations \
-            --modules qtwebengine qtwebview qtwebsockets qtwebchannel qtpositioning
+            --modules qtwebengine qtwebview
 
     fi
 }

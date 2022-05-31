@@ -22,7 +22,7 @@ setup() {
         # Install actual ios Qt:
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" \
             --archives qtbase qtdeclarative qttools qttranslations \
-            --modules qtwebview qtwebsockets qtwebchannel qtpositioning 
+            --modules qtwebview
         # Starting with Qt6, ios' qtbase install does no longer include a real qmake binary.
         # Instead, it is a script which invokes the mac desktop qmake.
         # As of aqtinstall 2.1.0 / 04/2022, desktop qtbase has to be installed manually:

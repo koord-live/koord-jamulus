@@ -42,7 +42,7 @@ setup() {
     #     --archives qtbase qtdeclarative qttools qttranslations icu
     # python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
     #     --archives qtbase qtdeclarative qttools qttranslations \
-    #     --modules qtwebview qtwebsockets qtwebchannel qtpositioning 
+    #     --modules qtwebview
 
     setup_cross_compiler
 }
