@@ -24,13 +24,11 @@ CONFIG += qt \
     thread \
     lrelease
 
-QT += core-private \
-    quickwidgets \
+QT += quickwidgets \
     webview \
     network \
     xml \
     concurrent
-#    webenginecore \
 
 contains(CONFIG, "nosound") {
     CONFIG -= "nosound"
@@ -76,6 +74,9 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 win32 {
+    # Windows desktop does not have native web runtime, need to package
+    QT += webenginecore
+
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     DEFINES += _WINSOCKAPI_ # try fix winsock / winsock2 redefinition problems
@@ -260,10 +261,9 @@ win32 {
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
+    # Need for eg device recording permissions
     # QT += androidextras
-
-    # don't want/need webengine for mobile
-    QT -= webenginecore
+    QT += core-private
 
     # enabled only for debugging on android devices
     # DEFINES += ANDROIDDEBUG
@@ -300,6 +300,9 @@ win32 {
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11
+
+    # Linux desktop does not have native web runtime, need to package
+    QT += webenginecore
 
     # --as-needed avoids linking the final binary against unnecessary runtime
     # libs. Most g++ versions already do that by default.
