@@ -75,7 +75,7 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 win32 {
     # Windows desktop does not have native web runtime, need to package
-    QT += webenginecore
+    QT += webenginequick
 
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
@@ -241,9 +241,6 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
     
-    # don't want/need webengine for mobile
-    QT -= webenginecore
-
     macx-xcode {
         QMAKE_INFO_PLIST = ios/Info-xcode.plist
     } else {
@@ -302,7 +299,7 @@ win32 {
     CONFIG += c++11
 
     # Linux desktop does not have native web runtime, need to package
-    QT += webenginecore
+    QT += webenginequick
 
     # --as-needed avoids linking the final binary against unnecessary runtime
     # libs. Most g++ versions already do that by default.

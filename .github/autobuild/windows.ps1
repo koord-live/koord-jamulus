@@ -42,7 +42,7 @@ Function Install-Qt
         "desktop",
         "$QtVersion",
         "$QtArch",
-        "--modules", "qtwebengine", "qtwebview", "qtmultimedia"
+        "--modules", "qtwebengine", "qtwebview", "qtwebchannels", "qtpositioning", "qtmultimedia"
     )
     aqt install-qt @Args
     if ( !$? )
