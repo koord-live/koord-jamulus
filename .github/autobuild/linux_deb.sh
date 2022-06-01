@@ -31,7 +31,7 @@ setup() {
 
     echo "Installing dependencies..."
     sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev
+    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-mesa-dev
         # qt6-base-dev \
         # qt6-base-dev-tools \
         # qt6-tools-dev-tools \
