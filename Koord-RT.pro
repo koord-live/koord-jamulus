@@ -78,6 +78,7 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
+    DEFINES += _WINSOCKAPI_ # attempt winsock / winsock2 redefinition problems
     RC_FILE = windows/mainicon.rc
     mingw* {
         LIBS += -lole32 \
