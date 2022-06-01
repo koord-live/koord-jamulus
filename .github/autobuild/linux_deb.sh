@@ -43,7 +43,7 @@ setup() {
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         # icu needs explicit installation 
         # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
-        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qttools qttranslations icu
             --modules qtwebview qtwebengine
     else 
@@ -68,7 +68,7 @@ setup_cross_compilation_apt_sources() {
     # sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
 
     # EXPERIMENTAL: add debian bullseye backports to Ubuntu 20.04 to add Qt6 armhf build
-    sudo echo "deb http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
+    sudo bash -c 'echo "deb http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list'
 
     sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
 
