@@ -45,7 +45,7 @@ setup() {
         # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
         sudo aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qttools qttranslations icu \
-            --modules qtwebview qtwebengine qtwebchannels qtpositioning
+            --modules qtwebview qtwebengine qtwebchannel qtpositioning
     else 
         # current latest version is 6.2.4
         # attempt force install

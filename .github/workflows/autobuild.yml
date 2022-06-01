@@ -113,6 +113,8 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
+          # Qt6 requires Ubuntu 20.04 at minimum as build environment
+          # if we need to build on Ubuntu 18.04 (compatibility - linuxdeployqt) then we HAVE to use Qt5 
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-20.04
