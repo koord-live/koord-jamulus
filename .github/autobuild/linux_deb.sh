@@ -67,7 +67,7 @@ setup_cross_compilation_apt_sources() {
     sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
     # sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
 
-    # EXPERIMENTAL: add debian bullseye backports to Ubuntu 20.04 to add Qt6-armhf
+    # EXPERIMENTAL: add debian bullseye backports to Ubuntu 20.04 to add Qt6 armhf build
     sudo echo "deb http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
 
     sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
