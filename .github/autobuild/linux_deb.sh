@@ -30,8 +30,8 @@ setup() {
     setup_cross_compilation_apt_sources
 
     echo "Installing dependencies..."
-    sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-mesa-dev
+    sudo apt-get update
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
         # qt6-base-dev \
         # qt6-base-dev-tools \
         # qt6-tools-dev-tools \
