@@ -24,9 +24,7 @@ CONFIG += qt \
     thread \
     lrelease
 
-QT += quickwidgets \
-    webview \
-    network \
+QT += network \
     xml \
     concurrent
 
@@ -40,7 +38,9 @@ contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
 } else {
-    QT += widgets
+    QT += widgets \
+        quickwidgets \
+        webview
 }
 
 LRELEASE_DIR = src/translation
@@ -75,7 +75,8 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 win32 {
     # Windows desktop does not have native web runtime, need to package
-    QT += webenginequick
+    QT += quick \
+        webenginecore
 
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
@@ -299,7 +300,7 @@ win32 {
     CONFIG += c++11
 
     # Linux desktop does not have native web runtime, need to package
-    QT += webenginequick
+    QT += webenginecore
 
     # --as-needed avoids linking the final binary against unnecessary runtime
     # libs. Most g++ versions already do that by default.
