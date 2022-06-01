@@ -115,13 +115,13 @@ jobs:
 
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
-            building_on_os:         ubuntu-18.04
+            building_on_os:         ubuntu-20.04
             base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
 
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
-            building_on_os:         ubuntu-18.04
+            building_on_os:         ubuntu-20.04
             base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 

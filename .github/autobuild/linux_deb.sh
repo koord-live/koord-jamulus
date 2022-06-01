@@ -1,6 +1,11 @@
 #!/bin/bash
 set -eu
 
+export QT_VERSION=6.3.0
+export QT_DIR="/usr/local/opt/qt"
+export PATH="${PATH}:${QT_DIR}/${QT_VERSION}/gcc_64/bin/"
+AQTINSTALL_VERSION=2.1.0
+
 if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
     echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
     exit 1
@@ -26,23 +31,30 @@ setup() {
 
     echo "Installing dependencies..."
     sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev \
-        qt6-base-dev \
-        qt6-base-dev-tools \
-        qt6-tools-dev-tools \
-        qt6-positioning-dev \
-        qt6-webengine-dev \
-        qt6-webview-dev
+    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev
+        # qt6-base-dev \
+        # qt6-base-dev-tools \
+        # qt6-tools-dev-tools \
+        # qt6-webengine-dev \
+        # qt6-webview-dev
 
-    # echo "Installing Qt..."
-    # python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-    # # icu needs explicit installation 
-    # # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
-    # python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
-    #     --archives qtbase qtdeclarative qttools qttranslations icu
-    # python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
-    #     --archives qtbase qtdeclarative qttools qttranslations \
-    #     --modules qtwebview
+    echo "Installing Qt..."
+    if [[ "${TARGET_ARCH}" == amd64 ]]; then
+        python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        # icu needs explicit installation 
+        # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
+        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
+            --archives qtbase qtdeclarative qttools qttranslations icu
+            --modules qtwebview qtwebengine
+    else 
+        # current latest version is 6.2.4
+        sudo apt-get -qq --no-install-recommends -y install \
+            qt6-base-dev \
+            qt6-base-dev-tools \
+            qt6-tools-dev-tools \
+            qt6-webengine-dev \
+            qt6-webview-dev
+    fi
 
     setup_cross_compiler
 }
@@ -53,7 +65,15 @@ setup_cross_compilation_apt_sources() {
     fi
     sudo dpkg --add-architecture "${TARGET_ARCH}"
     sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
+    # sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
+
+    # EXPERIMENTAL: add debian bullseye backports to Ubuntu 20.04 to add Qt6-armhf
+    sudo echo "deb http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
+
     sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
+
+    echo "STATE OF APT SOURCES.LIST:"
+    cat /etc/apt/sources.list
 }
 
 setup_cross_compiler() {
