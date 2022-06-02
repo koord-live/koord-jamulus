@@ -78,8 +78,12 @@ mv Koord-RT-*.AppImage gui_appimage/
 
 echo "Building headless AppImage ...."
 cd $BDIR
+# manually copy in desktop file
 mkdir -p appdir_headless/usr/share/applications/
 cp -v linux/koordrt-headless.desktop appdir_headless/usr/share/applications/
+# manually copy in image
+mkdir -p appdir_headless/usr/share/icons/hicolor/512x512/apps/
+cp -v distributions/koordrt.png appdir_headless/usr/share/icons/hicolor/512x512/apps/
 ./linuxdeployqt-continuous-x86_64.AppImage appdir_headless/usr/share/applications/*.desktop -appimage
 mkdir headless_appimage
 mv Koord-RT-*.AppImage headless_appimage/
