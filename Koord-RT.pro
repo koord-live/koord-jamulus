@@ -38,7 +38,7 @@ contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
 } else {
-    # webview module is only needed actually for Qt5
+    # webview module is only needed actually for Qt5???
     QT += widgets \
         quickwidgets \
         webview
@@ -147,6 +147,11 @@ win32 {
     } else {
         MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
         RC_FILE = mac/mainicon.icns
+    }
+
+    # temp hack for legacy mac build on Qt5
+    equals(QT_VERSION, "5.15.2") {
+        QT -= webview
     }
 
     HEADERS += mac/activity.h mac/badgelabel.h
