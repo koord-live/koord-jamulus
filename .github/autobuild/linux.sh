@@ -54,7 +54,9 @@ setup_x64() {
     #     --modules qtwebview qtwebengine qtwebchannel qtpositioning
     sudo apt-get --no-install-recommends -y install \
         qtbase5-dev \
+        qt5-default \
         qtbase5-dev-tools \
+        qttools5-dev-tools \
         qtwebengine5-dev \
         qml-module-qtwebview \
         qtdeclarative5-dev \
@@ -77,7 +79,9 @@ setup_arm() {
     echo "Installing Qt ...."
     sudo apt-get --no-install-recommends -y install \
         qtbase5-dev \
+        qt5-default \
         qtbase5-dev-tools \
+        qttools5-dev-tools \
         qtwebengine5-dev \
         qml-module-qtwebview \
         qtdeclarative5-dev \
@@ -87,9 +91,12 @@ setup_arm() {
     local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
     sudo apt-get install -y --no-install-recommends \
         "g++-${GCC_VERSION}-${ABI_NAME}" \
-        "qt5-qmake:${TARGET_ARCH}" \
-        "qtbase5-dev:${TARGET_ARCH}" \
         "libjack-jackd2-dev:${TARGET_ARCH}" \
+        "qt5-qmake:${TARGET_ARCH}" \
+        "qt5-default:${TARGET_ARCH}" \
+        "qtbase5-dev:${TARGET_ARCH}" \
+        "qtbase5-dev-tools:${TARGET_ARCH}" \
+        "qttools5-dev-tools:${TARGET_ARCH}" \
         "qtbase5-dev-tools:${TARGET_ARCH}" \
         "qtwebengine5-dev:${TARGET_ARCH}" \
         "qml-module-qtwebview:${TARGET_ARCH}" \
