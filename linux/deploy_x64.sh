@@ -73,11 +73,13 @@ export VERSION=${KOORD_VERSION}
 echo "Building gui AppImage ...."
 cd $BDIR
 ./linuxdeployqt-continuous-x86_64.AppImage appdir_gui/usr/share/applications/*.desktop -appimage
+mkdir gui_appimage
+mv Koord-RT-*.AppImage gui_appimage/
 
 echo "Building headless AppImage ...."
 cd $BDIR
 mkdir -p appdir_headless/usr/share/applications/
 cp -v linux/koordrt-headless.desktop appdir_headless/usr/share/applications/
 ./linuxdeployqt-continuous-x86_64.AppImage appdir_headless/usr/share/applications/*.desktop -appimage
-
-
+mkdir headless_appimage
+mv Koord-RT-*.AppImage headless_appimage/
