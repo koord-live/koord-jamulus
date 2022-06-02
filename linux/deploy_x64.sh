@@ -72,9 +72,12 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
-# need libpango this to run on ubuntu 22.04 at least!
+# need libpango[cairo|ft2] - to run on ubuntu 22.04 at least!
 # otherwise: symbol lookup error: /lib64/libpango-1.0.so.0: undefined symbol: g_memdup2
-cp -v /usr/lib64/libpango-1.0.so.0 appdir_gui/usr/lib/
+# So: copy from location on 64bit ubuntu 18.04
+cp -v /usr/lib/x86_64-linux-gnu/libpango-1.0.so.0 appdir_gui/usr/lib/
+cp -v /usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 appdir_gui/usr/lib/
+cp -v /usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 appdir_gui/usr/lib/
 ./linuxdeployqt-continuous-x86_64.AppImage appdir_gui/usr/share/applications/*.desktop -appimage
 mkdir gui_appimage
 mv Koord-RT-*.AppImage gui_appimage/
