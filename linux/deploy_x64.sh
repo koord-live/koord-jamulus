@@ -75,6 +75,7 @@ cd $BDIR
 # need libpango[cairo|ft2] - to run on ubuntu 22.04 at least!
 # otherwise: symbol lookup error: /lib64/libpango-1.0.so.0: undefined symbol: g_memdup2
 # So: copy from location on 64bit ubuntu 18.04
+mkdir -p appdir_gui/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libpango-1.0.so.0 appdir_gui/usr/lib/
 cp -v /usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 appdir_gui/usr/lib/
 cp -v /usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 appdir_gui/usr/lib/
