@@ -29,7 +29,7 @@
 #include "global.h"
 #ifndef HEADLESS
 #    include <QApplication>
-#    include <QtWebView/QtWebView>
+#    include <QtWebView>
 #    include <QMessageBox>
 #    include "serverdlg.h"
 #    ifndef SERVER_ONLY
