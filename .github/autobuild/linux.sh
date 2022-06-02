@@ -46,7 +46,7 @@ setup_x64() {
     sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
 
     echo "Installing Qt..."
-    sudo python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+    python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
     # icu needs explicit installation 
     # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
     sudo aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
@@ -75,7 +75,7 @@ setup_arm() {
 
     echo "Setting up cross-compiler ...."
     local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
-    sudo apt install -qq -y --no-install-recommends "g++-${GCC_VERSION}-${ABI_NAME}" "qmake5:${TARGET_ARCH}" "qtbase5-dev:${TARGET_ARCH}" "libjack-jackd2-dev:${TARGET_ARCH}"
+    sudo apt-get install -qq -y --no-install-recommends "g++-${GCC_VERSION}-${ABI_NAME}" "qt5-qmake:${TARGET_ARCH}" "qtbase5-dev:${TARGET_ARCH}" "libjack-jackd2-dev:${TARGET_ARCH}"
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
 
