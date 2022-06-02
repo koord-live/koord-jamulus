@@ -37,7 +37,11 @@
         <!-- Temporarily opt out of Dark Mode as Qt 5.9 does not support it well, see https://bugreports.qt.io/browse/QTBUG-68891 -->
         <key>NSRequiresAquaSystemAppearance</key>
         <string>true</string>
-
+        <key>UISupportedInterfaceOrientations</key>
+        <array>
+            <string>UIInterfaceOrientationLandscapeLeft</string>
+            <string>UIInterfaceOrientationLandscapeRight</string>
+        </array>
         <!-- Add URL Handler for koord:// URLs -->
         <key>CFBundleURLTypes</key>
         <array>
