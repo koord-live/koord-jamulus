@@ -20,14 +20,14 @@ setup() {
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         
-        # temporary hack to avoid installing qtwebview with Qt5
+        # temporary hack for Qt5
         if [ ! ${QT_VERSION} == "5.15.2" ]; then
             python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
                 --archives qtbase qtdeclarative qttools qttranslations \
                 --modules qtwebengine qtwebview
         else
             python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-                --archives qtbase qtdeclarative qttools qttranslations \
+                --archives qtbase qtdeclarative qttools qttranslations qtwebview \
                 --modules qtwebengine
         fi
 
