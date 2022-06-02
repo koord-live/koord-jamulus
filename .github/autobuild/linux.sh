@@ -43,7 +43,8 @@ setup_x64() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev \
+        libgl1-mesa-dev python3-setuptools
 
     echo "Installing Qt..."
     python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
