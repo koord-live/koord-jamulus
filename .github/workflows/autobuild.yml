@@ -116,7 +116,7 @@ jobs:
           # Qt6 requires Ubuntu 20.04 at minimum as build environment -  But AppImage/linuxdeployqt requires 18.04 
           # So in theory: if we need to build on Ubuntu 18.04 (compatibility - linuxdeployqt) then we HAVE to use Qt5 
           # Trying eg aqt install of Qt6 on 18.04 results in glibc error when exec qmake - needs v2.28 not present on 18.04
-          - config_name:            Linux .deb amd64 (artifacts+codeQL)
+          - config_name:            Linux appimage amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-18.04
             base_command:           ./.github/autobuild/linux.sh
@@ -217,7 +217,7 @@ jobs:
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/init@v1
+        uses:                       github/codeql-action/init@v2
         with:
           languages: 'cpp'
 
@@ -339,4 +339,4 @@ jobs:
 
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/analyze@v1
+        uses:                       github/codeql-action/analyze@v2
