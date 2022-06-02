@@ -95,9 +95,6 @@ setup_arm() {
         "qt5-qmake:${TARGET_ARCH}" \
         "qt5-default:${TARGET_ARCH}" \
         "qtbase5-dev:${TARGET_ARCH}" \
-        "qtbase5-dev-tools:${TARGET_ARCH}" \
-        "qttools5-dev-tools:${TARGET_ARCH}" \
-        "qtbase5-dev-tools:${TARGET_ARCH}" \
         "qtwebengine5-dev:${TARGET_ARCH}" \
         "qml-module-qtwebview:${TARGET_ARCH}" \
         "qtdeclarative5-dev:${TARGET_ARCH}" \

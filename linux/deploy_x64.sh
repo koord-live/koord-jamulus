@@ -44,13 +44,13 @@ lrelease *.ts
 echo "Building gui ...."
 cd $BDIR
 cd build-gui
-make -j "$$(nproc)"
+make -j "$(nproc)"
 
 # headless
 echo "Building headless ...."
 cd $BDIR
 cd build-nox
-make -j "$$(nproc)"
+make -j "$(nproc)"
 
 # Install ###########################
 # gui
