@@ -167,12 +167,6 @@ jobs:
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             true
 
-          # - config_name:            Windows JACK (artifact)
-          #   target_os:              windows
-          #   building_on_os:         windows-2019
-          #   base_command:           powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage
-          #   run_codeql:             false
-
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
       - name:                       Select Xcode version for Mac

@@ -92,30 +92,6 @@ Function Ensure-jom
     choco install --no-progress -y jom --version "${JomVersion}"
 }
 
-Function Ensure-JACK
-{
-    if ( $BuildOption -ne "jackonwindows" )
-    {
-        return
-    }
-
-    echo "Install JACK2 64-bit..."
-    # Install JACK2 64-bit
-    choco install --no-progress -y jack --version "${JackVersion}"
-    if ( !$? )
-    {
-        throw "64bit jack installation failed with exit code $LastExitCode"
-    }
-
-    echo "Install JACK2 32-bit..."
-    # Install JACK2 32-bit (need to force choco install as it detects 64 bits as installed)
-    choco install --no-progress -y -f --forcex86 jack --version "${JackVersion}"
-    if ( !$? )
-    {
-        throw "32bit jack installation failed with exit code $LastExitCode"
-    }
-}
-
 Function Build-App-With-Installer
 {
     echo "Build app and create installer..."
@@ -133,15 +109,7 @@ Function Build-App-With-Installer
 
 Function Pass-Artifact-to-Job
 {
-    # Add $BuildOption as artifact file name suffix. Shorten "jackonwindows" to just "jack":
-    $ArtifactSuffix = switch -Regex ( $BuildOption )
-    {
-        "jackonwindows" { "_jack"; break }
-        "^\S+$"         { "_${BuildOption}"; break }
-        default         { "" }
-    }
-
-    $artifact = "koord-rt_${JamulusVersion}_win${ArtifactSuffix}.exe"
+    $artifact = "koord-rt_${JamulusVersion}_win.exe"
 
     echo "Copying artifact to ${artifact}"
     # "Output" is name of dir for innosetup output
@@ -161,7 +129,6 @@ switch ( $Stage )
         choco config set cacheLocation $ChocoCacheDir
         Ensure-Qt
         Ensure-jom
-        # Ensure-JACK
     }
     "build"
     {

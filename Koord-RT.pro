@@ -38,6 +38,7 @@ contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
 } else {
+    # webview module is only needed actually for Qt5
     QT += widgets \
         quickwidgets \
         webview
@@ -116,51 +117,23 @@ win32 {
         message(Restricting build to server-only due to CONFIG+=serveronly.)
         DEFINES += SERVER_ONLY
     } else {
-        contains(CONFIG, "jackonwindows") {
-            message(Using JACK.)
-            contains(QT_ARCH, "i386") {
-                exists("C:/Program Files (x86)") {
-                    message("Cross compilation build")
-                    programfilesdir = "C:/Program Files (x86)"
-                } else {
-                    message("Native i386 build")
-                    programfilesdir = "C:/Program Files"
-                }
-                libjackname = "libjack.lib"
-            } else {
-                message("Native x86_64 build")
-                programfilesdir = "C:/Program Files"
-                libjackname = "libjack64.lib"
-            }
-            !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
-            }
+        # defo using ASIO and NOT Jack
+        message(Using ASIO.)
+        message(Please review the ASIO SDK licence.)
 
-            HEADERS += linux/sound.h
-            SOURCES += linux/sound.cpp
-            DEFINES += WITH_JACK
-            DEFINES += JACK_ON_WINDOWS
-            DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-            INCLUDEPATH += "$${programfilesdir}/JACK2/include"
-            LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
-        } else {
-            message(Using ASIO.)
-            message(Please review the ASIO SDK licence.)
-
-            !exists(windows/ASIOSDK2) {
-                error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
-            }
-            # Important: Keep those ASIO includes local to this build target in
-            # order to avoid poisoning other builds license-wise.
-            HEADERS += windows/sound.h
-            SOURCES += windows/sound.cpp \
-                windows/ASIOSDK2/common/asio.cpp \
-                windows/ASIOSDK2/host/asiodrivers.cpp \
-                windows/ASIOSDK2/host/pc/asiolist.cpp
-            INCLUDEPATH += windows/ASIOSDK2/common \
-                windows/ASIOSDK2/host \
-                windows/ASIOSDK2/host/pc
+        !exists(windows/ASIOSDK2) {
+            error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
         }
+        # Important: Keep those ASIO includes local to this build target in
+        # order to avoid poisoning other builds license-wise.
+        HEADERS += windows/sound.h
+        SOURCES += windows/sound.cpp \
+            windows/ASIOSDK2/common/asio.cpp \
+            windows/ASIOSDK2/host/asiodrivers.cpp \
+            windows/ASIOSDK2/host/pc/asiolist.cpp
+        INCLUDEPATH += windows/ASIOSDK2/common \
+            windows/ASIOSDK2/host \
+            windows/ASIOSDK2/host/pc
     }
 
 } else:macx {
@@ -210,24 +183,10 @@ win32 {
         -framework Foundation \
         -framework AppKit
 
-    contains(CONFIG, "jackonmac") {
-        message(Using JACK.)
-        !exists(/usr/include/jack/jack.h) {
-            !exists(/usr/local/include/jack/jack.h) {
-                 error("Error: jack.h was not found at the usual place, maybe jack is not installed")
-            }
-        }
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
-        DEFINES += WITH_JACK
-        DEFINES += JACK_REPLACES_COREAUDIO
-        INCLUDEPATH += /usr/local/include
-        LIBS += /usr/local/lib/libjack.dylib
-    } else {
-        message(Using CoreAudio.)
-        HEADERS += mac/sound.h
-        SOURCES += mac/sound.cpp
-    }
+    # defo use CoreAudio and not Jack
+    message(Using CoreAudio.)
+    HEADERS += mac/sound.h
+    SOURCES += mac/sound.cpp
 
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist

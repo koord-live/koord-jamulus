@@ -2,10 +2,10 @@
 set -eu
 
 # for x64 AppImage build
-export QT_VERSION=6.3.0
-export QT_DIR="/usr/local/opt/qt"
-# export PATH="${PATH}:${QT_DIR}/${QT_VERSION}/gcc_64/bin/"
-AQTINSTALL_VERSION=2.1.0
+# export QT_VERSION=6.3.0
+# export QT_DIR="/usr/local/opt/qt"
+# # export PATH="${PATH}:${QT_DIR}/${QT_VERSION}/gcc_64/bin/"
+# AQTINSTALL_VERSION=2.1.0
 
 if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
     echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
@@ -43,16 +43,22 @@ setup_x64() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev \
-        libgl1-mesa-dev python3-setuptools
+    # sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev \
+    #     libgl1-mesa-dev python3-setuptools python3-wheel
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-devscripts
+
 
     echo "Installing Qt..."
-    python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-    # icu needs explicit installation 
-    # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
-    sudo aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
-        --archives qtbase qtdeclarative qttools qttranslations icu \
-        --modules qtwebview qtwebengine qtwebchannel qtpositioning
+    # python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+    # sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
+    #     --archives qtbase qtdeclarative qttools qttranslations icu \
+    #     --modules qtwebview qtwebengine qtwebchannel qtpositioning
+    sudo apt-get --no-install-recommends -y install \
+        qtbase5-dev \
+        qtbase5-dev-tools \
+        qtwebengine5-dev \
+        qml-module-qtwebview
+
 }
 
 setup_arm() {

@@ -5,7 +5,7 @@ set -eu
 
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 
-cp -r distributions/debian .
+# cp -r distributions/debian .
 
 # get the koord-rt version from pro file
 KOORD_VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord-RT.pro)
