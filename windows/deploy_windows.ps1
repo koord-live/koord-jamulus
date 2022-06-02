@@ -150,8 +150,10 @@ Function Install-Dependencies
     # install MSIX Packaging Tool
     # Install  bundle
     
-    # assuming Powershell3, install Chocolatey
-    Set-ExecutionPolicy Bypass -Scope Process -Force; iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex
+    # chocolatey should already be on Github Windows builds
+    # # assuming Powershell3, install Chocolatey
+    # Set-ExecutionPolicy Bypass -Scope Process -Force; iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex
+    
     # now install Innosetup
     choco install innosetup
 }

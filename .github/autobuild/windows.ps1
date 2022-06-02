@@ -19,7 +19,6 @@ $ChocoCacheDir = 'C:\ChocoCache'
 $Qt32Version = "6.3.0"
 $Qt64Version = "6.3.0"
 $AqtinstallVersion = "2.1.0"
-$JackVersion = "1.9.17"
 $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
