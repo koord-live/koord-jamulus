@@ -25,14 +25,14 @@ echo "Configuring gui ...."
 cd $BDIR
 mkdir -p build-gui
 cd build-gui
-$(QMAKE) "CONFIG+=noupcasename" PREFIX=/usr ../Koord-RT.pro
+qmake "CONFIG+=noupcasename" PREFIX=/usr ../Koord-RT.pro
 
 # headless
 echo "Configuring headless ...."
 cd $BDIR
 mkdir -p build-nox
 cd build-nox
-$(QMAKE) "CONFIG+=headless serveronly" TARGET=koord-rt-headless PREFIX=/usr ../Koord-RT.pro
+qmake "CONFIG+=headless serveronly" TARGET=koord-rt-headless PREFIX=/usr ../Koord-RT.pro
 
 
 # Build ############################
