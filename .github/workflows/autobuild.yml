@@ -113,9 +113,8 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
-          # Qt6 requires Ubuntu 20.04 at minimum as build environment
+          # Qt6 requires Ubuntu 20.04 at minimum as build environment -  But AppImage/linuxdeployqt requires 18.04 
           # So in theory: if we need to build on Ubuntu 18.04 (compatibility - linuxdeployqt) then we HAVE to use Qt5 
-          # But we can try aqt qt6 anyway :) 
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-18.04

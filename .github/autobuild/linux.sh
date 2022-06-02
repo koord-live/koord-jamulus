@@ -56,7 +56,9 @@ setup_x64() {
         qtbase5-dev \
         qtbase5-dev-tools \
         qtwebengine5-dev \
-        qml-module-qtwebview
+        qml-module-qtwebview \
+        qtdeclarative5-dev \
+        libqt5webview5-dev  
 
 }
 
@@ -77,7 +79,9 @@ setup_arm() {
         qtbase5-dev \
         qtbase5-dev-tools \
         qtwebengine5-dev \
-        qml-module-qtwebview
+        qml-module-qtwebview \
+        qtdeclarative5-dev \
+        libqt5webview5-dev 
 
     echo "Setting up cross-compiler ...."
     local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
