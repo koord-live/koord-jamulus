@@ -78,34 +78,18 @@ build_app()
 
     # Add Qt deployment dependencies
     if [[ -z "$cert_name" ]]; then
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
-    else
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
+        macdeployqt "${build_path}/${target_name}.app" \
+            -verbose=2 \
+            -always-overwrite \
+            -qmldir="${root_path}/src"
+    else     # we do this here for signed / notarized dmg ..?
+        macdeployqt "${build_path}/${target_name}.app" \
+            -verbose=2 \
+            -always-overwrite \
+            -hardened-runtime -timestamp -appstore-compliant \
+            -sign-for-notarization="${cert_name}" \
+            -qmldir="${root_path}/src"
     fi
-
-    # ## Build installer pkg file - for submission to App Store
-    # if [[ -z "$macapp_cert_name" ]]; then
-    #     echo "No cert to sign for App Store, bypassing..."
-    # else
-    #     # Clone the build directory to leave the adhoc signed app untouched
-    #     cp -a ${build_path} "${build_path}_storesign"
-
-    #     # Add Qt deployment deps and codesign the app for App Store submission
-    #     macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
-        
-    #     # Create pkg installer and sign for App Store submission
-    #     productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
-    
-    #     NOTARIZATION_PASSWORD=""
-    #     if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
-    #         xcrun altool --validate-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
-    #         xcrun altool --upload-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
-    #     fi
-
-    #     # move created pkg file to prep for download
-    #     mv "${build_path}_storesign/Koord-RT_${app_version}.pkg" "${deploypkg_path}"
-
-    # fi
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
@@ -148,10 +132,18 @@ build_installer_pkg()
         cp -a ${build_path} "${build_path}_storesign"
 
         # Add Qt deployment deps and codesign the app for App Store submission
-        macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+        macdeployqt "${build_path}_storesign/${target_name}.app" \
+            -verbose=2 \
+            -always-overwrite \
+            -hardened-runtime -timestamp -appstore-compliant \
+            -sign-for-notarization="${macapp_cert_name}" \
+            -qmldir="${root_path}/src/"
         
         # Create pkg installer and sign for App Store submission
-        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
+        productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
+            --component "${build_path}_storesign/${target_name}.app" \
+            /Applications \
+            "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
     
         NOTARIZATION_PASSWORD=""
         if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
