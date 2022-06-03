@@ -91,6 +91,9 @@ build_app()
             -qmldir="${root_path}/src"
     fi
 
+    # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
+    rm -fr "${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
+
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
     cp -r "${build_path}/${target_name}.app" "${deploy_path}"
@@ -138,13 +141,17 @@ build_installer_pkg()
             -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${macapp_cert_name}" \
             -qmldir="${root_path}/src/"
-        
+
+        # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
+        rm -fr "${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
+
         # Create pkg installer and sign for App Store submission
         productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
             --component "${build_path}_storesign/${target_name}.app" \
             /Applications \
             "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
-    
+
+
         NOTARIZATION_PASSWORD=""
         if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
             xcrun altool --validate-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
