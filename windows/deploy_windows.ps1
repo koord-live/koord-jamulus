@@ -305,7 +305,7 @@ Function Build-App
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler", "--qmldir=$RootPath\src", `
-        "-webenginecore", "-webengine", "-webview", "-qml", "-quick", "-declarative", `
+        "-webenginecore", "-webengine", "-webview", "-qml", "-quick", `
         "$BuildPath\$BuildConfig\$AppName.exe")
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
