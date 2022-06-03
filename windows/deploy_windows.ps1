@@ -305,10 +305,13 @@ Function Build-App
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler", "--qmldir=$RootPath\src", `
-        "-webenginecore", "-webengine", "-webview", "-qml", "-quick", `
+        "-webenginecore", "-webenginequick", "-webenginewidgets", "-webview", "-qml", "-quick", `
         "$BuildPath\$BuildConfig\$AppName.exe")
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
+
+    # Manually copy in webengine exe
+    Copy-Item -Path "$QtInstallPath64/$QtCompile64/bin/QtWebEngineProcess.exe" -Destination "$DeployPath\$BuildArch"
 
     # Transfer VS dist DLLs for x64
     Copy-Item -Path "$VsDistFile64Path\*" -Destination "$DeployPath\$BuildArch"
