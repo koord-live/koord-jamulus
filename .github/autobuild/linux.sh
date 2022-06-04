@@ -45,7 +45,7 @@ setup_x64() {
         libgl1-mesa-dev python3-setuptools python3-wheel
 
     echo "Installing Qt..."
-    pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
+    sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
     sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
         --archives qtbase qtdeclarative qttools qttranslations icu \
         --modules qtwebview qtwebengine qtwebchannel qtpositioning
