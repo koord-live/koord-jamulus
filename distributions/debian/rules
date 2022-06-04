@@ -7,9 +7,9 @@ DEB_HOST_GNU_TYPE := $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE := $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 # /usr/local/opt/qt/6.3.0/gcc_64/bin/qmake
-
+## hardcode qmake for now!
 ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
-	QMAKE := qmake
+	QMAKE := /usr/local/opt/qt/6.3.0/gcc_64/bin/qmake
 else
 	QMAKE := "/usr/lib/$(DEB_BUILD_GNU_TYPE)/qt5/bin/qmake" -qtconf "/usr/lib/$(DEB_TARGET_GNU_TYPE)/qt5/qt.conf" -spec "/usr/lib/$(DEB_TARGET_GNU_TYPE)/qt5/mkspecs/$(DEB_TARGET_GNU_TYPE)-g++" LIBS+="-lstdc++ -lm"
 endif
