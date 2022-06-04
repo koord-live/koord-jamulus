@@ -89,20 +89,17 @@ build_app_as_ipa() {
 }
 
 pass_artifact_to_job() {
-    # just mv one ipa file, depending on cert status
-    if [ "${IOSDIST_CERTIFICATE_ID}" == "" ]; then
-        local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_unsigned${ARTIFACT_SUFFIX:-}.ipa"
-    else
+    # just pass the one IPA file
+    sign_test=$(ls *.ipa | grep -i 'unsigned')
+    if [ "${sign_test}" == "" ]; then  # we are signed
         local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
+    else
+        local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_unsigned${ARTIFACT_SUFFIX:-}.ipa"
     fi
+
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Koord-RT_*.ipa "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
-
-    # local artifact2="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
-    # echo "Moving build artifact to deploy/${artifact2}"
-    # mv ./deploy/Koord-RT_signed.ipa "./deploy/${artifact2}"
-    # echo "::set-output name=artifact_2::${artifact2}"
 }
 
 case "${1:-}" in
