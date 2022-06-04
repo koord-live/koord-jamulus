@@ -113,20 +113,25 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
-          # Qt6 requires Ubuntu 20.04 at minimum as build environment -  But AppImage/linuxdeployqt requires 18.04 
-          # So in theory: if we need to build on Ubuntu 18.04 (compatibility - linuxdeployqt) then we HAVE to use Qt5 
-          # Trying eg aqt install of Qt6 on 18.04 results in glibc error when exec qmake - needs v2.28 not present on 18.04
+          # Qt6 requires Ubuntu 20.04 at minimum as build environment
+          # But: AppImage/linuxdeployqt requires 18.04 (cf unofficial ppa backports of Qt6 - but they DON'T include all pkgs, eg webengine or -dev packages)
+          # - So need to use Qt5 for 18.04/AppImage (aqt install of Qt6 on 18.04 results in glibc error when exec qmake - needs v2.28 not present on 18.04)
+          #   - BUT: this breaks consistency in webview / webengine handling - between Qt5-6 - too much to handle
+          #     - SO: do ubuntu 20.04 and Qt6 - deb - x64 only :|
           - config_name:            Linux appimage amd64 (artifacts+codeQL)
             target_os:              linux
-            building_on_os:         ubuntu-18.04
+            building_on_os:         ubuntu-20.04
             base_command:           ./.github/autobuild/linux.sh
             run_codeql:             false
 
-          - config_name:            Linux .deb armhf (artifacts)
-            target_os:              linux
-            building_on_os:         ubuntu-18.04
-            base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
-            run_codeql:             false
+          ## DISABLE !!
+          ## Without Qt6 support on 18.04, we can't install cross-compiler tools to build for arm !!!
+          ## And NOT doing Qt5 just for RPi :/
+          # - config_name:            Linux .deb armhf (artifacts)
+          #   target_os:              linux
+          #   building_on_os:         ubuntu-18.04
+          #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
+          #   run_codeql:             false
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
@@ -140,7 +145,7 @@ jobs:
           - config_name:            MacOS Legacy (artifacts+CodeQL)
             target_os:              macos
             building_on_os:         macos-10.15
-            base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
+            base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             false
             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.

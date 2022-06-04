@@ -2,10 +2,10 @@
 set -eu
 
 # for x64 AppImage build
-# export QT_VERSION=6.3.0
-# export QT_DIR="/usr/local/opt/qt"
-# # export PATH="${PATH}:${QT_DIR}/${QT_VERSION}/gcc_64/bin/"
-# AQTINSTALL_VERSION=2.1.0
+export QT_VERSION=6.3.0
+export QT_DIR="/usr/local/opt/qt"
+export PATH="${PATH}:${QT_DIR}/${QT_VERSION}/gcc_64/bin/"
+AQTINSTALL_VERSION=2.1.0
 
 if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
     echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
@@ -31,7 +31,9 @@ setup() {
     if [[ "${TARGET_ARCH}" == amd64 ]]; then
         setup_x64
     else
-        setup_arm
+        # not doing this until Qt6 supported
+        # setup_arm
+        pass
     fi
 }
 
@@ -43,108 +45,111 @@ setup_x64() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    # sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev \
-    #     libgl1-mesa-dev python3-setuptools python3-wheel
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev \
+        libgl1-mesa-dev python3-setuptools python3-wheel
+    # sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev
 
     echo "Installing Qt..."
-    # python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-    # sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
-    #     --archives qtbase qtdeclarative qttools qttranslations icu \
-    #     --modules qtwebview qtwebengine qtwebchannel qtpositioning
-    sudo apt-get --no-install-recommends -y install \
-        qtbase5-dev \
-        qt5-default \
-        qtbase5-dev-tools \
-        qttools5-dev-tools \
-        qtwebengine5-dev \
-        qml-module-qtwebview \
-        qtdeclarative5-dev \
-        libqt5webview5-dev  
+    python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+    sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
+        --archives qtbase qtdeclarative qttools qttranslations icu \
+        --modules qtwebview qtwebengine qtwebchannel qtpositioning
+    # sudo apt-get --no-install-recommends -y install \
+    #     qtbase5-dev \
+    #     qt5-default \
+    #     qtbase5-dev-tools \
+    #     qttools5-dev-tools \
+    #     qtwebengine5-dev \
+    #     qml-module-qtwebview \
+    #     qtdeclarative5-dev \
+    #     libqt5webview5-dev  
 
 }
 
-setup_arm() {
-    # This is on Ubuntu 18.04 and Qt 5.15.x
+# setup_arm() {
+#     # This is on Ubuntu 18.04 and Qt 5.15.x
 
-    echo "Configuring dpkg architectures for cross-compilation ..."
-    sudo dpkg --add-architecture "${TARGET_ARCH}"
-    sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
-    sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
+#     echo "Configuring dpkg architectures for cross-compilation ..."
+#     sudo dpkg --add-architecture "${TARGET_ARCH}"
+#     sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
+#     sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
 
-    echo "Installing dependencies..."
-    sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
+#     echo "Installing dependencies..."
+#     sudo apt-get update
+#     sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
  
-    echo "Installing Qt ...."
-    sudo apt-get --no-install-recommends -y install \
-        qtbase5-dev \
-        qt5-default \
-        qtbase5-dev-tools \
-        qttools5-dev-tools \
-        qtwebengine5-dev \
-        qml-module-qtwebview \
-        qtdeclarative5-dev \
-        libqt5webview5-dev 
+#     echo "Installing Qt ...."
+#     sudo apt-get --no-install-recommends -y install \
+#         qtbase5-dev \
+#         qt5-default \
+#         qtbase5-dev-tools \
+#         qttools5-dev-tools \
+#         qtwebengine5-dev \
+#         qml-module-qtwebview \
+#         qtdeclarative5-dev \
+#         libqt5webview5-dev 
 
-    echo "Setting up cross-compiler ...."
-    local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
-    sudo apt-get install -y --no-install-recommends \
-        "g++-${GCC_VERSION}-${ABI_NAME}" \
-        "libjack-jackd2-dev:${TARGET_ARCH}" \
-        "qt5-qmake:${TARGET_ARCH}" \
-        "qt5-default:${TARGET_ARCH}" \
-        "qtbase5-dev:${TARGET_ARCH}" \
-        "qtwebengine5-dev:${TARGET_ARCH}" \
-        "qml-module-qtwebview:${TARGET_ARCH}" \
-        "qtdeclarative5-dev:${TARGET_ARCH}" \
-        "libqt5webview5-dev:${TARGET_ARCH}" 
+#     echo "Setting up cross-compiler ...."
+#     local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
+#     sudo apt-get install -y --no-install-recommends \
+#         "g++-${GCC_VERSION}-${ABI_NAME}" \
+#         "libjack-jackd2-dev:${TARGET_ARCH}" \
+#         "qt5-qmake:${TARGET_ARCH}" \
+#         "qt5-default:${TARGET_ARCH}" \
+#         "qtbase5-dev:${TARGET_ARCH}" \
+#         "qtwebengine5-dev:${TARGET_ARCH}" \
+#         "qml-module-qtwebview:${TARGET_ARCH}" \
+#         "qtdeclarative5-dev:${TARGET_ARCH}" \
+#         "libqt5webview5-dev:${TARGET_ARCH}" 
 
-    sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
-    sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
+#     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
+#     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
 
-    if [[ "${TARGET_ARCH}" == armhf ]]; then
-        # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf. Therefore, build a custom one:
-        sudo cp -R "/usr/lib/${ABI_NAME}/qt5/mkspecs/linux-arm-gnueabi-g++/" "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/"
-        sudo sed -re 's/-gnueabi/-gnueabihf/' -i "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/qmake.conf"
-    fi
+#     if [[ "${TARGET_ARCH}" == armhf ]]; then
+#         # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf. Therefore, build a custom one:
+#         sudo cp -R "/usr/lib/${ABI_NAME}/qt5/mkspecs/linux-arm-gnueabi-g++/" "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/"
+#         sudo sed -re 's/-gnueabi/-gnueabihf/' -i "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/qmake.conf"
+#     fi
 
-}
+# }
 
 build_app() {
     if [[ "${TARGET_ARCH}" == armhf ]]; then
-        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_arm.sh
+        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     else
-        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_x64.sh
+        # TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_x64_appimg.sh
+        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     fi
 }
 
 pass_artifacts_to_job() {
     mkdir deploy
 
-    if [[ "${TARGET_ARCH}" == armhf ]]; then
-        # rename headless first, so wildcard pattern matches only one file each
-        local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
-        echo "Moving headless build artifact to deploy/${artifact_1}"
-        mv ../koord-rt-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_1}"
-        echo "::set-output name=artifact_1::${artifact_1}"
+    # if [[ "${TARGET_ARCH}" == armhf ]]; then
 
-        local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
-        echo "Moving regular build artifact to deploy/${artifact_2}"
-        mv ../koord-rt*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
-        echo "::set-output name=artifact_2::${artifact_2}"
-    else
-        # rename headless first, so wildcard pattern matches only one file each
-        local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
-        echo "Moving headless build artifact to deploy/${artifact_1}"
-        mv headless_appimage/*AppImage "./deploy/${artifact_1}"
-        echo "::set-output name=artifact_1::${artifact_1}"
+    # rename headless first, so wildcard pattern matches only one file each
+    local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+    echo "Moving headless build artifact to deploy/${artifact_1}"
+    mv ../koord-rt-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_1}"
+    echo "::set-output name=artifact_1::${artifact_1}"
 
-        local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
-        echo "Moving regular build artifact to deploy/${artifact_2}"
-        mv gui_appimage/*AppImage "./deploy/${artifact_2}"
-        echo "::set-output name=artifact_2::${artifact_2}"
-    fi
+    local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+    echo "Moving regular build artifact to deploy/${artifact_2}"
+    mv ../koord-rt*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
+    echo "::set-output name=artifact_2::${artifact_2}"
+
+    # else
+    #     # rename headless first, so wildcard pattern matches only one file each
+    #     local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
+    #     echo "Moving headless build artifact to deploy/${artifact_1}"
+    #     mv headless_appimage/*AppImage "./deploy/${artifact_1}"
+    #     echo "::set-output name=artifact_1::${artifact_1}"
+
+    #     local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
+    #     echo "Moving regular build artifact to deploy/${artifact_2}"
+    #     mv gui_appimage/*AppImage "./deploy/${artifact_2}"
+    #     echo "::set-output name=artifact_2::${artifact_2}"
+    # fi
 }
 
 case "${1:-}" in
