@@ -3,8 +3,8 @@
 [Setup]
 AppID=Koord-RT
 AppName=Koord-RT
-AppVerName=Koord-RT_3.8.0-k01
-AppVersion=3.8.0-k01
+AppVerName=Koord-RT_3.8.83
+AppVersion=3.8.83
 AppPublisher=Koord.Live
 AppPublisherURL=https://koord.live
 AppSupportURL=https://github.com/koord-live/koord-realtime/issues
