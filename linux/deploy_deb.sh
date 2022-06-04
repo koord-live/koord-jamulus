@@ -30,4 +30,4 @@ CC=$(dpkg-architecture -A"${TARGET_ARCH}" -qDEB_TARGET_GNU_TYPE)-gcc
 # There must be no space after -a either, otherwise debuild cannot recognize it and fails during Changelog checks.
 
 echo "PATH = : ${PATH}"
-CC="${CC}" BINPATH="${PATH}" debuild --preserve-env -b -us -uc -j -a"${TARGET_ARCH}" --target-arch "${TARGET_ARCH}"
+PATH="${QTADDPATH}" CC="${CC}" debuild --preserve-env -b -us -uc -j -a"${TARGET_ARCH}" --target-arch "${TARGET_ARCH}"
