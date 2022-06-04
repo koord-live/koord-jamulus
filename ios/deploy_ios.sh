@@ -75,6 +75,10 @@ build_ipa()
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
 
+        # debug
+        echo "Archive contents after creating archive"
+        ls -alR build/Koord-RT.xcarchive
+
         #FIXME this may be redundant - since provisioning profile is specified in exportOptionsRelease.plist
         cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
 
@@ -90,6 +94,10 @@ build_ipa()
             CODE_SIGNING_ALLOWED=YES \
             CODE_SIGN_STYLE="Manual"
 
+        # debug
+        echo "Archive contents after creating signed installer"
+        ls -alR build/Koord-RT.xcarchive
+
         NOTARIZATION_PASSWORD=""
         if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
             xcrun altool --validate-app -f "build/Exports/Koord-RT.ipa" -t ios -p @keychain:APPCONNAUTH
@@ -97,19 +105,23 @@ build_ipa()
         fi
     fi
 
-    # Generate unsigned ipa by copying the .app structure from the xcarchive directory
-    cd ${root_path}
-    mkdir -p build/unsigned/Payload
-    cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/unsigned/Payload/
-    cd build/unsigned
-    zip -0 -y -r Koord-RT.ipa Payload/
+    # handle ipa file
+    if [[ -z "$iosdist_cert_name" ]]; then
+        # Generate unsigned ipa by copying the .app structure from the xcarchive directory
+        cd ${root_path}
+        mkdir -p build/unsigned/Payload
+        cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/unsigned/Payload/
+        cd build/unsigned
+        zip -0 -y -r Koord-RT.ipa Payload/
 
-    # copy files
-    cd ${root_path}
-    # unsigned IPA
-    mv build/unsigned/Koord-RT.ipa deploy/Koord-RT_unsigned.ipa
-    # signed IPA
-    mv build/Exports/Koord-RT.ipa deploy/Koord-RT_signed.ipa
+        # move unsigned ipa file for upload
+        cd ${root_path}
+        mv build/unsigned/Koord-RT.ipa deploy/Koord-RT_unsigned.ipa
+    else
+        cd ${root_path}
+        # move signed ipa file for upload
+        mv build/Exports/Koord-RT.ipa deploy/Koord-RT_signed.ipa
+    fi
 }
 
 # Cleanup previous deployments
