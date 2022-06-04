@@ -8,6 +8,7 @@ DEB_BUILD_GNU_TYPE := $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 # /usr/local/opt/qt/6.3.0/gcc_64/bin/qmake
 ## hardcode qmake for now!
+## and lrelease below !!!
 ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
 	QMAKE := /usr/local/opt/qt/6.3.0/gcc_64/bin/qmake
 else
@@ -22,7 +23,7 @@ override_dh_auto_configure:
 	mkdir -p build-nox && cd build-nox && $(QMAKE) "CONFIG+=headless serveronly" TARGET=koord-rt-headless PREFIX=/usr ../Koord-RT.pro
 
 override_dh_auto_build:
-	cd src/translation && lrelease *.ts
+	cd src/translation && /usr/local/opt/qt/6.3.0/gcc_64/bin/lrelease *.ts
 	cd build-gui && make -j "$$(nproc)"
 	cd build-nox && make -j "$$(nproc)"
 
