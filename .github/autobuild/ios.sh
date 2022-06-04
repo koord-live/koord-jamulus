@@ -90,7 +90,7 @@ build_app_as_ipa() {
 
 pass_artifact_to_job() {
     # just pass the one IPA file
-    sign_test=$(ls *.ipa | grep -i 'unsigned')
+    sign_test=$(ls deploy/Koord-RT_*.ipa | grep -i 'unsigned')
     if [ "${sign_test}" == "" ]; then  # we are signed
         local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
     else
