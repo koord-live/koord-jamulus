@@ -40,7 +40,7 @@ setup_x64() {
     echo "Installing dependencies..."
     sudo apt-get update
     sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
-        #  python3-setuptools python3-wheel qtchooser
+        #  python3-setuptools python3-wheel
 
     echo "Installing Qt..."
     # sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
@@ -49,7 +49,6 @@ setup_x64() {
     #     --modules qtwebview qtwebengine qtwebchannel qtpositioning
     sudo apt-get --no-install-recommends -y install \
         qt6-base-dev \
-        qtchooser \
         qt6-base-dev-tools \
         qt6-tools-dev-tools \
         qt6-webengine-dev \
@@ -74,7 +73,6 @@ setup_arm() {
     echo "Installing Qt ...."
     sudo apt-get --no-install-recommends -y install \
         qt6-base-dev \
-        qtchooser \
         qt6-base-dev-tools \
         qt6-tools-dev-tools \
         qt6-webengine-dev \
