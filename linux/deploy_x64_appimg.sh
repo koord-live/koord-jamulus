@@ -29,6 +29,8 @@ sudo chmod 755 /usr/local/bin/linuxdeploy
 sudo wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage -O /usr/local/bin/linuxdeploy-plugin-qt
 sudo chmod 755 /usr/local/bin/linuxdeploy-plugin-qt
 
+export QML_SOURCES_PATHS="${BDIR}"/src
+
 # Configure ###################
 # gui
 echo "Configuring gui ...."
