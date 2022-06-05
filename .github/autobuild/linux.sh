@@ -39,7 +39,7 @@ setup_x64() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev \
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
         python3-setuptools python3-wheel
 
     echo "Installing Qt..."
@@ -69,7 +69,7 @@ setup_arm() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1
  
     echo "Installing Qt ...."
     sudo apt-get --no-install-recommends -y install \
@@ -89,6 +89,7 @@ setup_arm() {
         "g++-${GCC_VERSION}-${ABI_NAME}" \
         "libjack-jackd2-dev:${TARGET_ARCH}" \
         "libgl-dev:${TARGET_ARCH}" \
+        "libegl1:${TARGET_ARCH}" \
         "qmake6:${TARGET_ARCH}" \
         "qt6-base-dev:${TARGET_ARCH}" \
         "qt6-webengine-dev:${TARGET_ARCH}" \
