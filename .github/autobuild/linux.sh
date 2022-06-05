@@ -109,8 +109,8 @@ build_app() {
     if [[ "${TARGET_ARCH}" == armhf ]]; then
         TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     else
-        # TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_x64_appimg.sh
-        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
+        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_x64_appimg.sh
+        # TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     fi
 }
 

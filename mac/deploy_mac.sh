@@ -81,6 +81,7 @@ build_app()
         macdeployqt "${build_path}/${target_name}.app" \
             -verbose=2 \
             -always-overwrite \
+            -hardened-runtime -timestamp -appstore-compliant \
             -qmldir="${root_path}/src"
     else     # we do this here for signed / notarized dmg ..?
         macdeployqt "${build_path}/${target_name}.app" \
