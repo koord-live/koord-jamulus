@@ -20,11 +20,9 @@ echo "${KOORD_VERSION} building..."
 # base dir for build operations
 BDIR="$(echo ${PWD})"
 
-# Install appimage-builder
-sudo apt install -y python3-pip python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse
-sudo pip3 install appimage-builder
-sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
-sudo chmod u+x /usr/local/bin/appimagetool
+# Install linuxdeploy
+sudo wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -O /usr/local/bin/linuxdeploy
+sudo chmod u+x /usr/local/bin/linuxdeploy
 
 # Configure ###################
 # gui
@@ -79,29 +77,11 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
-appimage-builder --appdir ../appdir_gui --skip-test --recipe linux/AppImageBuilder.yml
-mkdir gui_appimage
+linuxdeploy --appdir ../appdir_gui -e koord-rt --plugin qt --output Koord-RT-${VERSION}.appimage
 mv Koord-RT-*.AppImage gui_appimage/
-
-
-# echo "Building headless AppImage ...."
-# cd $BDIR
 
 # 
 cd $BDIR
-appimage-builder --appdir ../appdir_headless --skip-test --recipe linux/AppImageBuilder.yml
-mkdir headless_appimage
+linuxdeploy --appdir ../appdir_headless -e koord-rt --plugin qt --output Koord-RT_headless_${VERSION}.appimage
 mv Koord-RT-*.AppImage headless_appimage/
 
-
-# # manually copy in desktop file
-# mkdir -p appdir_headless/usr/share/applications/
-# cp -v linux/koordrt-headless.desktop appdir_headless/usr/share/applications/
-# # manually copy in image
-# mkdir -p appdir_headless/usr/share/icons/hicolor/512x512/apps/
-# cp -v distributions/koordrt.png appdir_headless/usr/share/icons/hicolor/512x512/apps/
-
-
-# ./linuxdeployqt-continuous-x86_64.AppImage appdir_headless/usr/share/applications/*.desktop -appimage
-# mkdir headless_appimage
-# mv Koord-RT-*.AppImage headless_appimage/

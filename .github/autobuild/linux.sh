@@ -60,52 +60,55 @@ setup_x64() {
 
 }
 
-# setup_arm() {
+setup_arm() {
 
-#     echo "Configuring dpkg architectures for cross-compilation ..."
-#     sudo dpkg --add-architecture "${TARGET_ARCH}"
-#     sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
-#     sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
+    echo "Configuring dpkg architectures for cross-compilation ..."
+    sudo dpkg --add-architecture "${TARGET_ARCH}"
+    sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
+    sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
 
-#     echo "Installing dependencies..."
-#     sudo apt-get update
-#     sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
+    echo "Installing dependencies..."
+    sudo apt-get update
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
  
-#     echo "Installing Qt ...."
-#     sudo apt-get --no-install-recommends -y install \
-#         qt6-base-dev \
-#         qt6-base-dev-tools \
-#         qt6-tools-dev-tools \
-#         qt6-webengine-dev \
-#         qml6-module-qtwebview \
-#         qt6-declarative-dev \
-#         qt6-webview-dev \
-#         libqt6opengl6-dev \
-#         qt6-l10n-tools
+    echo "Installing Qt ...."
+    sudo apt-get --no-install-recommends -y install \
+        qt6-base-dev \
+        qt6-base-dev-tools \
+        qt6-tools-dev-tools \
+        qt6-webengine-dev \
+        qml6-module-qtwebview \
+        qt6-declarative-dev \
+        qt6-webview-dev \
+        libqt6opengl6-dev \
+        qt6-l10n-tools
 
-#     echo "Setting up cross-compiler ...."
-#     local GCC_VERSION=11  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
-#     sudo apt-get install -y --no-install-recommends \
-#         "g++-${GCC_VERSION}-${ABI_NAME}" \
-#         "libjack-jackd2-dev:${TARGET_ARCH}" \
-#         "qmake6:${TARGET_ARCH}" \
-#         "qt6-base-dev:${TARGET_ARCH}" \
-#         "qt6-webengine-dev:${TARGET_ARCH}" \
-#         "qml6-module-qtwebview:${TARGET_ARCH}" \
-#         "qt6-declarative-dev:${TARGET_ARCH}" \
-#         "qt6-webview-dev:${TARGET_ARCH}" \
-#         "libqt6opengl6-dev:${TARGET_ARCH}"
+    echo "Setting up cross-compiler ...."
+    local GCC_VERSION=11  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
+    sudo apt-get install -y --no-install-recommends \
+        "g++-${GCC_VERSION}-${ABI_NAME}" \
+        "libjack-jackd2-dev:${TARGET_ARCH}" \
+        "qmake6:${TARGET_ARCH}" \
+        "qt6-base-dev:${TARGET_ARCH}" \
+        "qt6-webengine-dev:${TARGET_ARCH}" \
+        "qml6-module-qtwebview:${TARGET_ARCH}" \
+        "qt6-declarative-dev:${TARGET_ARCH}" \
+        "qt6-webview-dev:${TARGET_ARCH}" \
+        "libqt6opengl6-dev:${TARGET_ARCH}"
 
-#     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
-#     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
+    sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
+    sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
 
-#     if [[ "${TARGET_ARCH}" == armhf ]]; then
-#         # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf. Therefore, build a custom one:
-#         sudo cp -R "/usr/lib/${ABI_NAME}/qt6/mkspecs/linux-arm-gnueabi-g++/" "/usr/lib/${ABI_NAME}/qt6/mkspecs/${ABI_NAME}-g++/"
-#         sudo sed -re 's/-gnueabi/-gnueabihf/' -i "/usr/lib/${ABI_NAME}/qt6/mkspecs/${ABI_NAME}-g++/qmake.conf"
-#     fi
+    if [[ "${TARGET_ARCH}" == armhf ]]; then
+        # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf. Therefore, build a custom one:
+        sudo cp -R "/usr/lib/${ABI_NAME}/qt6/mkspecs/linux-arm-gnueabi-g++/" "/usr/lib/${ABI_NAME}/qt6/mkspecs/${ABI_NAME}-g++/"
+        sudo sed -re 's/-gnueabi/-gnueabihf/' -i "/usr/lib/${ABI_NAME}/qt6/mkspecs/${ABI_NAME}-g++/qmake.conf"
+    fi
 
-# }
+    # force link for uic
+    ln -s /usr/lib/qt6/libexec/uic /usr/libexec/uic
+
+}
 
 build_app() {
     if [[ "${TARGET_ARCH}" == armhf ]]; then
