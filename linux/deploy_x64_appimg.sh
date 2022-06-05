@@ -20,6 +20,9 @@ echo "${KOORD_VERSION} building..."
 # base dir for build operations
 BDIR="$(echo ${PWD})"
 
+# install fuse2 as dep for appimage
+sudo apt-get install -y libfuse2
+
 # Install linuxdeploy
 sudo wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -O /usr/local/bin/linuxdeploy
 sudo chmod 755 /usr/local/bin/linuxdeploy
@@ -82,6 +85,6 @@ mv Koord-RT-*.AppImage gui_appimage/
 
 # 
 cd $BDIR
-linuxdeploy --appdir ../appdir_headless -e koord-rt --plugin qt --output Koord-RT_headless_${VERSION}.appimage
+linuxdeploy --appdir ../appdir_headless -e koord-rt-headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
 mv Koord-RT-*.AppImage headless_appimage/
 

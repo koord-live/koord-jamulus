@@ -106,7 +106,7 @@ setup_arm() {
     fi
 
     # force link for uic
-    sudo ln -s /usr/lib/qt6/libexec/uic /usr/libexec/uic
+    sudo ln -s /usr/lib/qt6/libexec/* /usr/libexec/
 
 }
 
