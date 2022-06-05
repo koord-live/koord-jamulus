@@ -74,7 +74,7 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
-appimage-builder --appdir ../appdir_gui --recipe linux/AppImageBuilder.yml
+appimage-builder --appdir ../appdir_gui --skip-test --recipe linux/AppImageBuilder.yml
 mkdir gui_appimage
 mv Koord-RT-*.AppImage gui_appimage/
 
@@ -84,7 +84,7 @@ mv Koord-RT-*.AppImage gui_appimage/
 
 # 
 cd $BDIR
-appimage-builder --appdir ../appdir_headless --recipe linux/AppImageBuilder.yml
+appimage-builder --appdir ../appdir_headless --skip-test --recipe linux/AppImageBuilder.yml
 mkdir headless_appimage
 mv Koord-RT-*.AppImage headless_appimage/
 

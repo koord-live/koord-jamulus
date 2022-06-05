@@ -118,20 +118,19 @@ jobs:
           # - So need to use Qt5 for 18.04/AppImage (aqt install of Qt6 on 18.04 results in glibc error when exec qmake - needs v2.28 not present on 18.04)
           #   - BUT: this breaks consistency in webview / webengine handling - between Qt5-6 - too much to handle
           #     - SO: do ubuntu 20.04 and Qt6 - deb - x64 only :|
-          - config_name:            Linux deb amd64 (artifacts+codeQL)
+          - config_name:            Linux appimg amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/linux.sh
             run_codeql:             false
 
           ## DISABLE !!
-          ## Without Qt6 support on 18.04, we can't install cross-compiler tools to build for arm !!!
-          ## And NOT doing Qt5 just for RPi :/
-          - config_name:            Linux .deb armhf (artifacts)
-            target_os:              linux
-            building_on_os:         ubuntu-22.04
-            base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
-            run_codeql:             false
+          ## get cross-build working with Qt6 ??
+          # - config_name:            Linux .deb armhf (artifacts)
+          #   target_os:              linux
+          #   building_on_os:         ubuntu-22.04
+          #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
+          #   run_codeql:             false
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
