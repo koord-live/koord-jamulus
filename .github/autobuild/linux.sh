@@ -55,7 +55,8 @@ setup_x64() {
         qml6-module-qtwebview \
         qt6-declarative-dev \
         qt6-webview-dev \
-        libqt6opengl6-dev
+        libqt6opengl6-dev \
+        qt6-l10n-tools
 
 }
 
@@ -79,7 +80,8 @@ setup_arm() {
         qml6-module-qtwebview \
         qt6-declarative-dev \
         qt6-webview-dev \
-        libqt6opengl6-dev
+        libqt6opengl6-dev \
+        qt6-l10n-tools
 
     echo "Setting up cross-compiler ...."
     local GCC_VERSION=11  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
@@ -109,8 +111,8 @@ build_app() {
     if [[ "${TARGET_ARCH}" == armhf ]]; then
         TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     else
-        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_x64_appimg.sh
-        # TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
+        # TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_x64_appimg.sh
+        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     fi
 }
 

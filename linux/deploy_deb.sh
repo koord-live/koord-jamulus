@@ -32,5 +32,7 @@ CC=$(dpkg-architecture -A"${TARGET_ARCH}" -qDEB_TARGET_GNU_TYPE)-gcc
 # export PATH=${QTADDPATH}
 # echo "PATH = : ${PATH}"
 
+export PATH=/usr/lib/qt6/bin:${PATH}
+
 echo "Executing debuild ....."
 CC="${CC}" debuild --preserve-env -b -us -uc -j -a"${TARGET_ARCH}" --target-arch "${TARGET_ARCH}"
