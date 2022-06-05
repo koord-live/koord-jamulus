@@ -31,9 +31,7 @@ setup() {
     if [[ "${TARGET_ARCH}" == amd64 ]]; then
         setup_x64
     else
-        # not doing this until Qt6 supported
-        # setup_arm
-        pass
+        setup_arm
     fi
 }
 
@@ -67,7 +65,6 @@ setup_x64() {
 }
 
 setup_arm() {
-    # This is on Ubuntu 18.04 and Qt 5.15.x
 
     echo "Configuring dpkg architectures for cross-compilation ..."
     sudo dpkg --add-architecture "${TARGET_ARCH}"
