@@ -39,7 +39,7 @@ setup_x64() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev \
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-dev \
         python3-setuptools python3-wheel
 
     echo "Installing Qt..."
@@ -69,7 +69,7 @@ setup_arm() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-dev
  
     echo "Installing Qt ...."
     sudo apt-get --no-install-recommends -y install \

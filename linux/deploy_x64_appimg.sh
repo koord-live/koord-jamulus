@@ -80,11 +80,11 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
-linuxdeploy --appdir ../appdir_gui -e koord-rt --plugin qt --output Koord-RT-${VERSION}.appimage
+linuxdeploy --appdir ../appdir_gui --plugin qt --output Koord-RT-${VERSION}.appimage
 mv Koord-RT-*.AppImage gui_appimage/
 
 # 
 cd $BDIR
-linuxdeploy --appdir ../appdir_headless -e koord-rt-headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
+linuxdeploy --appdir ../appdir_headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
 mv Koord-RT-*.AppImage headless_appimage/
 
