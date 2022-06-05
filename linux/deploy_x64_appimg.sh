@@ -29,8 +29,6 @@ sudo chmod 755 /usr/local/bin/linuxdeploy
 sudo wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage -O /usr/local/bin/linuxdeploy-plugin-qt
 sudo chmod 755 /usr/local/bin/linuxdeploy-plugin-qt
 
-export QML_SOURCES_PATHS="${BDIR}"/src
-
 # Configure ###################
 # gui
 echo "Configuring gui ...."
@@ -84,11 +82,11 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
-linuxdeploy --appdir ../appdir_gui --plugin qt --output Koord-RT-${VERSION}.appimage
+linuxdeploy --appdir appdir_gui --plugin qt --output Koord-RT-${VERSION}.appimage
 mv Koord-RT-*.AppImage gui_appimage/
 
 # 
 cd $BDIR
-linuxdeploy --appdir ../appdir_headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
+linuxdeploy --appdir appdir_headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
 mv Koord-RT-*.AppImage headless_appimage/
 
