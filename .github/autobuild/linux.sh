@@ -55,7 +55,8 @@ setup_x64() {
         qt6-webengine-dev \
         qml6-module-qtwebview \
         qt6-declarative-dev \
-        qt6-webview-dev
+        qt6-webview-dev \
+        libqt6opengl6-dev
 
 }
 
@@ -79,7 +80,8 @@ setup_arm() {
         qt6-webengine-dev \
         qml6-module-qtwebview \
         qt6-declarative-dev \
-        qt6-webview-dev
+        qt6-webview-dev \
+        libqt6opengl6-dev
 
     echo "Setting up cross-compiler ...."
     local GCC_VERSION=11  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
@@ -91,7 +93,8 @@ setup_arm() {
         "qt6-webengine-dev:${TARGET_ARCH}" \
         "qml6-module-qtwebview:${TARGET_ARCH}" \
         "qt6-declarative-dev:${TARGET_ARCH}" \
-        "qt6-webview-dev:${TARGET_ARCH}" 
+        "qt6-webview-dev:${TARGET_ARCH}" \
+        "libqt6opengl6-dev:${TARGET_ARCH}"
 
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
