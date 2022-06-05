@@ -22,7 +22,7 @@ BDIR="$(echo ${PWD})"
 
 # Install linuxdeploy
 sudo wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -O /usr/local/bin/linuxdeploy
-sudo chmod u+x /usr/local/bin/linuxdeploy
+sudo chmod 755 /usr/local/bin/linuxdeploy
 
 # Configure ###################
 # gui
