@@ -15,9 +15,11 @@ echo "${KOORD_VERSION} building..."
 # base dir for build operations
 BDIR="$(echo ${PWD})"
 
-# Install linuxdeployqt
-wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+# Install appimage-builder
+sudo apt install -y python3-pip python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse
+sudo pip3 install appimage-builder
+sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+sudo chmod u+x /usr/local/bin/appimagetool
 
 # Configure ###################
 # gui
@@ -72,25 +74,29 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
-# need libpango[cairo|ft2] - to run on ubuntu 22.04 at least!
-# otherwise: symbol lookup error: /lib64/libpango-1.0.so.0: undefined symbol: g_memdup2
-# So: copy from location on 64bit ubuntu 18.04
-mkdir -p appdir_gui/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libpango-1.0.so.0 appdir_gui/usr/lib/
-cp -v /usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 appdir_gui/usr/lib/
-cp -v /usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 appdir_gui/usr/lib/
-./linuxdeployqt-continuous-x86_64.AppImage appdir_gui/usr/share/applications/*.desktop -appimage
+appimage-builder --appdir ../appdir_gui --recipe linux/AppImageBuilder.yml
 mkdir gui_appimage
 mv Koord-RT-*.AppImage gui_appimage/
 
-echo "Building headless AppImage ...."
+
+# echo "Building headless AppImage ...."
+# cd $BDIR
+
+# 
 cd $BDIR
-# manually copy in desktop file
-mkdir -p appdir_headless/usr/share/applications/
-cp -v linux/koordrt-headless.desktop appdir_headless/usr/share/applications/
-# manually copy in image
-mkdir -p appdir_headless/usr/share/icons/hicolor/512x512/apps/
-cp -v distributions/koordrt.png appdir_headless/usr/share/icons/hicolor/512x512/apps/
-./linuxdeployqt-continuous-x86_64.AppImage appdir_headless/usr/share/applications/*.desktop -appimage
+appimage-builder --appdir ../appdir_headless --recipe linux/AppImageBuilder.yml
 mkdir headless_appimage
 mv Koord-RT-*.AppImage headless_appimage/
+
+
+# # manually copy in desktop file
+# mkdir -p appdir_headless/usr/share/applications/
+# cp -v linux/koordrt-headless.desktop appdir_headless/usr/share/applications/
+# # manually copy in image
+# mkdir -p appdir_headless/usr/share/icons/hicolor/512x512/apps/
+# cp -v distributions/koordrt.png appdir_headless/usr/share/icons/hicolor/512x512/apps/
+
+
+# ./linuxdeployqt-continuous-x86_64.AppImage appdir_headless/usr/share/applications/*.desktop -appimage
+# mkdir headless_appimage
+# mv Koord-RT-*.AppImage headless_appimage/

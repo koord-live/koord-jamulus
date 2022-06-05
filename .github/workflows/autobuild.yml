@@ -120,18 +120,18 @@ jobs:
           #     - SO: do ubuntu 20.04 and Qt6 - deb - x64 only :|
           - config_name:            Linux deb amd64 (artifacts+codeQL)
             target_os:              linux
-            building_on_os:         ubuntu-20.04
+            building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/linux.sh
             run_codeql:             false
 
           ## DISABLE !!
           ## Without Qt6 support on 18.04, we can't install cross-compiler tools to build for arm !!!
           ## And NOT doing Qt5 just for RPi :/
-          # - config_name:            Linux .deb armhf (artifacts)
-          #   target_os:              linux
-          #   building_on_os:         ubuntu-18.04
-          #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
-          #   run_codeql:             false
+          - config_name:            Linux .deb armhf (artifacts)
+            target_os:              linux
+            building_on_os:         ubuntu-22.04
+            base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
+            run_codeql:             false
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
