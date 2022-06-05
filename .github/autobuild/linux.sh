@@ -39,28 +39,23 @@ setup_x64() {
 
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev \
-        libgl1-mesa-dev python3-setuptools python3-wheel qtchooser
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl1-mesa-dev
+        #  python3-setuptools python3-wheel qtchooser
 
     echo "Installing Qt..."
-    sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
-    sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
-        --archives qtbase qtdeclarative qttools qttranslations icu \
-        --modules qtwebview qtwebengine qtwebchannel qtpositioning
-
-    # This is on Ubuntu 18.04 and Qt 5.15.x
-    # Why? Because this: https://github.com/probonopd/linuxdeployqt/issues/340
-    # AppImage policy to force compatibility with oldest-supported LTS - so 18.04 until 2023.
-    # Maybe I can do aqt install to 18.04 though ???
-    # sudo apt-get --no-install-recommends -y install \
-    #     qtbase5-dev \
-    #     qt5-default \
-    #     qtbase5-dev-tools \
-    #     qttools5-dev-tools \
-    #     qtwebengine5-dev \
-    #     qml-module-qtwebview \
-    #     qtdeclarative5-dev \
-    #     libqt5webview5-dev  
+    # sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
+    # sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
+    #     --archives qtbase qtdeclarative qttools qttranslations icu \
+    #     --modules qtwebview qtwebengine qtwebchannel qtpositioning
+    sudo apt-get --no-install-recommends -y install \
+        qt6-base-dev \
+        qtchooser \
+        qt6-base-dev-tools \
+        qt6-tools-dev-tools \
+        qt6-webengine-dev \
+        qml6-module-qtwebview \
+        qt6-declarative-dev \
+        qt6-webview-dev
 
 }
 
@@ -111,10 +106,10 @@ setup_arm() {
 
 build_app() {
     if [[ "${TARGET_ARCH}" == armhf ]]; then
-        TARGET_ARCH="${TARGET_ARCH}" QTADDPATH="${PATH}" ./linux/deploy_deb.sh
+        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     else
         # TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_x64_appimg.sh
-        TARGET_ARCH="${TARGET_ARCH}" QTADDPATH="${PATH}" ./linux/deploy_deb.sh
+        TARGET_ARCH="${TARGET_ARCH}" ./linux/deploy_deb.sh
     fi
 }
 
