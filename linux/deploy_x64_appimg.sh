@@ -13,7 +13,7 @@ KOORD_VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord-RT.pro)
 # set up QT path
 # NOTE: need to PREPEND to the path, to avoid running into all the alias crap that qtchooser installs to /usr/bin, all broken with Qt6 / qmake
 # note: move off qmake to cmake!
-export PATH=/usr/lib/qt6/bin:${PATH}
+export PATH=/usr/lib/qt6/bin/:/usr/lib/qt6/libexec/:${PATH}
 
 echo "${KOORD_VERSION} building..."
 

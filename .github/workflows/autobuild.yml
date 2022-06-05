@@ -126,11 +126,11 @@ jobs:
 
           ## DISABLE !!
           ## get cross-build working with Qt6 ??
-          - config_name:            Linux .deb armhf (artifacts)
-            target_os:              linux
-            building_on_os:         ubuntu-22.04
-            base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
-            run_codeql:             false
+          # - config_name:            Linux .deb armhf (artifacts)
+          #   target_os:              linux
+          #   building_on_os:         ubuntu-22.04
+          #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
+          #   run_codeql:             false
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
