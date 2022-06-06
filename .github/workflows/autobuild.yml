@@ -113,12 +113,8 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
-          # Qt6 requires Ubuntu 20.04 at minimum as build environment
-          # But: AppImage/linuxdeployqt requires 18.04 (cf unofficial ppa backports of Qt6 - but they DON'T include all pkgs, eg webengine or -dev packages)
-          # - So need to use Qt5 for 18.04/AppImage (aqt install of Qt6 on 18.04 results in glibc error when exec qmake - needs v2.28 not present on 18.04)
-          #   - BUT: this breaks consistency in webview / webengine handling - between Qt5-6 - too much to handle
-          #     - SO: do ubuntu 20.04 and Qt6 - deb - x64 only :|
-          - config_name:            Linux appimg amd64 (artifacts+codeQL)
+          # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
+          - config_name:            Linux deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/linux.sh
