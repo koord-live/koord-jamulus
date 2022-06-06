@@ -34,6 +34,7 @@
 #include <QSlider>
 #include <QRadioButton>
 #include <QMenuBar>
+#include <QButtonGroup>
 #include <QLayout>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -47,8 +48,8 @@
 #include "settings.h"
 #include "multicolorled.h"
 #include "audiomixerboard.h"
-#include "clientsettingsdlg.h"
-#include "chatdlg.h"
+//#include "clientsettingsdlg.h"
+//#include "chatdlg.h"
 #include "connectdlg.h"
 #include "basicconnectdlg.h"
 #include "analyzerconsole.h"
@@ -68,6 +69,9 @@
 // number of ping times > upper bound until error message is shown
 #define NUM_HIGH_PINGS_UNTIL_ERROR 5
 
+#define DISPLAY_UPDATE_TIME 1000 // ms
+
+
 /* Classes ********************************************************************/
 class CClientDlg : public CBaseDlg, private Ui_CClientDlgBase
 {
@@ -83,6 +87,15 @@ public:
                  const bool       bMuteStream,
                  const bool       bNEnableIPv6,
                  QWidget*         parent = nullptr );
+    // session chat
+    void AddChatText ( QString strChatText );
+    // settings
+    void UpdateUploadRate();
+    void UpdateDisplay();
+    void UpdateSettingsDisplay();
+    void UpdateSoundDeviceChannelSelectionFrame();
+    void SetEnableFeedbackDetection ( bool enable );
+
 
 protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -121,13 +134,25 @@ protected:
     virtual void closeEvent ( QCloseEvent* Event );
     virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
     virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
-    void         UpdateDisplay();
+//    void         UpdateDisplay();
 
-    CClientSettingsDlg ClientSettingsDlg;
-    CChatDlg           ChatDlg;
+//    CClientSettingsDlg ClientSettingsDlg;
+//    CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
     CBasicConnectDlg   BasicConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
+
+    // settings stuff
+    void    UpdateJitterBufferFrame();
+    void    UpdateSoundCardFrame();
+    void    UpdateDirectoryServerComboBox();
+//    void    UpdateAudioFaderSlider();
+    QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
+    virtual void showEvent ( QShowEvent* );
+//    CClient*         pClient;
+//    CClientSettings* pSettings;
+//    QTimer           TimerStatus;
+    QButtonGroup     SndCrdBufferDelayButtonGroup;
 
 public slots:
     void OnConnectDisconBut();
@@ -160,10 +185,10 @@ public slots:
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowBasicConnectionSetupDialog(); }
-    void OnOpenUserProfileSettings();
-    void OnOpenAudioNetSettings();
-    void OnOpenAdvancedSettings();
-    void OnOpenChatDialog() { ShowChatWindow(); }
+//    void OnOpenUserProfileSettings();
+//    void OnOpenAudioNetSettings();
+//    void OnOpenAdvancedSettings();
+//    void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnOwnFaderFirst()
     {
@@ -181,7 +206,7 @@ public slots:
     void OnNumMixerPanelRowsChanged ( int value ) { MainMixerBoard->SetNumMixerPanelRows ( value ); }
 
     void OnSettingsStateChanged ( int value );
-    void OnPubConnectStateChanged ( int value );
+//    void OnPubConnectStateChanged ( int value );
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
 
@@ -191,7 +216,7 @@ public slots:
 
     void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
 
-    void OnFeedbackDetectionChanged ( int state ) { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
+//    void OnFeedbackDetectionChanged ( int state ) { SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
@@ -246,8 +271,59 @@ public slots:
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 
+    // session chat stuff ========================
+    void OnSendText();
+    void OnLocalInputTextTextChanged ( const QString& strNewText );
+    void OnClearChatHistory();
+    void OnAnchorClicked ( const QUrl& Url );
+    // end session chat stuff ========================
+
+    // settings stuff ==========================================
+//    void OnTimerStatus() { UpdateDisplay(); }
+    void OnNetBufValueChanged ( int value );
+    void OnNetBufServerValueChanged ( int value );
+    void OnAutoJitBufStateChanged ( int value );
+    void OnEnableOPUS64StateChanged ( int value );
+    void OnFeedbackDetectionChanged ( int value );
+    void OnCustomDirectoriesEditingFinished();
+    void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
+    void OnInputBoostChanged();
+    void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
+    void OnSoundcardActivated ( int iSndDevIdx );
+    void OnLInChanActivated ( int iChanIdx );
+    void OnRInChanActivated ( int iChanIdx );
+    void OnLOutChanActivated ( int iChanIdx );
+    void OnROutChanActivated ( int iChanIdx );
+    void OnAudioChannelsActivated ( int iChanIdx );
+    void OnAudioQualityActivated ( int iQualityIdx );
+    void OnGUIDesignActivated ( int iDesignIdx );
+    void OnMeterStyleActivated ( int iMeterStyleIdx );
+    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
+    void OnAliasTextChanged ( const QString& strNewName );
+    void OnInstrumentActivated ( int iCntryListItem );
+    void OnCountryActivated ( int iCntryListItem );
+    void OnCityTextChanged ( const QString& strNewName );
+    void OnSkillActivated ( int iCntryListItem );
+//    void OnTabChanged();
+//    void OnMakeTabChange ( int iTabIdx );
+    void OnAudioPanValueChanged ( int value );
+#if defined( _WIN32 ) && !defined( WITH_JACK )
+    // Only include this slot for Windows when JACK is NOT used
+    void OnDriverSetupClicked();
+#endif
+    // end of settings stuff ===================================
+
     void accept() { close(); } // introduced by pljones
 
 signals:
     void SendTabChange ( int iTabIdx );
+    void NewLocalInputText ( QString strNewText );
+
+    // settings stuff
+    void GUIDesignChanged();
+    void MeterStyleChanged();
+    void AudioChannelsChanged();
+    void CustomDirectoriesChanged();
+    void NumMixerPanelRowsChanged ( int value );
+
 };
