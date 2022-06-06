@@ -1035,156 +1035,159 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
         vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "None" ),
-                                           ":/png/instr/res/instruments/none.png",
-                                           IC_OTHER_INSTRUMENT ) ); // special first element
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Drum Set" ),
-                                           ":/png/instr/res/instruments/drumset.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Djembe" ),
-                                           ":/png/instr/res/instruments/djembe.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Electric Guitar" ),
-                                           ":/png/instr/res/instruments/eguitar.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Acoustic Guitar" ),
-                                           ":/png/instr/res/instruments/aguitar.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Guitar" ),
-                                           ":/png/instr/res/instruments/bassguitar.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard" ),
-                                           ":/png/instr/res/instruments/keyboard.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Synthesizer" ),
-                                           ":/png/instr/res/instruments/synthesizer.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Grand Piano" ),
-                                           ":/png/instr/res/instruments/grandpiano.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Accordion" ),
-                                           ":/png/instr/res/instruments/accordeon.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal" ),
-                                           ":/png/instr/res/instruments/vocal.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Microphone" ),
-                                           ":/png/instr/res/instruments/microphone.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harmonica" ),
-                                           ":/png/instr/res/instruments/harmonica.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trumpet" ),
-                                           ":/png/instr/res/instruments/trumpet.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trombone" ),
-                                           ":/png/instr/res/instruments/trombone.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "French Horn" ),
-                                           ":/png/instr/res/instruments/frenchhorn.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Tuba" ),
-                                           ":/png/instr/res/instruments/tuba.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Saxophone" ),
-                                           ":/png/instr/res/instruments/saxophone.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Clarinet" ),
-                                           ":/png/instr/res/instruments/clarinet.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Flute" ),
-                                           ":/png/instr/res/instruments/flute.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Violin" ),
-                                           ":/png/instr/res/instruments/violin.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Cello" ),
-                                           ":/png/instr/res/instruments/cello.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Double Bass" ),
-                                           ":/png/instr/res/instruments/doublebass.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Recorder" ),
-                                           ":/png/instr/res/instruments/recorder.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Streamer" ),
-                                           ":/png/instr/res/instruments/streamer.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Listener" ),
-                                           ":/png/instr/res/instruments/listener.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Guitar+Vocal" ),
-                                           ":/png/instr/res/instruments/guitarvocal.png",
-                                           IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard+Vocal" ),
-                                           ":/png/instr/res/instruments/keyboardvocal.png",
-                                           IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bodhran" ),
-                                           ":/png/instr/res/instruments/bodhran.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bassoon" ),
-                                           ":/png/instr/res/instruments/bassoon.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Oboe" ),
-                                           ":/png/instr/res/instruments/oboe.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harp" ),
-                                           ":/png/instr/res/instruments/harp.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Viola" ),
-                                           ":/png/instr/res/instruments/viola.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Congas" ),
-                                           ":/png/instr/res/instruments/congas.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bongo" ),
-                                           ":/png/instr/res/instruments/bongo.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Bass" ),
-                                           ":/png/instr/res/instruments/vocalbass.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Tenor" ),
-                                           ":/png/instr/res/instruments/vocaltenor.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Alto" ),
-                                           ":/png/instr/res/instruments/vocalalto.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Soprano" ),
-                                           ":/png/instr/res/instruments/vocalsoprano.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Banjo" ),
-                                           ":/png/instr/res/instruments/banjo.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mandolin" ),
-                                           ":/png/instr/res/instruments/mandolin.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Ukulele" ),
-                                           ":/png/instr/res/instruments/ukulele.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Ukulele" ),
-                                           ":/png/instr/res/instruments/bassukulele.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Baritone" ),
-                                           ":/png/instr/res/instruments/vocalbaritone.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Lead" ),
-                                           ":/png/instr/res/instruments/vocallead.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mountain Dulcimer" ),
-                                           ":/png/instr/res/instruments/mountaindulcimer.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Scratching" ),
-                                           ":/png/instr/res/instruments/scratching.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Rapping" ),
-                                           ":/png/instr/res/instruments/rapping.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vibraphone" ),
-                                           ":/png/instr/res/instruments/vibraphone.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Conductor" ),
-                                           ":/png/instr/res/instruments/conductor.png",
-                                           IC_OTHER_INSTRUMENT ) );
+
+        // DON'T actually do anything here, we don't use the instruments images now!
+
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "None" ),
+//                                           ":/png/instr/res/instruments/none.png",
+//                                           IC_OTHER_INSTRUMENT ) ); // special first element
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Drum Set" ),
+//                                           ":/png/instr/res/instruments/drumset.png",
+//                                           IC_PERCUSSION_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Djembe" ),
+//                                           ":/png/instr/res/instruments/djembe.png",
+//                                           IC_PERCUSSION_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Electric Guitar" ),
+//                                           ":/png/instr/res/instruments/eguitar.png",
+//                                           IC_PLUCKING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Acoustic Guitar" ),
+//                                           ":/png/instr/res/instruments/aguitar.png",
+//                                           IC_PLUCKING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Guitar" ),
+//                                           ":/png/instr/res/instruments/bassguitar.png",
+//                                           IC_PLUCKING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard" ),
+//                                           ":/png/instr/res/instruments/keyboard.png",
+//                                           IC_KEYBOARD_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Synthesizer" ),
+//                                           ":/png/instr/res/instruments/synthesizer.png",
+//                                           IC_KEYBOARD_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Grand Piano" ),
+//                                           ":/png/instr/res/instruments/grandpiano.png",
+//                                           IC_KEYBOARD_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Accordion" ),
+//                                           ":/png/instr/res/instruments/accordeon.png",
+//                                           IC_KEYBOARD_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal" ),
+//                                           ":/png/instr/res/instruments/vocal.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Microphone" ),
+//                                           ":/png/instr/res/instruments/microphone.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harmonica" ),
+//                                           ":/png/instr/res/instruments/harmonica.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trumpet" ),
+//                                           ":/png/instr/res/instruments/trumpet.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trombone" ),
+//                                           ":/png/instr/res/instruments/trombone.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "French Horn" ),
+//                                           ":/png/instr/res/instruments/frenchhorn.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Tuba" ),
+//                                           ":/png/instr/res/instruments/tuba.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Saxophone" ),
+//                                           ":/png/instr/res/instruments/saxophone.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Clarinet" ),
+//                                           ":/png/instr/res/instruments/clarinet.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Flute" ),
+//                                           ":/png/instr/res/instruments/flute.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Violin" ),
+//                                           ":/png/instr/res/instruments/violin.png",
+//                                           IC_STRING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Cello" ),
+//                                           ":/png/instr/res/instruments/cello.png",
+//                                           IC_STRING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Double Bass" ),
+//                                           ":/png/instr/res/instruments/doublebass.png",
+//                                           IC_STRING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Recorder" ),
+//                                           ":/png/instr/res/instruments/recorder.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Streamer" ),
+//                                           ":/png/instr/res/instruments/streamer.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Listener" ),
+//                                           ":/png/instr/res/instruments/listener.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Guitar+Vocal" ),
+//                                           ":/png/instr/res/instruments/guitarvocal.png",
+//                                           IC_MULTIPLE_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard+Vocal" ),
+//                                           ":/png/instr/res/instruments/keyboardvocal.png",
+//                                           IC_MULTIPLE_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bodhran" ),
+//                                           ":/png/instr/res/instruments/bodhran.png",
+//                                           IC_PERCUSSION_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bassoon" ),
+//                                           ":/png/instr/res/instruments/bassoon.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Oboe" ),
+//                                           ":/png/instr/res/instruments/oboe.png",
+//                                           IC_WIND_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harp" ),
+//                                           ":/png/instr/res/instruments/harp.png",
+//                                           IC_STRING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Viola" ),
+//                                           ":/png/instr/res/instruments/viola.png",
+//                                           IC_STRING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Congas" ),
+//                                           ":/png/instr/res/instruments/congas.png",
+//                                           IC_PERCUSSION_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bongo" ),
+//                                           ":/png/instr/res/instruments/bongo.png",
+//                                           IC_PERCUSSION_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Bass" ),
+//                                           ":/png/instr/res/instruments/vocalbass.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Tenor" ),
+//                                           ":/png/instr/res/instruments/vocaltenor.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Alto" ),
+//                                           ":/png/instr/res/instruments/vocalalto.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Soprano" ),
+//                                           ":/png/instr/res/instruments/vocalsoprano.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Banjo" ),
+//                                           ":/png/instr/res/instruments/banjo.png",
+//                                           IC_PLUCKING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mandolin" ),
+//                                           ":/png/instr/res/instruments/mandolin.png",
+//                                           IC_PLUCKING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Ukulele" ),
+//                                           ":/png/instr/res/instruments/ukulele.png",
+//                                           IC_PLUCKING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Ukulele" ),
+//                                           ":/png/instr/res/instruments/bassukulele.png",
+//                                           IC_PLUCKING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Baritone" ),
+//                                           ":/png/instr/res/instruments/vocalbaritone.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Lead" ),
+//                                           ":/png/instr/res/instruments/vocallead.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mountain Dulcimer" ),
+//                                           ":/png/instr/res/instruments/mountaindulcimer.png",
+//                                           IC_STRING_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Scratching" ),
+//                                           ":/png/instr/res/instruments/scratching.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Rapping" ),
+//                                           ":/png/instr/res/instruments/rapping.png",
+//                                           IC_OTHER_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vibraphone" ),
+//                                           ":/png/instr/res/instruments/vibraphone.png",
+//                                           IC_PERCUSSION_INSTRUMENT ) );
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Conductor" ),
+//                                           ":/png/instr/res/instruments/conductor.png",
+//                                           IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;
