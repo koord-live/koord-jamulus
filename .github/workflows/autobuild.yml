@@ -124,8 +124,7 @@ jobs:
             base_command:           ./.github/autobuild/linux.sh
             run_codeql:             false
 
-          ## DISABLE !!
-          ## get cross-build working with Qt6 ??
+          ## Qt6 from apt - crossbuild for armhf eg rPi
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
             building_on_os:         ubuntu-22.04
