@@ -142,11 +142,9 @@ jobs:
             base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             false
-            # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
-            # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
-            # https://developer.apple.com/support/xcode/
-            # Xcode 12.1.1 is the most-recent 12.1.x release:
-            # https://xcodereleases.com/
+            # Target oldest version of macOS: 10.14 - xcode 12 needed 
+            # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
+            # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
             xcode_version:          12.1.1
 
           - config_name:            iOS (artifacts)
@@ -195,7 +193,6 @@ jobs:
           path: |
             C:\Qt
             C:\ChocoCache
-            ~\windows\NSIS
             ~\windows\ASIOSDK2
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
 

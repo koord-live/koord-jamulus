@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: "Check Windows installer translations"
-        run: ./tools/check-wininstaller-translations.sh
+      # - name: "Check Windows installer translations"
+      #   run: ./tools/check-wininstaller-translations.sh
       #- name: "Check for duplicate hotkeys (will not fail)"
       #  run: sudo apt install libxml-simple-perl && cd src/translation/ && perl ./tools/checkkeys.pl
