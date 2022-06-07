@@ -13,7 +13,8 @@ KOORD_VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord-RT.pro)
 # set up QT path
 # NOTE: need to PREPEND to the path, to avoid running into all the alias crap that qtchooser installs to /usr/bin, all broken with Qt6 / qmake
 # note: move off qmake to cmake!
-export PATH=/usr/lib/qt6/bin/:/usr/lib/qt6/libexec/:${PATH}
+
+# export PATH=/usr/lib/qt6/bin/:/usr/lib/qt6/libexec/:${PATH}
 
 echo "${KOORD_VERSION} building..."
 
@@ -90,8 +91,8 @@ cd $BDIR
 linuxdeploy -v0 --appdir appdir_headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
 mv Koord-RT-*.AppImage headless_appimage/
 
-echo "DEBUG:"
-echo "find /usr/local/opt/qt/6.3.0/ | grep qxcb"
-find /usr/local/opt/qt/6.3.0/ | grep qxcb
-echo "ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so ..."
-ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so 
+# echo "DEBUG:"
+# echo "find /usr/local/opt/qt/6.3.0/ | grep qxcb"
+# find /usr/local/opt/qt/6.3.0/ | grep qxcb
+# echo "ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so ..."
+# ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so 
