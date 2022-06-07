@@ -132,31 +132,29 @@ build_app() {
 pass_artifacts_to_job() {
     mkdir deploy
 
-    # if [[ "${TARGET_ARCH}" == armhf ]]; then
+    if [[ "${TARGET_ARCH}" == armhf ]]; then
+        # rename headless first, so wildcard pattern matches only one file each
+        local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+        echo "Moving headless build artifact to deploy/${artifact_1}"
+        mv ../koord-rt-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_1}"
+        echo "::set-output name=artifact_1::${artifact_1}"
 
-    # rename headless first, so wildcard pattern matches only one file each
-    local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
-    echo "Moving headless build artifact to deploy/${artifact_1}"
-    mv ../koord-rt-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_1}"
-    echo "::set-output name=artifact_1::${artifact_1}"
+        local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+        echo "Moving regular build artifact to deploy/${artifact_2}"
+        mv ../koord-rt*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
+        echo "::set-output name=artifact_2::${artifact_2}"
+    else
+        # rename headless first, so wildcard pattern matches only one file each
+        local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
+        echo "Moving headless build artifact to deploy/${artifact_1}"
+        mv headless_appimage/*appimage "./deploy/${artifact_1}"
+        echo "::set-output name=artifact_1::${artifact_1}"
 
-    local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
-    echo "Moving regular build artifact to deploy/${artifact_2}"
-    mv ../koord-rt*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
-    echo "::set-output name=artifact_2::${artifact_2}"
-
-    # else
-    #     # rename headless first, so wildcard pattern matches only one file each
-    #     local artifact_1="koord-rt_headless_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
-    #     echo "Moving headless build artifact to deploy/${artifact_1}"
-    #     mv headless_appimage/*AppImage "./deploy/${artifact_1}"
-    #     echo "::set-output name=artifact_1::${artifact_1}"
-
-    #     local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
-    #     echo "Moving regular build artifact to deploy/${artifact_2}"
-    #     mv gui_appimage/*AppImage "./deploy/${artifact_2}"
-    #     echo "::set-output name=artifact_2::${artifact_2}"
-    # fi
+        local artifact_2="koord-rt_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
+        echo "Moving regular build artifact to deploy/${artifact_2}"
+        mv gui_appimage/*appimage "./deploy/${artifact_2}"
+        echo "::set-output name=artifact_2::${artifact_2}"
+    fi
 }
 
 case "${1:-}" in

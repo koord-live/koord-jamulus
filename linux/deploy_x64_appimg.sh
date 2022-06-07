@@ -86,13 +86,13 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
-linuxdeploy -v0 --appdir appdir_gui --plugin qt --output Koord-RT-${VERSION}.appimage
-mv Koord-RT-*.AppImage gui_appimage/
+linuxdeploy --appdir appdir_gui --plugin qt --output appimage
+mv Koord-RT-*.appimage gui_appimage/Koord-RT-${VERSION}_x64.appimage
  
 echo "Building headless AppImage ...."
 cd $BDIR
-linuxdeploy -v0 --appdir appdir_headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
-mv Koord-RT-*.AppImage headless_appimage/
+linuxdeploy --appdir appdir_headless --plugin qt --output appimage
+mv Koord-RT-*.appimage headless_appimage/Koord-RT-headless-${VERSION}_x64.appimage
 
 # echo "DEBUG:"
 # echo "find /usr/local/opt/qt/6.3.0/ | grep qxcb"
