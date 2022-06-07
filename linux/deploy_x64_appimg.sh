@@ -91,6 +91,7 @@ linuxdeploy -v0 --appdir appdir_headless --plugin qt --output Koord-RT_headless_
 mv Koord-RT-*.AppImage headless_appimage/
 
 echo "DEBUG:"
-echo "find /usr/local/opt/qt/6.3.0/"
+echo "find /usr/local/opt/qt/6.3.0/ | grep qxcb"
+find /usr/local/opt/qt/6.3.0/ | grep qxcb
 echo "ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so ..."
 ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so 
