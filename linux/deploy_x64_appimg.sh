@@ -80,13 +80,18 @@ find ../appdir_headless
 # Build AppImage ########################
 export VERSION=${KOORD_VERSION}
 
+echo "DEBUG:"
+echo "ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so ..."
+ldd /usr/local/opt/qt/6.3.0/gcc_64/plugins/platforms/libqxcb.so 
+
 echo "Building gui AppImage ...."
 cd $BDIR
-linuxdeploy --appdir appdir_gui --plugin qt --output Koord-RT-${VERSION}.appimage
+linuxdeploy -v0 --appdir appdir_gui --plugin qt --output Koord-RT-${VERSION}.appimage
 mv Koord-RT-*.AppImage gui_appimage/
 
 # 
+echo "Building headless AppImage ...."
 cd $BDIR
-linuxdeploy --appdir appdir_headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
+linuxdeploy -v0 --appdir appdir_headless --plugin qt --output Koord-RT_headless_${VERSION}.appimage
 mv Koord-RT-*.AppImage headless_appimage/
 
