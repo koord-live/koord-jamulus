@@ -86,6 +86,8 @@ export VERSION=${KOORD_VERSION}
 
 echo "Building gui AppImage ...."
 cd $BDIR
+# manually copy in qml files to get picked up by qmlimportscanner
+cp src/webview.qml appdir_gui
 linuxdeploy --appdir appdir_gui --plugin qt --output appimage
 mv Koord-RT-*.appimage gui_appimage/Koord-RT-${VERSION}_x64.appimage
  
