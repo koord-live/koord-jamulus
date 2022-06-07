@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
-    <height>866</height>
+    <width>672</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -56,6 +56,9 @@
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/png/main/res/background.png);</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -78,7 +81,115 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="1" column="0" rowspan="2" colspan="4">
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_15">
+        <item>
+         <widget class="QLabel" name="koordLogoLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>88</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="resources.qrc">:/png/main/res/krt_logo.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>2</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="sessionStatusLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>5</width>
+            <height>1</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="text">
+           <string>SESSION STATUS</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" rowspan="2" colspan="3">
        <widget class="QTabWidget" name="tabWidget">
         <property name="enabled">
          <bool>true</bool>
@@ -96,10 +207,13 @@
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">
-QTabWidget::pane { border: none}; 
-
-background-color: rgb(47, 54, 56);</string>
+         <string notr="true">QTabWidget::pane { 
+	background-image: url(:/png/main/res/background.png);
+    border: 2px solid gray;
+    border-radius: 10px;
+	border-color: rgb(251, 143, 0);;
+};
+</string>
         </property>
         <property name="tabPosition">
          <enum>QTabWidget::West</enum>
@@ -108,7 +222,7 @@ background-color: rgb(47, 54, 56);</string>
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <property name="iconSize">
          <size>
@@ -117,7 +231,7 @@ background-color: rgb(47, 54, 56);</string>
          </size>
         </property>
         <property name="usesScrollButtons">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="movable">
          <bool>false</bool>
@@ -151,6 +265,12 @@ background-color: rgb(47, 54, 56);</string>
           </property>
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="wholeWinddowThing">
+            <property name="topMargin">
+             <number>3</number>
+            </property>
+            <property name="bottomMargin">
+             <number>3</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" name="controlHorizRegion">
               <property name="spacing">
@@ -161,12 +281,18 @@ background-color: rgb(47, 54, 56);</string>
                 <property name="spacing">
                  <number>0</number>
                 </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
                  <widget class="QGroupBox" name="upperControlBox">
                   <property name="styleSheet">
                    <string notr="true">QGroupBox {
-    border: 2px solid gray;
-    border-radius: 10px;
+    border: 1px solid gray;
+    border-radius: 12px;
 	color: rgb(255, 255, 255);
     /*margin-top: 1ex;  leave space at the top for the title */
 }</string>
@@ -737,15 +863,27 @@ text-decoration: underline;</string>
              <widget class="QGroupBox" name="groupBox">
               <property name="styleSheet">
                <string notr="true">QGroupBox {
-    border: 2px solid gray;
-    border-radius: 10px;
+    border: 1px solid gray;
+    border-radius: 12px;
 	color: rgb(255, 255, 255);
     /*margin-top: 1ex;  leave space at the top for the title */
 }</string>
               </property>
+              <property name="flat">
+               <bool>false</bool>
+              </property>
               <layout class="QVBoxLayout" name="verticalLayout">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
                <property name="topMargin">
-                <number>3</number>
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
                </property>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -918,6 +1056,14 @@ text-decoration: underline;</string>
          <property name="toolTip">
           <string/>
          </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QTabBar::tab {
+	background-image: url(:/png/main/res/background.png);
+}</string>
+         </property>
          <attribute name="icon">
           <iconset resource="resources.qrc">
            <normaloff>:/png/main/res/Chat02.png</normaloff>:/png/main/res/Chat02.png</iconset>
@@ -1027,8 +1173,8 @@ text-decoration: underline;</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>754</width>
-               <height>1483</height>
+               <width>580</width>
+               <height>1447</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -2001,6 +2147,9 @@ text-decoration: underline;</string>
          </layout>
         </widget>
         <widget class="QWidget" name="helpTab">
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
          <attribute name="icon">
           <iconset resource="resources.qrc">
            <normaloff>:/png/main/res/Help.png</normaloff>:/png/main/res/Help.png</iconset>
@@ -2135,63 +2284,6 @@ text-decoration: underline;</string>
          </layout>
         </widget>
        </widget>
-      </item>
-      <item row="0" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_12">
-        <item>
-         <widget class="QFrame" name="frame">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">image: url(:/png/main/res/krt_logo.png);</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>1</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
       </item>
      </layout>
     </widget>
