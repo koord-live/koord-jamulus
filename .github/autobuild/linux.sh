@@ -58,10 +58,20 @@ setup_x64() {
     #     qt6-l10n-tools
 
     # # via AQTINSTALL
+    ## NOTE: We need to replicate the apt install of qt by installing all the non-qt deps from apt 
+    ## This ensures the necessary libs are in system for AppImage build
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
-        python3-setuptools python3-wheel libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb* libx11-dev
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper \
+        fakeroot libjack-jackd2-dev libgl-dev libegl1 \
+        python3-setuptools python3-wheel
+    ## NOTE: We need to replicate the apt install of qt by installing all the non-qt deps from apt 
+    ## This ensures the necessary libs are in system for AppImage build
+    sudo apt-get --no-install-recommends -y install \
+        libavcodec58 libavformat58 libavutil56 libb2-1 libbluray2 libchromaprint1 \
+        libcodec2-1.0 libdouble-conversion3 libevdev2 libevent-2.1-7 libgme0 libgsm1 \
+        libinput-bin libinput10 libmd4c0 libmfx1 libminizip1 libmp3lame0 libmpg123-0 \
+        libmtdev1 libogg0 libopengl-dev libopengl0 libopenmpt0 libopus0
 
     echo "Installing Qt..."
     sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
