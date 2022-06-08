@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -eu
+set -eu
 
 # Create AppImage files (gui client and headless)
 
@@ -30,7 +30,9 @@ sudo apt-get install -y libfuse2
 # Install linuxdeploy
 sudo wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -O /usr/local/bin/linuxdeploy
 sudo chmod 755 /usr/local/bin/linuxdeploy
-sudo wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage -O /usr/local/bin/linuxdeploy-plugin-qt
+## USE hacked linuxdeploy-plugin-qt to enable deployment of QtWebEngineProcess
+# sudo wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage -O /usr/local/bin/linuxdeploy-plugin-qt
+sudo wget https://github.com/koord-live/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage -O /usr/local/bin/linuxdeploy-plugin-qt
 sudo chmod 755 /usr/local/bin/linuxdeploy-plugin-qt
 
 # Configure ###################
