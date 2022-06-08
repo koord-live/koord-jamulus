@@ -60,8 +60,8 @@ setup_x64() {
     # # via AQTINSTALL
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
-        python3-setuptools python3-wheel libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0
+    sudo apt-get -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
+        python3-setuptools python3-wheel libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb* libx11-dev
 
     echo "Installing Qt..."
     sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
