@@ -92,13 +92,13 @@ cd $BDIR
 cp src/webview.qml appdir_gui
 linuxdeploy --appdir appdir_gui --plugin qt --output appimage
 mkdir gui_appimage
-mv Koord-RT-*.appimage gui_appimage/Koord-RT-${VERSION}_x64.appimage
+mv Koord-RT-*.AppImage gui_appimage/Koord-RT-${VERSION}_x64.appimage
  
 echo "Building headless AppImage ...."
 cd $BDIR
 linuxdeploy --appdir appdir_headless --plugin qt --output appimage
 mkdir headless_appimage
-mv Koord-RT-*.appimage headless_appimage/Koord-RT-headless-${VERSION}_x64.appimage
+mv Koord-RT-*.AppImage headless_appimage/Koord-RT-headless-${VERSION}_x64.appimage
 
 # echo "DEBUG:"
 # echo "find /usr/local/opt/qt/6.3.0/ | grep qxcb"
