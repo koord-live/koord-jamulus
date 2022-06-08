@@ -105,13 +105,13 @@ jobs:
         # Think of this like a foreach loop. Basically runs the steps with every combination of
         # the contents of this.
         config:
-          # - config_name:            Android .aab (artifact+codeQL)
-          #   target_os:              android
-          #   building_on_os:         ubuntu-22.04
-          #   base_command:           ./.github/autobuild/android.sh
-          #   run_codeql:             false
-          #   # Jamulus.pro needs to count git history length for android versioning:
-          #   checkout_fetch_depth:   '0'
+          - config_name:            Android .aab (artifact+codeQL)
+            target_os:              android
+            building_on_os:         ubuntu-22.04
+            base_command:           ./.github/autobuild/android.sh
+            run_codeql:             false
+            # Jamulus.pro needs to count git history length for android versioning:
+            checkout_fetch_depth:   '0'
 
           # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
           # Can install Qt using aqtinstall on 20.04
@@ -137,31 +137,31 @@ jobs:
           #   run_codeql:             false
           #   xcode_version:          13.2.1
 
-          # - config_name:            MacOS 10.14+ (artifacts+CodeQL)
-          #   target_os:              macos
-          #   building_on_os:         macos-10.15
-          #   base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-          #   run_codeql:             false
-          #   # Target oldest version of macOS: 10.14 - xcode 12 needed 
-          #   # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
-          #   # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
-          #   xcode_version:          12.1.1
+          - config_name:            MacOS 10.14+ (artifacts+CodeQL)
+            target_os:              macos
+            building_on_os:         macos-10.15
+            base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
+            run_codeql:             false
+            # Target oldest version of macOS: 10.14 - xcode 12 needed 
+            # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
+            # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
+            xcode_version:          12.1.1
 
-          # - config_name:            iOS (artifacts)
-          #   target_os:              ios
-          #   building_on_os:         macos-11
-          #   base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
-          #   # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
-          #   # There are no hints that iOS is supposed to be supported by CodeQL.
-          #   # Therefore, disable it:
-          #   run_codeql:             false
-          #   xcode_version:          13.2.1
+          - config_name:            iOS (artifacts)
+            target_os:              ios
+            building_on_os:         macos-11
+            base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
+            # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
+            # There are no hints that iOS is supposed to be supported by CodeQL.
+            # Therefore, disable it:
+            run_codeql:             false
+            xcode_version:          13.2.1
 
-          # - config_name:            Windows (artifact+codeQL)
-          #   target_os:              windows
-          #   building_on_os:         windows-2019
-          #   base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
-          #   run_codeql:             false
+          - config_name:            Windows (artifact+codeQL)
+            target_os:              windows
+            building_on_os:         windows-2019
+            base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
+            run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
