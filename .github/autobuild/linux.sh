@@ -38,36 +38,36 @@ setup() {
 setup_x64() {
 
     # # VIA APT REPOS
-    echo "Installing dependencies..."
-    sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1
-
-    echo "Installing Qt..."
-    sudo apt-get --no-install-recommends -y install \
-        qt6-base-dev \
-        qt6-base-dev-tools \
-        qt6-tools-dev-tools \
-        qt6-declarative-dev \
-        qt6-webengine-dev \
-        qt6-webengine-dev-tools \
-        qt6-webview-dev \
-        qt6-webview-plugins \
-        qml6-module-qtwebview \
-        qml6-module-qtwebengine \
-        libqt6opengl6-dev \
-        qt6-l10n-tools
-
-    # # via AQTINSTALL
     # echo "Installing dependencies..."
     # sudo apt-get update
-    # sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
-    #     python3-setuptools python3-wheel
+    # sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1
 
     # echo "Installing Qt..."
-    # sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
-    # sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
-    #     --archives qtbase qtdeclarative qttools qttranslations icu \
-    #     --modules qtwebview qtwebengine qtwebchannel qtpositioning
+    # sudo apt-get --no-install-recommends -y install \
+    #     qt6-base-dev \
+    #     qt6-base-dev-tools \
+    #     qt6-tools-dev-tools \
+    #     qt6-declarative-dev \
+    #     qt6-webengine-dev \
+    #     qt6-webengine-dev-tools \
+    #     qt6-webview-dev \
+    #     qt6-webview-plugins \
+    #     qml6-module-qtwebview \
+    #     qml6-module-qtwebengine \
+    #     libqt6opengl6-dev \
+    #     qt6-l10n-tools
+
+    # # via AQTINSTALL
+    echo "Installing dependencies..."
+    sudo apt-get update
+    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
+        python3-setuptools python3-wheel
+
+    echo "Installing Qt..."
+    sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
+    sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
+        --archives qtbase qtdeclarative qttools qttranslations icu \
+        --modules qtwebview qtwebengine qtwebchannel qtpositioning
 
 }
 

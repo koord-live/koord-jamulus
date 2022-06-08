@@ -15,9 +15,9 @@ KOORD_VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord-RT.pro)
 # note: move off qmake to cmake!
 
 # For APT: 
-export PATH=/usr/lib/qt6/bin/:/usr/lib/qt6/libexec/:${PATH}
+# export PATH=/usr/lib/qt6/bin/:/usr/lib/qt6/libexec/:${PATH}
 # For aqtinstall:
-# export PATH=/usr/local/opt/qt/6.3.0/gcc_64/bin/:/usr/local/opt/qt/6.3.0/gcc_64/libexec/:${PATH}
+export PATH=/usr/local/opt/qt/6.3.0/gcc_64/bin/:/usr/local/opt/qt/6.3.0/gcc_64/libexec/:${PATH}
 
 echo "${KOORD_VERSION} building..."
 

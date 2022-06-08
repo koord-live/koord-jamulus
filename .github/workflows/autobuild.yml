@@ -114,9 +114,10 @@ jobs:
             checkout_fetch_depth:   '0'
 
           # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
+          # Can install Qt using aqtinstall on 20.04
           - config_name:            Linux appimage amd64 (artifacts+codeQL)
             target_os:              linux
-            building_on_os:         ubuntu-22.04
+            building_on_os:         ubuntu-20.04
             base_command:           ./.github/autobuild/linux.sh
             run_codeql:             false
 
