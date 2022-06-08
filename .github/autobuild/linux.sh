@@ -53,6 +53,7 @@ setup_x64() {
         qt6-webview-dev \
         qt6-webview-plugins \
         qml6-module-qtwebview \
+        qml6-module-qtwebengine \
         libqt6opengl6-dev \
         qt6-l10n-tools
 
