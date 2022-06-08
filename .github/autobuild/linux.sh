@@ -62,18 +62,24 @@ setup_x64() {
     ## This ensures the necessary libs are in system for AppImage build
     echo "Installing dependencies..."
     sudo apt-get update
-    sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper \
-        fakeroot libjack-jackd2-dev libgl-dev libegl1 \
-        python3-setuptools python3-wheel
-    ## NOTE: We need to replicate the apt install of qt by installing all the non-qt deps from apt 
-    ## This ensures the necessary libs are in system for AppImage build
-    sudo apt-get --no-install-recommends -y install \
-        libavcodec58 libavformat58 libavutil56 libb2-1 libbluray2 libchromaprint1 libcodec2-0.9 libdouble-conversion3 libevdev2 libevent-2.1-7 \
-        libgme0 libgsm1 libinput-bin libinput10 libmd4c0 libmfx1 libminizip1 libmp3lame0 libmpg123-0 libmtdev1 libogg0 libopengl-dev \
-        libopengl0 libopenmpt0 libopus0 libshine3 libsoxr0 libspeex1 libsrt1 libssh-gcrypt-4 libswresample3 libtheora0 libts0 \
-        libtwolame0 libva-drm2 libva-x11-2 libva2 libvdpau1 libvorbis0a libvorbisenc2 libvorbisfile3 libvpx6 libwacom-common libwacom2 \
-        libx264-155 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-util1 libxcb-xinput0 libxcb-xkb1 \
-        libxkbcommon-x11-0 libxvidcore4 libzvbi-common libzvbi0 ocl-icd-libopencl1         
+    ## WORKING !!!!!!!!!!!!!!
+    sudo apt-get -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
+        python3-setuptools python3-wheel libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+        libxcb-randr0 libxcb-render-util0 libxcb-util1 libxcb-xinput0 libxcb-xkb1 libx11-dev
+
+    ##FIXME
+    # sudo apt-get --no-install-recommends -y install devscripts build-essential debhelper \
+    #     fakeroot libjack-jackd2-dev libgl-dev libegl1 \
+    #     python3-setuptools python3-wheel
+    # ## NOTE: We need to replicate the apt install of qt by installing all the non-qt deps from apt 
+    # ## This ensures the necessary libs are in system for AppImage build
+    # sudo apt-get --no-install-recommends -y install \
+    #     libavcodec58 libavformat58 libavutil56 libb2-1 libbluray2 libchromaprint1 libcodec2-0.9 libdouble-conversion3 libevdev2 libevent-2.1-7 \
+    #     libgme0 libgsm1 libinput-bin libinput10 libmd4c0 libmfx1 libminizip1 libmp3lame0 libmpg123-0 libmtdev1 libogg0 libopengl-dev \
+    #     libopengl0 libopenmpt0 libopus0 libshine3 libsoxr0 libspeex1 libsrt1 libssh-gcrypt-4 libswresample3 libtheora0 libts0 \
+    #     libtwolame0 libva-drm2 libva-x11-2 libva2 libvdpau1 libvorbis0a libvorbisenc2 libvorbisfile3 libvpx6 libwacom-common libwacom2 \
+    #     libx264-155 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-util1 libxcb-xinput0 libxcb-xkb1 \
+    #     libxkbcommon-x11-0 libxvidcore4 libzvbi-common libzvbi0 ocl-icd-libopencl1         
 
     echo "Installing Qt..."
     sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
