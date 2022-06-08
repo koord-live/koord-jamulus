@@ -69,7 +69,7 @@ setup_x64() {
     ## This ensures the necessary libs are in system for AppImage build
     sudo apt-get --no-install-recommends -y install \
         libavcodec58 libavformat58 libavutil56 libb2-1 libbluray2 libchromaprint1 \
-        libcodec2-1.0 libdouble-conversion3 libevdev2 libevent-2.1-7 libgme0 libgsm1 \
+        libcodec2-0.9 libdouble-conversion3 libevdev2 libevent-2.1-7 libgme0 libgsm1 \
         libinput-bin libinput10 libmd4c0 libmfx1 libminizip1 libmp3lame0 libmpg123-0 \
         libmtdev1 libogg0 libopengl-dev libopengl0 libopenmpt0 libopus0
 
