@@ -96,7 +96,7 @@ mv Koord-RT-*.AppImage gui_appimage/Koord-RT-${VERSION}_x64.appimage
  
 echo "Building headless AppImage ...."
 cd $BDIR
-linuxdeploy --appdir appdir_headless --plugin qt --output appimage
+linuxdeploy -d linux/koordrt-headless.desktop -i distributions/koordrt.png --appdir appdir_headless --plugin qt --output appimage
 mkdir headless_appimage
 mv Koord-RT-*.AppImage headless_appimage/Koord-RT-headless-${VERSION}_x64.appimage
 
