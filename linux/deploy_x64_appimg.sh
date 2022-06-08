@@ -91,11 +91,13 @@ cd $BDIR
 # manually copy in qml files to get picked up by qmlimportscanner
 cp src/webview.qml appdir_gui
 linuxdeploy --appdir appdir_gui --plugin qt --output appimage
+mkdir gui_appimage
 mv Koord-RT-*.appimage gui_appimage/Koord-RT-${VERSION}_x64.appimage
  
 echo "Building headless AppImage ...."
 cd $BDIR
 linuxdeploy --appdir appdir_headless --plugin qt --output appimage
+mkdir headless_appimage
 mv Koord-RT-*.appimage headless_appimage/Koord-RT-headless-${VERSION}_x64.appimage
 
 # echo "DEBUG:"

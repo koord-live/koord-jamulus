@@ -47,10 +47,12 @@ setup_x64() {
         qt6-base-dev \
         qt6-base-dev-tools \
         qt6-tools-dev-tools \
-        qt6-webengine-dev \
-        qml6-module-qtwebview \
         qt6-declarative-dev \
+        qt6-webengine-dev \
+        qt6-webengine-dev-tools \
         qt6-webview-dev \
+        qt6-webview-plugins \
+        qml6-module-qtwebview \
         libqt6opengl6-dev \
         qt6-l10n-tools
 
@@ -84,10 +86,12 @@ setup_arm() {
         qt6-base-dev \
         qt6-base-dev-tools \
         qt6-tools-dev-tools \
-        qt6-webengine-dev \
-        qml6-module-qtwebview \
         qt6-declarative-dev \
+        qt6-webengine-dev \
+        qt6-webengine-dev-tools \
         qt6-webview-dev \
+        qt6-webview-plugins \
+        qml6-module-qtwebview \
         libqt6opengl6-dev \
         qt6-l10n-tools
 
@@ -100,10 +104,12 @@ setup_arm() {
         "libegl1:${TARGET_ARCH}" \
         "qmake6:${TARGET_ARCH}" \
         "qt6-base-dev:${TARGET_ARCH}" \
-        "qt6-webengine-dev:${TARGET_ARCH}" \
-        "qml6-module-qtwebview:${TARGET_ARCH}" \
         "qt6-declarative-dev:${TARGET_ARCH}" \
+        "qt6-webengine-dev:${TARGET_ARCH}" \
+        "qt6-webengine-dev-tools:${TARGET_ARCH}" \
         "qt6-webview-dev:${TARGET_ARCH}" \
+        "qt6-webview-plugins:${TARGET_ARCH}" \
+        "qml6-module-qtwebview:${TARGET_ARCH}" \
         "libqt6opengl6-dev:${TARGET_ARCH}"
 
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
