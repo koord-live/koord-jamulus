@@ -268,6 +268,9 @@
             <property name="topMargin">
              <number>3</number>
             </property>
+            <property name="rightMargin">
+             <number>3</number>
+            </property>
             <property name="bottomMargin">
              <number>3</number>
             </property>
@@ -873,20 +876,29 @@ text-decoration: underline;</string>
                <bool>false</bool>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout">
+               <property name="spacing">
+                <number>6</number>
+               </property>
                <property name="leftMargin">
-                <number>0</number>
+                <number>3</number>
                </property>
                <property name="topMargin">
                 <number>0</number>
                </property>
                <property name="rightMargin">
-                <number>0</number>
+                <number>3</number>
                </property>
                <property name="bottomMargin">
                 <number>0</number>
                </property>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <property name="topMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QPushButton" name="butConnect">
                    <property name="sizePolicy">
@@ -1057,7 +1069,7 @@ text-decoration: underline;</string>
           <string/>
          </property>
          <property name="autoFillBackground">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="styleSheet">
           <string notr="true">QTabBar::tab {
@@ -2148,7 +2160,7 @@ text-decoration: underline;</string>
         </widget>
         <widget class="QWidget" name="helpTab">
          <property name="autoFillBackground">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <attribute name="icon">
           <iconset resource="resources.qrc">
