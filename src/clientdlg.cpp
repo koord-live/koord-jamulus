@@ -2265,13 +2265,13 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
     {
     case GD_ORIGINAL:
         backgroundFrame->setStyleSheet (
-            "QFrame#backgroundFrame { border-image:  url(:/png/main/res/background.png) 34px 30px 40px 40px;"
-            "                         border-top:    34px transparent;"
-            "                         border-bottom: 40px transparent;"
-            "                         border-left:   30px transparent;"
-            "                         border-right:  40px transparent;"
-            "                         padding:       -5px;"
-            "                         margin:        -5px, -5px, 0px, 0px; }"
+            "QFrame#backgroundFrame { border-image:  url(:/png/main/res/background.png) 0px 0px 0px 0px;"
+            "                         border-top:    0px transparent;"
+            "                         border-bottom: 0px transparent;"
+            "                         border-left:   0px transparent;"
+            "                         border-right:  0px transparent;"
+            "                         padding:       2px;"
+            "                         margin:        2px, 2px, 2px, 2px; }"
             "QLabel {                 color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
             "QRadioButton {           color:          rgb(220, 220, 220);"
