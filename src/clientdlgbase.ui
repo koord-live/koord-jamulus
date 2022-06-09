@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>672</width>
-    <height>478</height>
+    <width>583</width>
+    <height>389</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>40</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="contextMenuPolicy">
    <enum>Qt::DefaultContextMenu</enum>
@@ -227,7 +239,7 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <property name="iconSize">
          <size>
@@ -341,19 +353,16 @@
                         <layout class="QVBoxLayout" name="inputBox">
                          <item>
                           <layout class="QHBoxLayout" name="horizontalLayout_2">
+                           <property name="spacing">
+                            <number>0</number>
+                           </property>
                            <property name="leftMargin">
                             <number>0</number>
                            </property>
                            <item>
-                            <widget class="QWidget" name="sparesBox" native="true">
+                            <widget class="QLabel" name="label_2">
                              <property name="enabled">
-                              <bool>true</bool>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>41</width>
-                               <height>18</height>
-                              </size>
+                              <bool>false</bool>
                              </property>
                              <property name="maximumSize">
                               <size>
@@ -361,624 +370,8 @@
                                <height>0</height>
                               </size>
                              </property>
-                             <widget class="QLabel" name="lblBuffers">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string/>
-                              </property>
-                              <property name="alignment">
-                               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                              </property>
-                              <property name="wordWrap">
-                               <bool>false</bool>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblDelayUnit">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="minimumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string/>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblPingUnit">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="minimumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string/>
-                              </property>
-                             </widget>
-                             <widget class="QCheckBox" name="chbChat">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">QCheckBox::indicator:unchecked {
-	image: url(:/png/main/res/general_btn_off.png);
-}
-QCheckBox::indicator:checked {
-	image: url(:/png/main/res/general_btn_on.png);
-}
-QCheckBox::indicator { 
-	width:          28px; 
-	height:         28px; 
-}</string>
-                              </property>
-                              <property name="text">
-                               <string/>
-                              </property>
-                             </widget>
-                             <widget class="QCheckBox" name="chbSettings">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">QCheckBox::indicator:unchecked {
-	image: url(:/png/main/res/general_btn_off.png);
-}
-QCheckBox::indicator:checked {
-	image: url(:/png/main/res/general_btn_on.png);
-}
-QCheckBox::indicator { 
-	width:          28px; 
-	height:         28px; 
-}</string>
-                              </property>
-                              <property name="text">
-                               <string/>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblLevelMeterRight">
-                              <property name="enabled">
-                               <bool>false</bool>
-                              </property>
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>R</string>
-                              </property>
-                              <property name="alignment">
-                               <set>Qt::AlignCenter</set>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblLevelMeterLeft">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">font: 9pt &quot;Sans Serif&quot;;</string>
-                              </property>
-                              <property name="text">
-                               <string>LR</string>
-                              </property>
-                              <property name="alignment">
-                               <set>Qt::AlignCenter</set>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblMeterStyle">
-                              <property name="enabled">
-                               <bool>false</bool>
-                              </property>
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>Meter Style</string>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblSkin">
-                              <property name="enabled">
-                               <bool>true</bool>
-                              </property>
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>Skin</string>
-                              </property>
-                             </widget>
-                             <widget class="QComboBox" name="cbxSkin">
-                              <property name="enabled">
-                               <bool>false</bool>
-                              </property>
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                             </widget>
-                             <widget class="QComboBox" name="cbxMeterStyle">
-                              <property name="enabled">
-                               <bool>false</bool>
-                              </property>
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="plblCountry">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>Country/Region</string>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="plblSkill">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>Skill</string>
-                              </property>
-                             </widget>
-                             <widget class="QLineEdit" name="pedtCity">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="sizePolicy">
-                               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                               </sizepolicy>
-                              </property>
-                              <property name="minimumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="plblCity">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>City</string>
-                              </property>
-                             </widget>
-                             <widget class="QComboBox" name="pcbxInstrument">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="minimumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="plblInstrument">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>Instrument</string>
-                              </property>
-                             </widget>
-                             <widget class="QComboBox" name="pcbxSkill">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="minimumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                             </widget>
-                             <widget class="QComboBox" name="pcbxCountry">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="minimumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblCustomDirectories">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="text">
-                               <string>Custom Directories:</string>
-                              </property>
-                             </widget>
-                             <widget class="QComboBox" name="cbxCustomDirectories">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="editable">
-                               <bool>true</bool>
-                              </property>
-                             </widget>
-                             <widget class="QLabel" name="lblAudioReverb">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">font: 9pt &quot;Sans Serif&quot;;
-text-decoration: underline;</string>
-                              </property>
-                              <property name="text">
-                               <string>REVERB</string>
-                              </property>
-                              <property name="textFormat">
-                               <enum>Qt::PlainText</enum>
-                              </property>
-                              <property name="alignment">
-                               <set>Qt::AlignCenter</set>
-                              </property>
-                             </widget>
-                             <widget class="QRadioButton" name="rbtReverbSelL">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="layoutDirection">
-                               <enum>Qt::RightToLeft</enum>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">color: rgb(251, 143, 0);</string>
-                              </property>
-                              <property name="text">
-                               <string>L</string>
-                              </property>
-                             </widget>
-                             <widget class="QRadioButton" name="rbtReverbSelR">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">color: rgb(251, 143, 0);</string>
-                              </property>
-                              <property name="text">
-                               <string>R</string>
-                              </property>
-                             </widget>
-                             <widget class="QDial" name="sldAudioReverb">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">background-color: rgb(251, 143, 0);</string>
-                              </property>
-                              <property name="tracking">
-                               <bool>false</bool>
-                              </property>
-                              <property name="wrapping">
-                               <bool>false</bool>
-                              </property>
-                              <property name="notchesVisible">
-                               <bool>true</bool>
-                              </property>
-                             </widget>
-                             <widget class="QCheckBox" name="chbPubJam">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>0</width>
-                                <height>0</height>
-                               </rect>
-                              </property>
-                              <property name="maximumSize">
-                               <size>
-                                <width>0</width>
-                                <height>0</height>
-                               </size>
-                              </property>
-                              <property name="styleSheet">
-                               <string notr="true">QCheckBox::indicator:unchecked {
-	image: url(:/png/main/res/general_btn_off.png);
-}
-QCheckBox::indicator:checked {
-	image: url(:/png/main/res/general_btn_on.png);
-}
-QCheckBox::indicator { 
-	width:          28px; 
-	height:         28px; 
-}</string>
-                              </property>
-                              <property name="text">
-                               <string/>
-                              </property>
-                             </widget>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QLabel" name="label_2">
                              <property name="text">
-                              <string>TextLabel</string>
+                              <string/>
                              </property>
                             </widget>
                            </item>
@@ -1316,7 +709,7 @@ text-decoration: underline;</string>
                           <widget class="QLabel" name="lblPingVal">
                            <property name="minimumSize">
                             <size>
-                             <width>35</width>
+                             <width>30</width>
                              <height>0</height>
                             </size>
                            </property>
@@ -1402,14 +795,14 @@ text-decoration: underline;</string>
                            <item>
                             <widget class="CMultiColorLED" name="ledDelay" native="true">
                              <property name="sizePolicy">
-                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                                <horstretch>0</horstretch>
                                <verstretch>0</verstretch>
                               </sizepolicy>
                              </property>
                              <property name="minimumSize">
                               <size>
-                               <width>35</width>
+                               <width>40</width>
                                <height>25</height>
                               </size>
                              </property>
@@ -1440,14 +833,14 @@ text-decoration: underline;</string>
                               <bool>true</bool>
                              </property>
                              <property name="sizePolicy">
-                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                                <horstretch>0</horstretch>
                                <verstretch>0</verstretch>
                               </sizepolicy>
                              </property>
                              <property name="minimumSize">
                               <size>
-                               <width>35</width>
+                               <width>40</width>
                                <height>25</height>
                               </size>
                              </property>
@@ -1474,7 +867,7 @@ text-decoration: underline;</string>
                           <widget class="QLabel" name="label">
                            <property name="minimumSize">
                             <size>
-                             <width>40</width>
+                             <width>30</width>
                              <height>0</height>
                             </size>
                            </property>
@@ -1493,7 +886,7 @@ text-decoration: underline;</string>
                           <widget class="QLabel" name="label_6">
                            <property name="minimumSize">
                             <size>
-                             <width>35</width>
+                             <width>40</width>
                              <height>0</height>
                             </size>
                            </property>
@@ -1711,6 +1104,672 @@ text-decoration: underline;</string>
             </item>
            </layout>
           </item>
+          <item row="0" column="1">
+           <widget class="QWidget" name="sparesBox" native="true">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="lblBuffers">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblDelayUnit">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblPingUnit">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="chbChat">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QCheckBox::indicator:unchecked {
+	image: url(:/png/main/res/general_btn_off.png);
+}
+QCheckBox::indicator:checked {
+	image: url(:/png/main/res/general_btn_on.png);
+}
+QCheckBox::indicator { 
+	width:          28px; 
+	height:         28px; 
+}</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="chbSettings">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QCheckBox::indicator:unchecked {
+	image: url(:/png/main/res/general_btn_off.png);
+}
+QCheckBox::indicator:checked {
+	image: url(:/png/main/res/general_btn_on.png);
+}
+QCheckBox::indicator { 
+	width:          28px; 
+	height:         28px; 
+}</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblLevelMeterRight">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>R</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblLevelMeterLeft">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 9pt &quot;Sans Serif&quot;;</string>
+             </property>
+             <property name="text">
+              <string>LR</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblMeterStyle">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Meter Style</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblSkin">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Skin</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cbxSkin">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cbxMeterStyle">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="plblCountry">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Country/Region</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="plblSkill">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Skill</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="pedtCity">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="plblCity">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>City</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="pcbxInstrument">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="plblInstrument">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Instrument</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="pcbxSkill">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="pcbxCountry">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblCustomDirectories">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Custom Directories:</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cbxCustomDirectories">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="editable">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblAudioReverb">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 9pt &quot;Sans Serif&quot;;
+text-decoration: underline;</string>
+             </property>
+             <property name="text">
+              <string>REVERB</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::PlainText</enum>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="rbtReverbSelL">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(251, 143, 0);</string>
+             </property>
+             <property name="text">
+              <string>L</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="rbtReverbSelR">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(251, 143, 0);</string>
+             </property>
+             <property name="text">
+              <string>R</string>
+             </property>
+            </widget>
+            <widget class="QDial" name="sldAudioReverb">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(251, 143, 0);</string>
+             </property>
+             <property name="tracking">
+              <bool>false</bool>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="notchesVisible">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="chbPubJam">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QCheckBox::indicator:unchecked {
+	image: url(:/png/main/res/general_btn_off.png);
+}
+QCheckBox::indicator:checked {
+	image: url(:/png/main/res/general_btn_on.png);
+}
+QCheckBox::indicator { 
+	width:          28px; 
+	height:         28px; 
+}</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="CLanguageComboBox" name="cbxLanguage">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>0</width>
+               <height>0</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblLanguage">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>160</width>
+               <height>18</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Language</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
          </layout>
         </widget>
         <widget class="QWidget" name="videoTab">
@@ -1887,9 +1946,9 @@ text-decoration: underline;</string>
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
-               <width>602</width>
-               <height>1483</height>
+               <y>-927</y>
+               <width>513</width>
+               <height>1582</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1947,7 +2006,7 @@ text-decoration: underline;</string>
                   <item>
                    <widget class="QGroupBox" name="grbMusicien">
                     <property name="title">
-                     <string>Name to display in Sessions:</string>
+                     <string>Choose your name to appear in Sessions:</string>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_16">
                      <item>
@@ -1957,7 +2016,7 @@ text-decoration: underline;</string>
                          <item>
                           <widget class="QLabel" name="plblAlias">
                            <property name="text">
-                            <string>username</string>
+                            <string>Username</string>
                            </property>
                           </widget>
                          </item>
@@ -1999,13 +2058,6 @@ text-decoration: underline;</string>
                        <item>
                         <layout class="QVBoxLayout" name="verticalLayout_20">
                          <item>
-                          <widget class="QLabel" name="lblLanguage">
-                           <property name="text">
-                            <string>Language</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
                           <widget class="QLabel" name="lblMixerRows">
                            <property name="text">
                             <string>Mixer Rows</string>
@@ -2016,16 +2068,6 @@ text-decoration: underline;</string>
                        </item>
                        <item>
                         <layout class="QVBoxLayout" name="verticalLayout_21">
-                         <item>
-                          <widget class="CLanguageComboBox" name="cbxLanguage">
-                           <property name="minimumSize">
-                            <size>
-                             <width>150</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                          </widget>
-                         </item>
                          <item>
                           <widget class="QSpinBox" name="spnMixerRows">
                            <property name="sizePolicy">
@@ -2101,26 +2143,39 @@ text-decoration: underline;</string>
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_3">
                   <item>
-                   <widget class="QLabel" name="lblSoundcardDevice">
-                    <property name="text">
-                     <string>Audio Device</string>
+                   <widget class="QGroupBox" name="groupBox_3">
+                    <property name="title">
+                     <string/>
                     </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="cbxSoundcard">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_12">
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_11">
+                       <item>
+                        <widget class="QLabel" name="lblSoundcardDevice">
+                         <property name="text">
+                          <string>Audio Device</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QComboBox" name="cbxSoundcard">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                   <item>
@@ -2284,164 +2339,129 @@ text-decoration: underline;</string>
                    </widget>
                   </item>
                   <item>
+                   <widget class="QGroupBox" name="groupBox_4">
+                    <property name="title">
+                     <string/>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_6">
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_17">
+                       <item>
+                        <widget class="QLabel" name="lblAudioChannels">
+                         <property name="text">
+                          <string>Audio Channels</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QComboBox" name="cbxAudioChannels"/>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_7">
+                    <property name="title">
+                     <string/>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_11">
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_23">
+                       <item>
+                        <widget class="QLabel" name="lblAudioQuality">
+                         <property name="text">
+                          <string>Audio Quality</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QComboBox" name="cbxAudioQuality"/>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_8">
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayout_5">
-                      <item>
-                       <widget class="QLabel" name="lblAudioChannels">
-                        <property name="text">
-                         <string>Audio Channels</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QComboBox" name="cbxAudioChannels"/>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="lblAudioQuality">
-                        <property name="text">
-                         <string>Audio Quality</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QComboBox" name="cbxAudioQuality"/>
-                      </item>
-                     </layout>
+                     <layout class="QVBoxLayout" name="verticalLayout_5"/>
                     </item>
                    </layout>
                   </item>
                   <item>
                    <layout class="QVBoxLayout" name="verticalLayout_12">
                     <item>
-                     <widget class="QLabel" name="lblNewClientLevel">
-                      <property name="text">
-                       <string>New Client Level</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QSlider" name="horizontalSlider">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_14">
-                      <item>
-                       <widget class="QLineEdit" name="edtNewClientLevel"/>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="lblPercentUnit">
-                        <property name="text">
-                         <string>%</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                    <item>
-                     <widget class="QGroupBox" name="groupBox_2">
+                     <widget class="QGroupBox" name="groupBox_5">
                       <property name="title">
-                       <string>Input Balance</string>
+                       <string>Set level in mix of new members</string>
                       </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_16">
+                      <layout class="QVBoxLayout" name="verticalLayout_7">
                        <item>
-                        <layout class="QVBoxLayout" name="_19">
-                         <property name="spacing">
-                          <number>3</number>
-                         </property>
+                        <layout class="QHBoxLayout" name="horizontalLayout_20">
                          <item>
-                          <widget class="QLabel" name="lblAudioPan">
+                          <widget class="QLabel" name="lblNewClientLevel">
                            <property name="text">
-                            <string>Pan</string>
-                           </property>
-                           <property name="alignment">
-                            <set>Qt::AlignCenter</set>
+                            <string>Level</string>
                            </property>
                           </widget>
                          </item>
                          <item>
-                          <layout class="QHBoxLayout" name="_20">
-                           <item>
-                            <spacer>
-                             <property name="orientation">
-                              <enum>Qt::Horizontal</enum>
-                             </property>
-                             <property name="sizeType">
-                              <enum>QSizePolicy::Minimum</enum>
-                             </property>
-                             <property name="sizeHint" stdset="0">
-                              <size>
-                               <width>0</width>
-                               <height>20</height>
-                              </size>
-                             </property>
-                            </spacer>
-                           </item>
-                           <item>
-                            <widget class="QSlider" name="sldAudioPan">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>0</height>
-                              </size>
-                             </property>
-                             <property name="styleSheet">
-                              <string/>
-                             </property>
-                             <property name="pageStep">
-                              <number>1</number>
-                             </property>
-                             <property name="orientation">
-                              <enum>Qt::Horizontal</enum>
-                             </property>
-                             <property name="tickPosition">
-                              <enum>QSlider::TicksBothSides</enum>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <spacer>
-                             <property name="orientation">
-                              <enum>Qt::Horizontal</enum>
-                             </property>
-                             <property name="sizeType">
-                              <enum>QSizePolicy::Minimum</enum>
-                             </property>
-                             <property name="sizeHint" stdset="0">
-                              <size>
-                               <width>0</width>
-                               <height>20</height>
-                              </size>
-                             </property>
-                            </spacer>
-                           </item>
-                          </layout>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="lblAudioPanValue">
-                           <property name="minimumSize">
+                          <widget class="QDial" name="dial">
+                           <property name="maximumSize">
                             <size>
-                             <width>50</width>
-                             <height>0</height>
+                             <width>60</width>
+                             <height>60</height>
                             </size>
                            </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_21">
+                         <item>
+                          <widget class="QLabel" name="lblPercentUnit">
                            <property name="text">
-                            <string>Center</string>
+                            <string>%</string>
                            </property>
-                           <property name="alignment">
-                            <set>Qt::AlignCenter</set>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="edtNewClientLevel"/>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QGroupBox" name="groupBox_6">
+                      <property name="title">
+                       <string>Feedback Protection (recommended)</string>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_9">
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_22">
+                         <item>
+                          <widget class="QLabel" name="lblDetectFeedback">
+                           <property name="text">
+                            <string/>
                            </property>
-                           <property name="wordWrap">
-                            <bool>false</bool>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QCheckBox" name="chbDetectFeedback">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="text">
+                            <string>Enable</string>
                            </property>
                           </widget>
                          </item>
@@ -2451,39 +2471,60 @@ text-decoration: underline;</string>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QLabel" name="lblInputBoost">
-                      <property name="text">
-                       <string>Input Boost</string>
+                     <layout class="QHBoxLayout" name="horizontalLayout_14"/>
+                    </item>
+                    <item>
+                     <widget class="QGroupBox" name="grbSoundCrdBufDelay">
+                      <property name="title">
+                       <string>Buffer Delay</string>
                       </property>
+                      <layout class="QVBoxLayout" name="_9">
+                       <item>
+                        <widget class="QRadioButton" name="rbtBufferDelayPreferred">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>(preferred)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QRadioButton" name="rbtBufferDelayDefault">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>(default)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QRadioButton" name="rbtBufferDelaySafe">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>(safe)</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSlider" name="horizontalSlider_2">
+                     <widget class="Line" name="line_4">
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QComboBox" name="cbxInputBoost"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="lblDetectFeedback">
-                      <property name="text">
-                       <string>Feedback Protection</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QCheckBox" name="chbDetectFeedback">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>Enable</string>
                       </property>
                      </widget>
                     </item>
@@ -2526,6 +2567,138 @@ text-decoration: underline;</string>
                </layout>
               </item>
               <item>
+               <widget class="QGroupBox" name="inputBoostBox">
+                <property name="title">
+                 <string>Input Boost box</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_23">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_24">
+                   <item>
+                    <widget class="QLabel" name="lblInputBoost">
+                     <property name="text">
+                      <string>Input Boost</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="cbxInputBoost"/>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="inputBalanceBox">
+                <property name="title">
+                 <string>Input Balance</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_16">
+                 <item>
+                  <layout class="QVBoxLayout" name="_19">
+                   <property name="spacing">
+                    <number>3</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="lblAudioPan">
+                     <property name="text">
+                      <string>Pan</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="_20">
+                     <item>
+                      <spacer>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeType">
+                        <enum>QSizePolicy::Minimum</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>0</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item>
+                      <widget class="QSlider" name="sldAudioPan">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string/>
+                       </property>
+                       <property name="pageStep">
+                        <number>1</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="tickPosition">
+                        <enum>QSlider::TicksBothSides</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <spacer>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeType">
+                        <enum>QSizePolicy::Minimum</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>0</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="lblAudioPanValue">
+                     <property name="minimumSize">
+                      <size>
+                       <width>50</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Center</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <widget class="Line" name="line_3">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -2542,7 +2715,7 @@ text-decoration: underline;</string>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_7">
                 <item>
-                 <spacer name="horizontalSpacer_14">
+                 <spacer name="horizontalSpacer_6">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
@@ -2555,210 +2728,93 @@ text-decoration: underline;</string>
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="grbSoundCrdBufDelay">
-                  <property name="title">
-                   <string>Buffer Delay</string>
-                  </property>
-                  <layout class="QVBoxLayout" name="_9">
-                   <item>
-                    <widget class="QRadioButton" name="rbtBufferDelayPreferred">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
+                 <layout class="QVBoxLayout" name="verticalLayout_13">
+                  <item>
+                   <widget class="QCheckBox" name="chbEnableOPUS64">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Enable Small Network Buffers</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="grbUpstreamValue">
+                    <property name="title">
+                     <string>Audio Stream Rate</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_14">
+                     <property name="spacing">
+                      <number>2</number>
                      </property>
-                     <property name="text">
-                      <string>(preferred)</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="rbtBufferDelayDefault">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>(default)</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="rbtBufferDelaySafe">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>(safe)</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <layout class="QVBoxLayout" name="verticalLayout_13">
                      <item>
-                      <widget class="QGroupBox" name="grbJitterBuffer">
-                       <property name="title">
-                        <string>Jitter Buffer</string>
-                       </property>
-                       <layout class="QVBoxLayout" name="_15">
-                        <item>
-                         <widget class="QCheckBox" name="chbAutoJitBuf">
-                          <property name="sizePolicy">
-                           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                           </sizepolicy>
-                          </property>
-                          <property name="text">
-                           <string>Auto (recommended)</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <layout class="QHBoxLayout" name="_16">
-                          <item>
-                           <widget class="QLabel" name="lblNetBufLabel">
-                            <property name="text">
-                             <string>Local</string>
-                            </property>
-                            <property name="alignment">
-                             <set>Qt::AlignCenter</set>
-                            </property>
-                            <property name="wordWrap">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QLabel" name="lblNetBufServerLabel">
-                            <property name="text">
-                             <string>Server</string>
-                            </property>
-                            <property name="alignment">
-                             <set>Qt::AlignCenter</set>
-                            </property>
-                            <property name="wordWrap">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                         </layout>
-                        </item>
-                        <item>
-                         <layout class="QHBoxLayout" name="_17">
-                          <item>
-                           <widget class="QLabel" name="lblNetBuf">
-                            <property name="text">
-                             <string>Size</string>
-                            </property>
-                            <property name="alignment">
-                             <set>Qt::AlignCenter</set>
-                            </property>
-                            <property name="wordWrap">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QLabel" name="lblNetBufServer">
-                            <property name="text">
-                             <string>Size</string>
-                            </property>
-                            <property name="alignment">
-                             <set>Qt::AlignCenter</set>
-                            </property>
-                            <property name="wordWrap">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                         </layout>
-                        </item>
-                        <item>
-                         <layout class="QHBoxLayout" name="_18">
-                          <item>
-                           <spacer>
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                             <enum>QSizePolicy::Minimum</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>0</width>
-                              <height>0</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item>
-                           <widget class="QSlider" name="sldNetBuf">
-                            <property name="minimum">
-                             <number>1</number>
-                            </property>
-                            <property name="maximum">
-                             <number>20</number>
-                            </property>
-                            <property name="pageStep">
-                             <number>1</number>
-                            </property>
-                            <property name="orientation">
-                             <enum>Qt::Vertical</enum>
-                            </property>
-                            <property name="tickPosition">
-                             <enum>QSlider::TicksBothSides</enum>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <spacer>
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                             <enum>QSizePolicy::Minimum</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>0</width>
-                              <height>0</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item>
-                           <widget class="QSlider" name="sldNetBufServer">
-                            <property name="minimum">
-                             <number>1</number>
-                            </property>
-                            <property name="maximum">
-                             <number>20</number>
-                            </property>
-                            <property name="pageStep">
-                             <number>1</number>
-                            </property>
-                            <property name="orientation">
-                             <enum>Qt::Vertical</enum>
-                            </property>
-                            <property name="tickPosition">
-                             <enum>QSlider::TicksBothSides</enum>
-                            </property>
-                           </widget>
-                          </item>
-                         </layout>
-                        </item>
-                       </layout>
-                      </widget>
+                      <layout class="QGridLayout" name="_10">
+                       <item row="0" column="4">
+                        <spacer name="horizontalSpacer_9">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>1</width>
+                           <height>5</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="0" column="3">
+                        <widget class="QLabel" name="lblUpstreamUnit">
+                         <property name="text">
+                          <string>kbps</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QLabel" name="lblUpstreamValue">
+                         <property name="text">
+                          <string>val</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                         <property name="margin">
+                          <number>2</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <spacer name="horizontalSpacer_10">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>1</width>
+                           <height>5</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
                      </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="grbJitterBuffer">
+                    <property name="title">
+                     <string>Jitter Buffer</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="_15">
                      <item>
-                      <widget class="QCheckBox" name="chbEnableOPUS64">
+                      <widget class="QCheckBox" name="chbAutoJitBuf">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                          <horstretch>0</horstretch>
@@ -2766,82 +2822,151 @@ text-decoration: underline;</string>
                         </sizepolicy>
                        </property>
                        <property name="text">
-                        <string>Enable Small Network Buffers</string>
+                        <string>Auto (recommended)</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <widget class="QGroupBox" name="grbUpstreamValue">
-                       <property name="title">
-                        <string>Audio Stream Rate</string>
-                       </property>
-                       <layout class="QVBoxLayout" name="verticalLayout_14">
-                        <property name="spacing">
-                         <number>2</number>
-                        </property>
-                        <item>
-                         <layout class="QGridLayout" name="_10">
-                          <item row="0" column="4">
-                           <spacer name="horizontalSpacer_9">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>1</width>
-                              <height>5</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item row="0" column="3">
-                           <widget class="QLabel" name="lblUpstreamUnit">
-                            <property name="text">
-                             <string>kbps</string>
-                            </property>
-                            <property name="alignment">
-                             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="0" column="1">
-                           <widget class="QLabel" name="lblUpstreamValue">
-                            <property name="text">
-                             <string>val</string>
-                            </property>
-                            <property name="alignment">
-                             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                            </property>
-                            <property name="margin">
-                             <number>2</number>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="0" column="0">
-                           <spacer name="horizontalSpacer_10">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>1</width>
-                              <height>5</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                         </layout>
-                        </item>
-                       </layout>
-                      </widget>
+                      <layout class="QHBoxLayout" name="_16">
+                       <item>
+                        <widget class="QLabel" name="lblNetBufLabel">
+                         <property name="text">
+                          <string>Local</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lblNetBufServerLabel">
+                         <property name="text">
+                          <string>Server</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="_17">
+                       <item>
+                        <widget class="QLabel" name="lblNetBuf">
+                         <property name="text">
+                          <string>Size</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="lblNetBufServer">
+                         <property name="text">
+                          <string>Size</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="_18">
+                       <item>
+                        <spacer>
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Minimum</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QSlider" name="sldNetBuf">
+                         <property name="minimum">
+                          <number>1</number>
+                         </property>
+                         <property name="maximum">
+                          <number>20</number>
+                         </property>
+                         <property name="pageStep">
+                          <number>1</number>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                         <property name="tickPosition">
+                          <enum>QSlider::TicksBothSides</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer>
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Minimum</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QSlider" name="sldNetBufServer">
+                         <property name="minimum">
+                          <number>1</number>
+                         </property>
+                         <property name="maximum">
+                          <number>20</number>
+                         </property>
+                         <property name="pageStep">
+                          <number>1</number>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                         <property name="tickPosition">
+                          <enum>QSlider::TicksBothSides</enum>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </item>
                     </layout>
-                   </item>
-                  </layout>
-                 </widget>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <spacer name="horizontalSpacer_15">
+                 <spacer name="horizontalSpacer_7">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
