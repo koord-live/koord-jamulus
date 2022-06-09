@@ -308,6 +308,9 @@ Function Build-App
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
 
+    # get visibility on deployed files
+    Tree "$DeployPath\$BuildArch" /f /a
+
     # Manually copy in webengine exe
     Copy-Item -Path "$QtInstallPath64/$QtCompile64/bin/QtWebEngineProcess.exe" -Destination "$DeployPath\$BuildArch"
 
