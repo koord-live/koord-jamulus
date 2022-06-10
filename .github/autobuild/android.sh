@@ -79,7 +79,10 @@ setup_qt() {
         # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qttools qttranslations icu
-        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
+        # Build for 64bit android_arm64_v8a only:
+        # - 64bit required for Play Store
+        # - qmake in Qt6 only allows 1 arch to be built! Need to move to CMake to build other archs eg arm_v7 into same aab
+        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_arm64_v8a \
             --archives qtbase qtdeclarative qttools qttranslations \
             --modules qtwebview 
     fi
