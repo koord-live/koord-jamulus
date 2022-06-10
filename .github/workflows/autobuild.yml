@@ -105,7 +105,7 @@ jobs:
         # Think of this like a foreach loop. Basically runs the steps with every combination of
         # the contents of this.
         config:
-          - config_name:            Android .aab (artifact+codeQL)
+          - config_name:            Android 7+(?) armeabi_v7 .aab
             target_os:              android
             building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/android.sh
@@ -115,13 +115,14 @@ jobs:
 
           # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
           # Can install Qt using aqtinstall on 20.04
-          - config_name:            Linux appimage amd64 (artifacts+codeQL)
+          - config_name:            Linux glibc2.31+ x64 appimg
             target_os:              linux
             building_on_os:         ubuntu-20.04
             base_command:           ./.github/autobuild/linux.sh
             run_codeql:             false
 
           ## Qt6 from apt - crossbuild for armhf eg rPi
+          ## Disable for now: likely no Qt6 on rPi anyway. AppImage preferable
           # - config_name:            Linux .deb armhf (artifacts)
           #   target_os:              linux
           #   building_on_os:         ubuntu-22.04
@@ -137,17 +138,18 @@ jobs:
           #   run_codeql:             false
           #   xcode_version:          13.2.1
 
-          - config_name:            MacOS 10.14+ (artifacts+CodeQL)
+          - config_name:            MacOS 10.14+ x64 pkg
             target_os:              macos
+            # Build platform can be newer than target platform
             building_on_os:         macos-10.15
             base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
             run_codeql:             false
-            # Target oldest version of macOS: 10.14 - xcode 12 needed 
+            # Target oldest macOS version supported by Qt6: 10.14 - so xcode 12 needed 
             # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
             # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
             xcode_version:          12.1.1
 
-          - config_name:            iOS (artifacts)
+          - config_name:            iOS 10.13+(?) ipa
             target_os:              ios
             building_on_os:         macos-11
             base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
@@ -157,7 +159,7 @@ jobs:
             run_codeql:             false
             xcode_version:          13.2.1
 
-          - config_name:            Windows (artifact+codeQL)
+          - config_name:            Windows 10+ x64 exe
             target_os:              windows
             building_on_os:         windows-2019
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
