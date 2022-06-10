@@ -203,7 +203,7 @@ win32 {
     }
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-    ANDROID_ABIS = armeabi-v7a
+    ANDROID_ABIS = arm64-v8a
     # ANDROID_MIN_SDK_VERSION = 25
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
