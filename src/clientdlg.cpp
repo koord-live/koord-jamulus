@@ -501,9 +501,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     lblAudioPan->setWhatsThis ( strAudFader );
     lblAudioPanValue->setWhatsThis ( strAudFader );
-    sldAudioPan->setWhatsThis ( strAudFader );
+//    sldAudioPan->setWhatsThis ( strAudFader );
 
-    sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
+//    sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // jitter buffer
     QString strJitterBufferSize = "<b>" + tr ( "Jitter Buffer Size" ) + ":</b> " +
@@ -787,8 +787,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                  "from your microphone, adjusting your sound equipment "
                                  "or by decreasing your operating system's input settings." );
     lblInputBoost->setWhatsThis ( strInputBoost );
-    cbxInputBoost->setWhatsThis ( strInputBoost );
-    cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
+//    cbxInputBoost->setWhatsThis ( strInputBoost );
+//    cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
     // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
@@ -833,8 +833,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 #endif
 
     // init audio in fader
-    sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
-    sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
+//    sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
+    panDial->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
+//    sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
     UpdateAudioFaderSlider();
 
     // init delay and other information controls
@@ -891,15 +892,16 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
 
-    // Input Boost combo box
-    cbxInputBoost->clear();
-    cbxInputBoost->addItem ( tr ( "None" ) );
-    for ( int i = 2; i <= 10; i++ )
-    {
-        cbxInputBoost->addItem ( QString ( "%1x" ).arg ( i ) );
-    }
+//    // Input Boost combo box
+//    cbxInputBoost->clear();
+//    cbxInputBoost->addItem ( tr ( "None" ) );
+//    for ( int i = 2; i <= 10; i++ )
+//    {
+//        cbxInputBoost->addItem ( QString ( "%1x" ).arg ( i ) );
+//    }
     // factor is 1-based while index is 0-based:
-    cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
+//    cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
+    dialInputBoost->setValue( pSettings->iInputBoost );
 
     // init number of mixer rows
     spnMixerRows->setValue ( pSettings->iNumMixerPanelRows );
@@ -1206,8 +1208,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( chbDetectFeedback, &QCheckBox::stateChanged, this, &CClientDlg::OnFeedbackDetectionChanged );
 
+//    // line edits
+//    QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished, this, &CClientDlg::OnNewClientLevelEditingFinished );
     // line edits
-    QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished, this, &CClientDlg::OnNewClientLevelEditingFinished );
+//    QObject::connect ( newInputLevelDial, &QLineEdit::editingFinished, this, &CClientDlg::OnNewClientLevelEditingFinished );
+    QObject::connect ( newInputLevelDial,
+                       &QSlider::valueChanged,
+                       this,
+                       &CClientDlg::OnNewClientLevelChanged );
 
     // combo boxes
     QObject::connect ( cbxSoundcard,
@@ -1264,8 +1272,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientDlg::OnLanguageChanged );
 
-    QObject::connect ( cbxInputBoost,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+//    QObject::connect ( cbxInputBoost,
+//                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+//                       this,
+//                       &CClientDlg::OnInputBoostChanged );
+
+    QObject::connect ( dialInputBoost,
+                       &QSlider::valueChanged,
                        this,
                        &CClientDlg::OnInputBoostChanged );
 
@@ -1277,7 +1290,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // misc
     // sliders
-    QObject::connect ( sldAudioPan, &QSlider::valueChanged, this, &CClientDlg::OnAudioPanValueChanged );
+//    QObject::connect ( sldAudioPan, &QSlider::valueChanged, this, &CClientDlg::OnAudioPanValueChanged );
+    // panDial
+    QObject::connect ( panDial, &QSlider::valueChanged, this, &CClientDlg::OnAudioPanValueChanged );
 
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
                        static_cast<void ( QButtonGroup::* ) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
@@ -2132,6 +2147,12 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
             return;
         }
 
+        // set session status bar
+//        sessionStatusLabel->setText(strSelectedAddress);
+        sessionStatusLabel->setText("CONNECTED");
+        sessionStatusLabel->setStyleSheet ( "QLabel { color: green; font: bold; }" );
+
+
         // hide label connect to server
         lblConnectToServer->hide();
         lbrInputLevelL->setEnabled ( true );
@@ -2171,6 +2192,10 @@ void CClientDlg::Disconnect()
 
     // change connect button text to "connect"
     butConnect->setText ( tr ( "Join..." ) );
+
+    // reset session status bar
+    sessionStatusLabel->setText("NO SESSION");
+    sessionStatusLabel->setStyleSheet ( "QLabel { color: white; font: normal; }" );
 
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );
@@ -2387,6 +2412,8 @@ void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, cons
                                         "                   left: 7px;"
                                         "                   color: rgb(255,255,255);"
                                         "                   background-color: rgb(255,0,0); }" );
+        recLabel->setStyleSheet ( "QLabel { color: red; font: bold; }" );
+
     }
     else
     {
@@ -2404,6 +2431,7 @@ void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, cons
                                             "                   left: 7px;"
                                             "                   color: rgb(0,0,0); }" );
         }
+        recLabel->setStyleSheet ( "QLabel { color: rgb(86, 86, 86); font: normal; }" );
     }
 }
 
@@ -2774,8 +2802,21 @@ void CClientDlg::UpdateDirectoryServerComboBox()
 void CClientDlg::OnInputBoostChanged()
 {
     // index is zero-based while boost factor must be 1-based:
-    pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
+//    pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
+    pSettings->iInputBoost = dialInputBoost->value();
     pClient->SetInputBoost ( pSettings->iInputBoost );
+}
+
+void CClientDlg::OnNewClientLevelChanged()
+{
+    // index is zero-based while boost factor must be 1-based:
+//    pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
+    pSettings->iInputBoost = dialInputBoost->value();
+    pClient->SetInputBoost ( pSettings->iInputBoost );
+
+    pSettings->iNewClientFaderLevel = newInputLevelDial->value();
+    edtNewClientLevel->setText(QString::number(newInputLevelDial->value()));
+    //edtNewClientLevel->text().toInt();
 }
 
 void CClientDlg::OnAliasTextChanged ( const QString& strNewName )
@@ -2854,7 +2895,8 @@ void CClientDlg::UpdateAudioFaderSlider()
 {
     // update slider and label of audio fader
     const int iCurAudInFader = pClient->GetAudioInFader();
-    sldAudioPan->setValue ( iCurAudInFader );
+//    sldAudioPan->setValue ( iCurAudInFader );
+    panDial->setValue ( iCurAudInFader );
 
     // show in label the center position and what channel is
     // attenuated

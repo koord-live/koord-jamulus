@@ -966,8 +966,9 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     {
         // no connection or connection was reset: show default title
         //FIXME Don't want this hardcoding!
-        //setTitle ( tr ( "Session Channels" ) );
-
+//        setTitle ( tr ( "Session Channels" ) );
+        ;
+        // don't do anything for now!
     }
     else
     {
@@ -976,7 +977,9 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
         // list was received, the connection was successful and the title is updated
         // with the correct server name. Make sure to choose a "try to connect" title
         // which is most striking (we use filled blocks and upper case letters).
-        setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
+//        setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
+        ;
+        // don't do anything for now !!
     }
 }
 
@@ -1174,7 +1177,8 @@ void CAudioMixerBoard::UpdateTitle()
 
     if ( eRecorderState == RS_RECORDING )
     {
-        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+//        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        // nope don't set title here any more
     }
 
     // replace & signs with && (See Qt documentation for QLabel)
@@ -1185,7 +1189,8 @@ void CAudioMixerBoard::UpdateTitle()
     strEscServerName.replace ( "&", "&&" );
 
     //FIXME let's not do hard-coding like this
-    setTitle ( strTitlePrefix + tr ( "SESSION Mix at: " ) + strEscServerName );
+//    setTitle ( strTitlePrefix + tr ( "SESSION Mix at: " ) + strEscServerName );
+    // don't set title here now!
     setAccessibleName ( title() );
 }
 
