@@ -52,12 +52,34 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 {
     setupUi ( this );
 
+//    // setup style
+//    QFile f(":qdarkstyle/dark/darkstyle.qss");
+//    if (!f.exists())   {
+//        printf("Unable to set stylesheet, file not found\n");
+//    }
+//    else   {
+//        f.open(QFile::ReadOnly | QFile::Text);
+//        QTextStream ts(&f);
+//        qApp->setStyleSheet(ts.readAll());
+//    }
+
     // Add video webview to videoTab
     QQuickWidget *m_quickWidget = new QQuickWidget(this) ;
     m_quickWidget->setSource(QUrl("qrc:/webview.qml"));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     videoTab->layout()->addWidget(m_quickWidget);
 
+    // Set up touch on all widgets' viewports which inherit from QAbstractScrollArea
+    // https://doc.qt.io/qt-6/qtouchevent.html#details
+    scrollArea->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
+    txvHelp->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
+    txvAbout->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
+    txvChatWindow->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
+    // ??
+    QScroller::grabGesture(scrollArea, QScroller::TouchGesture);
+    QScroller::grabGesture(txvHelp, QScroller::TouchGesture);
+    QScroller::grabGesture(txvAbout, QScroller::TouchGesture);
+    QScroller::grabGesture(txvChatWindow, QScroller::TouchGesture);
 
     // add Session Chat stuff
     // input message text
@@ -1714,6 +1736,10 @@ void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo 
 
     // update mixer board with the additional client infos
     MainMixerBoard->ApplyNewConClientList ( vecChanInfo );
+    // set session status bar with address
+    sessionStatusLabel->setText("CONNECTED");
+    sessionStatusLabel->setStyleSheet ( "QLabel { color: green; font: bold; }" );
+
 }
 
 void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
@@ -2149,9 +2175,8 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
         // set session status bar
 //        sessionStatusLabel->setText(strSelectedAddress);
-        sessionStatusLabel->setText("CONNECTED");
-        sessionStatusLabel->setStyleSheet ( "QLabel { color: green; font: bold; }" );
-
+//        sessionStatusLabel->setText("CONNECTED");
+//        sessionStatusLabel->setStyleSheet ( "QLabel { color: green; font: bold; }" );
 
         // hide label connect to server
         lblConnectToServer->hide();
@@ -2161,8 +2186,18 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         // change connect button text to "disconnect"
         butConnect->setText ( tr ( "&Disconnect" ) );
 
-        // set server name in audio mixer group box title
-        MainMixerBoard->SetServerName ( strMixerBoardLabel );
+        // set connection status in status bar
+        if (strMixerBoardLabel.isEmpty())
+        {
+            sessionStatusLabel->setText("NO SESSION");
+            sessionStatusLabel->setStyleSheet ( "QLabel { color: gray; font: bold; }" );
+        }
+        else
+        {
+            sessionStatusLabel->setText("CONNECTING...");
+            sessionStatusLabel->setStyleSheet ( "QLabel { color: orange; font: bold; }" );
+        }
+//        MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
         // start timer for level meter bar and ping time measurement
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
@@ -2196,9 +2231,8 @@ void CClientDlg::Disconnect()
     // reset session status bar
     sessionStatusLabel->setText("NO SESSION");
     sessionStatusLabel->setStyleSheet ( "QLabel { color: white; font: normal; }" );
-
     // reset server name in audio mixer group box title
-    MainMixerBoard->SetServerName ( "" );
+//    MainMixerBoard->SetServerName ( "" );
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();
