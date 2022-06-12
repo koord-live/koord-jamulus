@@ -79,19 +79,24 @@ build_app()
     # Add Qt deployment dependencies
     if [[ -z "$cert_name" ]]; then
         macdeployqt "${build_path}/${target_name}.app" \
-            -verbose=2 \
+            -verbose=3 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -qmldir="${root_path}/src"
     else     # we do this here for signed / notarized dmg ..?
         macdeployqt "${build_path}/${target_name}.app" \
-            -verbose=2 \
+            -verbose=3 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${cert_name}" \
             -qmldir="${root_path}/src"
     fi
 
+    # debug:
+    echo ">>> BUILD FINISHED. Tree listing of ${build_path}/${target_name}.app/ follows:"
+    tree ${build_path}/${target_name}.app/
+
+    echo ">>> Removing from app: ${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
     # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
     rm -fr "${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
 
@@ -137,7 +142,7 @@ build_installer_pkg()
 
         # Add Qt deployment deps and codesign the app for App Store submission
         macdeployqt "${build_path}_storesign/${target_name}.app" \
-            -verbose=2 \
+            -verbose=3 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${macapp_cert_name}" \
