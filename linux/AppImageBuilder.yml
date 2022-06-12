@@ -6,7 +6,7 @@ AppDir:
     id: live.koord.koordrt
     name: Koord-RT
     icon: koordrt
-    version: 3.8.83
+    version: 1.9.4
     exec: usr/bin/Koord-RT
     exec_args: $@
   files:

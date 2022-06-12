@@ -1,3 +1,7 @@
+### 1.9.4 (2022-06-12) ###
+
+- Client: Koord-RT - qt6, webview, redo versions for v2_pre versions
+
 ### 3.8.81 (2022-05-17) ###
 
 - Client: Koord-RT - fix build issues
