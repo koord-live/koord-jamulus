@@ -93,8 +93,8 @@ build_app()
     fi
 
     # debug:
-    echo ">>> BUILD FINISHED. Tree listing of ${build_path}/${target_name}.app/ follows:"
-    tree ${build_path}/${target_name}.app/
+    echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ follows:"
+    ls -alR ${build_path}/${target_name}.app/
 
     echo ">>> Removing from app: ${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
     # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
