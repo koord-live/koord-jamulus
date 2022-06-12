@@ -932,6 +932,10 @@ int main ( int argc, char** argv )
     // bUseMultithreading = true;
     QApplication* pApp = new QApplication ( argc, argv );
 #    else
+
+    // https://doc.qt.io/qt-6/qml-qtwebengine-webengineview.html#details
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+//    QtWebEngineQuick::initialize();
     // need this before new QApplication
     QtWebView::initialize();
 
