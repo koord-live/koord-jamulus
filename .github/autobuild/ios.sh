@@ -92,9 +92,9 @@ pass_artifact_to_job() {
     # just pass the one IPA file
     local SIGN_TEST=$(ls deploy/Koord-RT_*.ipa | grep -i unsigned)
     if [ "${SIGN_TEST}" == "" ]; then
-        local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
+        local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
     else
-        local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_iOS_unsigned${ARTIFACT_SUFFIX:-}.ipa"
+        local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_unsigned${ARTIFACT_SUFFIX:-}.ipa"
     fi
 
     echo "Moving build artifact to deploy/${artifact}"

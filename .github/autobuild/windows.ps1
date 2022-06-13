@@ -108,7 +108,7 @@ Function Build-App-With-Installer
 
 Function Pass-Artifact-to-Job
 {
-    $artifact = "koord-rt_${JamulusVersion}_win.exe"
+    $artifact = "Koord_${JamulusVersion}_win.exe"
 
     echo "Copying artifact to ${artifact}"
     # "Output" is name of dir for innosetup output

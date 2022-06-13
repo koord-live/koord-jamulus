@@ -110,7 +110,7 @@ build_app_as_aab() {
 
 pass_artifact_to_job() {
     mkdir deploy
-    local artifact="koord-rt_${JAMULUS_BUILD_VERSION}_android.aab"
+    local artifact="Koord_${JAMULUS_BUILD_VERSION}_android.aab"
     # debug to check for filenames
     ls -alR ${BUILD_DIR}/build/
     echo "Moving ${BUILD_DIR}/build/outputs/bundle/release/build-release.aab to deploy/${artifact}"
