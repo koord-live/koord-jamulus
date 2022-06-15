@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap10 rescap">
+  <!--Package created by MSIX Packaging Tool version: 1.2022.330.0-->
+  <Identity Name="Koord.KoordRT" Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C" Version="1.0.0.0" ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Koord RT</DisplayName>
+    <PublisherDisplayName>Koord</PublisherDisplayName>
+    <Description>Play music live in real-time over the internet</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <uap10:PackageIntegrity>
+      <uap10:Content Enforcement="on" />
+    </uap10:PackageIntegrity>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22000.1" />
+  </Dependencies>
+  <Applications>
+    <Application Id="KOORDREALTIME" Executable="VFS\ProgramFilesX64\Koord-RealTime\Koord-RealTime.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements BackgroundColor="transparent" DisplayName="Koord-RealTime" Square150x150Logo="Assets\KOORDREALTIME-Square150x150Logo.png" Square44x44Logo="Assets\KOORDREALTIME-Square44x44Logo.png" Description="Koord-RealTime">
+        <uap:DefaultTile Wide310x150Logo="Assets\KOORDREALTIME-Wide310x150Logo.png" Square310x310Logo="Assets\KOORDREALTIME-Square310x310Logo.png" Square71x71Logo="Assets\KOORDREALTIME-Square71x71Logo.png" />
+      </uap:VisualElements>
+    </Application>
+    <Application Id="KDASIOCONFIG" Executable="VFS\ProgramFilesX64\Koord-RealTime\kdasioconfig.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Config" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="KoordASIO Config">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\Square310x310Logo.png" Square71x71Logo="Assets\Square71x71Logo.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
