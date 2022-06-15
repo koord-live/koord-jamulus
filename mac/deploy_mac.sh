@@ -140,32 +140,39 @@ build_installer_pkg()
         # Clone the build directory to leave the adhoc signed app untouched
         cp -a ${build_path} "${build_path}_storesign"
 
+        cd ${build_path}_storesign/
+
         # Add Qt deployment deps and codesign the app for App Store submission
-        macdeployqt "${build_path}_storesign/${target_name}.app" \
+        macdeployqt "${target_name}.app" \
             -verbose=3 \
+            -dmg \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${macapp_cert_name}" \
             -qmldir="${root_path}/src/"
 
+        cd ..
+        echo "Listing the app dir structure"
+        ls -al "${build_path}_storesign/${target_name}.app"
+
+        echo "Removing ${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
         # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
         rm -fr "${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
 
-        # Create pkg installer and sign for App Store submission
-        productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
-            --component "${build_path}_storesign/${target_name}.app" \
-            /Applications \
-            "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
+        # # Create pkg installer and sign for App Store submission
+        # productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
+        #     --component "${build_path}_storesign/${target_name}.app" \
+        #     /Applications \
+        #     "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
 
-
-        NOTARIZATION_PASSWORD=""
-        if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
-            xcrun altool --validate-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
-            xcrun altool --upload-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
-        fi
+        # NOTARIZATION_PASSWORD=""
+        # if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
+        #     xcrun altool --validate-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
+        #     xcrun altool --upload-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
+        # fi
 
         # move created pkg file to prep for download
-        mv "${build_path}_storesign/Koord-RT_${app_version}.pkg" "${deploypkg_path}"
+        mv "${build_path}_storesign/Koord-RT_${app_version}.dmg" "${deploypkg_path}"
     fi
 }
 

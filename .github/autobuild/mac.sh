@@ -98,15 +98,15 @@ build_app_as_dmg_installer() {
 }
 
 pass_artifact_to_job() {
-    artifact="Koord_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
+    artifact="Koord_${JAMULUS_BUILD_VERSION}_mac_adhoc${ARTIFACT_SUFFIX:-}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Koord-RT-*installer-mac.dmg "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
 
-    artifact2="Koord_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
-    if [ -f ./deploypkg/Koord-RT_*.pkg ]; then
+    artifact2="Koord_${JAMULUS_BUILD_VERSION}_mac_storesign${ARTIFACT_SUFFIX:-}.pkg"
+    if [ -f ./deploypkg/Koord-RT_*.dmg ]; then
         echo "Moving build artifact2 to deploy/${artifact2}"
-        mv ./deploypkg/Koord-RT_*.pkg "./deploy/${artifact2}"
+        mv ./deploypkg/Koord-RT_*.dmg "./deploy/${artifact2}"
         echo "::set-output name=artifact_2::${artifact2}"
     fi
 }
