@@ -153,9 +153,9 @@ build_installer_pkg()
 
         cd ..
         echo "finding the dmg file...."
-        find . | grep *.dmg
-        echo "Listing the app dir structure"
-        ls -alR "${build_path}_storesign/"
+        ls -alR
+        # echo "Listing the app dir structure"
+        # ls -alR "${build_path}_storesign/"
 
         echo "Removing ${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
         # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
