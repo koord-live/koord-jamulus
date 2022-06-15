@@ -106,7 +106,7 @@ pass_artifact_to_job() {
     artifact2="Koord_${JAMULUS_BUILD_VERSION}_mac_storesign${ARTIFACT_SUFFIX:-}.pkg"
     if [ -f ./deploypkg/Koord-RT_*.dmg ]; then
         echo "Moving build artifact2 to deploy/${artifact2}"
-        mv ./deploypkg/Koord-RT_*.dmg "./deploy/${artifact2}"
+        mv ./deploypkg/Koord-RT*.dmg "./deploy/${artifact2}"
         echo "::set-output name=artifact_2::${artifact2}"
     fi
 }

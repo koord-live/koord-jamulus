@@ -153,7 +153,7 @@ build_installer_pkg()
 
         cd ..
         echo "Listing the app dir structure"
-        ls -al "${build_path}_storesign/${target_name}.app"
+        ls -alR "${build_path}_storesign/${target_name}.app"
 
         echo "Removing ${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
         # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
@@ -172,7 +172,7 @@ build_installer_pkg()
         # fi
 
         # move created pkg file to prep for download
-        mv "${build_path}_storesign/Koord-RT_${app_version}.dmg" "${deploypkg_path}"
+        mv "${build_path}_storesign/Koord-RT*.dmg" "${deploypkg_path}"
     fi
 }
 
