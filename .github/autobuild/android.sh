@@ -98,6 +98,7 @@ build_app_as_aab() {
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
     "${QT_BASEDIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
+        --verbose \
         --output "${BUILD_DIR}" \
         --aab \
         --release \
