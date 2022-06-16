@@ -311,15 +311,7 @@ win32 {
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS_GUI = src/aboutdlgbase.ui \
-    src/serverdlgbase.ui
-
-!contains(CONFIG, "serveronly") {
-    FORMS_GUI += src/clientdlgbase.ui \
-        src/clientsettingsdlgbase.ui \
-        src/chatdlgbase.ui \
-        src/basicconnectdlgbase.ui
-}
+FORMS_GUI += src/clientdlgbase.ui 
 
 HEADERS += src/buffer.h \
     src/channel.h \
