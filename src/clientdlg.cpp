@@ -46,7 +46,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
 //    ClientSettingsDlg ( pNCliP, pNSetP, parent ),
-    ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
+//    ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
     BasicConnectDlg ( pNSetP, parent ),
     AnalyzerConsole ( pNCliP, parent ),
     strSelectedAddress ("")
@@ -317,7 +317,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     UpdateRevSelection();
 
     // init connect dialog
-    ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
+//    ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
 
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
@@ -496,11 +496,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //        ShowChatWindow();
 //    }
 
-    // connection setup window
-    if ( !pSettings->vecWindowPosConnect.isEmpty() && !pSettings->vecWindowPosConnect.isNull() )
-    {
-        ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
-    }
+//    // connection setup window
+//    if ( !pSettings->vecWindowPosConnect.isEmpty() && !pSettings->vecWindowPosConnect.isNull() )
+//    {
+//        ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
+//    }
 
     // basic connection setup window
     if ( !pSettings->vecWindowPosBasicConnect.isEmpty() && !pSettings->vecWindowPosBasicConnect.isNull() )
@@ -1145,13 +1145,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pClient, &CClient::PingTimeReceived, this, &CClientDlg::OnPingTimeResult );
 
-    QObject::connect ( pClient, &CClient::CLServerListReceived, this, &CClientDlg::OnCLServerListReceived );
+//    QObject::connect ( pClient, &CClient::CLServerListReceived, this, &CClientDlg::OnCLServerListReceived );
 
-    QObject::connect ( pClient, &CClient::CLRedServerListReceived, this, &CClientDlg::OnCLRedServerListReceived );
+//    QObject::connect ( pClient, &CClient::CLRedServerListReceived, this, &CClientDlg::OnCLRedServerListReceived );
 
-    QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived, this, &CClientDlg::OnCLConnClientsListMesReceived );
+//    QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived, this, &CClientDlg::OnCLConnClientsListMesReceived );
 
-    QObject::connect ( pClient, &CClient::CLPingTimeWithNumClientsReceived, this, &CClientDlg::OnCLPingTimeWithNumClientsReceived );
+//    QObject::connect ( pClient, &CClient::CLPingTimeWithNumClientsReceived, this, &CClientDlg::OnCLPingTimeWithNumClientsReceived );
 
     QObject::connect ( pClient, &CClient::ControllerInFaderLevel, this, &CClientDlg::OnControllerInFaderLevel );
 
@@ -1178,7 +1178,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( this, &CClientDlg::AudioChannelsChanged, this, &CClientDlg::OnAudioChannelsChanged );
 
-    QObject::connect ( this, &CClientDlg::CustomDirectoriesChanged, &ConnectDlg, &CConnectDlg::OnCustomDirectoriesChanged );
+//    QObject::connect ( this, &CClientDlg::CustomDirectoriesChanged, &ConnectDlg, &CConnectDlg::OnCustomDirectoriesChanged );
 
     QObject::connect ( this, &CClientDlg::NumMixerPanelRowsChanged, this, &CClientDlg::OnNumMixerPanelRowsChanged );
 
@@ -1194,20 +1194,20 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( this, &CClientDlg::NewLocalInputText, this, &CClientDlg::OnNewLocalInputText );
 
-    QObject::connect ( &ConnectDlg, &CConnectDlg::ReqServerListQuery, this, &CClientDlg::OnReqServerListQuery );
+//    QObject::connect ( &ConnectDlg, &CConnectDlg::ReqServerListQuery, this, &CClientDlg::OnReqServerListQuery );
 
     // note that this connection must be a queued connection, otherwise the server list ping
     // times are not accurate and the client list may not be retrieved for all servers listed
     // (it seems the sendto() function needs to be called from different threads to fire the
     // packet immediately and do not collect packets before transmitting)
-    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListPingMes, this, &CClientDlg::OnCreateCLServerListPingMes, Qt::QueuedConnection );
+//    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListPingMes, this, &CClientDlg::OnCreateCLServerListPingMes, Qt::QueuedConnection );
 
-    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListReqVerAndOSMes, this, &CClientDlg::OnCreateCLServerListReqVerAndOSMes );
+//    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListReqVerAndOSMes, this, &CClientDlg::OnCreateCLServerListReqVerAndOSMes );
 
-    QObject::connect ( &ConnectDlg,
-                       &CConnectDlg::CreateCLServerListReqConnClientsListMes,
-                       this,
-                       &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
+//    QObject::connect ( &ConnectDlg,
+//                       &CConnectDlg::CreateCLServerListReqConnClientsListMes,
+//                       this,
+//                       &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
 //    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
 //    QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
@@ -1365,11 +1365,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // start timer for status bar
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
 
-    // restore connect dialog
-    if ( pSettings->bWindowWasShownConnect )
-    {
-         ShowConnectionSetupDialog();
-    }
+//    // restore connect dialog
+//    if ( pSettings->bWindowWasShownConnect )
+//    {
+//         ShowConnectionSetupDialog();
+//    }
 
 //    // restore basic connect dialog
 //    if ( pSettings->bWindowWasShownBasicConnect )
@@ -1410,18 +1410,18 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pSettings->vecWindowPosMain     = saveGeometry();
 //    pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
 //    pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
-    pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
+//    pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
     pSettings->vecWindowPosBasicConnect  = BasicConnectDlg.saveGeometry();
 
 //    pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
 //    pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
-    pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
+//    pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
     pSettings->bWindowWasShownConnect  = BasicConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
 //    ClientSettingsDlg.close();
 //    ChatDlg.close();
-    ConnectDlg.close();
+//    ConnectDlg.close();
     BasicConnectDlg.close();
     AnalyzerConsole.close();
 
@@ -1434,7 +1434,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     // make sure all current fader settings are applied to the settings struct
     MainMixerBoard->StoreAllFaderSettings();
 
-    pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
+//    pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
     pSettings->eChannelSortType            = MainMixerBoard->GetFaderSorting();
     pSettings->iNumMixerPanelRows          = MainMixerBoard->GetNumMixerPanelRows();
 
@@ -1500,67 +1500,67 @@ void CClientDlg::UpdateRevSelection()
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
 
-void CClientDlg::OnConnectDlgAccepted()
-{
-    // We had an issue that the accepted signal was emit twice if a list item was double
-    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
-    // we process the accepted signal only once after the dialog was initially shown.
-    if ( bConnectDlgWasShown )
-    {
-        // get the address from the connect dialog
-        QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
+//void CClientDlg::OnConnectDlgAccepted()
+//{
+//    // We had an issue that the accepted signal was emit twice if a list item was double
+//    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
+//    // we process the accepted signal only once after the dialog was initially shown.
+//    if ( bConnectDlgWasShown )
+//    {
+//        // get the address from the connect dialog
+//        QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
-        // only store new host address in our data base if the address is
-        // not empty and it was not a server list item (only the addresses
-        // typed in manually are stored by definition)
-        if ( !strSelectedAddress.isEmpty() && !ConnectDlg.GetServerListItemWasChosen() )
-        {
-            // store new address at the top of the list, if the list was already
-            // full, the last element is thrown out
-            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
-        }
+//        // only store new host address in our data base if the address is
+//        // not empty and it was not a server list item (only the addresses
+//        // typed in manually are stored by definition)
+//        if ( !strSelectedAddress.isEmpty() && !ConnectDlg.GetServerListItemWasChosen() )
+//        {
+//            // store new address at the top of the list, if the list was already
+//            // full, the last element is thrown out
+//            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+//        }
 
-        // get name to be set in audio mixer group box title
-        QString strMixerBoardLabel;
+//        // get name to be set in audio mixer group box title
+//        QString strMixerBoardLabel;
 
-        if ( ConnectDlg.GetServerListItemWasChosen() )
-        {
-            // in case a server in the server list was chosen,
-            // display the server name of the server list
-            strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
-        }
-        else
-        {
-            // an item of the server address combo box was chosen,
-            // just show the address string as it was entered by the
-            // user
-            strMixerBoardLabel = strSelectedAddress;
+//        if ( ConnectDlg.GetServerListItemWasChosen() )
+//        {
+//            // in case a server in the server list was chosen,
+//            // display the server name of the server list
+//            strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
+//        }
+//        else
+//        {
+//            // an item of the server address combo box was chosen,
+//            // just show the address string as it was entered by the
+//            // user
+//            strMixerBoardLabel = strSelectedAddress;
 
-            // special case: if the address is empty, we substitute the default
-            // directory address so that a user who just pressed the connect
-            // button without selecting an item in the table or manually entered an
-            // address gets a successful connection
-            if ( strSelectedAddress.isEmpty() )
-            {
-                strSelectedAddress = DEFAULT_SERVER_ADDRESS;
-                strMixerBoardLabel = tr ( "%1 Directory" ).arg ( DirectoryTypeToString ( AT_DEFAULT ) );
-            }
-        }
+//            // special case: if the address is empty, we substitute the default
+//            // directory address so that a user who just pressed the connect
+//            // button without selecting an item in the table or manually entered an
+//            // address gets a successful connection
+//            if ( strSelectedAddress.isEmpty() )
+//            {
+//                strSelectedAddress = DEFAULT_SERVER_ADDRESS;
+//                strMixerBoardLabel = tr ( "%1 Directory" ).arg ( DirectoryTypeToString ( AT_DEFAULT ) );
+//            }
+//        }
 
-        // first check if we are already connected, if this is the case we have to
-        // disconnect the old server first
-        if ( pClient->IsRunning() )
-        {
-            Disconnect();
-        }
+//        // first check if we are already connected, if this is the case we have to
+//        // disconnect the old server first
+//        if ( pClient->IsRunning() )
+//        {
+//            Disconnect();
+//        }
 
-        // initiate connection
-        Connect ( strSelectedAddress, strMixerBoardLabel );
+//        // initiate connection
+//        Connect ( strSelectedAddress, strMixerBoardLabel );
 
-        // reset flag
-        bConnectDlgWasShown = false;
-    }
-}
+//        // reset flag
+//        bConnectDlgWasShown = false;
+//    }
+//}
 
 void CClientDlg::OnJoinCancelClicked()
 {
@@ -1939,17 +1939,17 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 #endif
 }
 
-void CClientDlg::ShowConnectionSetupDialog()
-{
-    // show connect dialog
-    bConnectDlgWasShown = true;
-    ConnectDlg.show();
-    ConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
+//void CClientDlg::ShowConnectionSetupDialog()
+//{
+//    // show connect dialog
+//    bConnectDlgWasShown = true;
+//    ConnectDlg.show();
+//    ConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
 
-    // make sure dialog is upfront and has focus
-    ConnectDlg.raise();
-    ConnectDlg.activateWindow();
-}
+//    // make sure dialog is upfront and has focus
+//    ConnectDlg.raise();
+//    ConnectDlg.activateWindow();
+//}
 
 //void CClientDlg::ShowBasicConnectionSetupDialog()
 //{
@@ -2214,11 +2214,11 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
     UpdateSoundDeviceChannelSelectionFrame();
 }
 
-void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients )
-{
-    // update connection dialog server list
-    ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
-}
+//void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients )
+//{
+//    // update connection dialog server list
+//    ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
+//}
 
 void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
 {
@@ -2369,18 +2369,18 @@ void CClientDlg::UpdateDisplay()
 //        chbChat->blockSignals ( false );
 //    }
 
-    if ( chbPubJam->isChecked() && !ConnectDlg.isVisible() )
-    {
-        chbPubJam->blockSignals ( true );
-        chbPubJam->setChecked ( false );
-        chbPubJam->blockSignals ( false );
-    }
-    if ( !chbPubJam->isChecked() && ConnectDlg.isVisible() )
-    {
-        chbPubJam->blockSignals ( true );
-        chbPubJam->setChecked ( true );
-        chbPubJam->blockSignals ( false );
-    }
+//    if ( chbPubJam->isChecked() && !ConnectDlg.isVisible() )
+//    {
+//        chbPubJam->blockSignals ( true );
+//        chbPubJam->setChecked ( false );
+//        chbPubJam->blockSignals ( false );
+//    }
+//    if ( !chbPubJam->isChecked() && ConnectDlg.isVisible() )
+//    {
+//        chbPubJam->blockSignals ( true );
+//        chbPubJam->setChecked ( true );
+//        chbPubJam->blockSignals ( false );
+//    }
 }
 
 void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )

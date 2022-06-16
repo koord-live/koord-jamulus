@@ -50,7 +50,7 @@
 #include "audiomixerboard.h"
 //#include "clientsettingsdlg.h"
 //#include "chatdlg.h"
-#include "connectdlg.h"
+// #include "connectdlg.h"
 #include "basicconnectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
@@ -101,7 +101,7 @@ protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void SetMyWindowTitle ( const int iNumClients );
-    void ShowConnectionSetupDialog();
+//    void ShowConnectionSetupDialog();
 //    void ShowBasicConnectionSetupDialog();
     void ShowJoinWidget();
     void HideJoinWidget();
@@ -142,7 +142,7 @@ protected:
 
 //    CClientSettingsDlg ClientSettingsDlg;
 //    CChatDlg           ChatDlg;
-    CConnectDlg        ConnectDlg;
+    // CConnectDlg        ConnectDlg;
     CBasicConnectDlg   BasicConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
 
@@ -170,7 +170,7 @@ public slots:
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
-    void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
+//    void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
 
     void OnControllerInFaderLevel ( const int iChannelIdx, const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx, iValue ); }
 
@@ -241,20 +241,20 @@ public slots:
 
     void OnCreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListReqConnClientsListMes ( InetAddr ); }
 
-    void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
-    {
-        ConnectDlg.SetServerList ( InetAddr, vecServerInfo );
-    }
+    // void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
+    // {
+    //     ConnectDlg.SetServerList ( InetAddr, vecServerInfo );
+    // }
 
-    void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
-    {
-        ConnectDlg.SetServerList ( InetAddr, vecServerInfo, true );
-    }
+    // void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
+    // {
+    //     ConnectDlg.SetServerList ( InetAddr, vecServerInfo, true );
+    // }
 
-    void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
-    {
-        ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo );
-    }
+    // void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
+    // {
+    //     ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo );
+    // }
 
     void OnClientIDReceived ( int iChanID ) { MainMixerBoard->SetMyChannelID ( iChanID ); }
 
@@ -268,7 +268,7 @@ public slots:
     void OnJoinCancelClicked();
     void OnJoinConnectClicked();
     void OnBasicConnectDlgAccepted();
-    void OnConnectDlgAccepted();
+//    void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
     void OnMeterStyleChanged();
