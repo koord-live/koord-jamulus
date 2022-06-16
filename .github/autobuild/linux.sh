@@ -85,7 +85,7 @@ setup_x64() {
     sudo pip3 install "aqtinstall==${AQTINSTALL_VERSION}"
     sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
         --archives qtbase qtdeclarative qttools icu \
-        --modules qtwebview qtwebengine qtwebchannel qtpositioning
+        --modules qtwebview qtwebengine
 
 }
 
