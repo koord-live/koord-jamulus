@@ -102,7 +102,9 @@ protected:
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void SetMyWindowTitle ( const int iNumClients );
     void ShowConnectionSetupDialog();
-    void ShowBasicConnectionSetupDialog();
+//    void ShowBasicConnectionSetupDialog();
+    void ShowJoinWidget();
+    void HideJoinWidget();
     void ShowGeneralSettings ( int iTab );
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
@@ -130,6 +132,8 @@ protected:
     QTimer         TimerPing;
     QTimer         TimerCheckAudioDeviceOk;
     QTimer         TimerDetectFeedback;
+    // for join
+    QString      strSelectedAddress;
 
     virtual void closeEvent ( QCloseEvent* Event );
     virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
@@ -184,7 +188,7 @@ public slots:
 
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
-    void OnOpenConnectionSetupDialog() { ShowBasicConnectionSetupDialog(); }
+//    void OnOpenConnectionSetupDialog() { ShowBasicConnectionSetupDialog(); }
 //    void OnOpenUserProfileSettings();
 //    void OnOpenAudioNetSettings();
 //    void OnOpenAdvancedSettings();
@@ -261,6 +265,8 @@ public slots:
         MainMixerBoard->SetChannelLevels ( vecLevelList );
     }
 
+    void OnJoinCancelClicked();
+    void OnJoinConnectClicked();
     void OnBasicConnectDlgAccepted();
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }

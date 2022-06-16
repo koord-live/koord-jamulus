@@ -48,7 +48,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //    ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
     BasicConnectDlg ( pNSetP, parent ),
-    AnalyzerConsole ( pNCliP, parent )
+    AnalyzerConsole ( pNCliP, parent ),
+    strSelectedAddress ("")
 {
     setupUi ( this );
 
@@ -322,13 +323,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     SetMyWindowTitle ( 0 );
 
     // prepare Mute Myself info label (invisible by default)
-    lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
-    lblGlobalInfoLabel->hide();
+//    lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
+//    lblGlobalInfoLabel->hide();
 
     // prepare update check info label (invisible by default)
-    lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
-    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
-    lblUpdateCheck->hide();
+//    lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
+//    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
+//    lblUpdateCheck->hide();
 
     // setup timers
     TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
@@ -1208,8 +1209,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
-    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
-    QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
+//    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+//    QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
+    // with sessionInputField ....????
+//    QObject::connect ( this, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
+
+    QObject::connect ( sessionCancelButton, &QPushButton::clicked, this, &CClientDlg::OnJoinCancelClicked );
+    QObject::connect ( sessionConnectButton, &QPushButton::clicked, this, &CClientDlg::OnJoinConnectClicked );
 
     // ==================================================================================================
     // SETTINGS SLOTS ========
@@ -1365,11 +1371,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
          ShowConnectionSetupDialog();
     }
 
-    // restore basic connect dialog
-    if ( pSettings->bWindowWasShownBasicConnect )
-    {
-        ShowBasicConnectionSetupDialog();
-    }
+//    // restore basic connect dialog
+//    if ( pSettings->bWindowWasShownBasicConnect )
+//    {
+//        ShowBasicConnectionSetupDialog();
+//    }
+    sessionJoinWidget->setVisible(false);
 
     // mute stream on startup (must be done after the signal connections)
     if ( bMuteStream )
@@ -1555,6 +1562,49 @@ void CClientDlg::OnConnectDlgAccepted()
     }
 }
 
+void CClientDlg::OnJoinCancelClicked()
+{
+    HideJoinWidget();
+}
+
+void CClientDlg::OnJoinConnectClicked()
+{
+    strSelectedAddress = NetworkUtil::FixAddress ( joinFieldEdit->toPlainText() );
+
+//    // tell the parent window that the connection shall be initiated
+//    done ( QDialog::Accepted );
+    //      ---    nabbed from OnConnectDlgAccepted():
+    // only store new host address in our data base if the address is
+    // not empty and it was not a server list item (only the addresses
+    // typed in manually are stored by definition)
+    if ( !strSelectedAddress.isEmpty() )
+    {
+        // store new address at the top of the list, if the list was already
+        // full, the last element is thrown out
+        pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+    }
+
+    // get name to be set in audio mixer group box title
+    QString strMixerBoardLabel;
+
+    // an item of the server address combo box was chosen,
+    // just show the address string as it was entered by the
+    // user
+    strMixerBoardLabel = strSelectedAddress;
+
+    // first check if we are already connected, if this is the case we have to
+    // disconnect the old server first
+    if ( pClient->IsRunning() )
+    {
+        Disconnect();
+    }
+
+    // initiate connection
+    Connect ( strSelectedAddress, strMixerBoardLabel );
+
+    HideJoinWidget();
+}
+
 void CClientDlg::OnBasicConnectDlgAccepted()
 {
     // We had an issue that the accepted signal was emit twice if a list item was double
@@ -1608,7 +1658,8 @@ void CClientDlg::OnConnectDisconBut()
     }
     else
     {
-        ShowBasicConnectionSetupDialog();
+//        ShowBasicConnectionSetupDialog();
+        ShowJoinWidget();
     }
 }
 
@@ -1677,9 +1728,11 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
     // only compare if the server version has no suffix (such as dev or beta)
     if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
     {
+        // do nothing
+        ;
         // show the label and hide it after one minute again
-        lblUpdateCheck->show();
-        QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+//        lblUpdateCheck->show();
+//        QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
     }
 #endif
 }
@@ -1898,16 +1951,28 @@ void CClientDlg::ShowConnectionSetupDialog()
     ConnectDlg.activateWindow();
 }
 
-void CClientDlg::ShowBasicConnectionSetupDialog()
-{
-    // show connect dialog
-    bBasicConnectDlgWasShown = true;
-    BasicConnectDlg.show();
-    BasicConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
+//void CClientDlg::ShowBasicConnectionSetupDialog()
+//{
+//    // show connect dialog
+//    bBasicConnectDlgWasShown = true;
+//    BasicConnectDlg.show();
+//    BasicConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
 
-    // make sure dialog is upfront and has focus
-    BasicConnectDlg.raise();
-    BasicConnectDlg.activateWindow();
+//    // make sure dialog is upfront and has focus
+//    BasicConnectDlg.raise();
+//    BasicConnectDlg.activateWindow();
+//}
+
+void CClientDlg::ShowJoinWidget()
+{
+    sessionJoinWidget->setVisible(true);
+    defaultButtonWidget->setVisible(false);
+}
+
+void CClientDlg::HideJoinWidget()
+{
+    sessionJoinWidget->setVisible(false);
+    defaultButtonWidget->setVisible(true);
 }
 
 //void CClientDlg::ShowGeneralSettings ( int iTab )
@@ -1998,11 +2063,15 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
     // show/hide info label
     if ( value == Qt::Checked )
     {
-        lblGlobalInfoLabel->show();
+        // do nothing
+        ;
+//        lblGlobalInfoLabel->show();
     }
     else
     {
-        lblGlobalInfoLabel->hide();
+        // do nothing
+        ;
+//        lblGlobalInfoLabel->hide();
     }
 }
 
@@ -2179,7 +2248,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 //        sessionStatusLabel->setStyleSheet ( "QLabel { color: green; font: bold; }" );
 
         // hide label connect to server
-        lblConnectToServer->hide();
+//        lblConnectToServer->hide();
         lbrInputLevelL->setEnabled ( true );
         lbrInputLevelR->setEnabled ( true );
 
@@ -2242,7 +2311,7 @@ void CClientDlg::Disconnect()
     lbrInputLevelR->SetValue ( 0 );
 
     // show connect to server message
-    lblConnectToServer->show();
+//    lblConnectToServer->show();
 
     // stop other timers
     TimerBuffersLED.stop();
