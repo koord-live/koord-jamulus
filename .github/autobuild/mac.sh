@@ -20,19 +20,17 @@ setup() {
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         
-        # temporary hack for Qt5
-        if [ ! ${QT_VERSION} == "5.15.2" ]; then
-            python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-                --archives qtbase qtdeclarative qttools qttranslations \
-                --modules qtwebengine qtwebview
-        else
-            python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-                --archives qtbase qtdeclarative qttools qttranslations qtwebview \
-                --modules qtwebengine
-        fi
-
-
-
+        # # temporary hack for Qt5
+        # if [ ! ${QT_VERSION} == "5.15.2" ]; then
+        #     python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
+        #         --archives qtbase qtdeclarative qttools qttranslations \
+        #         --modules qtwebengine qtwebview
+        # else
+    
+        # no need for webengine in Mac! At all! Like iOS
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
+            --archives qtbase qtdeclarative qttools qttranslations qtwebview
+            # --modules qtwebengine
     fi
 }
 
@@ -104,9 +102,9 @@ pass_artifact_to_job() {
     echo "::set-output name=artifact_1::${artifact}"
 
     artifact2="Koord_${JAMULUS_BUILD_VERSION}_mac_storesign${ARTIFACT_SUFFIX:-}.pkg"
-    if [ -f ./deploypkg/Koord-RT.dmg ]; then
+    if [ -f ./deploypkg/Koord-RT*.pkg ]; then
         echo "Moving build artifact2 to deploy/${artifact2}"
-        mv ./deploypkg/Koord-RT.dmg "./deploy/${artifact2}"
+        mv ./deploypkg/Koord-RT*.pkg "./deploy/${artifact2}"
         echo "::set-output name=artifact_2::${artifact2}"
     fi
 }

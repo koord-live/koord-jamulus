@@ -96,9 +96,10 @@ build_app()
     echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ follows:"
     ls -alR ${build_path}/${target_name}.app/
 
-    echo ">>> Removing from app: ${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
-    # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
-    rm -fr "${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
+    ## there's no webengine any more! stop this hack!
+    # echo ">>> Removing from app: ${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
+    # # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
+    # rm -fr "${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
@@ -140,32 +141,29 @@ build_installer_pkg()
         # Clone the build directory to leave the adhoc signed app untouched
         cp -a ${build_path} "${build_path}_storesign"
 
-        cd ${build_path}_storesign/
-
         # Add Qt deployment deps and codesign the app for App Store submission
-        macdeployqt "${target_name}.app" \
+        macdeployqt "${build_path}_storesign/${target_name}.app" \
             -verbose=3 \
-            -dmg \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${macapp_cert_name}" \
             -qmldir="${root_path}/src/"
 
-        cd ..
-        echo "finding the dmg file...."
+        echo ">>> Recursive ls in root_dir ...."
         ls -alR
         # echo "Listing the app dir structure"
         # ls -alR "${build_path}_storesign/"
 
-        echo "Removing ${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
-        # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
-        rm -fr "${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
+        ## no more webengine, stop this foolishness
+        # echo "Removing ${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
+        # # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
+        # rm -fr "${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
 
-        # # Create pkg installer and sign for App Store submission
-        # productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
-        #     --component "${build_path}_storesign/${target_name}.app" \
-        #     /Applications \
-        #     "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
+        # Create pkg installer and sign for App Store submission
+        productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
+            --component "${build_path}_storesign/${target_name}.app" \
+            /Applications \
+            "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
 
         # NOTARIZATION_PASSWORD=""
         # if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
@@ -174,7 +172,7 @@ build_installer_pkg()
         # fi
 
         # move created pkg file to prep for download
-        mv "${build_path}_storesign/Koord-RT.dmg" "${deploypkg_path}"
+        mv "${build_path}_storesign/Koord-RT*.pkg" "${deploypkg_path}"
     fi
 }
 
