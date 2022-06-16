@@ -19,14 +19,7 @@ setup() {
     else
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-        
-        # # temporary hack for Qt5
-        # if [ ! ${QT_VERSION} == "5.15.2" ]; then
-        #     python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-        #         --archives qtbase qtdeclarative qttools qttranslations \
-        #         --modules qtwebengine qtwebview
-        # else
-    
+
         # no need for webengine in Mac! At all! Like iOS
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qttools qttranslations \

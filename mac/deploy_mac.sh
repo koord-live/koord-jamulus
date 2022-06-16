@@ -172,7 +172,7 @@ build_installer_pkg()
         # fi
 
         # move created pkg file to prep for download
-        mv "${build_path}_storesign/Koord-RT*.pkg" "${deploypkg_path}"
+        mv "${build_path}_storesign/Koord-RT_${app_version}.pkg" "${deploypkg_path}"
     fi
 }
 
