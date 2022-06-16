@@ -43,18 +43,18 @@ contains(CONFIG, "headless") {
         webview
 }
 
-LRELEASE_DIR = src/translation
-TRANSLATIONS = src/translation/translation_de_DE.ts \
-    src/translation/translation_fr_FR.ts \
-    src/translation/translation_pt_PT.ts \
-    src/translation/translation_pt_BR.ts \
-    src/translation/translation_es_ES.ts \
-    src/translation/translation_nl_NL.ts \
-    src/translation/translation_pl_PL.ts \
-    src/translation/translation_sk_SK.ts \
-    src/translation/translation_it_IT.ts \
-    src/translation/translation_sv_SE.ts \
-    src/translation/translation_zh_CN.ts
+#LRELEASE_DIR = src/translation
+#TRANSLATIONS = src/translation/translation_de_DE.ts \
+#    src/translation/translation_fr_FR.ts \
+#    src/translation/translation_pt_PT.ts \
+#    src/translation/translation_pt_BR.ts \
+#    src/translation/translation_es_ES.ts \
+#    src/translation/translation_nl_NL.ts \
+#    src/translation/translation_pl_PL.ts \
+#    src/translation/translation_sk_SK.ts \
+#    src/translation/translation_it_IT.ts \
+#    src/translation/translation_sv_SE.ts \
+#    src/translation/translation_zh_CN.ts
 
 INCLUDEPATH += src
 
@@ -78,75 +78,49 @@ win32 {
     QT += quick \
         webenginecore
 
+    QT -= webchannel positioning
+
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     DEFINES += _WINSOCKAPI_ # try fix winsock / winsock2 redefinition problems
     RC_FILE = windows/mainicon.rc
-    mingw* {
-        LIBS += -lole32 \
-            -luser32 \
-            -ladvapi32 \
-            -lwinmm \
-            -lws2_32
-    } else {
-        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/jamulussoftware/jamulus/issues/93
-        LIBS += ole32.lib \
-            user32.lib \
-            advapi32.lib \
-            winmm.lib \
-            ws2_32.lib
-        # also add KoordASIO lib, 64bit only right now
-        # Full path in build will be:
-        # D:\a\koord-rt\koord-rt\KoordASIO\build\release\flexasio\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
-        LIBS += -L$$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
-        INCLUDEPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
-        DEPENDPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
 
-        greaterThan(QT_MAJOR_VERSION, 5) {
-            # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
-            # the platform-agnostic main().
-            # Qt6 is still supposed to have that lib under the new name QtEntryPoint. As it does not seem
-            # to be effective when building with qmake, we are rather instructing MSVC to use the platform-agnostic
-            # main() entrypoint directly:
-            QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
-        }
+    LIBS += ole32.lib \
+        user32.lib \
+        advapi32.lib \
+        winmm.lib \
+        ws2_32.lib
+    # also add KoordASIO lib, 64bit only right now
+    # Full path in build will be:
+    # D:\a\koord-rt\koord-rt\KoordASIO\build\release\flexasio\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
+    LIBS += -L$$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
+    INCLUDEPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+    DEPENDPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+
+    # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
+    # the platform-agnostic main().
+    # Qt6 is still supposed to have that lib under the new name QtEntryPoint. As it does not seem
+    # to be effective when building with qmake, we are rather instructing MSVC to use the platform-agnostic
+    # main() entrypoint directly:
+    QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
+
+    !exists(windows/ASIOSDK2) {
+        error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
     }
-
-    contains(CONFIG, "serveronly") {
-        message(Restricting build to server-only due to CONFIG+=serveronly.)
-        DEFINES += SERVER_ONLY
-    } else {
-        # defo using ASIO and NOT Jack
-        message(Using ASIO.)
-        message(Please review the ASIO SDK licence.)
-
-        !exists(windows/ASIOSDK2) {
-            error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
-        }
-        # Important: Keep those ASIO includes local to this build target in
-        # order to avoid poisoning other builds license-wise.
-        HEADERS += windows/sound.h
-        SOURCES += windows/sound.cpp \
-            windows/ASIOSDK2/common/asio.cpp \
-            windows/ASIOSDK2/host/asiodrivers.cpp \
-            windows/ASIOSDK2/host/pc/asiolist.cpp
-        INCLUDEPATH += windows/ASIOSDK2/common \
-            windows/ASIOSDK2/host \
-            windows/ASIOSDK2/host/pc
-    }
+    # Important: Keep those ASIO includes local to this build target in
+    # order to avoid poisoning other builds license-wise.
+    HEADERS += windows/sound.h
+    SOURCES += windows/sound.cpp \
+        windows/ASIOSDK2/common/asio.cpp \
+        windows/ASIOSDK2/host/asiodrivers.cpp \
+        windows/ASIOSDK2/host/pc/asiolist.cpp
+    INCLUDEPATH += windows/ASIOSDK2/common \
+        windows/ASIOSDK2/host \
+        windows/ASIOSDK2/host/pc
 
 } else:macx {
-    contains(CONFIG, "server_bundle") {
-        message(The generated application bundle will run a server instance.)
-
-         DEFINES += SERVER_BUNDLE
-         TARGET = $${TARGET}Server
-         MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
-         RC_FILE = mac/jamulus-server-icon-2020.icns
-    } else {
-        MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
-        RC_FILE = mac/mainicon.icns
-    }
+    MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
+    RC_FILE = mac/mainicon.icns
 
     HEADERS += mac/activity.h mac/badgelabel.h
     OBJECTIVE_SOURCES += mac/activity.mm mac/badgelabel.mm
@@ -158,16 +132,12 @@ win32 {
     OSX_ENTITLEMENTS.path = Contents/Resources
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
 
-    macx-xcode {
-        QMAKE_INFO_PLIST = mac/Info-xcode.plist
-        XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-        XCODE_ENTITLEMENTS.value = mac/Koord-RT.entitlements
-        QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
-        MACOSX_BUNDLE_ICON.path = Contents/Resources
-        QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
-    } else {
-        QMAKE_INFO_PLIST = mac/Info-make.plist
-    }
+    QMAKE_INFO_PLIST = mac/Info-xcode.plist
+    XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+    XCODE_ENTITLEMENTS.value = mac/Koord-RT.entitlements
+    QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
+    MACOSX_BUNDLE_ICON.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -203,18 +173,19 @@ win32 {
     }
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-    ANDROID_ABIS = arm64-v8a
-    # ANDROID_MIN_SDK_VERSION = 25
+    ANDROID_ABIS = x86_64
+    # sdk version = 30 is required by Google Play store
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
-    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+#    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    # hardcode for local build on win64
+    ANDROID_VERSION_CODE = 5678
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
     # Need for eg device recording permissions
-    # QT += androidextras
     QT += core-private
 
     # enabled only for debugging on android devices
@@ -347,7 +318,6 @@ FORMS_GUI = src/aboutdlgbase.ui \
     FORMS_GUI += src/clientdlgbase.ui \
         src/clientsettingsdlgbase.ui \
         src/chatdlgbase.ui \
-        src/connectdlgbase.ui \
         src/basicconnectdlgbase.ui
 }
 
@@ -493,7 +463,6 @@ SOURCES_GUI = src/serverdlg.cpp
     SOURCES_GUI += src/audiomixerboard.cpp \
         src/chatdlg.cpp \
         src/clientsettingsdlg.cpp \
-        src/connectdlg.cpp \
         src/basicconnectdlg.cpp \
         src/clientdlg.cpp \
         src/multicolorled.cpp \
@@ -678,17 +647,6 @@ DISTFILES += ChangeLog \
     distributions/koordrt.desktop.in \
     distributions/koordrt.png \
     distributions/koordrt.svg \
-    src/res/translation/translation_de_DE.qm \
-    src/res/translation/translation_fr_FR.qm \
-    src/res/translation/translation_pt_PT.qm \
-    src/res/translation/translation_pt_BR.qm \
-    src/res/translation/translation_es_ES.qm \
-    src/res/translation/translation_nl_NL.qm \
-    src/res/translation/translation_pl_PL.qm \
-    src/res/translation/translation_it_IT.qm \
-    src/res/translation/translation_sv_SE.qm \
-    src/res/translation/translation_sk_SK.qm \
-    src/res/translation/translation_zh_CN.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -783,19 +741,19 @@ contains(CONFIG, "opus_shared_lib") {
             sse_cc.name = sse_cc
             sse_cc.input = SOURCES_OPUS_X86_SSE
             sse_cc.dependency_type = TYPE_C
-            sse_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse_cc.output = ${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
             sse_cc.commands = ${CC} -msse $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
             sse_cc.variable_out = OBJECTS
             sse2_cc.name = sse2_cc
             sse2_cc.input = SOURCES_OPUS_X86_SSE2
             sse2_cc.dependency_type = TYPE_C
-            sse2_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse2_cc.output = ${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
             sse2_cc.commands = ${CC} -msse2 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
             sse2_cc.variable_out = OBJECTS
             sse4_cc.name = sse4_cc
             sse4_cc.input = SOURCES_OPUS_X86_SSE4
             sse4_cc.dependency_type = TYPE_C
-            sse4_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse4_cc.output = ${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
             sse4_cc.commands = ${CC} -msse4 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
             sse4_cc.variable_out = OBJECTS
             QMAKE_EXTRA_COMPILERS += sse_cc sse2_cc sse4_cc
