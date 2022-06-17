@@ -133,12 +133,12 @@ public:
         vecWindowPosSettings(), // empty array
         vecWindowPosChat(),     // empty array
         vecWindowPosConnect(),  // empty array
-        vecWindowPosBasicConnect(),  // empty array
+//        vecWindowPosBasicConnect(),  // empty array
         bWindowWasShownSettings ( false ),
         bWindowWasShownChat ( false ),
         bWindowWasShownConnect ( false ),
         bOwnFaderFirst ( false ),
-        bWindowWasShownBasicConnect ( false ),
+//        bWindowWasShownBasicConnect ( false ),
         pClient ( pNCliP )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
@@ -170,12 +170,12 @@ public:
     QByteArray vecWindowPosSettings;
     QByteArray vecWindowPosChat;
     QByteArray vecWindowPosConnect;
-    QByteArray vecWindowPosBasicConnect;
+//    QByteArray vecWindowPosBasicConnect;
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
     bool       bOwnFaderFirst;
-    bool       bWindowWasShownBasicConnect;
+//    bool       bWindowWasShownBasicConnect;
 
 protected:
     // No CommandLineOptions used when reading Client inifile
