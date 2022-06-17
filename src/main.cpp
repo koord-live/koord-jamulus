@@ -30,6 +30,7 @@
 #ifndef HEADLESS
 #    include <QApplication>
 #    include <QtWebView>
+#    include <QQuickWindow>
 #    include <QMessageBox>
 #    include "serverdlg.h"
 #    ifndef SERVER_ONLY
@@ -933,6 +934,9 @@ int main ( int argc, char** argv )
     QApplication* pApp = new QApplication ( argc, argv );
 #    else
 
+    // need to set OpenGL specifically for at least Mac!
+    // https://doc.qt.io/qt-6/qquickwidget.html#performance-considerations
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
     // https://doc.qt.io/qt-6/qml-qtwebengine-webengineview.html#details
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 //    QtWebEngineQuick::initialize();
@@ -965,8 +969,7 @@ int main ( int argc, char** argv )
 #endif
 
 #ifdef ANDROID
-    // special Android coded needed for record audio permission handling
-//  // Qt6 way of doing permissions:
+    // special Android code needed for record audio permission handling
     auto permcheck = QtAndroidPrivate::checkPermission( QString ("android.permission.RECORD_AUDIO"));
 
     if ( permcheck.result() == QtAndroidPrivate::PermissionResult::Denied)
@@ -978,18 +981,6 @@ int main ( int argc, char** argv )
             return 0;
         }
     }
-//    // Qt5 way of doing permissions:
-//    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
-
-//    if ( result == QtAndroid::PermissionResult::Denied )
-//    {
-//        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
-
-//        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
-//        {
-//            return 0;
-//        }
-//    }
 #endif
 
 #ifdef _WIN32
