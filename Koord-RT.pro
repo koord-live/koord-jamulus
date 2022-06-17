@@ -1,4 +1,4 @@
-VERSION = 1.9.4
+VERSION = 1.9.5
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -174,6 +174,7 @@ win32 {
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     ANDROID_ABIS = arm64-v8a
+#    ANDROID_ABIS = x86_64
     # sdk version = 30 is required by Google Play store
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION

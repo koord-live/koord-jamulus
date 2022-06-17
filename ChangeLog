@@ -1,3 +1,7 @@
+### 1.9.5 (2022-06-17) ###
+
+- Client: Koord-RT - fix Join workflow
+
 ### 1.9.4 (2022-06-12) ###
 
 - Client: Koord-RT - qt6, webview, redo versions for v2_pre versions
