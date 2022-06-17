@@ -934,14 +934,15 @@ int main ( int argc, char** argv )
     QApplication* pApp = new QApplication ( argc, argv );
 #    else
 
-    // need to set OpenGL specifically for at least Mac!
+    // need this before new QApplication created
+    // AND before QPlatformOpenGLContext is created - https://doc.qt.io/qt-6/qtwebview-index.html#prerequisites
+    QtWebView::initialize();
+
+    // need to set OpenGL specifically for at least Mac! maybe iOS too
     // https://doc.qt.io/qt-6/qquickwidget.html#performance-considerations
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
     // https://doc.qt.io/qt-6/qml-qtwebengine-webengineview.html#details
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-//    QtWebEngineQuick::initialize();
-    // need this before new QApplication
-    QtWebView::initialize();
 
     //FIXME - gui vs nogui handling
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
