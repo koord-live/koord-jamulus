@@ -52,9 +52,9 @@ qmake "CONFIG+=headless serveronly" TARGET=koord-rt-headless PREFIX=/usr ../Koor
 
 
 # Build ############################
-cd $BDIR
-cd src/translation
-lrelease *.ts
+# cd $BDIR
+# cd src/translation
+# lrelease *.ts
 
 # gui
 echo "Building gui ...."
