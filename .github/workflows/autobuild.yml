@@ -105,7 +105,7 @@ jobs:
         # Think of this like a foreach loop. Basically runs the steps with every combination of
         # the contents of this.
         config:
-          - config_name:            Android 7+(?) arm64_v8a .aab
+          - config_name:            Android 10+ arm64_v8a .aab
             target_os:              android
             building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/android.sh
@@ -149,7 +149,7 @@ jobs:
             # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
             xcode_version:          12.1.1
 
-          - config_name:            iOS 10.13+(?) ipa
+          - config_name:            iOS 10.13+ ipa
             target_os:              ios
             building_on_os:         macos-11
             base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
