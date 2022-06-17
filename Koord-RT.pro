@@ -43,19 +43,6 @@ contains(CONFIG, "headless") {
         webview
 }
 
-#LRELEASE_DIR = src/translation
-#TRANSLATIONS = src/translation/translation_de_DE.ts \
-#    src/translation/translation_fr_FR.ts \
-#    src/translation/translation_pt_PT.ts \
-#    src/translation/translation_pt_BR.ts \
-#    src/translation/translation_es_ES.ts \
-#    src/translation/translation_nl_NL.ts \
-#    src/translation/translation_pl_PL.ts \
-#    src/translation/translation_sk_SK.ts \
-#    src/translation/translation_it_IT.ts \
-#    src/translation/translation_sv_SE.ts \
-#    src/translation/translation_zh_CN.ts
-
 INCLUDEPATH += src
 
 INCLUDEPATH_OPUS = libs/opus/include \
@@ -77,8 +64,6 @@ win32 {
     # Windows desktop does not have native web runtime, need to package
     QT += quick \
         webenginecore
-
-    QT -= webchannel positioning
 
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
@@ -174,13 +159,17 @@ win32 {
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     ANDROID_ABIS = arm64-v8a
-#    ANDROID_ABIS = x86_64
     # sdk version = 30 is required by Google Play store
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
-#    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+
+    ## LOCAL BUILD
     # hardcode for local build on win64
-    ANDROID_VERSION_CODE = 5678
+    #ANDROID_VERSION_CODE = 5678
+    # reset for build on win64
+    #ANDROID_ABIS = x86_64
+    
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex
@@ -354,7 +343,6 @@ HEADERS_GUI = src/serverdlg.h
     HEADERS_GUI += src/audiomixerboard.h \
         src/chatdlg.h \
         src/clientsettingsdlg.h \
-        src/connectdlg.h \
         src/basicconnectdlg.h \
         src/clientdlg.h \
         src/levelmeter.h \
