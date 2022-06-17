@@ -39,7 +39,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
-//    bBasicConnectDlgWasShown ( false ),
+    bBasicConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
@@ -47,7 +47,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     eLastDesign ( GD_ORIGINAL ),         //          "
 //    ClientSettingsDlg ( pNCliP, pNSetP, parent ),
 //    ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
-//    BasicConnectDlg ( pNSetP, parent ),
+    BasicConnectDlg ( pNSetP, parent ),
     AnalyzerConsole ( pNCliP, parent ),
     strSelectedAddress ("")
 {
@@ -502,11 +502,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //        ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
 //    }
 
-//    // basic connection setup window
-//    if ( !pSettings->vecWindowPosBasicConnect.isEmpty() && !pSettings->vecWindowPosBasicConnect.isNull() )
-//    {
-//        BasicConnectDlg.restoreGeometry ( pSettings->vecWindowPosBasicConnect );
-//    }
+    // basic connection setup window
+    if ( !pSettings->vecWindowPosBasicConnect.isEmpty() && !pSettings->vecWindowPosBasicConnect.isNull() )
+    {
+        BasicConnectDlg.restoreGeometry ( pSettings->vecWindowPosBasicConnect );
+    }
 
 // START OF SETTINGS STUFF ===========================================================
 
@@ -1411,18 +1411,18 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
 //    pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
 //    pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
 //    pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
-//    pSettings->vecWindowPosBasicConnect  = BasicConnectDlg.saveGeometry();
+    pSettings->vecWindowPosBasicConnect  = BasicConnectDlg.saveGeometry();
 
 //    pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
 //    pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
 //    pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
-//    pSettings->bWindowWasShownConnect  = BasicConnectDlg.isVisible();
+    pSettings->bWindowWasShownConnect  = BasicConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
 //    ClientSettingsDlg.close();
 //    ChatDlg.close();
 //    ConnectDlg.close();
-//    BasicConnectDlg.close();
+    BasicConnectDlg.close();
     AnalyzerConsole.close();
 
     // if connected, terminate connection
@@ -1605,48 +1605,48 @@ void CClientDlg::OnJoinConnectClicked()
     HideJoinWidget();
 }
 
-//void CClientDlg::OnBasicConnectDlgAccepted()
-//{
-//    // We had an issue that the accepted signal was emit twice if a list item was double
-//    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
-//    // we process the accepted signal only once after the dialog was initially shown.
-//    if ( bBasicConnectDlgWasShown )
-//    {
-//        // get the address from the connect dialog
-//        QString strSelectedAddress = BasicConnectDlg.GetSelectedAddress();
+void CClientDlg::OnBasicConnectDlgAccepted()
+{
+    // We had an issue that the accepted signal was emit twice if a list item was double
+    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
+    // we process the accepted signal only once after the dialog was initially shown.
+    if ( bBasicConnectDlgWasShown )
+    {
+        // get the address from the connect dialog
+        QString strSelectedAddress = BasicConnectDlg.GetSelectedAddress();
 
-//        // only store new host address in our data base if the address is
-//        // not empty and it was not a server list item (only the addresses
-//        // typed in manually are stored by definition)
-//        if ( !strSelectedAddress.isEmpty() )
-//        {
-//            // store new address at the top of the list, if the list was already
-//            // full, the last element is thrown out
-//            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
-//        }
+        // only store new host address in our data base if the address is
+        // not empty and it was not a server list item (only the addresses
+        // typed in manually are stored by definition)
+        if ( !strSelectedAddress.isEmpty() )
+        {
+            // store new address at the top of the list, if the list was already
+            // full, the last element is thrown out
+            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+        }
 
-//        // get name to be set in audio mixer group box title
-//        QString strMixerBoardLabel;
+        // get name to be set in audio mixer group box title
+        QString strMixerBoardLabel;
 
-//        // an item of the server address combo box was chosen,
-//        // just show the address string as it was entered by the
-//        // user
-//        strMixerBoardLabel = strSelectedAddress;
+        // an item of the server address combo box was chosen,
+        // just show the address string as it was entered by the
+        // user
+        strMixerBoardLabel = strSelectedAddress;
 
-//        // first check if we are already connected, if this is the case we have to
-//        // disconnect the old server first
-//        if ( pClient->IsRunning() )
-//        {
-//            Disconnect();
-//        }
+        // first check if we are already connected, if this is the case we have to
+        // disconnect the old server first
+        if ( pClient->IsRunning() )
+        {
+            Disconnect();
+        }
 
-//        // initiate connection
-//        Connect ( strSelectedAddress, strMixerBoardLabel );
+        // initiate connection
+        Connect ( strSelectedAddress, strMixerBoardLabel );
 
-//        // reset flag
-//        bBasicConnectDlgWasShown = false;
-//    }
-//}
+        // reset flag
+        bBasicConnectDlgWasShown = false;
+    }
+}
 
 void CClientDlg::OnConnectDisconBut()
 {

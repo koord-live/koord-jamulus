@@ -51,7 +51,7 @@
 //#include "clientsettingsdlg.h"
 //#include "chatdlg.h"
 // #include "connectdlg.h"
-//#include "basicconnectdlg.h"
+#include "basicconnectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
 #if defined( Q_OS_MACX )
@@ -120,7 +120,7 @@ protected:
 
     bool           bConnected;
     bool           bConnectDlgWasShown;
-//    bool           bBasicConnectDlgWasShown;
+    bool           bBasicConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
     bool           bEnableIPv6;
@@ -143,7 +143,7 @@ protected:
 //    CClientSettingsDlg ClientSettingsDlg;
 //    CChatDlg           ChatDlg;
     // CConnectDlg        ConnectDlg;
-//    CBasicConnectDlg   BasicConnectDlg;
+    CBasicConnectDlg   BasicConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
 
     // settings stuff
@@ -267,7 +267,7 @@ public slots:
 
     void OnJoinCancelClicked();
     void OnJoinConnectClicked();
-//    void OnBasicConnectDlgAccepted();
+    void OnBasicConnectDlgAccepted();
 //    void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
