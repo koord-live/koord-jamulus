@@ -79,24 +79,41 @@ setup_qt() {
         # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qttools icu
-        # Build for 64bit android_arm64_v8a only:
+
         # - 64bit required for Play Store
-        # - qmake in Qt6 only allows 1 arch to be built! Need to move to CMake to build other archs eg arm_v7 into same aab
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_arm64_v8a \
+            --archives qtbase qtdeclarative qttools \
+            --modules qtwebview 
+
+        # Also install for arm_v7 to build for 32bit devices
+        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
             --archives qtbase qtdeclarative qttools \
             --modules qtwebview 
     fi
 }
 
-build_app_as_aab() {
+build_app {
+    local ARCH_ABI="${1}"
+
     local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
     local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
 
     echo "${GOOGLE_RELEASE_KEYSTORE}" | base64 --decode > android/android_release.keystore
 
-    "${QT_BASEDIR}/${QT_VERSION}/android_arm64_v8a/bin/qmake" -spec android-clang
+    echo ">>> Compiling for ${ARCH_ABI} ..."
+    # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
+    if [ "${ARCH_ABI}" == "android_armv7" ]; then
+        ANDROID_ABIS=android_armv7 "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+    else
+        "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+    fi
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
+}
+
+build_aab() {
+    echo ">>> Building .aab file ...."
+
     "${QT_BASEDIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
         --verbose \
         --output "${BUILD_DIR}" \
@@ -127,7 +144,9 @@ case "${1:-}" in
         setup_qt
         ;;
     build)
-        build_app_as_aab
+        build_app "android_armv7"
+        build_app "android_arm64_v8a"
+        build_aab
         ;;
     get-artifacts)
         pass_artifact_to_job
