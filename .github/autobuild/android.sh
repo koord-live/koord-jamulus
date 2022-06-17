@@ -144,7 +144,7 @@ case "${1:-}" in
         setup_qt
         ;;
     build)
-        build_app "android_armv7"
+        # build_app "android_armv7"
         build_app "android_arm64_v8a"
         build_aab
         ;;
