@@ -160,16 +160,19 @@ win32 {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     
     # if ANDROID_ABIS is passed as env var to qmake, will override this
-   !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
-#    ANDROID_ABIS = arm64-v8a
+    !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
+
+    # by default is 23 apparently = Android 6 !
+#    ANDROID_MIN_SDK_VERSION = 23
 
     # sdk version = 30 is required by Google Play store
+    # BUT: Qt6 should work on sdk=23+ (Android v6+) - https://doc.qt.io/qt-6/android.html
+    # - just don't know how to target multiple versions at the moment!
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
     
     # if ANDROID_VERSION_CODE is passed as env var to qmake, will override this
-   !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
-#    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
     
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
