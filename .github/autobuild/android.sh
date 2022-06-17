@@ -92,7 +92,7 @@ setup_qt() {
     fi
 }
 
-build_app {
+build_app() {
     local ARCH_ABI="${1}"
 
     local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
