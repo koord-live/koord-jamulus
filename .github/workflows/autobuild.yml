@@ -295,7 +295,7 @@ jobs:
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
-        id:                         validateupload
+        id:                         macos_validate_upload
         run:                        ${{ matrix.config.base_command }} validate_and_upload
         env:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
@@ -304,7 +304,7 @@ jobs:
       ## - iOS signed ipa
       - name:                       Validate and Upload iOS ipa file
         if:                         needs.create_release.outputs.publish_to_release == 'true'
-        id:                         validateupload
+        id:                         ios_validate_upload
         run:                        ${{ matrix.config.base_command }} validate_and_upload
         env:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
