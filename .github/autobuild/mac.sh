@@ -106,7 +106,7 @@ pass_artifact_to_job() {
 valid8_n_upload() {
     echo ">>> valid8_n_upload: ...."
     # test the signature of package
-    codesign -vvv --deep --strict "${ARTIFACT_PATH}"
+    pkgutil --check-signature "${ARTIFACT_PATH}"
     # attempt validate and then upload of pkg file, using previously-made keychain item
     xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p @keychain:APPCONNAUTH --keychain build.keychain
     xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p @keychain:APPCONNAUTH --keychain build.keychain

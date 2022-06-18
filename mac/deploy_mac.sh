@@ -80,14 +80,14 @@ build_app()
     if [[ -z "$macadhoc_cert_name" ]]; then
         echo ">>> Doing macdeployqt WITHOUT notarization ..."
         macdeployqt "${build_path}/${target_name}.app" \
-            -verbose=3 \
+            -verbose=2 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -qmldir="${root_path}/src"
     else     # we do this here for signed / notarized dmg ..?
         echo ">>> Doing macdeployqt for notarization ..."
         macdeployqt "${build_path}/${target_name}.app" \
-            -verbose=3 \
+            -verbose=2 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${macadhoc_cert_name}" \
@@ -136,7 +136,7 @@ build_installer_pkg()
 
         # Add Qt deployment deps and codesign the app for App Store submission
         macdeployqt "${build_path}_storesign/${target_name}.app" \
-            -verbose=3 \
+            -verbose=2 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${macapp_cert_name}" \
@@ -168,6 +168,10 @@ build_disk_image()
     # Get Jamulus version
     local app_version
     app_version=$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")
+
+    # try and test signature of bundle before build
+    echo ">>> Testing signature of bundle ...." 
+    codesign -vvv --deep --strict "${deploy_path}/Koord*"
 
     # Build installer image
     create-dmg \
