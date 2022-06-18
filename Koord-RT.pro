@@ -1,4 +1,4 @@
-VERSION = 1.9.5
+VERSION = 1.9.6
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -139,7 +139,7 @@ win32 {
     SOURCES += mac/sound.cpp
 
 } else:ios {
-    QMAKE_INFO_PLIST = ios/Info.plist
+    QMAKE_INFO_PLIST = ios/Info-xcode.plist
     QMAKE_ASSET_CATALOGS = ios/Images.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
@@ -150,12 +150,7 @@ win32 {
     # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
-    
-    macx-xcode {
-        QMAKE_INFO_PLIST = ios/Info-xcode.plist
-    } else {
-        QMAKE_INFO_PLIST = ios/Info-make.plist
-    }
+
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     
