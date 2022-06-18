@@ -72,7 +72,7 @@ prepare_signing() {
     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
     cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-    # Tell Github Workflow that we need notarization & stapling:
+    # Tell Github Workflow that we need to validate and upload
     echo "::set-output name=ios_signed::true"
     return 0
 }
@@ -105,8 +105,8 @@ pass_artifact_to_job() {
 
 valid8_n_upload() {
     # attempt validate and then upload of ipa file, using previously-made keychain item
-    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p @keychain:APPCONNAUTH --keychain build.keychain
-    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t ios $NOTARIZATION_USERNAME -p @keychain:APPCONNAUTH --keychain build.keychain
+    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD --keychain build.keychain
+    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t ios $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD --keychain build.keychain
 }
 
 case "${1:-}" in

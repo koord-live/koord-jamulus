@@ -171,7 +171,7 @@ build_disk_image()
 
     # try and test signature of bundle before build
     echo ">>> Testing signature of bundle ...." 
-    codesign -vvv --deep --strict "${deploy_path}/Koord*"
+    codesign -vvv --deep --strict "${deploy_path}/Koord-RT.app/"
 
     # Build installer image
     create-dmg \
