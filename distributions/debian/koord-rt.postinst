@@ -1,9 +1,0 @@
-#!/bin/sh
-
-set -e
-
-# Update mime database
-sudo update-mime-database /usr/share/mime
-
-# Update app database
-sudo update-desktop-database /usr/share/applications
