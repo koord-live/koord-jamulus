@@ -29,7 +29,7 @@ setup() {
 
 prepare_signing() {
     ##  Certificate types in use:
-    # - MACOS_CERTIFICATE - Developer ID Application - for codesigning for adhoc release
+    # - MAC_ADHOC_CERT - Developer ID Application - for codesigning for adhoc release
     # - MAC_STORE_APP_CERT - Mac App Distribution - codesigning for App Store submission
     # - MAC_STORE_INST_CERT - Mac Installer Distribution - for signing installer pkg file for App Store submission
 
@@ -104,9 +104,12 @@ pass_artifact_to_job() {
 }
 
 valid8_n_upload() {
+    echo ">>> valid8_n_upload: ...."
+    # test the signature of package
+    codesign -vvv --deep --strict "${ARTIFACT_PATH}"
     # attempt validate and then upload of pkg file, using previously-made keychain item
-    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -p @keychain:APPCONNAUTH
-    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -p @keychain:APPCONNAUTH
+    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p @keychain:APPCONNAUTH --keychain build.keychain
+    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p @keychain:APPCONNAUTH --keychain build.keychain
 }
 
 case "${1:-}" in

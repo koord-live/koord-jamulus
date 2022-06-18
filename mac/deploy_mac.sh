@@ -78,12 +78,14 @@ build_app()
 
     # Add Qt deployment dependencies
     if [[ -z "$macadhoc_cert_name" ]]; then
+        echo ">>> Doing macdeployqt WITHOUT notarization ..."
         macdeployqt "${build_path}/${target_name}.app" \
             -verbose=3 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
             -qmldir="${root_path}/src"
     else     # we do this here for signed / notarized dmg ..?
+        echo ">>> Doing macdeployqt for notarization ..."
         macdeployqt "${build_path}/${target_name}.app" \
             -verbose=3 \
             -always-overwrite \
@@ -125,8 +127,10 @@ build_installer_pkg()
 
     ## Build installer pkg file - for submission to App Store
     if [[ -z "$macapp_cert_name" ]]; then
-        echo "No cert to sign for App Store, bypassing..."
+        echo ">>> build_installer_pkg: No cert to sign for App Store, bypassing..."
     else
+        echo ">>> build_installer_pkg: building with storesign certs...."
+
         # Clone the build directory to leave the adhoc signed app untouched
         cp -a ${build_path} "${build_path}_storesign"
 
