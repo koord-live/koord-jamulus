@@ -273,12 +273,13 @@ jobs:
                                     steps.build.outputs.macos_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
         id:                         notarize-macOS-app
-        uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
+        uses:                       devbotsxyz/xcode-notarize@v1
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           primary-bundle-id:        live.koord.Koord-RT
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
+          verbose:                  true
 
       - name:                       Staple macOS Release Build
         if:                         >-
