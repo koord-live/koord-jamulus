@@ -276,7 +276,7 @@ jobs:
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
-          primary-bundle-id:        live.koord.koord-rt
+          primary-bundle-id:        live.koord.Koord-RT
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
 
@@ -299,15 +299,19 @@ jobs:
         run:                        ${{ matrix.config.base_command }} validate_and_upload
         env:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       ## RELEASE PROCEDURE FOR:
       ## - iOS signed ipa
       - name:                       Validate and Upload iOS ipa file
-        if:                         needs.create_release.outputs.publish_to_release == 'true'
+        if:                         >-
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    matrix.config.target_os == 'ios'
         id:                         ios_validate_upload
         run:                        ${{ matrix.config.base_command }} validate_and_upload
         env:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       ## RELEASE PROCEDURE FOR:
       ## - macOS adhoc dmg
