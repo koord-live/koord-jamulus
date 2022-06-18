@@ -224,9 +224,9 @@ jobs:
         run:                        ${{ matrix.config.base_command }} build
         env:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
-          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
-          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
+          MAC_ADHOC_CERT:           ${{ secrets.MAC_ADHOC_CERT}}
+          MAC_ADHOC_CERT_PWD:       ${{ secrets.MAC_ADHOC_CERT_PWD }}
+          MAC_ADHOC_CERT_ID:        ${{ secrets.MAC_ADHOC_CERT_ID }}
           MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT}}
           MAC_STORE_APP_CERT_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
           MAC_STORE_APP_CERT_ID:    ${{ secrets.MACAPP_CERT_ID }}
@@ -239,6 +239,7 @@ jobs:
           IOS_PROV_PROFILE_B64:     ${{ secrets.IOS_PROVISIONING_PROFILE }}
           GOOGLE_RELEASE_KEYSTORE:  ${{ secrets.GOOGLE_KEYSTORE }}
           GOOGLE_KEYSTORE_PASS:     ${{ secrets.GOOGLE_KEYSTORE_PASS }}
+          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
@@ -267,7 +268,6 @@ jobs:
           retention-days:           31
           if-no-files-found:        error
 
-      #NOTE: not doing auto notarize/staple for now
       - name:                       Notarize macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
@@ -289,24 +289,31 @@ jobs:
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
-      # - name:                       Validate and Upload macOS Release Build
-      #   if:                         >-
-      #                               steps.build.outputs.macos_signed == 'true' &&
-      #                               needs.create_release.outputs.publish_to_release == 'true'
-      #   id:                         validateupload
-      #   run:                        ${{ matrix.config.base_command }} validateupload
-      #   with:
-      #     product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+      ## RELEASE PROCEDURE FOR:
+      ## - macOS storesign pkg
+      - name:                       Validate and Upload macOS Storesign Pkg
+        if:                         >-
+                                    steps.build.outputs.macos_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
+        id:                         validateupload
+        run:                        ${{ matrix.config.base_command }} validate_and_upload
+        env:
+          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
 
-      # - name:                       Validate and Upload iOS Release Build
-      #   if:                         >-
-      #                               steps.build.outputs.macos_signed == 'true' &&
-      #                               needs.create_release.outputs.publish_to_release == 'true'
-      #   id:                         validateupload
-      #   run:                        ${{ matrix.config.base_command }} validateupload
-      #   with:
-      #     product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+      ## RELEASE PROCEDURE FOR:
+      ## - iOS signed ipa
+      - name:                       Validate and Upload iOS ipa file
+        if:                         needs.create_release.outputs.publish_to_release == 'true'
+        id:                         validateupload
+        run:                        ${{ matrix.config.base_command }} validate_and_upload
+        with:
+          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
+      ## RELEASE PROCEDURE FOR:
+      ## - macOS adhoc dmg
+      ## - Windows exe/msix - until automated(?)
+      ## - Android aab(s) - until automated
+      ## - Linux AppImage - until a Store exists :)
       - name:                       Upload Artifact 1 to Release
         # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
         # If the artifact is missing, this should fail.

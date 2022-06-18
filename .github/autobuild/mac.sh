@@ -36,22 +36,23 @@ prepare_signing() {
     [[ "${SIGN_IF_POSSIBLE:-0}" == "1" ]] || return 1
 
     # Signing was requested, now check all prerequisites:
-    [[ -n "${MACOS_CERTIFICATE:-}" ]] || return 1
-    [[ -n "${MACOS_CERTIFICATE_ID:-}" ]] || return 1
-    [[ -n "${MACOS_CERTIFICATE_PWD:-}" ]] || return 1
+    [[ -n "${MAC_ADHOC_CERT:-}" ]] || return 1
+    [[ -n "${MAC_ADHOC_CERT_ID:-}" ]] || return 1
+    [[ -n "${MAC_ADHOC_CERT_PWD:-}" ]] || return 1
     [[ -n "${MAC_STORE_APP_CERT:-}" ]] || return 1
     [[ -n "${MAC_STORE_APP_CERT_ID:-}" ]] || return 1
     [[ -n "${MAC_STORE_APP_CERT_PWD:-}" ]] || return 1
     [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
     [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
     [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
+    [[ -n "${NOTARIZATION_USERNAME:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
     echo "Signing was requested and all dependencies are satisfied"
 
     ## Put the certs to files
-    echo "${MACOS_CERTIFICATE}" | base64 --decode > macos_certificate.p12
+    echo "${MAC_ADHOC_CERT}" | base64 --decode > macadhoc_certificate.p12
     echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
     echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
     
@@ -60,11 +61,11 @@ prepare_signing() {
     security default-keychain -s build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     # add certs to keychain
-    security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
+    security import macadhoc_certificate.p12 -k build.keychain -P "${MAC_ADHOC_CERT_PWD}" -A -T /usr/bin/codesign 
     security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
     security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
-    # # add notarization/validation/upload password to keychain
-    # xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USER -p $NOTARIZATION_PASSWORD
+    # add notarization/validation/upload password to keychain
+    xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
     # allow the default keychain access to cli utilities
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
     # set lock timeout on keychain to 6 hours - possibly optional
@@ -83,7 +84,7 @@ build_app_as_dmg_installer() {
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
-        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
+        BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
     ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
@@ -102,6 +103,12 @@ pass_artifact_to_job() {
     fi
 }
 
+valid8_n_upload() {
+    # attempt validate and then upload of pkg file, using previously-made keychain item
+    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -p @keychain:APPCONNAUTH
+    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -p @keychain:APPCONNAUTH
+}
+
 case "${1:-}" in
     setup)
         setup
@@ -111,6 +118,9 @@ case "${1:-}" in
         ;;
     get-artifacts)
         pass_artifact_to_job
+        ;;
+    validate_and_upload)
+        valid8_n_upload
         ;;
     *)
         echo "Unknown stage '${1:-}'"

@@ -7,7 +7,7 @@ resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
 deploypkg_path="${root_path}/deploypkg"
-cert_name=""
+macadhoc_cert_name=""
 macapp_cert_name=""
 macinst_cert_name=""
 keychain_pass=""
@@ -15,9 +15,9 @@ keychain_pass=""
 while getopts 'hs:k:a:i:' flag; do
     case "${flag}" in
         s)
-            cert_name=$OPTARG
-            if [[ -z "$cert_name" ]]; then
-                echo "Please add the name of the certificate to use: -s \"<name>\""
+            macadhoc_cert_name=$OPTARG
+            if [[ -z "$macadhoc_cert_name" ]]; then
+                echo "Please add the name of the adhoc certificate to use: -s \"<name>\""
             fi
             ;;
         a)
@@ -39,7 +39,7 @@ while getopts 'hs:k:a:i:' flag; do
             fi
             ;;
         h)
-            echo "Usage: -s <cert name> for signing mac build"
+            echo "Usage: -s <adhoccertname> -a <codesigncertname> -i <instlrsigncertname> -k <keychain_pass>"
             exit 0
             ;;
         *)
@@ -77,7 +77,7 @@ build_app()
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
     # Add Qt deployment dependencies
-    if [[ -z "$cert_name" ]]; then
+    if [[ -z "$macadhoc_cert_name" ]]; then
         macdeployqt "${build_path}/${target_name}.app" \
             -verbose=3 \
             -always-overwrite \
@@ -88,18 +88,13 @@ build_app()
             -verbose=3 \
             -always-overwrite \
             -hardened-runtime -timestamp -appstore-compliant \
-            -sign-for-notarization="${cert_name}" \
+            -sign-for-notarization="${macadhoc_cert_name}" \
             -qmldir="${root_path}/src"
     fi
 
     # debug:
     echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ follows:"
     ls -alR ${build_path}/${target_name}.app/
-
-    ## there's no webengine any more! stop this hack!
-    # echo ">>> Removing from app: ${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
-    # # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
-    # rm -fr "${build_path}/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
@@ -113,20 +108,14 @@ build_app()
         client_app)
             CLIENT_TARGET_NAME="${target_name}"
             ;;
-        server_app)
-            SERVER_TARGET_NAME="${target_name}"
-            ;;
+        # server_app)
+        #     SERVER_TARGET_NAME="${target_name}"
+        #     ;;
         *)
             echo "build_app: invalid parameter '${client_or_server}'"
             exit 1
     esac
 }
-
-# make_clean()
-# {
-#     # Cleanup
-#     make -f "${build_path}/Makefile" -C "${build_path}" distclean
-# }
 
 build_installer_pkg() 
 {
@@ -151,25 +140,12 @@ build_installer_pkg()
 
         echo ">>> Recursive ls in root_dir ...."
         ls -alR
-        # echo "Listing the app dir structure"
-        # ls -alR "${build_path}_storesign/"
-
-        ## no more webengine, stop this foolishness
-        # echo "Removing ${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
-        # # FIXME - force removal of WebEngine core framework - shouldn't need it and makes pkg 250mb!
-        # rm -fr "${build_path}_storesign/${target_name}.app/Contents/Frameworks/QtWebEngineCore.framework/"
 
         # Create pkg installer and sign for App Store submission
         productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
             --component "${build_path}_storesign/${target_name}.app" \
             /Applications \
             "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
-
-        # NOTARIZATION_PASSWORD=""
-        # if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
-        #     xcrun altool --validate-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
-        #     xcrun altool --upload-app -f "${build_path}_storesign/Koord-RT_${app_version}.pkg" -t macos -p @keychain:APPCONNAUTH
-        # fi
 
         # move created pkg file to prep for download
         mv "${build_path}_storesign/Koord-RT_${app_version}.pkg" "${deploypkg_path}"
@@ -190,7 +166,6 @@ build_disk_image()
     app_version=$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")
 
     # Build installer image
-
     create-dmg \
       --volname "${client_target_name} Installer" \
       --background "${resources_path}/installerbackground.png" \
@@ -238,9 +213,8 @@ fi
 # Cleanup previous deployments
 cleanup
 
-# Build Jamulus client and server
+# Build app
 # Just build client for Mac
-# build_app server_app "CONFIG+=server_bundle"
 build_app client_app
 
 build_installer_pkg
@@ -249,5 +223,4 @@ build_installer_pkg
 make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
 # Create versioned installer image 
-# build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
 build_disk_image "${CLIENT_TARGET_NAME}"

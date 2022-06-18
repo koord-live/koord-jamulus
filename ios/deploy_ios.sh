@@ -97,15 +97,10 @@ build_ipa()
         # debug
         echo "Archive contents after creating signed installer"
         ls -alR build/Koord-RT.xcarchive
-
-        NOTARIZATION_PASSWORD=""
-        if [ ! -z "$NOTARIZATION_PASSWORD" ]; then
-            xcrun altool --validate-app -f "build/Exports/Koord-RT.ipa" -t ios -p @keychain:APPCONNAUTH
-            xcrun altool --upload-app -f "build/Exports/Koord-RT.ipa" -t ios -p @keychain:APPCONNAUTH
-        fi
     fi
 
-    # handle ipa file
+    # if no dist_cert, just create unsigned ipa file
+    # otherwise skip that, and upload the signed ipa
     if [[ -z "$iosdist_cert_name" ]]; then
         # Generate unsigned ipa by copying the .app structure from the xcarchive directory
         cd ${root_path}
