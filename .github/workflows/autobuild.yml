@@ -306,7 +306,7 @@ jobs:
         if:                         needs.create_release.outputs.publish_to_release == 'true'
         id:                         validateupload
         run:                        ${{ matrix.config.base_command }} validate_and_upload
-        with:
+        env:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
       ## RELEASE PROCEDURE FOR:
