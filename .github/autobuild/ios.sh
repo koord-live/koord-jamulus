@@ -105,8 +105,8 @@ pass_artifact_to_job() {
 
 valid8_n_upload() {
     # attempt validate and then upload of ipa file, using previously-made keychain item
-    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD --keychain build.keychain
-    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t ios $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD --keychain build.keychain
+    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
 }
 
 case "${1:-}" in
