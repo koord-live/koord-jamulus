@@ -348,7 +348,7 @@ jobs:
         id:                         publish_android
         uses:                       r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName:              live.koord.Koord-RT
           releaseFiles:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           track:                    beta
@@ -365,7 +365,7 @@ jobs:
           tenant-id:                ${{ secrets.AZURE_AD_TENANT_ID }}
           client-id:                ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
           client-secret:            ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
-          app-id:                   ${{ secrets.STORE_APP_ID }}
+          app-id:                   ${{ secrets.WINDOWS_STORE_APP_ID }}
           package-path:             deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
 
       ## All "Artifact 2" should be for Store upload only - do not put into Release
