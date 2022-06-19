@@ -390,17 +390,20 @@ Function Build-MSIX-Package
     $msixTempDir = [System.IO.Path]::GetTempPath()
     Invoke-WebRequest -Uri "$MSIXPkgToolUrl" -OutFile "$msixTempDir\msixpkgtool.msixbundle"
 
+    # maybe need to set this?
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+
     echo "Installing MsixPackagingTool ..."
     # Invoke-Native-Command -Command "Add-AppxPackage" `
     #     -Arguments ("-Path", "$msixTempDir\msixpkgtool.msixbundle", "-Confirm:$false", `
     #      "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
     Add-AppxPackage -Path "$msixTempDir\msixpkgtool.msixbundle" -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
 
-    Tree "C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps" /f /a
+    Tree "C:\Users\runneradmin\AppData" /f /a
 
     echo "Invoking MsixPackagingTool ...."
-    C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
-    MsixPackagingTool.exe -?
+    # C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
+    MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
     # Invoke-Native-Command -Command "$MsixPkgTool" `
     #     -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
     # MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
