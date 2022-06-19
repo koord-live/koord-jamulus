@@ -13,8 +13,9 @@ param (
     #   further consideration as it would make the license situation more complicated.
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
-    [string] $MSIXPkgToolUrl = "https://download.microsoft.com/download/6/f/e/6fec9d4c-f570-4826-995a-5feba065fa8b/MSIXPackagingTool_1.2022.110.0.msixbundle",
     [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
+    [string] $MSIXPkgToolUrl = "https://download.microsoft.com/download/6/f/e/6fec9d4c-f570-4826-995a-5feba065fa8b/MSIXPackagingTool_1.2022.110.0.msixbundle",
+    [string] $MsixPkgToolPath = "C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe",
     [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.29.30133\x64\Microsoft.VC142.CRT",
     [string] $BuildOption = ""
@@ -375,7 +376,8 @@ Function Build-Installer
     #FIXME for 64bit build only
     Set-Location -Path "$RootPath"
     # /Program Files (x86)/Inno Setup 6/ISCC.exe
-    Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
+    # Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
+    Invoke-Native-Command -Command "iscc" `
         -Arguments ("$RootPath\kdinstaller.iss", `
          "/FKoord-RT-${AppVersion}")
 }
@@ -389,13 +391,13 @@ Function Build-MSIX-Package
     Invoke-WebRequest -Uri "$MSIXPkgToolUrl" -OutFile "$msixTempDir\msixpkgtool.msixbundle"
 
     echo "Installing MsixPackagingTool ..."
-    Invoke-Native-Command -Command "Add-AppxPackage" `
-        -Arguments ("-Path", "$msixTempDir\msixpkgtool.msixbundle", "-Confirm:$false", `
-         "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
-    # Add-AppxPackage -Path msixpkgtool.msixbundle -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
+    # Invoke-Native-Command -Command "Add-AppxPackage" `
+    #     -Arguments ("-Path", "$msixTempDir\msixpkgtool.msixbundle", "-Confirm:$false", `
+    #      "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
+    Add-AppxPackage -Path "$msixTempDir\msixpkgtool.msixbundle" -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
 
     echo "Invoking MsixPackagingTool ...."
-    Invoke-Native-Command -Command "MsixPackagingTool.exe" `
+    Invoke-Native-Command -Command "$MsixPkgTool" `
         -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
     # MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
 
