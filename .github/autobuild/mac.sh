@@ -64,8 +64,8 @@ prepare_signing() {
     security import macadhoc_certificate.p12 -k build.keychain -P "${MAC_ADHOC_CERT_PWD}" -A -T /usr/bin/codesign 
     security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
     security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
-    # add notarization/validation/upload password to keychain
-    xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    # # add notarization/validation/upload password to keychain
+    # xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
     # allow the default keychain access to cli utilities
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
     # set lock timeout on keychain to 6 hours - possibly optional
@@ -104,12 +104,12 @@ pass_artifact_to_job() {
 }
 
 valid8_n_upload() {
-    echo ">>> valid8_n_upload: ...."
+    echo ">>> Processing validation and upload..."
     # test the signature of package
     pkgutil --check-signature "${ARTIFACT_PATH}"
     # attempt validate and then upload of pkg file, using previously-made keychain item
-    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD --keychain build.keychain
-    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD --keychain build.keychain
+    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
 }
 
 case "${1:-}" in

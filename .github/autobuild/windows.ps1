@@ -121,6 +121,20 @@ Function Pass-Artifact-to-Job
     echo "::set-output name=artifact_1::${artifact}"
 }
 
+Function Pass-MSIX-Artifact-to-Job
+{
+    $artifact = "Koord_${JamulusVersion}_win.msix"
+
+    echo "Copying artifact to ${artifact}"
+    move ".\????\Koord-RT*.msix" ".\deploy\${artifact}"
+    if ( !$? )
+    {
+        throw "move failed with exit code $LastExitCode"
+    }
+    echo "Setting Github step output name=artifact_2::${artifact}"
+    echo "::set-output name=artifact_2::${artifact}"
+}
+
 switch ( $Stage )
 {
     "setup"
@@ -136,6 +150,7 @@ switch ( $Stage )
     "get-artifacts"
     {
         Pass-Artifact-to-Job
+        Pass-MSIX-Artifact-to-Job
     }
     default
     {

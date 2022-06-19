@@ -389,9 +389,12 @@ Function Build-Installer
 # Build MSIX Package
 Function Build-MSIX-Package
 {
-    # https://download.microsoft.com/download/6/f/e/6fec9d4c-f570-4826-995a-5feba065fa8b/MSIXPackagingTool_1.2022.110.0.msixbundle
+    # Install MSIXPackagingTool
+    Invoke-WebRequest -Uri "$MSIXPkgToolUrl" -OutFile msixpkgtool.msixbundle
 
-    MsixPackagingTool.exe create-package --template "C:\path\to\ConversionTemplate.xml"
+    Add-AppPackage -path msixpkgtool.msixbundle
+
+    MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
 
 }
 
@@ -399,4 +402,4 @@ Clean-Build-Environment
 Install-Dependencies
 Build-App-Variants
 Build-Installer -BuildOption $BuildOption
-# Build-MSIX-Package
+Build-MSIX-Package
