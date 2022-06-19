@@ -396,9 +396,13 @@ Function Build-MSIX-Package
     #      "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
     Add-AppxPackage -Path "$msixTempDir\msixpkgtool.msixbundle" -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
 
+    Tree "C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps" /f /a
+
     echo "Invoking MsixPackagingTool ...."
-    Invoke-Native-Command -Command "$MsixPkgTool" `
-        -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
+    C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
+    MsixPackagingTool.exe -?
+    # Invoke-Native-Command -Command "$MsixPkgTool" `
+    #     -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
     # MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
 
 }

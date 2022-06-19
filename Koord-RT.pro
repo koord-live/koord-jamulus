@@ -158,11 +158,10 @@ win32 {
     !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
 
     # by default is 23 apparently = Android 6 !
-#    ANDROID_MIN_SDK_VERSION = 23
+    # BUT: crashes on Android 9, sdk=28
+    ANDROID_MIN_SDK_VERSION = 29
 
     # sdk version = 30 is required by Google Play store
-    # BUT: Qt6 should work on sdk=23+ (Android v6+) - https://doc.qt.io/qt-6/android.html
-    # - just don't know how to target multiple versions at the moment!
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
     
