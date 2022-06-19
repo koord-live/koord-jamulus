@@ -84,11 +84,11 @@
     -->
 
     <SaveLocation
-        PackagePath="C:\users\user\Desktop\MyPackage.msix" 
-        TemplatePath="C:\users\user\Desktop\MyTemplate.xml" />
+        PackagePath="C:\path\to\Koord-RT.msix" 
+        TemplatePath="C:\path\to\Koord-RT.xml" />
 
     <Installer
-        Path="C:\MyAppInstaller.msi"
+        Path="C:\path\to\Koord-RT.exe"
         Arguments= "/qn /norestart INSTALLSTARTMENUSHORTCUTS=1 DISABLEADVTSHORTCUTS=1"
         InstallLocation="C:\Program Files\Koord-RT" />
 	
@@ -101,10 +101,10 @@
     -->
 
     <PackageInformation
-        PackageName="MyAppPackageName"
-        PackageDisplayName="MyApp Display Name"
-        PublisherName="CN=MyPublisher"
-        PublisherDisplayName="MyPublisher Display Name"
+        PackageName="Koord.KoordRT"
+        PackageDisplayName="Koord"
+        PublisherName="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C"
+        PublisherDisplayName="Koord"
         Version="1.1.0.0"
         MainPackageNameForModificationPackage="MainPackageIdentityName">
 

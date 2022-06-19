@@ -400,7 +400,7 @@ Function Build-MSIX-Package
     Add-AppxPackage -Path "$msixTempDir\msixpkgtool.msixbundle" -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
 
     # debug to find tool
-    Tree "C:" /f /a
+    Tree "C:\Program Files" /f /a
 
     echo "Invoking MsixPackagingTool ...."
     # C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"

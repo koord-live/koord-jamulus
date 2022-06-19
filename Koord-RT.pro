@@ -259,35 +259,7 @@ win32 {
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
     target.path = $$BINDIR
 
-    contains(CONFIG, "headless") {
-        INSTALLS += target
-    } else {
-#        isEmpty(APPSDIR) {
-#            APPSDIR = share/applications
-#        }
-#        APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
-#        desktop.path = $$APPSDIR
-#        QMAKE_SUBSTITUTES += distributions/koordrt.desktop.in
-#        desktop.files = distributions/koordrt.desktop
-
-#        isEmpty(ICONSDIR) {
-#            ICONSDIR = share/icons/hicolor/512x512/apps
-#        }
-#        ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
-#        icons.path = $$ICONSDIR
-#        # icons.files = distributions/koordrt.png distributions/koordrt.svg
-#        icons.files = distributions/koordrt.png
-
-#        isEmpty(ICONSDIR_SVG) {
-#            ICONSDIR_SVG = share/icons/hicolor/scalable/apps/
-#        }
-#        ICONSDIR_SVG = $$absolute_path($$ICONSDIR_SVG, $$PREFIX)
-#        icons_svg.path = $$ICONSDIR_SVG
-#        icons_svg.files = distributions/koordrt.svg
-        
-#        INSTALLS += target desktop icons icons_svg man
-        INSTALLS += target
-    }
+    INSTALLS += target
 }
 
 RCC_DIR = src/res
