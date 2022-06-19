@@ -298,7 +298,8 @@ jobs:
       - name:                       Upload Artifact 1 to Release
         # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
         # If the artifact is missing, this should fail.
-        if:                         needs.create_release.outputs.publish_to_release == 'true' &&
+        if:                         >-
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
                                     (matrix.config.target_os == 'macos' || 
                                     matrix.config.target_os == 'windows' ||
                                     matrix.config.target_os == 'linux')
@@ -342,8 +343,9 @@ jobs:
 
       ## RELEASE PROCEDURE FOR:
       ## - Android Play Store - aab
-      - name: Publish arm_v8a Android build to Play Store
-        if:                         needs.create_release.outputs.publish_to_release == 'true' &&
+      - name:                       Publish arm_v8a Android build to Play Store
+        if:                         >-
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
                                     matrix.config.target_os == 'android'
         id:                         publish_android
         uses:                       r0adkll/upload-google-play@v1
@@ -356,8 +358,9 @@ jobs:
 
       ## RELEASE PROCEDURE FOR:
       ## - Windows Store - msix
-      - name: Publish msix Windows build to Store
-        if:                         needs.create_release.outputs.publish_to_release == 'true' &&
+      - name:                       Publish msix Windows build to Store
+        if:                         >-
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
                                     matrix.config.target_os == 'windows'
         id:                         publish_windows
         uses:                       isaacrlevin/windows-store-action@1.0

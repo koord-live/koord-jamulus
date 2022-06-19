@@ -390,11 +390,16 @@ Function Build-Installer
 Function Build-MSIX-Package
 {
     # Install MSIXPackagingTool
+    echo "Downloading MsixPackagingTool installer ..."
     Invoke-WebRequest -Uri "$MSIXPkgToolUrl" -OutFile msixpkgtool.msixbundle
 
+    echo "Installing... MsixPackagingTool ..."
     Add-AppPackage -path msixpkgtool.msixbundle
 
-    MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
+    echo "Invoking MsixPackagingTool ...."
+    Invoke-Native-Command -Command "MsixPackagingTool.exe" `
+        -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
+    # MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
 
 }
 
