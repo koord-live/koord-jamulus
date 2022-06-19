@@ -148,12 +148,6 @@ Function Install-Dependencies
     # install MSIX Packaging Tool
     # Install  bundle
     
-    # chocolatey should already be on Github Windows builds
-    # # assuming Powershell3, install Chocolatey
-    # Set-ExecutionPolicy Bypass -Scope Process -Force; iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex
-    
-    # now install Innosetup
-    choco install innosetup
 }
 
 # Setup environment variables and build tool paths
@@ -391,10 +385,14 @@ Function Build-MSIX-Package
 {
     # Install MSIXPackagingTool
     echo "Downloading MsixPackagingTool installer ..."
-    Invoke-WebRequest -Uri "$MSIXPkgToolUrl" -OutFile msixpkgtool.msixbundle
+    $msixTempDir = [System.IO.Path]::GetTempPath()
+    Invoke-WebRequest -Uri "$MSIXPkgToolUrl" -OutFile "$msixTempDir\msixpkgtool.msixbundle"
 
-    echo "Installing... MsixPackagingTool ..."
-    Add-AppPackage -path msixpkgtool.msixbundle
+    echo "Installing MsixPackagingTool ..."
+    Invoke-Native-Command -Command "Add-AppxPackage" `
+        -Arguments ("-Path", "msixpkgtool.msixbundle", "-Confirm:$false", `
+         "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
+    # Add-AppxPackage -Path msixpkgtool.msixbundle -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
 
     echo "Invoking MsixPackagingTool ...."
     Invoke-Native-Command -Command "MsixPackagingTool.exe" `

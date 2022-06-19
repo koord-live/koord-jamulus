@@ -106,7 +106,7 @@ Function Build-App-With-Installer
     }
 }
 
-Function Pass-Artifact-to-Job
+Function Pass-EXE-Artifact-to-Job
 {
     $artifact = "Koord_${JamulusVersion}_win.exe"
 
@@ -149,7 +149,7 @@ switch ( $Stage )
     }
     "get-artifacts"
     {
-        Pass-Artifact-to-Job
+        Pass-EXE-Artifact-to-Job
         Pass-MSIX-Artifact-to-Job
     }
     default
