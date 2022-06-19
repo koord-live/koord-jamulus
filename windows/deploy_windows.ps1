@@ -13,9 +13,9 @@ param (
     #   further consideration as it would make the license situation more complicated.
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
-    [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
+    # [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
     [string] $MSIXPkgToolUrl = "https://download.microsoft.com/download/6/f/e/6fec9d4c-f570-4826-995a-5feba065fa8b/MSIXPackagingTool_1.2022.110.0.msixbundle",
-    [string] $MsixPkgToolPath = "C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe",
+    [string] $MsixPkgToolPath = "C:\Program Files (x86)\MsixPackagingTool.exe",
     [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.29.30133\x64\Microsoft.VC142.CRT",
     [string] $BuildOption = ""
@@ -399,14 +399,15 @@ Function Build-MSIX-Package
     #      "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
     Add-AppxPackage -Path "$msixTempDir\msixpkgtool.msixbundle" -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
 
-    Tree "C:\Users\runneradmin\AppData" /f /a
+    # debug to find tool
+    Tree "C:" /f /a
 
     echo "Invoking MsixPackagingTool ...."
     # C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
-    MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
+    # MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
     # Invoke-Native-Command -Command "$MsixPkgTool" `
     #     -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
-    # MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
+    & MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
 
 }
 

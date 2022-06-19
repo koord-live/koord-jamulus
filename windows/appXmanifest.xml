@@ -1,4 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<Installer
+        Path="C:\MyAppInstaller.msi"
+        InstallLocation="C:\Program Files\MyAppInstallLocation" >
+</Installer>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap10 rescap">
   <!--Package created by MSIX Packaging Tool version: 1.2022.330.0-->
   <Identity Name="Koord.KoordRT" Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C" Version="1.0.0.0" ProcessorArchitecture="x64" />
