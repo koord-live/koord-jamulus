@@ -390,7 +390,7 @@ Function Build-MSIX-Package
 
     echo "Installing MsixPackagingTool ..."
     Invoke-Native-Command -Command "Add-AppxPackage" `
-        -Arguments ("-Path", "msixpkgtool.msixbundle", "-Confirm:$false", `
+        -Arguments ("-Path", "$msixTempDir\msixpkgtool.msixbundle", "-Confirm:$false", `
          "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
     # Add-AppxPackage -Path msixpkgtool.msixbundle -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
 
