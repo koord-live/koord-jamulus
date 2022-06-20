@@ -108,15 +108,22 @@ build_app() {
         "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     fi
     "${MAKE}" -j "$(nproc)"
-    "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
+    "${MAKE}" INSTALL_ROOT="${BUILD_DIR}_${ARCH_ABI}" -f Makefile install
+}
+
+build_make_clean() {
+    local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
+    "${MAKE}" clean
 }
 
 build_aab() {
+    local ARCH_ABI="${1}"
+
     echo ">>> Building .aab file ...."
 
     "${QT_BASEDIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
         --verbose \
-        --output "${BUILD_DIR}" \
+        --output "${BUILD_DIR}_${ARCH_ABI}" \
         --aab \
         --release \
         --sign android/android_release.keystore koord \
@@ -127,13 +134,23 @@ build_aab() {
 }
 
 pass_artifact_to_job() {
+    local ARCH_ABI="${1}"
+
+    if [ "${ARCH_ABI}" == "android_armv7" ]; then
+        NUM="1"
+        BUILDNAME="arm"
+    else
+        NUM="2"
+        BUILDNAME="arm64"
+    fi
+
     mkdir deploy
-    local artifact="Koord_${JAMULUS_BUILD_VERSION}_android.aab"
+    local artifact="Koord_${JAMULUS_BUILD_VERSION}_android_${BUILDNAME}.aab"
     # debug to check for filenames
-    ls -alR ${BUILD_DIR}/build/
-    echo "Moving ${BUILD_DIR}/build/outputs/bundle/release/build-release.aab to deploy/${artifact}"
-    mv "./${BUILD_DIR}/build/outputs/bundle/release/build-release.aab" "./deploy/${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    ls -alR ${BUILD_DIR}_${ARCH_ABI}/build/
+    echo "Moving ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build-release.aab to deploy/${artifact}"
+    mv "./${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build-release.aab" "./deploy/${artifact}"
+    echo "::set-output name=artifact_${NUM}::${artifact}"
 }
 
 case "${1:-}" in
@@ -144,12 +161,15 @@ case "${1:-}" in
         setup_qt
         ;;
     build)
-        # build_app "android_armv7"
+        build_app "android_armv7"
+        build_aab "android_armv7"
+        build_make_clean
         build_app "android_arm64_v8a"
-        build_aab
+        build_aab "android_arm64_v8a"
         ;;
     get-artifacts)
-        pass_artifact_to_job
+        pass_artifact_to_job "android_armv7"
+        pass_artifact_to_job "android_arm64_v8a"
         ;;
     *)
         echo "Unknown stage '${1:-}'"

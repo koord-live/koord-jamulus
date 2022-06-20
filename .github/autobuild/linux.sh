@@ -43,7 +43,7 @@ setup_x64() {
     echo "Installing dependencies..."
     sudo apt-get update
     ## WORKING !!!!!!!!!!!!!!
-    sudo apt-get -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev libgl-dev libegl1 \
+    sudo apt-get -y install devscripts build-essential fakeroot libjack-jackd2-dev libgl-dev libegl1 \
         python3-setuptools python3-wheel libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
         libxcb-randr0 libxcb-render-util0 libxcb-util1 libxcb-xinput0 libxcb-xkb1 libx11-dev
    
