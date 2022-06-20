@@ -385,29 +385,40 @@ Function Build-Installer
 # Build MSIX Package
 Function Build-MSIX-Package
 {
-    # Install MSIXPackagingTool
-    echo "Downloading MsixPackagingTool installer ..."
-    $msixTempDir = [System.IO.Path]::GetTempPath()
-    Invoke-WebRequest -Uri "$MSIXPkgToolUrl" -OutFile "$msixTempDir\msixpkgtool.msixbundle"
-
-    # maybe need to set this?
+    # set elevated / admin privileges??
+    #FIXME does this even work?
     Set-ExecutionPolicy Bypass -Scope Process -Force
 
+    # Install MSIXPackagingTool
+    echo "Downloading MsixPackagingTool installer ..."
+
+    & "$WindowsPath\Get_Store_Downloads.ps1" -packageFamilyName Microsoft.MsixPackagingTool_8wekyb3d8bbwe `
+        -downloadFolder C:\store-apps -excludeRegex '_arm__|_x86__|_arm64__'
+
     echo "Installing MsixPackagingTool ..."
-    # Invoke-Native-Command -Command "Add-AppxPackage" `
-    #     -Arguments ("-Path", "$msixTempDir\msixpkgtool.msixbundle", "-Confirm:$false", `
-    #      "-ForceUpdateFromAnyVersion", "-InstallAllResources", "-verbose")
-    Add-AppxPackage -Path "$msixTempDir\msixpkgtool.msixbundle" -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources -verbose
+
+    #FIXME - the version of tool and therefore path WILL change - need to get dynamically
+    Add-AppxPackage -Path 'C:\store-apps\Microsoft.MSIXPackagingTool_2022.330.739.0_neutral_~_8wekyb3d8bbwe.msixbundle' `
+        -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources
 
     # debug to find tool
-    Tree "C:\Program Files" /f /a
+    # Tree "C:\Program Files" /f /a
 
+    echo "Outputting MSIX Package Driver version..."
+    dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)'
+
+    echo "Now installing MSIX Package Driver. More long-winded bullshite"
+    dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)' `
+        |Select-Object -ExpandProperty Matches|Select-Object -ExpandProperty Value| `
+        ForEach-Object { dism /online /add-capability /capabilityname:$_ }
+
+    echo "Can I potentially run MsixPackagingTool now ?????????????????????"
     echo "Invoking MsixPackagingTool ...."
     # C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
     # MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
     # Invoke-Native-Command -Command "$MsixPkgTool" `
     #     -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
-    & MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
+    MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
 
 }
 
