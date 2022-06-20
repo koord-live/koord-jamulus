@@ -417,15 +417,14 @@ Function Build-MSIX-Package
     Get-AppxPackage -Name Microsoft.MSIXPackagingTool
 
     # debug - list output of tool installation directory
-    #dir "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe"
+    dir "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe"
 
     echo "Can I potentially run MsixPackagingTool now ?????????????????????"
     echo "Invoking MsixPackagingTool ...."
-    # C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
-    # MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
-    # Invoke-Native-Command -Command "$MsixPkgTool" `
-    #     -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
-    & "$MsixPkgToolPath" create-package --template "$WindowsPath\msix_template.xml"
+    
+    Invoke-Native-Command -Command "$MsixPkgToolPath" `
+        -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
+    # & "$MsixPkgToolPath" create-package --template "$WindowsPath\msix_template.xml"
 
 }
 
