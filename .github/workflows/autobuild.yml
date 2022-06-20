@@ -159,11 +159,11 @@ jobs:
           #   run_codeql:             false
           #   xcode_version:          13.2.1
 
-          - config_name:            Windows 10+ x64 exe,msix
-            target_os:              windows
-            building_on_os:         windows-2019
-            base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
-            run_codeql:             false
+          # - config_name:            Windows 10+ x64 exe,msix
+          #   target_os:              windows
+          #   building_on_os:         windows-2019
+          #   base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
+          #   run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
@@ -354,7 +354,7 @@ jobs:
         uses:                       r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          packageName:              live.koord.Koord-RT
+          packageName:              live.koord.koordrt
           releaseFiles:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           track:                    beta
           status:                   inProgress
