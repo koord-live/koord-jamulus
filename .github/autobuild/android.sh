@@ -1,4 +1,4 @@
-#!/bin/bash
+    #!/bin/bash
 set -eu
 
 COMMANDLINETOOLS_VERSION=8512546
@@ -118,9 +118,9 @@ build_make_clean() {
 }
 
 build_aab() {
-    echo ">>> Building .aab file for ${ARCH_ABI}...."
     local ARCH_ABI="${1}"
-    
+    echo ">>> Building .aab file for ${ARCH_ABI}...."
+
     ANDROID_ABIS="${ARCH_ABI}" "${QT_BASEDIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
         --verbose \
         --output "${BUILD_DIR}_${ARCH_ABI}" \
@@ -134,8 +134,8 @@ build_aab() {
 }
 
 pass_artifact_to_job() {
-    echo ">>> Deploying .aab file for ${ARCH_ABI}...."
     local ARCH_ABI="${1}"
+    echo ">>> Deploying .aab file for ${ARCH_ABI}...."
 
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
         NUM="1"
