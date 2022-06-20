@@ -343,6 +343,9 @@ jobs:
 
       ## RELEASE PROCEDURE FOR:
       ## - Android Play Store - aab
+      ## Requirement: Service Account JSON setup:
+      ## - Google Play Console -> Setup -> API Access -> Create/Link Google Cloud Project 
+      ## - Google Cloud console -> IAM & Admin -> Service Accounts -> Create (Wizard). Then create JSON key and export/save
       - name:                       Publish arm_v8a Android build to Play Store
         if:                         >-
                                     needs.create_release.outputs.publish_to_release == 'true' &&
