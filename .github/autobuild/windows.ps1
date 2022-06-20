@@ -150,7 +150,7 @@ switch ( $Stage )
     "get-artifacts"
     {
         Pass-EXE-Artifact-to-Job
-        Pass-MSIX-Artifact-to-Job
+        # Pass-MSIX-Artifact-to-Job
     }
     default
     {

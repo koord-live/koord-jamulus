@@ -383,6 +383,7 @@ Function Build-Installer
 }
 
 # Build MSIX Package
+#FIXME this is all totally heinous
 Function Build-MSIX-Package
 {
     # set elevated / admin privileges??
@@ -400,9 +401,8 @@ Function Build-MSIX-Package
         -downloadFolder C:\store-apps -excludeRegex '_arm__|_x86__|_arm64__'
 
     # enable Windows Update service to allow driver installation to succeed!
-    echo ">>> Enabling Windows Update service ..."
+    # echo ">>> Enabling Windows Update service ..."
     # Start-Service wuauserv
-    Start-Service wsusservice
 
     echo ">>> Installing MsixPackagingTool ..."
     #FIXME - the version of tool and therefore path WILL change - need to get dynamically
@@ -438,4 +438,4 @@ Clean-Build-Environment
 Install-Dependencies
 Build-App-Variants
 Build-Installer -BuildOption $BuildOption
-Build-MSIX-Package
+# Build-MSIX-Package
