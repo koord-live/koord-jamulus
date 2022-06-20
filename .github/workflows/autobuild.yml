@@ -113,13 +113,13 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
-          # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
-          # Can install Qt using aqtinstall on 20.04
-          - config_name:            Linux 2.31+ x64 AppImage
-            target_os:              linux
-            building_on_os:         ubuntu-20.04
-            base_command:           ./.github/autobuild/linux.sh
-            run_codeql:             false
+          # # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
+          # # Can install Qt using aqtinstall on 20.04
+          # - config_name:            Linux 2.31+ x64 AppImage
+          #   target_os:              linux
+          #   building_on_os:         ubuntu-20.04
+          #   base_command:           ./.github/autobuild/linux.sh
+          #   run_codeql:             false
 
           ## Qt6 from apt - crossbuild for armhf eg rPi
           ## Disable for now: likely no Qt6 on rPi anyway. AppImage preferable
@@ -138,26 +138,26 @@ jobs:
           #   run_codeql:             false
           #   xcode_version:          13.2.1
 
-          - config_name:            MacOS 10.14+ x64 pkg,dmg
-            target_os:              macos
-            # Build platform can be newer than target platform
-            building_on_os:         macos-10.15
-            base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-            run_codeql:             false
-            # Target oldest macOS version supported by Qt6: 10.14 - so xcode 12 needed 
-            # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
-            # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
-            xcode_version:          12.1.1
+          # - config_name:            MacOS 10.14+ x64 pkg,dmg
+          #   target_os:              macos
+          #   # Build platform can be newer than target platform
+          #   building_on_os:         macos-10.15
+          #   base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
+          #   run_codeql:             false
+          #   # Target oldest macOS version supported by Qt6: 10.14 - so xcode 12 needed 
+          #   # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
+          #   # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
+          #   xcode_version:          12.1.1
 
-          - config_name:            iOS 10.13+ ipa
-            target_os:              ios
-            building_on_os:         macos-11
-            base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
-            # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
-            # There are no hints that iOS is supposed to be supported by CodeQL.
-            # Therefore, disable it:
-            run_codeql:             false
-            xcode_version:          13.2.1
+          # - config_name:            iOS 10.13+ ipa
+          #   target_os:              ios
+          #   building_on_os:         macos-11
+          #   base_command:           QT_VERSION=6.3.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
+          #   # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
+          #   # There are no hints that iOS is supposed to be supported by CodeQL.
+          #   # Therefore, disable it:
+          #   run_codeql:             false
+          #   xcode_version:          13.2.1
 
           - config_name:            Windows 10+ x64 exe,msix
             target_os:              windows

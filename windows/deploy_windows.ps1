@@ -15,7 +15,7 @@ param (
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
     # [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
     [string] $MSIXPkgToolUrl = "https://download.microsoft.com/download/6/f/e/6fec9d4c-f570-4826-995a-5feba065fa8b/MSIXPackagingTool_1.2022.110.0.msixbundle",
-    [string] $MsixPkgToolPath = "C:\Program Files (x86)\MsixPackagingTool.exe",
+    [string] $MsixPkgToolPath = "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe\MsixPackagingToolCLI.exe",
     [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.29.30133\x64\Microsoft.VC142.CRT",
     [string] $BuildOption = ""
@@ -398,11 +398,9 @@ Function Build-MSIX-Package
     echo "Installing MsixPackagingTool ..."
 
     #FIXME - the version of tool and therefore path WILL change - need to get dynamically
+    # Check previous output for actual output path of download
     Add-AppxPackage -Path 'C:\store-apps\Microsoft.MSIXPackagingTool_2022.330.739.0_neutral_~_8wekyb3d8bbwe.msixbundle' `
         -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources
-
-    # debug to find tool
-    # Tree "C:\Program Files" /f /a
 
     echo "Outputting MSIX Package Driver version..."
     dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)'
@@ -412,13 +410,22 @@ Function Build-MSIX-Package
         |Select-Object -ExpandProperty Matches|Select-Object -ExpandProperty Value| `
         ForEach-Object { dism /online /add-capability /capabilityname:$_ }
 
+    echo "Outputting all installed AppxPackage ....."
+    Get-AppxPackage -all | Where PackageFamilyName -match '_8wekyb3d8bbwe' | sort Name -Unique | select Name,PackageFamilyName
+
+    echo "Outputting details of installed tool: Microsoft.MSIXPackagingTool"
+    Get-AppxPackage -Name Microsoft.MSIXPackagingTool
+
+    # debug - list output of tool installation directory
+    #dir "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe"
+
     echo "Can I potentially run MsixPackagingTool now ?????????????????????"
     echo "Invoking MsixPackagingTool ...."
     # C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe create-package --template "$WindowsPath\appXmanifest.xml"
     # MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
     # Invoke-Native-Command -Command "$MsixPkgTool" `
     #     -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
-    MsixPackagingTool.exe create-package --template "$WindowsPath\msix_template.xml"
+    & "$MsixPkgToolPath" create-package --template "$WindowsPath\msix_template.xml"
 
 }
 
