@@ -402,6 +402,9 @@ Function Build-MSIX-Package
     Add-AppxPackage -Path 'C:\store-apps\Microsoft.MSIXPackagingTool_2022.330.739.0_neutral_~_8wekyb3d8bbwe.msixbundle' `
         -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources
 
+    # enable Windows Update service to allow driver installation to succeed!
+    net start wuauserv
+
     echo "Outputting MSIX Package Driver version..."
     dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)'
 
