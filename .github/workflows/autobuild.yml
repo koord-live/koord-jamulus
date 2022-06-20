@@ -356,8 +356,9 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName:              live.koord.koordrt
           releaseFiles:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+          releaseName:              ${{ needs.create_release.outputs.build_version }}
           track:                    beta
-          status:                   completed
+          status:                   draft
 
       # ## RELEASE PROCEDURE FOR:
       # ## - Windows Store - msix
