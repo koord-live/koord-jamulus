@@ -112,16 +112,16 @@ build_app() {
 }
 
 build_make_clean() {
+    echo ">>> Doing make clean ..."
     local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
     "${MAKE}" clean
 }
 
 build_aab() {
+    echo ">>> Building .aab file for ${ARCH_ABI}...."
     local ARCH_ABI="${1}"
-
-    echo ">>> Building .aab file ...."
-
-    "${QT_BASEDIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
+    
+    ANDROID_ABIS="${ARCH_ABI}" "${QT_BASEDIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
         --verbose \
         --output "${BUILD_DIR}_${ARCH_ABI}" \
         --aab \
@@ -134,6 +134,7 @@ build_aab() {
 }
 
 pass_artifact_to_job() {
+    echo ">>> Deploying .aab file for ${ARCH_ABI}...."
     local ARCH_ABI="${1}"
 
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
