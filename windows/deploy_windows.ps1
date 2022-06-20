@@ -387,7 +387,7 @@ Function Build-MSIX-Package
 {
     # set elevated / admin privileges??
     #FIXME does this even work?
-    Set-ExecutionPolicy Bypass -Scope Process -Force
+    Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 
     # Install MSIXPackagingTool
     echo "Downloading MsixPackagingTool installer ..."
