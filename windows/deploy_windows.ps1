@@ -389,7 +389,11 @@ Function Build-MSIX-Package
     #FIXME does this even work?
     Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 
+    #debug permissions
+    whoami /groups
+
     # Install MSIXPackagingTool
+    # Using download tool and pattern from https://flexxible.com/automating-msix-packaging-with-powershell/
     echo ">>> Downloading MsixPackagingTool installer ..."
 
     & "$WindowsPath\Get_Store_Downloads.ps1" -packageFamilyName Microsoft.MsixPackagingTool_8wekyb3d8bbwe `
@@ -397,8 +401,8 @@ Function Build-MSIX-Package
 
     # enable Windows Update service to allow driver installation to succeed!
     echo ">>> Enabling Windows Update service ..."
-    Start-Service wuauserv
-    # Start-Service wsusservice
+    # Start-Service wuauserv
+    Start-Service wsusservice
 
     echo ">>> Installing MsixPackagingTool ..."
     #FIXME - the version of tool and therefore path WILL change - need to get dynamically
