@@ -165,8 +165,9 @@ win32 {
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
     
+    ## note: stop setting this here, screws up autobuild for 2 x aabs
     # if ANDROID_VERSION_CODE is passed as env var to qmake, will override this
-    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    # !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
     
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
