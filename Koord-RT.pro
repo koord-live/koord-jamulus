@@ -107,10 +107,6 @@ win32 {
     MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
     RC_FILE = mac/mainicon.icns
 
-    # turns out we DO actually need webengine in macos
-    QT += quick \
-        webenginecore
-
     HEADERS += mac/activity.h mac/badgelabel.h
     OBJECTIVE_SOURCES += mac/activity.mm mac/badgelabel.mm
     CONFIG += x86
