@@ -155,7 +155,7 @@ win32 {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     
     # if ANDROID_ABIS is passed as env var to qmake, will override this
-    !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
+    # !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
 
     # by default is 23 apparently = Android 6 !
     # BUT: crashes on Android 9, sdk=28

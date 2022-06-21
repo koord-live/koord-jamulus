@@ -103,9 +103,11 @@ build_app() {
     echo ">>> Compiling for ${ARCH_ABI} ..."
     # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
-        ANDROID_ABIS=android_armv7 "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+        echo ">>> Running qmake with ANDROID_ABIS=${ARCH_ABI} ..."
+        ANDROID_ABIS=armeabi-v7a "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     else
-        "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+        echo ">>> Running qmake with ANDROID_ABIS=${ARCH_ABI} ..."
+        ANDROID_ABIS=arm64-v8a "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     fi
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}_${ARCH_ABI}" -f Makefile install
@@ -115,13 +117,20 @@ build_make_clean() {
     echo ">>> Doing make clean ..."
     local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
     "${MAKE}" clean
+    rm -f Makefile
 }
 
 build_aab() {
     local ARCH_ABI="${1}"
-    echo ">>> Building .aab file for ${ARCH_ABI}...."
 
-    ANDROID_ABIS="${ARCH_ABI}" "${QT_BASEDIR}"/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
+    if [ "${ARCH_ABI}" == "android_armv7" ]; then
+        TARGET_ABI=armeabi-v7a
+    else
+        TARGET_ABI=arm64-v8a
+    fi
+    echo ">>> Building .aab file for ${TARGET_ABI}...."
+
+    ANDROID_ABIS=${TARGET_ABI} ${QT_BASEDIR}/${QT_VERSION}/gcc_64/bin/androiddeployqt --input android-Koord-RT-deployment-settings.json \
         --verbose \
         --output "${BUILD_DIR}_${ARCH_ABI}" \
         --aab \
