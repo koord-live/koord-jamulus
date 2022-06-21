@@ -19,7 +19,7 @@ $ChocoCacheDir = 'C:\ChocoCache'
 $Qt32Version = "6.3.0"
 $Qt64Version = "6.3.0"
 $AqtinstallVersion = "2.1.0"
-$Msvc32Version = "win32_msvc2019"
+#$Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
 
@@ -72,7 +72,7 @@ Function Ensure-Qt
 
     echo "Install Qt..."
     # Install Qt
-    pip install "aqtinstall==$AqtinstallVersion"
+    pip install "aqtinstall==$AqtinstallVersion" --use-deprecated=backtrack-on-build-failures
     if ( !$? )
     {
         throw "pip install aqtinstall failed with exit code $LastExitCode"
