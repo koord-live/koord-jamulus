@@ -170,11 +170,16 @@ win32 {
     # if ANDROID_VERSION_CODE is passed as env var to qmake, will override this
     !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
 
+    # get ANDROID_ABIS from environment - passed directly to qmake
+    ANDROID_ABIS = $$getenv(ANDROID_ABIS)
+
     # need to bump version code for 2nd abi build otherwise Play Store rejects
-    contains (ANDROID_ABIS, "armeabi-v7a") {
+    contains (ANDROID_ABIS, armeabi-v7a) {
         ANDROID_VERSION_CODE = $$ANDROID_VERSION_CODE
+        message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     } else {
         ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
+        message("Setting for armv8a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     }
 
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")

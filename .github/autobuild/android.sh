@@ -102,6 +102,7 @@ build_app() {
 
     echo ">>> Compiling for ${ARCH_ABI} ..."
     # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
+    # note: seems ANDROID_ABIS can be set here at cmdline, but ANDROID_VERSION_CODE cannot - must be in qmake file
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
         echo ">>> Running qmake with ANDROID_ABIS=armeabi-v7a ..."
         ANDROID_ABIS=armeabi-v7a \
