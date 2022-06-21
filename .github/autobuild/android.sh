@@ -103,10 +103,10 @@ build_app() {
     echo ">>> Compiling for ${ARCH_ABI} ..."
     # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
-        echo ">>> Running qmake with ANDROID_ABIS=${ARCH_ABI} ..."
+        echo ">>> Running qmake with ANDROID_ABIS=armeabi-v7a ..."
         ANDROID_ABIS=armeabi-v7a "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     else
-        echo ">>> Running qmake with ANDROID_ABIS=${ARCH_ABI} ..."
+        echo ">>> Running qmake with ANDROID_ABIS=arm64-v8a ..."
         ANDROID_ABIS=arm64-v8a "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     fi
     "${MAKE}" -j "$(nproc)"
@@ -158,8 +158,8 @@ pass_artifact_to_job() {
     local artifact="Koord_${JAMULUS_BUILD_VERSION}_android_${BUILDNAME}.aab"
     # debug to check for filenames
     ls -alR ${BUILD_DIR}_${ARCH_ABI}/build/
-    echo "Moving ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build-release.aab to deploy/${artifact}"
-    mv "./${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build-release.aab" "./deploy/${artifact}"
+    echo "Moving ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab to deploy/${artifact}"
+    mv "./${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab" "./deploy/${artifact}"
     echo "::set-output name=artifact_${NUM}::${artifact}"
 }
 
