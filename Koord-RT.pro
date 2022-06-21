@@ -153,7 +153,8 @@ win32 {
 
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-    
+    # note: only armeabi-v7a arm64-v8a are targeted, others are dead/deprecated
+
     # if ANDROID_ABIS is passed as env var to qmake, will override this
     # !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
 
@@ -167,8 +168,15 @@ win32 {
     
     ## note: stop setting this here, screws up autobuild for 2 x aabs
     # if ANDROID_VERSION_CODE is passed as env var to qmake, will override this
-    # !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
-    
+    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+
+    # need to bump version code for 2nd abi build otherwise Play Store rejects
+    contains (ANDROID_ABIS, "armeabi-v7a") {
+        ANDROID_VERSION_CODE = $$ANDROID_VERSION_CODE
+    } else {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
+    }
+
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex
