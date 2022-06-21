@@ -174,11 +174,12 @@ win32 {
     ANDROID_ABIS = $$getenv(ANDROID_ABIS)
 
     # need to bump version code for 2nd abi build otherwise Play Store rejects
+    # also add 10 to be def greater than git log increments... 
     contains (ANDROID_ABIS, armeabi-v7a) {
-        ANDROID_VERSION_CODE = $$ANDROID_VERSION_CODE
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 10)
         message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     } else {
-        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 11)
         message("Setting for armv8a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     }
 
