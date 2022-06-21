@@ -1,3 +1,7 @@
+### 1.9.7 (2022-06-21) ###
+
+- Client: Fixes including webengine for macOS
+
 ### 1.9.6 (2022-06-18) ###
 
 - Client: Autobuild fixes
