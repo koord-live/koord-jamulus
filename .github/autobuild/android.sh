@@ -106,15 +106,18 @@ build_app() {
     android_ver_code=$(git log --oneline | wc -l)
     bump_android_ver_code=$(expr $android_ver_code + 1)
 
+    echo "ANDROID_VERSION_CODE = ${android_ver_code}"
+    echo "BUMPED ANDROID_VERSION_CODE = ${bump_android_ver_code}"
+
     echo ">>> Compiling for ${ARCH_ABI} ..."
     # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
-        echo ">>> Running qmake with ANDROID_ABIS=armeabi-v7a ..."
-        ANDROID_VERSION_CODE=$android_ver_code ANDROID_ABIS=armeabi-v7a \
+        echo ">>> Running qmake with ANDROID_ABIS=armeabi-v7a and ANDROID_VERSION_CODE=${android_ver_code} ..."
+        ANDROID_VERSION_CODE="${android_ver_code}" ANDROID_ABIS=armeabi-v7a \
             "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     else
-        echo ">>> Running qmake with ANDROID_ABIS=arm64-v8a ..."
-        ANDROID_VERSION_CODE=$bump_android_ver_code ANDROID_ABIS=arm64-v8a \
+        echo ">>> Running qmake with ANDROID_ABIS=arm64-v8a ANDROID_VERSION_CODE=${bump_android_ver_code}"
+        ANDROID_VERSION_CODE="${bump_android_ver_code}" ANDROID_ABIS=arm64-v8a \
             "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     fi
     "${MAKE}" -j "$(nproc)"
