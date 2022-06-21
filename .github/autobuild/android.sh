@@ -100,14 +100,22 @@ build_app() {
 
     echo "${GOOGLE_RELEASE_KEYSTORE}" | base64 --decode > android/android_release.keystore
 
+    echo 
+    # We need 2 x version codes - Play store will not accept two uploads with same ANDROID_VERSION_CODE
+    # So for the 2nd upload, we increment by 1 (assuming later build codes will be >=2 greater)
+    android_ver_code=$(git log --oneline | wc -l)
+    bump_android_ver_code=$(expr $android_ver_code + 1)
+
     echo ">>> Compiling for ${ARCH_ABI} ..."
     # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
         echo ">>> Running qmake with ANDROID_ABIS=armeabi-v7a ..."
-        ANDROID_ABIS=armeabi-v7a "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+        ANDROID_VERSION_CODE=$android_ver_code ANDROID_ABIS=armeabi-v7a \
+            "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     else
         echo ">>> Running qmake with ANDROID_ABIS=arm64-v8a ..."
-        ANDROID_ABIS=arm64-v8a "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+        ANDROID_VERSION_CODE=$bump_android_ver_code ANDROID_ABIS=arm64-v8a \
+            "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     fi
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}_${ARCH_ABI}" -f Makefile install
