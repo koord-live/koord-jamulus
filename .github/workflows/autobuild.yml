@@ -115,11 +115,11 @@ jobs:
 
           # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
           # Can install Qt using aqtinstall on 20.04 - thus needs glibc>=2.31 
-          - config_name:            Linux 2.31+ x64 AppImage
-            target_os:              linux
-            building_on_os:         ubuntu-20.04
-            base_command:           ./.github/autobuild/linux.sh
-            run_codeql:             false
+          # - config_name:            Linux 2.31+ x64 AppImage
+          #   target_os:              linux
+          #   building_on_os:         ubuntu-20.04
+          #   base_command:           ./.github/autobuild/linux.sh
+          #   run_codeql:             false
 
           ## Qt6 from apt - crossbuild for armhf eg rPi
           ## Disable for now: likely no Qt6 on rPi anyway. AppImage preferable
@@ -159,11 +159,11 @@ jobs:
           #   run_codeql:             false
           #   xcode_version:          13.2.1
 
-          - config_name:            Windows 10+ x64 exe
-            target_os:              windows
-            building_on_os:         windows-2019
-            base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
-            run_codeql:             false
+          # - config_name:            Windows 10+ x64 exe
+          #   target_os:              windows
+          #   building_on_os:         windows-2019
+          #   base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
+          #   run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
