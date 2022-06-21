@@ -157,9 +157,13 @@ pass_artifact_to_job() {
     mkdir deploy
     local artifact="Koord_${JAMULUS_BUILD_VERSION}_android_${BUILDNAME}.aab"
     # debug to check for filenames
-    ls -alR ${BUILD_DIR}_${ARCH_ABI}/build/
-    echo "Moving ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab to deploy/${artifact}"
+    ls -alR ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/
+    ls -al ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab
+    echo ">>> Moving ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab to deploy/${artifact}"
     mv "./${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab" "./deploy/${artifact}"
+    echo ">>> Moved .aab file to deploy/${artifact}"
+    echo ">>> Artifact number is: ${NUM}"
+    echo ">>> Setting output as such: name=artifact_${NUM}::${artifact}"
     echo "::set-output name=artifact_${NUM}::${artifact}"
 }
 
