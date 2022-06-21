@@ -59,10 +59,13 @@ cleanup()
     mkdir -p "${deploypkg_path}"
 }
 
-
 build_app()
 {
     local client_or_server="${1}"
+
+    # We need this in build environment otherwise defaults to webengine!!
+    # bug is here: https://code.qt.io/cgit/qt/qtwebview.git/tree/src/webview/qwebviewfactory.cpp?h=6.3.0#n51
+    export QT_WEBVIEW_PLUGIN="native"
 
     # Build Jamulus
     qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${@:2}"
