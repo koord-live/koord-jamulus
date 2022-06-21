@@ -298,7 +298,7 @@ Function Build-App
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler", "--qmldir=$RootPath\src", `
-        "-webenginecore", "-webenginewidgets", "-webview", "-qml", "-quick", `
+        "-webenginecore", "-webengine", "-webenginewidgets", "-webview", "-qml", "-quick", `
         "$BuildPath\$BuildConfig\$AppName.exe")
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
@@ -307,7 +307,7 @@ Function Build-App
     Tree "$DeployPath\$BuildArch" /f /a
 
     # Manually copy in webengine exe
-    Copy-Item -Path "$QtInstallPath64/$QtCompile64/bin/QtWebEngineProcess.exe" -Destination "$DeployPath\$BuildArch"
+    # Copy-Item -Path "$QtInstallPath64/$QtCompile64/bin/QtWebEngineProcess.exe" -Destination "$DeployPath\$BuildArch"
 
     # Transfer VS dist DLLs for x64
     Copy-Item -Path "$VsDistFile64Path\*" -Destination "$DeployPath\$BuildArch"
@@ -384,55 +384,54 @@ Function Build-Installer
 
 # Build MSIX Package
 #FIXME this is all totally heinous
-Function Build-MSIX-Package
-{
-    # set elevated / admin privileges??
-    #FIXME does this even work?
-    Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
+# Function Build-MSIX-Package
+# {
+#     # set elevated / admin privileges??
+#     #FIXME does this even work?
+#     Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 
-    #debug permissions
-    whoami /groups
+#     #debug permissions
+#     whoami /groups
 
-    # Install MSIXPackagingTool
-    # Using download tool and pattern from https://flexxible.com/automating-msix-packaging-with-powershell/
-    echo ">>> Downloading MsixPackagingTool installer ..."
+#     # Install MSIXPackagingTool
+#     # Using download tool and pattern from https://flexxible.com/automating-msix-packaging-with-powershell/
+#     echo ">>> Downloading MsixPackagingTool installer ..."
 
-    & "$WindowsPath\Get_Store_Downloads.ps1" -packageFamilyName Microsoft.MsixPackagingTool_8wekyb3d8bbwe `
-        -downloadFolder C:\store-apps -excludeRegex '_arm__|_x86__|_arm64__'
+#     & "$WindowsPath\Get_Store_Downloads.ps1" -packageFamilyName Microsoft.MsixPackagingTool_8wekyb3d8bbwe `
+#         -downloadFolder C:\store-apps -excludeRegex '_arm__|_x86__|_arm64__'
 
-    # enable Windows Update service to allow driver installation to succeed!
-    # echo ">>> Enabling Windows Update service ..."
-    # Start-Service wuauserv
+#     # enable Windows Update service to allow driver installation to succeed!
+#     # echo ">>> Enabling Windows Update service ..."
+#     # Start-Service wuauserv
 
-    echo ">>> Installing MsixPackagingTool ..."
-    #FIXME - the version of tool and therefore path WILL change - need to get dynamically
-    # Check previous output for actual output path of download
-    Add-AppxPackage -Path 'C:\store-apps\Microsoft.MSIXPackagingTool_2022.330.739.0_neutral_~_8wekyb3d8bbwe.msixbundle' `
-        -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources
+#     echo ">>> Installing MsixPackagingTool ..."
+#     #FIXME - the version of tool and therefore path WILL change - need to get dynamically
+#     # Check previous output for actual output path of download
+#     Add-AppxPackage -Path 'C:\store-apps\Microsoft.MSIXPackagingTool_2022.330.739.0_neutral_~_8wekyb3d8bbwe.msixbundle' `
+#         -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources
 
-    echo ">>> Outputting MSIX Package Driver version..."
-    dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)'
+#     echo ">>> Outputting MSIX Package Driver version..."
+#     dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)'
 
-    echo ">>> installing MSIX Package Driver....."
-    dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)' `
-        |Select-Object -ExpandProperty Matches|Select-Object -ExpandProperty Value| `
-        ForEach-Object { dism /online /add-capability /capabilityname:$_ }
+#     echo ">>> installing MSIX Package Driver....."
+#     dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)' `
+#         |Select-Object -ExpandProperty Matches|Select-Object -ExpandProperty Value| `
+#         ForEach-Object { dism /online /add-capability /capabilityname:$_ }
 
-    echo ">>> Outputting all installed AppxPackage ....."
-    Get-AppxPackage -all | Where PackageFamilyName -match '_8wekyb3d8bbwe' | sort Name -Unique | select Name,PackageFamilyName
+#     echo ">>> Outputting all installed AppxPackage ....."
+#     Get-AppxPackage -all | Where PackageFamilyName -match '_8wekyb3d8bbwe' | sort Name -Unique | select Name,PackageFamilyName
 
-    echo ">>> Outputting details of installed tool: Microsoft.MSIXPackagingTool"
-    Get-AppxPackage -Name Microsoft.MSIXPackagingTool
+#     echo ">>> Outputting details of installed tool: Microsoft.MSIXPackagingTool"
+#     Get-AppxPackage -Name Microsoft.MSIXPackagingTool
 
-    # debug - list output of tool installation directory
-    dir "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe"
+#     # debug - list output of tool installation directory
+#     dir "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe"
 
-    echo ">>> Invoking MsixPackagingTool ...."    
-    Invoke-Native-Command -Command "$MsixPkgToolPath" `
-        -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
-    # & "$MsixPkgToolPath" create-package --template "$WindowsPath\msix_template.xml"
-
-}
+#     echo ">>> Invoking MsixPackagingTool ...."    
+#     Invoke-Native-Command -Command "$MsixPkgToolPath" `
+#         -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
+#     # & "$MsixPkgToolPath" create-package --template "$WindowsPath\msix_template.xml"
+# }
 
 Clean-Build-Environment
 Install-Dependencies

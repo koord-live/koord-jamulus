@@ -72,6 +72,8 @@ Function Ensure-Qt
 
     echo "Install Qt..."
     # Install Qt
+    #FIXME Move to Windows2022 build server? On 2019 we now need --use-deprecated param here to work past error:
+    #   "Preparing metadata (pyproject.toml) did not run successfully."
     pip install "aqtinstall==$AqtinstallVersion" --use-deprecated=backtrack-on-build-failures
     if ( !$? )
     {
