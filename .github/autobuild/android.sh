@@ -154,7 +154,7 @@ pass_artifact_to_job() {
         BUILDNAME="arm64"
     fi
 
-    mkdir deploy
+    mkdir -p deploy
     local artifact="Koord_${JAMULUS_BUILD_VERSION}_android_${BUILDNAME}.aab"
     # debug to check for filenames
     ls -alR ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/
