@@ -65,6 +65,7 @@ build_app()
 
     # We need this in build environment otherwise defaults to webengine!!
     # bug is here: https://code.qt.io/cgit/qt/qtwebview.git/tree/src/webview/qwebviewfactory.cpp?h=6.3.0#n51
+    # Note: not sure if this is useful here or only in Run env
     export QT_WEBVIEW_PLUGIN="native"
 
     # Build Jamulus
