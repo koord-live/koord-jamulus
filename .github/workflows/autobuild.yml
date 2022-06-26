@@ -113,8 +113,8 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
-          Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
-          Can install Qt using aqtinstall on 20.04 - thus needs glibc>=2.31 
+          # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
+          # Can install Qt using aqtinstall on 20.04 - thus needs glibc>=2.31 
           - config_name:            Linux 2.31+ x64 AppImage
             target_os:              linux
             building_on_os:         ubuntu-20.04
