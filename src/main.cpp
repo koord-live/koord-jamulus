@@ -942,7 +942,8 @@ int main ( int argc, char** argv )
     // https://doc.qt.io/qt-6/qquickwidget.html#performance-considerations
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
     // https://doc.qt.io/qt-6/qml-qtwebengine-webengineview.html#details
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+//    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     //FIXME - gui vs nogui handling
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );

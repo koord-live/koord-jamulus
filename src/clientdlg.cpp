@@ -35,7 +35,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bMuteStream,
                          const bool       bNEnableIPv6,
                          QWidget*         parent ) :
-    CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
+    QMainWindow (parent),
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
@@ -45,24 +45,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
-//    ClientSettingsDlg ( pNCliP, pNSetP, parent ),
-//    ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
     BasicConnectDlg ( pNSetP, parent ),
     AnalyzerConsole ( pNCliP, parent ),
     strSelectedAddress ("")
 {
-    setupUi ( this );
+    // setup main UI
+    setCentralWidget(backgroundFrame);
 
-//    // setup style
-//    QFile f(":qdarkstyle/dark/darkstyle.qss");
-//    if (!f.exists())   {
-//        printf("Unable to set stylesheet, file not found\n");
-//    }
-//    else   {
-//        f.open(QFile::ReadOnly | QFile::Text);
-//        QTextStream ts(&f);
-//        qApp->setStyleSheet(ts.readAll());
-//    }
+    setupUi ( this );
 
     // Add video webview to videoTab
     QQuickWidget *m_quickWidget = new QQuickWidget(this) ;
@@ -76,7 +66,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     txvHelp->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     txvAbout->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     txvChatWindow->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
-    // ??
     QScroller::grabGesture(scrollArea, QScroller::TouchGesture);
     QScroller::grabGesture(txvHelp, QScroller::TouchGesture);
     QScroller::grabGesture(txvAbout, QScroller::TouchGesture);
@@ -100,7 +89,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // set a placeholder text to make sure where to type the message in (#384)
     edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
-
 
     // Add help text to controls -----------------------------------------------
     // input level meter

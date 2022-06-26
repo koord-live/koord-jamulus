@@ -39,6 +39,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QActionGroup>
+#include <QMainWindow>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
@@ -73,7 +74,7 @@
 
 
 /* Classes ********************************************************************/
-class CClientDlg : public CBaseDlg, private Ui_CClientDlgBase
+class CClientDlg : public QMainWindow, private Ui_CClientDlgBase
 {
     Q_OBJECT
 
