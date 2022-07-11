@@ -59,7 +59,7 @@ Function Install-Qt
 
     # add vcredist and cmake - for Koord-RT build
     aqt install-tool windows desktop --outputdir C:\Qt tools_vcredist qt.tools.vcredist_msvc2019_x64
-    aqt install-tool windows desktop --outputdir C:\Qt tools_cmake qt.tools.cmake.win64
+    aqt install-tool windows desktop --outputdir C:\Qt tools_cmake qt.tools.cmake
 }
 
 Function Ensure-Qt
