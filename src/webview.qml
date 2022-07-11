@@ -10,10 +10,18 @@ Item {
 //        anchors.centerIn: parent
 //    }
 
+//    Text {
+//        text: _clientdlg.video_url
+//        font.family: "Helvetica"
+//        font.pointSize: 24
+//        color: "red"
+//    }
+
     WebView {
         id: webView
         anchors.fill: parent
-        url: "https://koord.live"
+        url: _clientdlg.video_url
+//        url: "https://clx5x3k0.kv.koord.live:30803/video"
     //    onLoadingChanged: function(loadRequest) {
     //        if (loadRequest.errorString)
     //            console.error(loadRequest.errorString);

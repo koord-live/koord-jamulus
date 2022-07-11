@@ -45,20 +45,40 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
+    strSelectedAddress (""),
     BasicConnectDlg ( pNSetP, parent ),
-    AnalyzerConsole ( pNCliP, parent ),
-    strSelectedAddress ("")
+    AnalyzerConsole ( pNCliP, parent )
 {
+    //FIXME cruft to remove later - just remove compiler warnings for now
+    if (bNewShowComplRegConnList == false)
+        ;
+    if (bShowAnalyzerConsole == false)
+        ;
+    // end cruft
+
     // setup main UI
     setCentralWidget(backgroundFrame);
 
     setupUi ( this );
+
+    // set up net manager for https requests
+//    qNam = new QNetworkAccessManager(this);
+    qNam = new QNetworkAccessManager;
 
     // Add video webview to videoTab
     QQuickWidget *m_quickWidget = new QQuickWidget(this) ;
     m_quickWidget->setSource(QUrl("qrc:/webview.qml"));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     videoTab->layout()->addWidget(m_quickWidget);
+
+    QQmlContext* context = m_quickWidget->rootContext();
+
+    strVideoUrl = "";
+
+    //FIXME prob don't want whole ClientDlg object
+    context->setContextProperty("_clientdlg", this);
+    // init video url for test
+//    emit videoUrlChanged();
 
     // Set up touch on all widgets' viewports which inherit from QAbstractScrollArea
     // https://doc.qt.io/qt-6/qtouchevent.html#details
@@ -74,11 +94,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // add Session Chat stuff
     // input message text
     edtLocalInputText->setWhatsThis ( "<b>" + tr ( "Input Message Text" ) + ":</b> " +
-                                      tr ( "Enter the chat message text in the edit box and press enter to send the "
-                                           "message to the server which distributes the message to all connected "
-                                           "clients. Your message will then show up in the chat window." ) );
-
-    edtLocalInputText->setAccessibleName ( tr ( "New chat text edit box" ) );
+                                      tr ( "Chat here while a session is active." ) );
+//    edtLocalInputText->setAccessibleName ( tr ( "New chat text edit box" ) );
 
     // clear chat window and edit line
     txvChatWindow->clear();
@@ -1338,9 +1355,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pcbxSkill, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CClientDlg::OnSkillActivated );
 
-//    QObject::connect ( tabSettings, &QTabWidget::currentChanged, this, &CClientDlg::OnTabChanged );
-
-//    tabSettings->setCurrentIndex ( pSettings->iSettingsTab );
+//    QObject::connect ( qNam, SIGNAL(finished(QNetworkReply *)), this, &CClientDlg::replyFinished );
+//    QObject::connect( qNam, &QNetworkReply::finished, this, &CClientDlg::replyFinished );
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -2268,6 +2284,64 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
             TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
             bDetectFeedback = true;
         }
+
+        // do video_url lookup here ...
+//      qNam is pointer to QNetworkAccessManager
+        // test url
+        QUrl url("https://test.koord.live/sess/sessionvideourl/");
+//        QUrl url("http://localhost/sess/sessionvideourl/");
+        QNetworkRequest request(url);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        request.setRawHeader("test-koord-login", "test17d3moin3s");
+
+        QRegularExpression rx_sessaddr("^(([a-z]*[0-9]*\\.*)+):([0-9]+)$");
+        qInfo() << ">>> strSelectedaddress = " << strSelectedAddress;
+        QRegularExpressionMatch reg_match = rx_sessaddr.match(strSelectedAddress);
+
+        QString hostname;
+        QString port;
+        if (reg_match.hasMatch()) {
+            hostname = reg_match.captured(1);
+            port = reg_match.captured(3);
+        }
+        qInfo() << ">>> hostname = " << hostname;
+        qInfo() << ">>> port = " << port;
+
+        // create request body
+        //        const QByteArray vid_req = "{'audio_port': '23455', 'session_dns': 'lively.kv.koord.live'}";
+        QJsonObject obj;
+        obj["audio_port"] = port;
+        obj["session_dns"] = hostname;
+        QJsonDocument doc(obj);
+        QByteArray vid_req = doc.toJson();
+
+        // send request and assign reply pointer
+        QNetworkReply *reply = qNam->post(request, vid_req);
+
+        // connect reply pointer with callback for finished signal
+//        QObject::connect(reply, &QNetworkReply::finished, this, &CClientDlg::replyFinished);
+        QObject::connect(reply, &QNetworkReply::finished, this, [=]()
+            {
+                QString err = reply->errorString();
+                QString contents = QString::fromUtf8(reply->readAll());
+                qInfo() << ">>> CONNECT: " << reply->error();
+                qInfo() << ">>> CONNECT - err: " << err;
+                qInfo() << ">>> CONNECT - contents: " << contents;
+
+                // if reply - no error
+                // parse the JSON response
+                QJsonDocument jsonResponse = QJsonDocument::fromJson(contents.toUtf8());
+                QJsonObject jsonObject = jsonResponse.object();
+                QString tmp_str = jsonObject.value("video_url").toString();
+
+                // set the video url and update QML side
+                strVideoUrl = tmp_str;
+                qInfo() << "strVideoUrl set to: " << strVideoUrl;
+                // tell the QML side that value is updated
+                emit videoUrlChanged();
+                qInfo() << "Called videoUrlChanged() ...";
+            });
+        qInfo() << ">>> CALLED VIDEO URL LOOKUP ENDPOINT >>>>";
     }
 }
 
@@ -2326,6 +2400,13 @@ OnTimerStatus();
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+}
+
+void CClientDlg::replyFinished(QNetworkReply *rep)
+{
+    QByteArray bts = rep->readAll();
+    QString str(bts);
+    QMessageBox::information(this,"sal",str,"ok");
 }
 
 void CClientDlg::UpdateDisplay()
@@ -3017,3 +3098,9 @@ void CClientDlg::OnAudioPanValueChanged ( int value )
 }
 
 // END SETTINGS FUNCTIONS ==========================================================================================
+
+// QML FUNCTIONS
+//QString CClientDlg::getVideoUrl()
+//{
+//    return strVideoUrl;
+//}

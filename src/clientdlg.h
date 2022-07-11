@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include "qnetworkaccessmanager.h"
+#include "qnetworkreply.h"
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>
@@ -77,6 +79,8 @@
 class CClientDlg : public QMainWindow, private Ui_CClientDlgBase
 {
     Q_OBJECT
+    Q_PROPERTY( QString video_url READ getVideoUrl NOTIFY videoUrlChanged )
+
 
 public:
     CClientDlg ( CClient*         pNCliP,
@@ -96,6 +100,12 @@ public:
     void UpdateSettingsDisplay();
     void UpdateSoundDeviceChannelSelectionFrame();
     void SetEnableFeedbackDetection ( bool enable );
+
+    // for QML
+    QString getVideoUrl() const {
+        qInfo() << ">>> Calling getVideoUrl and returning value: " << strVideoUrl;
+        return strVideoUrl;
+    };
 
 
 protected:
@@ -134,7 +144,11 @@ protected:
     QTimer         TimerCheckAudioDeviceOk;
     QTimer         TimerDetectFeedback;
     // for join
-    QString      strSelectedAddress;
+    QString        strSelectedAddress;
+    QString        strVideoUrl;
+    QNetworkAccessManager*   qNam;
+//    QScopedPointer<QNetworkReply> netreply;
+//    QNetworkReply netreply;
 
     virtual void closeEvent ( QCloseEvent* Event );
     virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
@@ -166,6 +180,8 @@ public slots:
     void OnTimerBuffersLED();
     void OnTimerCheckAudioDeviceOk();
     void OnTimerDetectFeedback();
+
+    void replyFinished(QNetworkReply *rep);
 
     void OnTimerStatus() { UpdateDisplay(); }
 
@@ -334,4 +350,6 @@ signals:
     void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );
 
+    // for QML
+    void videoUrlChanged();
 };
