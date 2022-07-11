@@ -161,7 +161,7 @@ jobs:
 
           - config_name:            Windows 10+ x64 exe
             target_os:              windows
-            building_on_os:         windows-2019
+            building_on_os:         windows-2022
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             false
 
