@@ -117,19 +117,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          tr ( "Make sure not to clip the input signal to avoid distortions of the "
                               "audio signal." );
 
-    QString strInpLevHTT = tr ( "If the application "
-                                "is connected to a server and "
-                                "you play your instrument/sing into the microphone, the VU "
-                                "meter should flicker. If this is not the case, you have "
-                                "probably selected the wrong input channel (e.g. 'line in' instead "
-                                "of the microphone input) or set the input gain too low in the "
-                                "(Windows) audio mixer." ) +
+    QString strInpLevHTT = tr ( "Check input activity here." ) +
                            "<br>" +
-                           tr ( "For proper usage of the "
-                                "application, you should not hear your singing/instrument through "
-                                "the loudspeaker or your headphone when the software is not connected. "
-                                "This can be achieved by muting your input audio channel in the "
-                                "Playback mixer (not the Recording mixer!)." ) +
+                           tr ( "Mute your own input if need be in the session mixer." ) +
                            TOOLTIP_COM_END_TEXT;
 
     QString strInpLevHAccText  = tr ( "Input level meter" );
