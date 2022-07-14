@@ -62,5 +62,6 @@
     </qresource>
     <qresource prefix="/">
         <file>webview.qml</file>
+        <file>webengineview.qml</file>
     </qresource>
 </RCC>

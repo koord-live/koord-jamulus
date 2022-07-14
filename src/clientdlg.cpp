@@ -67,7 +67,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Add video webview to videoTab
     QQuickWidget *m_quickWidget = new QQuickWidget(this) ;
+
+#if defined(ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_MACX)
+    // Use native WebView on Android/iOS/macOS
     m_quickWidget->setSource(QUrl("qrc:/webview.qml"));
+#else
+    // Use bundled WebEngineView on Windows/Linux
+    m_quickWidget->setSource(QUrl("qrc:/webengineview.qml"));
+#endif
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     videoTab->layout()->addWidget(m_quickWidget);
 
