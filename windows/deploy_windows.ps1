@@ -18,7 +18,7 @@ param (
     [string] $MsixPkgToolPath = "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe\MsixPackagingToolCLI.exe",
     # [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Redist = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\",
-    [string] $VsDistFile64Path = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\17.2.32408.312\x64\Microsoft.VC142.CRT",
+    [string] $VsDistFile64Path = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\19.32.31332.0\x64\Microsoft.VC142.CRT",
     [string] $BuildOption = ""
 )
 
@@ -160,9 +160,9 @@ Function Initialize-Build-Environment
         [string] $BuildArch
     )
 
-    # Look for Visual Studio/Build Tools 2017 or later (version 15.0 or above)
+    # Look for Visual Studio/Build Tools 2017 or later (version 17.2 or above)
     $VsInstallPath = Get-VSSetupInstance | `
-        Select-VSSetupInstance -Product "*" -Version "15.0" -Latest | `
+        Select-VSSetupInstance -Product "*" -Version "17.2" -Latest | `
         Select-Object -ExpandProperty "InstallationPath"
 
     if ($VsInstallPath -Eq "") { $VsInstallPath = "<N/A>" }
