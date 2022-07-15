@@ -43,8 +43,8 @@ setup_x64() {
     echo "Installing dependencies..."
     sudo apt-get update
     ## WORKING !!!!!!!!!!!!!!
-    sudo apt-get -y install devscripts build-essential fakeroot libjack-jackd2-dev libgl-dev libegl1 \
-        python3-setuptools python3-wheel libxkbcommon-x11-0 libx11-dev
+    sudo apt-get -y install --no-install-recommends devscripts build-essential fakeroot libjack-jackd2-dev libgl-dev libegl1 \
+        python3-setuptools python3-wheel libxkbcommon-x11-0 libx11-dev libxcb-icccm4
 
     ## Remove libxcb-* for now to bugfix appimg build
     # libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
