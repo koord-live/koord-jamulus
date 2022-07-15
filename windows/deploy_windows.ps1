@@ -18,7 +18,7 @@ param (
     [string] $MsixPkgToolPath = "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe\MsixPackagingToolCLI.exe",
     # [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
     [string] $VsDistFile64Redist = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\",
-    [string] $VsDistFile64Path = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\19.32.31332.0\x64\Microsoft.VC142.CRT",
+    [string] $VsDistFile64Path = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\17.2.32408.312\x64\Microsoft.VC142.CRT",
     [string] $BuildOption = ""
 )
 
