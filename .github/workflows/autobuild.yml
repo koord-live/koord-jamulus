@@ -176,8 +176,9 @@ jobs:
       - name:                       Checkout code
         uses:                       actions/checkout@v2
         with:
-          submodules:               true
-          fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}
+          submodules:               recursive
+          fetch-depth:              0
+          # fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}
 
       - name:                       Cache Mac dependencies
         if:                         matrix.config.target_os == 'macos'
