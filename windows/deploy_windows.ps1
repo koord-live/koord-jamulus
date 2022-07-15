@@ -261,7 +261,9 @@ Function Build-App
     Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
     Invoke-Native-Command -Command "nmake"
 
-    # Build FlexASIO dlls with CMake / nmake
+    # Move current directory for new CMake cache (?)
+    Set-Location -Path "$RootPath\KoordASIO"
+    # Build FlexASIO dlls with CMake
     Invoke-Native-Command -Command "$Env:QtCmakePath" `
         -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\KoordASIO\src\dechamps_cpputil:$RootPath\KoordASIO\src\dechamps_ASIOUtil'", `
             "-DCMAKE_BUILD_TYPE=Release", `
