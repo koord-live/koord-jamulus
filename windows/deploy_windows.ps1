@@ -279,6 +279,9 @@ Function Build-App
     # get visibility on built files
     Tree "$RootPath" /f /a
 
+    # Debug location of redist stuff
+    Tree "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\" /f /a
+
     # Now build rest of Koord-Realtime
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch $BuildOption", `
