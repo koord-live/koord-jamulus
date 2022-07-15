@@ -261,21 +261,20 @@ Function Build-App
     Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
     Invoke-Native-Command -Command "nmake"
 
-    # Move current directory for new CMake cache (?)
-    Set-Location -Path "$RootPath\KoordASIO"
-    # Build FlexASIO dlls with CMake
-    Invoke-Native-Command -Command "$Env:QtCmakePath" `
-        -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\KoordASIO\src\dechamps_cpputil:$RootPath\KoordASIO\src\dechamps_ASIOUtil'", `
-            "-DCMAKE_BUILD_TYPE=Release", `
-            "-S", "src", `
-            "-B", "build\$BuildConfig\flexasio", `
-            "-G", "Ninja")
+## BUILD KoordASIO in separate Github step prior to main build
+    # # Build FlexASIO dlls with CMake
+    # Invoke-Native-Command -Command "$Env:QtCmakePath" `
+    #     -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\KoordASIO\src\dechamps_cpputil:$RootPath\KoordASIO\src\dechamps_ASIOUtil'", `
+    #         "-DCMAKE_BUILD_TYPE=Release", `
+    #         "-S", "$RootPath\KoordASIO\src", `
+    #         "-B", "$BuildPath\$BuildConfig\flexasio", `
+    #         "-G", "NMake Makefiles")
     # Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
     # Invoke-Native-Command -Command "nmake"
 
-    # Now build with "cmake --build" - follow FlexASIO example
-    Invoke-Native-Command -Command "$Env:QtCmakePath" `
-        -Arguments ("--build", "src" )
+    # # Build with "cmake --build" - follow FlexASIO example
+    # Invoke-Native-Command -Command "$Env:QtCmakePath" `
+    #     -Arguments ("--build", "src" )
 
     # get visibility on built files
     Tree "$RootPath" /f /a

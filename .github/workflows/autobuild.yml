@@ -220,6 +220,15 @@ jobs:
         with:
           languages: 'cpp'
 
+      - name:                       Pre-build KoordASIO on Windows
+        if:                         matrix.config.target_os == 'windows'
+        uses:                       ilammy/msvc-dev-cmd@v1
+        with:
+          arch:                     amd64
+      - run:                        cmake -S KoordASIO/src -B KoordASIO/src/out/build/x64-Release -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/KoordASIO/src/out/install/x64-Release
+      - run:                        cmake --build KoordASIO/src/out/build/x64-Release
+      - run:                        cmake --install KoordASIO/src/out/build/x64-Release
+
       - name:                       Build for ${{ matrix.config.config_name }}
         id:                         build
         run:                        ${{ matrix.config.base_command }} build
