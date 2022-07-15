@@ -17,8 +17,8 @@ param (
     [string] $MSIXPkgToolUrl = "https://download.microsoft.com/download/6/f/e/6fec9d4c-f570-4826-995a-5feba065fa8b/MSIXPackagingTool_1.2022.110.0.msixbundle",
     [string] $MsixPkgToolPath = "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe\MsixPackagingToolCLI.exe",
     # [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
-    [string] $VsDistFile64Redist = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\",
-    [string] $VsDistFile64Path = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\17.2.32408.312\x64\Microsoft.VC142.CRT",
+    # [string] $VsDistFile64Redist = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\",
+    [string] $VsDistFile64Path = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\14.32.31326\x64\Microsoft.VC143.CRT",
     [string] $BuildOption = ""
 )
 
@@ -279,8 +279,8 @@ Function Build-App
     # get visibility on built files
     Tree "$RootPath" /f /a
 
-    # Debug location of redist stuff
-    Tree "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\" /f /a
+    # # Debug location of redist stuff
+    # Tree "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\" /f /a
 
     # Now build rest of Koord-Realtime
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
