@@ -44,10 +44,10 @@ setup_x64() {
     sudo apt-get update
     ## WORKING !!!!!!!!!!!!!!
     sudo apt-get -y install --no-install-recommends devscripts build-essential fakeroot libjack-jackd2-dev libgl-dev libegl1 \
-        python3-setuptools python3-wheel libxkbcommon-x11-0 libx11-dev libxcb-icccm4
+        python3-setuptools python3-wheel libxkbcommon-x11-0 libx11-dev libxcb-icccm4 libxcb-image0
 
     ## Remove libxcb-* for now to bugfix appimg build
-    # libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+    #  libxcb-keysyms1 \
     #     libxcb-randr0 libxcb-render-util0 libxcb-util1 libxcb-xinput0 libxcb-xkb1 libxcb-shape0 
 
     ## Install Qt
