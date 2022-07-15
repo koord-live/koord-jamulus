@@ -160,9 +160,9 @@ Function Initialize-Build-Environment
         [string] $BuildArch
     )
 
-    # Look for Visual Studio/Build Tools 2017 or later (version 17.2 or above)
+    # Look for Visual Studio/Build Tools 2017 or later (version 15.0 or above)
     $VsInstallPath = Get-VSSetupInstance | `
-        Select-VSSetupInstance -Product "*" -Version "17.2" -Latest | `
+        Select-VSSetupInstance -Product "*" -Version "17.0" -Latest | `
         Select-Object -ExpandProperty "InstallationPath"
 
     if ($VsInstallPath -Eq "") { $VsInstallPath = "<N/A>" }
@@ -267,9 +267,13 @@ Function Build-App
             "-DCMAKE_BUILD_TYPE=Release", `
             "-S", "$RootPath\KoordASIO\src", `
             "-B", "$BuildPath\$BuildConfig\flexasio", `
-            "-G", "NMake Makefiles")
-    Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
-    Invoke-Native-Command -Command "nmake"
+            "-G", "Ninja")
+    # Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
+    # Invoke-Native-Command -Command "nmake"
+
+    # Now build with "cmake --build" - follow FlexASIO example
+    Invoke-Native-Command -Command "$Env:QtCmakePath" `
+        -Arguments ("--build", "$RootPath\KoordASIO\src" )
 
     # get visibility on built files
     Tree "$RootPath" /f /a
