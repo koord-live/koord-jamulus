@@ -75,12 +75,17 @@ win32 {
         advapi32.lib \
         winmm.lib \
         ws2_32.lib
-    # also add KoordASIO lib, 64bit only right now
+    # also add KoordASIO lib, 64bit only
     # Full path in build will be:
-    # D:\a\koord-rt\koord-rt\KoordASIO\build\release\flexasio\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
-    LIBS += -L$$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
-    INCLUDEPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
-    DEPENDPATH += $$PWD/build/release/flexasio/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+    # D:\a\koord-rt\koord-rt\KoordASIO\src\out\build\x64-Release\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
+    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
+    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+
+#    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/bin/ -lportaudio
+#    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/lib/ -lportaudio
+#    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
+#    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
 
     # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
     # the platform-agnostic main().
@@ -155,6 +160,9 @@ win32 {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     # note: only armeabi-v7a arm64-v8a are targeted, others are dead/deprecated
 
+    # get ANDROID_ABIS from environment - passed directly to qmake
+    ANDROID_ABIS = $$getenv(ANDROID_ABIS)
+
     # if ANDROID_ABIS is passed as env var to qmake, will override this
     # !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
 
@@ -168,10 +176,11 @@ win32 {
     
     ## note: stop setting this here, screws up autobuild for 2 x aabs
     # if ANDROID_VERSION_CODE is passed as env var to qmake, will override this
-    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)    
 
-    # get ANDROID_ABIS from environment - passed directly to qmake
-    ANDROID_ABIS = $$getenv(ANDROID_ABIS)
+## FOR LOCAL DEV USE:
+#    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = 7717
+#    ANDROID_ABIS = x86_64
 
     # need to bump version code for 2nd abi build otherwise Play Store rejects
     # also add 10 to be def greater than git log increments... 
@@ -192,7 +201,7 @@ win32 {
     QT += core-private
 
     # enabled only for debugging on android devices
-    # DEFINES += ANDROIDDEBUG
+    #DEFINES += ANDROIDDEBUG
 
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
@@ -223,6 +232,9 @@ win32 {
     HEADERS += $$OBOE_HEADERS
     SOURCES += $$OBOE_SOURCES
     DISTFILES += $$DISTFILES_OBOE
+
+    # add for OpenSSL 1 support
+    include(android_openssl-master/openssl.pri)
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11
