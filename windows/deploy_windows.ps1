@@ -326,14 +326,18 @@ Function Build-App
                     # - kdasioconfig.exe
                     # all qt dlls etc ...
             # flexasio files in:
-                # D:\a\KoordASIO\KoordASIO\build\flexasio\install\bin
-                    # - FlexASIO.dll
-                    # - portaudio_x64.dll 
+                # D:\a\KoordASIO\KoordASIO\src\out\install\x64-Release\bin
+                    # - KoordASIO.dll
+                    # - portaudio.dll 
     # Move kdasioconfig.exe to deploy dir
     Move-Item -Path "$BuildPath\$BuildConfig\kdasioconfig\kdasioconfig.exe" -Destination "$DeployPath\$BuildArch" -Force
-    # Move 2 x FlexASIO dlls to deploy dir
-    Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\KoordASIO.dll" -Destination "$DeployPath\$BuildArch" -Force
-    Move-Item -Path "$BuildPath\$BuildConfig\flexasio\install\bin\portaudio_x64.dll" -Destination "$DeployPath\$BuildArch" -Force
+    # Move all KoordASIO dlls and exes to deploy dir
+    Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\ASIOTest.dll" -Destination "$DeployPath\$BuildArch" -Force
+    Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\FlexASIOTest.exe" -Destination "$DeployPath\$BuildArch" -Force
+    Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\KoordASIO.dll" -Destination "$DeployPath\$BuildArch" -Force
+    Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\portaudio.dll" -Destination "$DeployPath\$BuildArch" -Force
+    Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\PortAudioDevices.exe" -Destination "$DeployPath\$BuildArch" -Force
+    Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\sndfile.dll" -Destination "$DeployPath\$BuildArch" -Force
 
     # move InnoSetup script to deploy dir
     Move-Item -Path "$WindowsPath\kdinstaller.iss" -Destination "$RootPath" -Force
