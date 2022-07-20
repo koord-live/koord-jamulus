@@ -84,12 +84,25 @@ setup_qt() {
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_arm64_v8a \
             --archives qtbase qtdeclarative qttools \
             --modules qtwebview 
+        ##FIXME - HACK - SUBSTITUTE webview jar
+        cp android/qt_build_fix/arm64_v8a/QtAndroidWebView.jar "${QT_BASEDIR}/${QT_VERSION}/android_arm64_v8a/jar/QtAndroidWebView.jar"
 
         # Also install for arm_v7 to build for 32bit devices
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
             --archives qtbase qtdeclarative qttools \
             --modules qtwebview 
+        ##FIXME - HACK - SUBSTITUTE webview jar
+        # cp android/qt_build_fix/armv7/QtAndroidWebView.jar "${QT_BASEDIR}/${QT_VERSION}/android_armv7/jar/QtAndroidWebView.jar"
+
     fi
+}
+
+install_android_openssl() {
+    echo ">> Installing android_openssl as build dep ..."
+    wget https://github.com/KDAB/android_openssl/archive/refs/tags/1.1.1l_1.0.2u.tar.gz 
+    mkdir android_openssl 
+    tar zxvf 1.1.1l_1.0.2u.tar.gz -C android_openssl --strip-components 1
+    # android openssl libs are now installed at ./android_openssl/
 }
 
 build_app() {
@@ -176,6 +189,7 @@ case "${1:-}" in
         setup_android_ndk
         setup_android_sdk
         setup_qt
+        install_android_openssl
         ;;
     build)
         build_app "android_armv7"

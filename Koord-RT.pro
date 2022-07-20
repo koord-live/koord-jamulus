@@ -82,10 +82,10 @@ win32 {
     INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
     DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
 
-#    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/bin/ -lportaudio
-#    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/lib/ -lportaudio
-#    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
-#    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
+    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/bin/ -lportaudio
+    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/lib/ -lportaudio
+    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
+    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
 
     # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
     # the platform-agnostic main().
@@ -234,7 +234,7 @@ win32 {
     DISTFILES += $$DISTFILES_OBOE
 
     # add for OpenSSL 1 support
-    include(android_openssl-master/openssl.pri)
+    include(android_openssl/openssl.pri)
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11
