@@ -92,7 +92,7 @@ setup_qt() {
             --archives qtbase qtdeclarative qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
-        # cp android/qt_build_fix/armv7/QtAndroidWebView.jar "${QT_BASEDIR}/${QT_VERSION}/android_armv7/jar/QtAndroidWebView.jar"
+        cp android/qt_build_fix/armv7/QtAndroidWebView.jar "${QT_BASEDIR}/${QT_VERSION}/android_armv7/jar/QtAndroidWebView.jar"
 
     fi
 }
