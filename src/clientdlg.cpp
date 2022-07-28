@@ -57,7 +57,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // end cruft
 
     // setup main UI
-    setCentralWidget(backgroundFrame);
+//    setCentralWidget(backgroundFrame);
 
     setupUi ( this );
 
@@ -65,24 +65,34 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //    qNam = new QNetworkAccessManager(this);
     qNam = new QNetworkAccessManager;
 
-    // Add video webview to videoTab
+#if defined(Q_OS_MACX)
+    // Note: use QuickView to workaround problem with QuickWidget on macOS
+    // macOS uses native webview plugin
+    QQuickView *qview = new QQuickView();
+    QWidget *container = QWidget::createWindowContainer(qview, this);
+    qview->setSource(QUrl("qrc:/webview.qml"));
+    videoTab->layout()->addWidget(container);
+    QQmlContext* context = qview->rootContext();
+#elif defined(ANDROID) || defined(Q_OS_IOS)
+    // Android and iOS both use native webview plugin
     QQuickWidget *m_quickWidget = new QQuickWidget(this) ;
-
-#if defined(ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_MACX)
-    // Use native WebView on Android/iOS/macOS
     m_quickWidget->setSource(QUrl("qrc:/webview.qml"));
-#else
-    // Use bundled WebEngineView on Windows/Linux
-    m_quickWidget->setSource(QUrl("qrc:/webengineview.qml"));
-#endif
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     videoTab->layout()->addWidget(m_quickWidget);
-
     QQmlContext* context = m_quickWidget->rootContext();
+#else
+    // Windows and Linux both used bundled webengine plugin
+    QQuickWidget *m_quickWidget = new QQuickWidget(this) ;
+    m_quickWidget->setSource(QUrl("qrc:/webengineview.qml"));
+    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    videoTab->layout()->addWidget(m_quickWidget);
+    QQmlContext* context = m_quickWidget->rootContext();
+#endif
 
+    // initialize video_url with blank value to start
     strVideoUrl = "";
 
-    //FIXME prob don't want whole ClientDlg object
+    //FIXME prob don't want whole ClientDlg object ?
     context->setContextProperty("_clientdlg", this);
     // init video url for test
 //    emit videoUrlChanged();
@@ -102,7 +112,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // input message text
     edtLocalInputText->setWhatsThis ( "<b>" + tr ( "Input Message Text" ) + ":</b> " +
                                       tr ( "Chat here while a session is active." ) );
-//    edtLocalInputText->setAccessibleName ( tr ( "New chat text edit box" ) );
 
     // clear chat window and edit line
     txvChatWindow->clear();
@@ -2361,6 +2370,9 @@ void CClientDlg::Disconnect()
     sessionStatusLabel->setStyleSheet ( "QLabel { color: white; font: normal; }" );
     // reset server name in audio mixer group box title
 //    MainMixerBoard->SetServerName ( "" );
+
+    // Reset video view to No Session
+    strVideoUrl = "";
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();

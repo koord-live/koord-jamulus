@@ -241,6 +241,8 @@ win32 {
 
     # Linux desktop does not have native web runtime, need to package
     QT += webenginecore
+    # ??
+    #QT += webenginequick
 
     # --as-needed avoids linking the final binary against unnecessary runtime
     # libs. Most g++ versions already do that by default.

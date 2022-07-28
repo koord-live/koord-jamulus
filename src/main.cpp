@@ -940,7 +940,7 @@ int main ( int argc, char** argv )
 
     // need to set OpenGL specifically for at least Mac! maybe iOS too
     // https://doc.qt.io/qt-6/qquickwidget.html#performance-considerations
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
     // https://doc.qt.io/qt-6/qml-qtwebengine-webengineview.html#details
 //    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
@@ -976,13 +976,26 @@ int main ( int argc, char** argv )
 
 #ifdef ANDROID
     // special Android code needed for record audio permission handling
-    auto permcheck = QtAndroidPrivate::checkPermission( QString ("android.permission.RECORD_AUDIO"));
+    auto recaudio_check = QtAndroidPrivate::checkPermission( QString ("android.permission.RECORD_AUDIO"));
 
-    if ( permcheck.result() == QtAndroidPrivate::PermissionResult::Denied)
+    if ( recaudio_check.result() == QtAndroidPrivate::PermissionResult::Denied)
     {
-        auto reqPermRes = QtAndroidPrivate::requestPermission( "android.permission.RECORD_AUDIO" );
+        auto recaudio_reqPermRes = QtAndroidPrivate::requestPermission( "android.permission.RECORD_AUDIO" );
 
-        if ( reqPermRes.result() == QtAndroidPrivate::PermissionResult::Denied)
+        if ( recaudio_reqPermRes.result() == QtAndroidPrivate::PermissionResult::Denied)
+        {
+            return 0;
+        }
+    }
+
+    // and for camera permission handling
+    auto camera_check = QtAndroidPrivate::checkPermission( QString ("android.permission.CAMERA"));
+
+    if ( camera_check.result() == QtAndroidPrivate::PermissionResult::Denied)
+    {
+        auto camera_reqPermRes = QtAndroidPrivate::requestPermission( "android.permission.CAMERA" );
+
+        if ( camera_reqPermRes.result() == QtAndroidPrivate::PermissionResult::Denied)
         {
             return 0;
         }
