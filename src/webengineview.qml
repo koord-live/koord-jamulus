@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtWebView 1.1
 import QtWebEngine 1.10
+import QtQuick.Controls 2.15
 
 Rectangle {
 
@@ -16,6 +17,12 @@ Rectangle {
             font.family: "Helvetica"
             font.pointSize: 24
             color: "black"
+    }
+
+
+    BusyIndicator{
+            anchors.centerIn: parent
+            running: webView.loading === true
     }
 
     WebEngineView {
