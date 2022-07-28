@@ -21,7 +21,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>We need access to your microphone to let others hear you.</string>
+	<string>Koord needs access to your microphone to let others hear you.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Koord needs access to the camera to stream your video to other musicians</string> 
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
