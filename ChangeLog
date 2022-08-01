@@ -1,3 +1,7 @@
+### 1.9.8 (2022-08-01) ###
+
+- Client: Fixes for webview across platforms
+
 ### 1.9.7 (2022-06-21) ###
 
 - Client: Fixes including webengine for macOS

@@ -1,4 +1,4 @@
-VERSION = 1.9.7
+VERSION = 1.9.8
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -199,7 +199,9 @@ win32 {
 
     # Need for eg device recording permissions
     QT += core-private
+    QT += gui quick widgets quickwidgets
 
+    CONFIG += qmltypes qml_debug
     # enabled only for debugging on android devices
     #DEFINES += ANDROIDDEBUG
 
