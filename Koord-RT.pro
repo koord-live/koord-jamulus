@@ -145,6 +145,7 @@ win32 {
 
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info-xcode.plist
+    QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
     QMAKE_ASSET_CATALOGS = ios/Images.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
@@ -199,9 +200,10 @@ win32 {
 
     # Need for eg device recording permissions
     QT += core-private
+    # prob unnecesssary:
     QT += gui quick widgets quickwidgets
 
-    CONFIG += qmltypes qml_debug
+#    CONFIG += qmltypes qml_debug
     # enabled only for debugging on android devices
     #DEFINES += ANDROIDDEBUG
 
