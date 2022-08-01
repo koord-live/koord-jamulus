@@ -24,7 +24,6 @@ on:
     branches:
       # For developers: Branches starting with autobuild will be built and evaluated on each push.
       - "autobuild**"
-      - "testgui2"
       # CodeQL requires every branch from on.pull_request to be part of on.push as well in order to run comparisons.
       # We also need master here to trigger builds on PR merge to master and manual pushes (e.g. as part of the release process):
       - "master"
