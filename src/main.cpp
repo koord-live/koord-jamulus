@@ -940,10 +940,10 @@ int main ( int argc, char** argv )
 
     // need to set OpenGL specifically for at least Mac! maybe iOS too
     // https://doc.qt.io/qt-6/qquickwidget.html#performance-considerations
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
+//    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
     // https://doc.qt.io/qt-6/qml-qtwebengine-webengineview.html#details
-//    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+//    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     //FIXME - gui vs nogui handling
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
