@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtWebView 1.1
 import QtWebEngine 1.10
 import QtQuick.Controls 2.15
@@ -6,7 +6,7 @@ import QtQuick.Controls 2.15
 Rectangle {
 
     id: orangerect
-    color: "orange"
+    color: "gray"
     anchors.fill: parent
 
     Text {
@@ -16,7 +16,8 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             font.family: "Helvetica"
             font.pointSize: 24
-            color: "black"
+            color: "orange"
+            visible: webView.loading === false
     }
 
 
@@ -32,6 +33,7 @@ Rectangle {
         onFeaturePermissionRequested: {
             grantFeaturePermission(securityOrigin, feature, true);
         }
+        visible: _clientdlg.video_url !== ""
     }
 
 }

@@ -1,34 +1,23 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtWebView 1.1
 import QtQuick.Controls 2.15
 
+
 Rectangle {
 
-//    Text {
-//        id: text
-//        text: qsTr("Hello world")
-
-//        anchors.centerIn: parent
-//    }
-
-//    Text {
-//        text: _clientdlg.video_url
-//        font.family: "Helvetica"
-//        font.pointSize: 24
-//        color: "red"
-//    }
-    id: orangerect
-    color: "orange"
-    anchors.fill: parent
+    id: grayrect
+    color: "gray"
+//    anchors.fill: parent
 
     Text {
-            anchors.fill: parent
+            anchors.centerIn: parent
             text: "NO SESSION"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.family: "Helvetica"
             font.pointSize: 24
-            color: "black"
+            color: "orange"
+            visible: webView.loading === false && _clientdlg.video_url === ""
     }
 
     BusyIndicator{
@@ -40,17 +29,7 @@ Rectangle {
         id: webView
         anchors.fill: parent
         url: _clientdlg.video_url
-//        url: "https://clx5x3k0.kv.koord.live:30803/video"
-    //    onLoadingChanged: function(loadRequest) {
-    //        if (loadRequest.errorString)
-    //            console.error(loadRequest.errorString);
-    //    }
+        visible: _clientdlg.video_url !== ""
     }
 
 }
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-##^##*/
