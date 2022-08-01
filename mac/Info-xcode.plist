@@ -11,9 +11,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
-	<string>3.9.8</string>
+	<string>3.9.9</string>
 	<key>CFBundleShortVersionString</key>
-	<string>3.9.8</string>
+	<string>3.9.9</string>
 	<key>CFBundleSupportedPlatforms</key>
 	<array>
 		<string>MacOSX</string>
