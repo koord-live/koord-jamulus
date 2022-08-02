@@ -54,9 +54,11 @@ echo "Building gui AppImage ...."
 cd $BDIR
 # manually copy in qml files to get picked up by qmlimportscanner
 cp -v src/webview.qml appdir_gui
-# manually copy in libssl v1, we need to ship to stop breakage on systems expecting v3
-cp -v /usr/lib/x86_64-linux-gnu/libssl.so.1.1  appdir_gui/lib
-linuxdeploy -d linux/koordrt.desktop -i linux/koordrt.png --appdir appdir_gui --plugin qt --output appimage
+# include libssl v1, we need to ship to stop breakage on systems expecting v3
+linuxdeploy --desktop-file linux/koordrt.desktop \
+            --icon-file linux/koordrt.png \
+            --library /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
+            --appdir appdir_gui --plugin qt --output appimage
 mkdir gui_appimage
 mv Koord-RT-*.AppImage gui_appimage/Koord-RT-${VERSION}_x64.appimage
 
