@@ -2,5 +2,6 @@
 	path = libs/oboe
 	url = ../../google/oboe.git
 [submodule "KoordASIO"]
+	branch = bltin
 	path = KoordASIO
 	url = git@github.com:koord-live/KoordASIO.git
