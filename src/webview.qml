@@ -7,18 +7,7 @@ Rectangle {
 
     id: grayrect
     color: "gray"
-//    anchors.fill: parent
-
-    Text {
-            anchors.centerIn: parent
-            text: "NO SESSION"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.family: "Helvetica"
-            font.pointSize: 24
-            color: "orange"
-            visible: webView.loading === false && _clientdlg.video_url === ""
-    }
+    anchors.fill: parent
 
     BusyIndicator{
             anchors.centerIn: parent
@@ -29,7 +18,6 @@ Rectangle {
         id: webView
         anchors.fill: parent
         url: _clientdlg.video_url
-        visible: _clientdlg.video_url !== ""
     }
 
 }

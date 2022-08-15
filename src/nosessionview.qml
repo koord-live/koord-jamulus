@@ -1,6 +1,4 @@
 import QtQuick 2.15
-import QtWebView 1.1
-import QtWebEngine 1.10
 import QtQuick.Controls 2.15
 
 Rectangle {

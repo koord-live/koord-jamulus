@@ -21,7 +21,7 @@ Rectangle {
         onFeaturePermissionRequested: {
             grantFeaturePermission(securityOrigin, feature, true);
         }
-        visible: _clientdlg.video_url !== ""
+//        visible: _clientdlg.video_url !== ""
     }
 
 }

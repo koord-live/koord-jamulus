@@ -2342,7 +2342,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
                 // set the video url and update QML side
 #if defined(Q_OS_MACX)
-                quickView->setSource(QUrl("qrc:/nosessionview.qml"));
+                quickView->setSource(QUrl("qrc:/webview.qml"));
 #else
                 quickWidget->setSource(QUrl("qrc:/webengineview.qml"));
 #endif
