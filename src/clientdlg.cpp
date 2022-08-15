@@ -2341,7 +2341,11 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 QString tmp_str = jsonObject.value("video_url").toString();
 
                 // set the video url and update QML side
+#if defined(Q_OS_MACX)
+                quickView->setSource(QUrl("qrc:/nosessionview.qml"));
+#else
                 quickWidget->setSource(QUrl("qrc:/webengineview.qml"));
+#endif
                 strVideoUrl = tmp_str;
                 qInfo() << "strVideoUrl set to: " << strVideoUrl;
                 // tell the QML side that value is updated
