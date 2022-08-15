@@ -256,7 +256,7 @@ Function Build-App
     Invoke-Native-Command -Command "$Env:QtCmakePath" `
         -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake'", `
             "-DCMAKE_BUILD_TYPE=Release", `
-            "-S", "$RootPath\src\kdasioconfig", `
+            "-S", "$RootPath\KoordASIO\src\kdasioconfig", `
             "-B", "$BuildPath\$BuildConfig\kdasioconfig", `
             "-G", "NMake Makefiles")
     Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
@@ -266,7 +266,7 @@ Function Build-App
 
     # Ninja! 
     Invoke-Native-Command -Command "$Env:QtCmakePath" `
-        -Arguments ("-S", "$RootPath\src", `
+        -Arguments ("-S", "$RootPath\KoordASIO\src", `
             "-B", "$BuildPath\$BuildConfig\flexasio", `
             "-G", "Ninja", `
             "-DCMAKE_BUILD_TYPE=Release")
