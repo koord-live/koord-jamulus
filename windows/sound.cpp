@@ -53,7 +53,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
             iDriverIdx = i + 1; // adjust for offset due to built-in driver
         }
     }
-    if (strDriverName == "KoordASIO-builtin")
+    if (strDriverName == "KoordASIO_builtin")
     {
         iDriverIdx = 0;  // we hardcoded this earlier
     }
@@ -70,7 +70,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     long lNumOutChanPrev = lNumOutChan;
 
     // Hack-load internal ASIO driver, rather than reading from ASIO SDK driver list
-    if (strDriverName == "KoordASIO-builtin")
+    if (strDriverName == "KoordASIO_builtin")
     {
         auto* const asioDriver = CreateFlexASIO();
 	    if (asioDriver == nullptr) abort();
@@ -99,7 +99,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        if (strDriverName == "KoordASIO-builtin") 
+        if (strDriverName == "KoordASIO_builtin") 
         {
             if ( ( strCurDevName.compare ( strDriverName ) != 0 ) || ( lNumInChanPrev != lNumInChan ) || ( lNumOutChanPrev != lNumOutChan ) )
             {
@@ -589,13 +589,13 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
 
     // copy driver names to base class but internally we still have to use
     // the char* variable because of the ASIO API :-(    
-    strDriverNames[0] = "KoordASIO-builtin"; // put KoordASIO-builtin at start of driver name list
+    strDriverNames[0] = "KoordASIO_builtin"; // put KoordASIO_builtin at start of driver name list
     for ( i = 0; i < lNumDevs; i++ )
     {
         strDriverNames[i + 1] = cDriverNames[i];
     }
     // strDriverNames should look something like:
-    // 0 - strDriverNames[0] = "KoordASIO-builtin" --> no cDriverNames entry
+    // 0 - strDriverNames[0] = "KoordASIO_builtin" --> no cDriverNames entry
     // 1 - strDriverNames[1] = "ASIO4ALL" --> cDriverNames[0]
     // 2 - strDriverNames[2] = "Focusrite ASIO" --> cDriverNames[1]
 
