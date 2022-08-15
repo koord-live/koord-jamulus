@@ -60,6 +60,8 @@
 #if defined( Q_OS_MACX )
 #    include "mac/badgelabel.h"
 #endif
+#include <QQuickWidget>
+#include <QQuickView>
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
@@ -145,7 +147,12 @@ protected:
     QTimer         TimerDetectFeedback;
     // for join
     QString        strSelectedAddress;
-    QString        strVideoUrl;
+    QString        strVideoUrl;    
+#if defined(Q_OS_MACX)
+    QQuickView*     quickView;
+#else
+    QQuickWidget*   quickWidget;
+#endif
     QNetworkAccessManager*   qNam;
 //    QScopedPointer<QNetworkReply> netreply;
 //    QNetworkReply netreply;

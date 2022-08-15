@@ -63,5 +63,6 @@
     <qresource prefix="/">
         <file>webview.qml</file>
         <file>webengineview.qml</file>
+        <file>nosessionview.qml</file>
     </qresource>
 </RCC>
