@@ -252,35 +252,28 @@ Function Build-App
     )
 
     # Build kdasioconfig Qt project with CMake / nmake
+    # # Build FlexASIO dlls with CMake / nmake
     Invoke-Native-Command -Command "$Env:QtCmakePath" `
         -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake'", `
             "-DCMAKE_BUILD_TYPE=Release", `
-            "-S", "$RootPath\KoordASIO\src\kdasioconfig", `
+            "-S", "$RootPath\src\kdasioconfig", `
             "-B", "$BuildPath\$BuildConfig\kdasioconfig", `
             "-G", "NMake Makefiles")
     Set-Location -Path "$BuildPath\$BuildConfig\kdasioconfig"
-    Invoke-Native-Command -Command "nmake"
+    Invoke-Native-Command -Command "nmake" #FIXME necessary??
+    
+    Set-Location -Path "$RootPath"
 
-## BUILD KoordASIO in separate Github step prior to main build
-    # # Build FlexASIO dlls with CMake
-    # Invoke-Native-Command -Command "$Env:QtCmakePath" `
-    #     -Arguments ("-DCMAKE_PREFIX_PATH='$QtInstallPath\$QtCompile64\lib\cmake:$RootPath\KoordASIO\src\dechamps_cpputil:$RootPath\KoordASIO\src\dechamps_ASIOUtil'", `
-    #         "-DCMAKE_BUILD_TYPE=Release", `
-    #         "-S", "$RootPath\KoordASIO\src", `
-    #         "-B", "$BuildPath\$BuildConfig\flexasio", `
-    #         "-G", "NMake Makefiles")
-    # Set-Location -Path "$BuildPath\$BuildConfig\flexasio"
-    # Invoke-Native-Command -Command "nmake"
+    # Ninja! 
+    Invoke-Native-Command -Command "$Env:QtCmakePath" `
+        -Arguments ("-S", "$RootPath\src", `
+            "-B", "$BuildPath\$BuildConfig\flexasio", `
+            "-G", "Ninja", `
+            "-DCMAKE_BUILD_TYPE=Release")
 
-    # # Build with "cmake --build" - follow FlexASIO example
-    # Invoke-Native-Command -Command "$Env:QtCmakePath" `
-    #     -Arguments ("--build", "src" )
-
-    # get visibility on built files
-    Tree "$RootPath" /f /a
-
-    # # Debug location of redist stuff
-    # Tree "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\" /f /a
+    # Build!
+    Invoke-Native-Command -Command "$Env:QtCmakePath" `
+        -Arguments ("--build", "$BuildPath\$BuildConfig\flexasio")
 
     # Now build rest of Koord-Realtime
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
