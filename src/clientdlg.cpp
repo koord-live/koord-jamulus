@@ -70,13 +70,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // macOS uses native webview plugin
     quickView = new QQuickView();
     QWidget *container = QWidget::createWindowContainer(quickView, this);
-    quickView->setSource(QUrl("qrc:/webview.qml"));
+    quickView->setSource(QUrl("qrc:/nosessionview.qml"));
     videoTab->layout()->addWidget(container);
     QQmlContext* context = quickView->rootContext();
 #elif defined(ANDROID) || defined(Q_OS_IOS)
     // Android and iOS both use native webview plugin
     quickWidget = new QQuickWidget(this) ;
-    quickWidget->setSource(QUrl("qrc:/webview.qml"));
+    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
     quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     videoTab->layout()->addWidget(quickWidget);
     QQmlContext* context = quickWidget->rootContext();
