@@ -1,3 +1,7 @@
+### 1.9.10 (2022-08-16) ###
+
+- Client: webview and asio fixes
+
 ### 1.9.9 (2022-08-01) ###
 
 - Client: Fixes for webview across platforms
