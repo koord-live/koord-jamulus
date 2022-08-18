@@ -55,8 +55,10 @@ cd $BDIR
 # manually copy in qml files to get picked up by qmlimportscanner
 cp -v src/webview.qml appdir_gui
 # include libssl v1, we need to ship to stop breakage on systems expecting v3
+# also exclude libnss3 due to https://github.com/probonopd/linuxdeployqt/issues/35#issuecomment-382994446
 linuxdeploy --desktop-file linux/koordrt.desktop \
             --icon-file linux/koordrt.png \
+            --exclude-library="libnss3.so,libnssutil3.so" \
             --library /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
             --appdir appdir_gui --plugin qt --output appimage
 mkdir gui_appimage
