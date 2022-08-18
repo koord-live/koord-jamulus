@@ -65,7 +65,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //    qNam = new QNetworkAccessManager(this);
     qNam = new QNetworkAccessManager;
 
-#if defined(Q_OS_MACX)
+#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
     // Note: use QuickView to workaround problem with QuickWidget on macOS
     // macOS uses native webview plugin
     quickView = new QQuickView();
@@ -73,7 +73,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     quickView->setSource(QUrl("qrc:/nosessionview.qml"));
     videoTab->layout()->addWidget(container);
     QQmlContext* context = quickView->rootContext();
-#elif defined(ANDROID) || defined(Q_OS_IOS)
+#elif defined(ANDROID)
     // Android and iOS both use native webview plugin
     quickWidget = new QQuickWidget(this) ;
     quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
@@ -2341,7 +2341,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 QString tmp_str = jsonObject.value("video_url").toString();
 
                 // set the video url and update QML side
-#if defined(Q_OS_MACX)
+#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
                 quickView->setSource(QUrl("qrc:/webview.qml"));
 #else
                 quickWidget->setSource(QUrl("qrc:/webengineview.qml"));
@@ -2379,7 +2379,7 @@ void CClientDlg::Disconnect()
     // Reset video view to No Session
 //    strVideoUrl = "";
 //    emit videoUrlChanged();
-#if defined(Q_OS_MACX)
+#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
     quickView->setSource(QUrl("qrc:/nosessionview.qml"));
 #else
     quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));

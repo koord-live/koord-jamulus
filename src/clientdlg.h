@@ -148,7 +148,7 @@ protected:
     // for join
     QString        strSelectedAddress;
     QString        strVideoUrl;    
-#if defined(Q_OS_MACX)
+#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
     QQuickView*     quickView;
 #else
     QQuickWidget*   quickWidget;
