@@ -54,11 +54,14 @@ echo "Building gui AppImage ...."
 cd $BDIR
 # manually copy in qml files to get picked up by qmlimportscanner
 cp -v src/webview.qml appdir_gui
+# Since it doesn't work to exclude libnss3.so, libnssutil3.so - because Qt plugin picks them up after main run anyway - ...
+# - ref: https://github.com/probonopd/linuxdeployqt/issues/35#issuecomment-382994446
+# ... we have to include the libs that libnss is packaged with eg softokn, - otherwise app crashes
+mkdir -p appdir_gui/usr/lib/
+cp -r /usr/lib/x86_64-linux-gnu/nss appdir_gui/usr/lib/
 # include libssl v1, we need to ship to stop breakage on systems expecting v3
-# also exclude libnss3 due to https://github.com/probonopd/linuxdeployqt/issues/35#issuecomment-382994446
 linuxdeploy --desktop-file linux/koordrt.desktop \
             --icon-file linux/koordrt.png \
-            --exclude-library="libnss3.so,libnssutil3.so" \
             --library /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
             --appdir appdir_gui --plugin qt --output appimage
 mkdir gui_appimage
