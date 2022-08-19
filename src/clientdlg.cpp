@@ -65,7 +65,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //    qNam = new QNetworkAccessManager(this);
     qNam = new QNetworkAccessManager;
 
-#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
+//#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
     // Note: use QuickView to workaround problem with QuickWidget on macOS
     // macOS uses native webview plugin
     quickView = new QQuickView();
@@ -73,21 +73,21 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     quickView->setSource(QUrl("qrc:/nosessionview.qml"));
     videoTab->layout()->addWidget(container);
     QQmlContext* context = quickView->rootContext();
-#elif defined(ANDROID)
-    // Android and iOS both use native webview plugin
-    quickWidget = new QQuickWidget(this) ;
-    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
-    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    videoTab->layout()->addWidget(quickWidget);
-    QQmlContext* context = quickWidget->rootContext();
-#else
-    // Windows and Linux both used bundled webengine plugin
-    quickWidget = new QQuickWidget(this) ;
-    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
-    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    videoTab->layout()->addWidget(quickWidget);
-    QQmlContext* context = quickWidget->rootContext();
-#endif
+//#elif defined(ANDROID)
+//    // Android and iOS both use native webview plugin
+//    quickWidget = new QQuickWidget(this) ;
+//    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
+//    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+//    videoTab->layout()->addWidget(quickWidget);
+//    QQmlContext* context = quickWidget->rootContext();
+//#else
+//    // Windows and Linux both used bundled webengine plugin
+//    quickWidget = new QQuickWidget(this) ;
+//    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
+//    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+//    videoTab->layout()->addWidget(quickWidget);
+//    QQmlContext* context = quickWidget->rootContext();
+//#endif
 
     // initialize video_url with blank value to start
     strVideoUrl = "";
@@ -2341,10 +2341,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 QString tmp_str = jsonObject.value("video_url").toString();
 
                 // set the video url and update QML side
-#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
+#if defined(Q_OS_MACX) || defined(Q_OS_IOS) || defined(ANDROID)
                 quickView->setSource(QUrl("qrc:/webview.qml"));
 #else
-                quickWidget->setSource(QUrl("qrc:/webengineview.qml"));
+                quickView->setSource(QUrl("qrc:/webengineview.qml"));
 #endif
                 strVideoUrl = tmp_str;
                 qInfo() << "strVideoUrl set to: " << strVideoUrl;
@@ -2379,11 +2379,11 @@ void CClientDlg::Disconnect()
     // Reset video view to No Session
 //    strVideoUrl = "";
 //    emit videoUrlChanged();
-#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
+//#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
     quickView->setSource(QUrl("qrc:/nosessionview.qml"));
-#else
-    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
-#endif
+//#else
+//    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
+//#endif
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();
