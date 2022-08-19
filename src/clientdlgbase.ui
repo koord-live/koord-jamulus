@@ -3346,7 +3346,7 @@ QCheckBox::indicator {
                  </font>
                 </property>
                 <property name="text">
-                 <string>VERSION 1.9.11</string>
+                 <string>VERSION 1.9.12</string>
                 </property>
                 <property name="wordWrap">
                  <bool>false</bool>
