@@ -56,46 +56,40 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         ;
     // end cruft
 
-    // setup main UI
-//    setCentralWidget(backgroundFrame);
+    //FIXME - possibly not necessary
+#if defined(ANDROID)
+    setCentralWidget(backgroundFrame);
+#endif
 
+    // setup main UI
     setupUi ( this );
 
     // set up net manager for https requests
-//    qNam = new QNetworkAccessManager(this);
     qNam = new QNetworkAccessManager;
 
-//#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
-    // Note: use QuickView to workaround problem with QuickWidget on macOS
-    // macOS uses native webview plugin
+// FIXME - exception for Android
+// - QuickView does NOT work as for other OS - when setSource is changed from "nosession" to webview, view goes full-screen
+#if defined(ANDROID)
+    quickWidget = new QQuickWidget;
+    // need SizeRootObjectToView for QuickWidget, otherwise web content doesn't load ??
+    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    quickWidget->setSource(QUrl("qrc:/androidwebview.qml"));
+    videoTab->layout()->addWidget(quickWidget);
+    QQmlContext* context = quickWidget->rootContext();
+#else
+// Note: use QuickView to workaround problems with QuickWidget
     quickView = new QQuickView();
     QWidget *container = QWidget::createWindowContainer(quickView, this);
     quickView->setSource(QUrl("qrc:/nosessionview.qml"));
     videoTab->layout()->addWidget(container);
     QQmlContext* context = quickView->rootContext();
-//#elif defined(ANDROID)
-//    // Android and iOS both use native webview plugin
-//    quickWidget = new QQuickWidget(this) ;
-//    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
-//    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-//    videoTab->layout()->addWidget(quickWidget);
-//    QQmlContext* context = quickWidget->rootContext();
-//#else
-//    // Windows and Linux both used bundled webengine plugin
-//    quickWidget = new QQuickWidget(this) ;
-//    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
-//    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-//    videoTab->layout()->addWidget(quickWidget);
-//    QQmlContext* context = quickWidget->rootContext();
-//#endif
-
-    // initialize video_url with blank value to start
-    strVideoUrl = "";
+#endif
 
     //FIXME prob don't want whole ClientDlg object ?
     context->setContextProperty("_clientdlg", this);
-    // init video url for test
-//    emit videoUrlChanged();
+
+    // initialize video_url with blank value to start
+    strVideoUrl = "";
 
     // Set up touch on all widgets' viewports which inherit from QAbstractScrollArea
     // https://doc.qt.io/qt-6/qtouchevent.html#details
@@ -2292,16 +2286,14 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         }
 
         // do video_url lookup here ...
-//      qNam is pointer to QNetworkAccessManager
-        // test url
+        //FIXME - unhardcode test url
         QUrl url("https://test.koord.live/sess/sessionvideourl/");
-//        QUrl url("http://localhost/sess/sessionvideourl/");
         QNetworkRequest request(url);
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
         request.setRawHeader("test-koord-login", "test17d3moin3s");
 
         QRegularExpression rx_sessaddr("^(([a-z]*[0-9]*\\.*)+):([0-9]+)$");
-        qInfo() << ">>> strSelectedaddress = " << strSelectedAddress;
+//        qInfo() << ">>> strSelectedaddress = " << strSelectedAddress;
         QRegularExpressionMatch reg_match = rx_sessaddr.match(strSelectedAddress);
 
         QString hostname;
@@ -2325,14 +2317,13 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         QNetworkReply *reply = qNam->post(request, vid_req);
 
         // connect reply pointer with callback for finished signal
-//        QObject::connect(reply, &QNetworkReply::finished, this, &CClientDlg::replyFinished);
         QObject::connect(reply, &QNetworkReply::finished, this, [=]()
             {
                 QString err = reply->errorString();
                 QString contents = QString::fromUtf8(reply->readAll());
-                qInfo() << ">>> CONNECT: " << reply->error();
-                qInfo() << ">>> CONNECT - err: " << err;
-                qInfo() << ">>> CONNECT - contents: " << contents;
+//                qInfo() << ">>> CONNECT: " << reply->error();
+//                qInfo() << ">>> CONNECT - err: " << err;
+//                qInfo() << ">>> CONNECT - contents: " << contents;
 
                 // if reply - no error
                 // parse the JSON response
@@ -2341,8 +2332,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 QString tmp_str = jsonObject.value("video_url").toString();
 
                 // set the video url and update QML side
-#if defined(Q_OS_MACX) || defined(Q_OS_IOS) || defined(ANDROID)
+#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
                 quickView->setSource(QUrl("qrc:/webview.qml"));
+#elif defined(ANDROID)
+//                quickWidget->setSource(QUrl("qrc:/androidwebview.qml"));
 #else
                 quickView->setSource(QUrl("qrc:/webengineview.qml"));
 #endif
@@ -2350,9 +2343,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 qInfo() << "strVideoUrl set to: " << strVideoUrl;
                 // tell the QML side that value is updated
                 emit videoUrlChanged();
-                qInfo() << "Called videoUrlChanged() ...";
             });
-        qInfo() << ">>> CALLED VIDEO URL LOOKUP ENDPOINT >>>>";
     }
 }
 
@@ -2377,13 +2368,15 @@ void CClientDlg::Disconnect()
 //    MainMixerBoard->SetServerName ( "" );
 
     // Reset video view to No Session
-//    strVideoUrl = "";
-//    emit videoUrlChanged();
-//#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
+//FIXME - we do special stuff for Android, because calling setSource() again causes webview to go FULL SCREEN
+#if defined(ANDROID)
+    strVideoUrl = "https://koord.live/about";
+    emit videoUrlChanged();
+    strVideoUrl = "";
+    emit videoUrlChanged();
+#else
     quickView->setSource(QUrl("qrc:/nosessionview.qml"));
-//#else
-//    quickWidget->setSource(QUrl("qrc:/nosessionview.qml"));
-//#endif
+#endif
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();

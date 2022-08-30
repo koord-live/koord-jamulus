@@ -64,5 +64,6 @@
         <file>webview.qml</file>
         <file>webengineview.qml</file>
         <file>nosessionview.qml</file>
+        <file>androidwebview.qml</file>
     </qresource>
 </RCC>

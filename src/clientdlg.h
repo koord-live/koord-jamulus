@@ -148,11 +148,11 @@ protected:
     // for join
     QString        strSelectedAddress;
     QString        strVideoUrl;    
-//#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
+#if defined(ANDROID)
+    QQuickWidget*   quickWidget;
+#else
     QQuickView*     quickView;
-//#else
-//    QQuickWidget*   quickWidget;
-//#endif
+#endif
     QNetworkAccessManager*   qNam;
 //    QScopedPointer<QNetworkReply> netreply;
 //    QNetworkReply netreply;
