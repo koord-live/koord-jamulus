@@ -22,13 +22,13 @@ jobs:
 
       - name:                       Build Webview jars
         id:                         webviewjar
-        run:                        ./autobuild/webview_jars.sh build
+        run:                        ./.github/autobuild/webview_jars.sh build
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         
       - name:                       Post-Build for jar build
         id:                         get-artifacts
-        run:                        ./autobuild/webview_jars.sh get-artifacts
+        run:                        ./.github/autobuild/webview_jars.sh get-artifacts
 
       - name:                       Upload Artifact 1 to Job
         uses:                       actions/upload-artifact@v2
