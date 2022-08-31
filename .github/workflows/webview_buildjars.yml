@@ -1,7 +1,7 @@
 name: Build hacked webview jars
 
 on:
-  pull_request:
+  push:
     branches:
       - webviewjars
 
