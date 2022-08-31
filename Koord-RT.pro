@@ -146,8 +146,12 @@ win32 {
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info-xcode.plist
     QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
-    QMAKE_ASSET_CATALOGS = ios/Images.xcassets
+    QMAKE_ASSET_CATALOGS += ios/Images.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
+
+    ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
