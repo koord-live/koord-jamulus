@@ -1,7 +1,6 @@
 #!/bin/bash
 set -eu
 
-# for x64 AppImage build
 export QT_VERSION=6.3.1
 
 ## Utility to build Qt for Android, on Linux
@@ -17,42 +16,14 @@ export QT_VERSION=6.3.1
     # Hack in file: QtAndroidWebViewController.java
     # - Add following function to inner class QtAndroidWebChromeClient:
     #     @Override public void onPermissionRequest(PermissionRequest request) { request.grant(request.getResources()); }
-    # - copy built jars QtAndroidWebView.jar, QtAndroidWebView-bundled.jar to Qt installation to rebuild
+    # - copy built jar QtAndroidWebView.jar to Qt installation to rebuild
 
 ## REQUIREMENTS (provided by Github ubuntu 2004 build image):
 # - gradle 7.2+
 # - android cli tools (sdkmanager)
 # - cmake 
 
-## If building locally:
-    # Install Android sdk cli tools from DL from https://developer.android.com/studio : commandlinetools-linux-8512546_latest.zip
-    # - install to /home/user/Android/cmdline-tools ( SDK_ROOT = /home/user/Android )
-    # Install Gradle 7.2+ from https://gradle.org/next-steps/?version=7.5&format=bin
-    # - install to /opt/gradle
-    # Do SDK setup as per:
-    #  - ./sdkmanager --sdk_root=/home/user/Android --install "cmdline-tools;latest" "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;22.1.7171670"
-    ## env vars:
-    # export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-    # export CMAKE_ROOT=/home/dan/Qt/Tools/CMake/bin
-    # export GRADLE_HOME=/opt/gradle
-    # export PATH=$JAVA_HOME/bin:$GRADLE_HOME/bin:$CMAKE_ROOT:$PATH
-    ## Build Qt
-    # mkdir /home/user/code/qt5/qt6-build
-    # cd /home/user/code/qt5/qt6-build
-    # # actually!! to avoid errors, change to non-symlinked path ie /mnt/c/ ... on WSL
-    # ../qt5/configure -platform android-clang -prefix /home/user/code/qt6_nu_install_arm7 \
-    #     -android-ndk /home/user/Android/ndk/22.1.7171670/ -android-sdk  /home/user/Android/ \
-    #     -qt-host-path /home/user/Qt/${QT_VERSION}/gcc_64 -android-abis arm64-v8a
-    # cmake --build . --parallel
-
-    # ../qt5/configure -platform android-clang -prefix /home/dan/code/qt6_nu_install_arm7 \
-    #     -android-ndk /home/dan/Android/ndk/22.1.7171670/ -android-sdk  /home/dan/Android/ \
-    #     -qt-host-path /home/dan/Qt/${QT_VERSION}/gcc_64 -android-abis armeabi-v7a
-
-
 setup() {
-
-    ## AUTOBUILD:
     # Install build deps from apt
     sudo apt-get install -y --no-install-recommends \
         openjdk-11-jdk \
@@ -90,34 +61,17 @@ setup() {
     patch -u qtwebview/src/jar/src/org/qtproject/qt/android/view/QtAndroidWebViewController.java -i \
         ${GITHUB_WORKSPACE}/android/qt_build_fix/webview_perms.patch
 
-    ## OR 2) from qt archives
-    # mkdir qt5
-    # cd qt5
-    # # unpacks each archive to eg ./qtbase-everywhere-src-${QT_VERSION}/
-    # wget https://download.qt.io/archive/qt/6.3/${QT_VERSION}/submodules/qtbase-everywhere-src-${QT_VERSION}.tar.xz -qO- | tar xvJ
-    # wget https://download.qt.io/archive/qt/6.3/${QT_VERSION}/submodules/qtdeclarative-everywhere-src-${QT_VERSION}.tar.xz -qO- | tar xvJ
-    # wget https://download.qt.io/archive/qt/6.3/${QT_VERSION}/submodules/qtshadertools-everywhere-src-${QT_VERSION}.tar.xz -qO- | tar xvJ
-    # wget https://download.qt.io/archive/qt/6.3/${QT_VERSION}/submodules/qtwebview-everywhere-src-${QT_VERSION}.tar.xz -qO- | tar xvJ
-    # mv qtbase-everywhere-src-${QT_VERSION} qtbase
-    # mv qtdeclarative-everywhere-src-${QT_VERSION} qtdeclarative
-    # mv qtshadertools-everywhere-src-${QT_VERSION} qtshadertools
-    # mv qtwebview-everywhere-src-${QT_VERSION} qtwebview
-    # # Copy in CMakeLists, configure script
-    # cp linux/qt_build_fix/CMakeLists.txt CMakeLists.txt
-    # cp linux/qt_build_fix/configure configure
-    # cp -a linux/qt_build_fix/cmake cmake
-    # chmod 755 configure # ensure exec permission
-
-    # Create shadow build directory
-    mkdir -p $HOME/qt6-build
 }
 
 build_jar() {
     local ARCH_ABI="${1}"
 
+    # Create shadow build directory
+    mkdir -p $HOME/qt6-build-${ARCH_ABI}
+
     # Configure build for Android
     # ALSO configure and build for: armeabi-v7a
-    cd $HOME/qt6-build
+    cd $HOME/qt6-build-${ARCH_ABI}
     ../qt5/configure \
         -platform android-clang \
         -prefix $HOME/qt6_${ARCH_ABI} \
@@ -137,9 +91,7 @@ build_jar() {
     # file is now at $HOME/qt6_${ARCH_ABI}/jar/QtAndroidWebView.jar
 }
 
-
 pass_artifacts_to_job() {
-
     mkdir -p deploy
     
     mv $HOME/qt6_armeabi-v7a/jar/QtAndroidWebView.jar ~/deploy/QtAndroidWebView_armeabi-v7a.jar
