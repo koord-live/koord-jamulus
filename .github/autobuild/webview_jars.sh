@@ -59,6 +59,7 @@ setup() {
         ninja-build \
         flex bison \
         libgl-dev \
+        libegl-dev \
         libclang-11-dev \
         gperf \
         nodejs
