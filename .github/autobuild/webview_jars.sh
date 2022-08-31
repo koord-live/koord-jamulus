@@ -87,7 +87,7 @@ setup() {
 
     # Patch the QtAndroidWebViewController
     patch -u qtwebview/src/jar/src/org/qtproject/qt/android/view/QtAndroidWebViewController.java -i \
-        ${GITHUB_WORKSPACE}/koord-realtime/android/qt_build_fix/webview_perms.patch
+        ${GITHUB_WORKSPACE}/android/qt_build_fix/webview_perms.patch
 
     ## OR 2) from qt archives
     # mkdir qt5
