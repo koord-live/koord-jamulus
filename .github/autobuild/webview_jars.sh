@@ -85,9 +85,9 @@ setup() {
     git checkout ${QT_VERSION}
     perl init-repository --module-subset=qtbase,qtwebview,qtshadertools,qtdeclarative # get submodule source code
 
-    # Copy hacked source file into place, overwrite original
-    cp $HOME/koord-realtime/android/qt_build_fix/QtAndroidWebViewController.java \
-        qtwebview/src/jar/src/org/qtproject/qt/android/view/QtAndroidWebViewController.java
+    # Patch the QtAndroidWebViewController
+    patch -u qtwebview/src/jar/src/org/qtproject/qt/android/view/QtAndroidWebViewController.java -i \
+        $HOME/koord-realtime/koord-realtime/android/qt_build_fix/webview_perms.patch
 
     ## OR 2) from qt archives
     # mkdir qt5
