@@ -113,7 +113,7 @@ setup() {
 
 build_jar() {
     local ARCH_ABI="${1}"
-    
+
     # Configure build for Android
     # ALSO configure and build for: armeabi-v7a
     cd $HOME/qt6-build
@@ -151,10 +151,8 @@ pass_artifacts_to_job() {
 }
 
 case "${1:-}" in
-    setup)
-        setup
-        ;;
     build)
+        setup
         build_jar "armeabi-v7a"
         build_jar "arm64-v8a"
         ;;
