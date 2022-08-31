@@ -54,7 +54,7 @@ setup() {
 
     ## AUTOBUILD:
     # Install build deps from apt
-    sudo apt install -y --no-recommends \
+    sudo apt-get install -y --no-recommends \
         openjdk-11-jdk \
         ninja-build \
         flex bison \
