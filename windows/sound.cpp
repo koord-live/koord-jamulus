@@ -26,14 +26,11 @@
 \******************************************************************************/
 
 #include "sound.h"
-#include "..\KoordASIO\src\flexasio\FlexASIO\cflexasio.h"
 
 /* Implementation *************************************************************/
 // external references
 extern AsioDrivers* asioDrivers;
 bool                loadAsioDriver ( char* name );
-extern IASIO*       theAsioDriver;
-
 
 // pointer to our sound object
 CSound* pSound;
@@ -50,18 +47,14 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     {
         if ( strDriverName.compare ( cDriverNames[i] ) == 0 )
         {
-            iDriverIdx = i + 1; // adjust for offset due to built-in driver
+            iDriverIdx = i;
         }
-    }
-    if (strDriverName == "KoordASIO_builtin")
-    {
-        iDriverIdx = 0;  // we hardcoded this earlier
     }
 
     // if the selected driver was not found, return an error message
     if ( iDriverIdx == INVALID_INDEX )
     {
-        return tr ( "The selected audio device is no longer present in the system. Please check your audio device." );
+        return tr ( "The current selected audio device is no longer present in the system." );
     }
 
     // Save number of channels from last driver
@@ -69,18 +62,8 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     long lNumInChanPrev  = lNumInChan;
     long lNumOutChanPrev = lNumOutChan;
 
-    // Hack-load internal ASIO driver, rather than reading from ASIO SDK driver list
-    if (strDriverName == "KoordASIO_builtin")
-    {
-        auto* const asioDriver = CreateFlexASIO();
-	    if (asioDriver == nullptr) abort();
-        theAsioDriver = asioDriver;
-    }
-    else
-    {
-        loadAsioDriver ( cDriverNames[iDriverIdx - 1] ); // adjust for offset
-    }
-    
+    loadAsioDriver ( cDriverNames[iDriverIdx] );
+
     // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
     // should be set, but we haven't being doing that and it seems to work
     // okay...
@@ -90,7 +73,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     {
         // clean up and return error string
         asioDrivers->removeCurrentDriver();
-        return tr ( "Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings." );
+        return tr ( "The audio driver could not be initialized." );
     }
 
     // check device capabilities if it fulfills our requirements
@@ -99,28 +82,17 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        if (strDriverName == "KoordASIO_builtin") 
+        // Reset channel mapping if the sound card name has changed or the number of channels has changed
+        if ( ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) || ( lNumInChanPrev != lNumInChan ) || ( lNumOutChanPrev != lNumOutChan ) )
         {
-            if ( ( strCurDevName.compare ( strDriverName ) != 0 ) || ( lNumInChanPrev != lNumInChan ) || ( lNumOutChanPrev != lNumOutChan ) )
-            {
-                ResetChannelMapping();
-                strCurDevName = strDriverName;
-            }
-        }
-        else 
-        {
-            // Reset channel mapping if the sound card name has changed or the number of channels has changed
-            if ( ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) || ( lNumInChanPrev != lNumInChan ) || ( lNumOutChanPrev != lNumOutChan ) )
-            {
-                // In order to fix https://github.com/jamulussoftware/jamulus/issues/796
-                // this code runs after a change in the ASIO driver (not when changing the ASIO input selection.)
+            // In order to fix https://github.com/jamulussoftware/jamulus/issues/796
+            // this code runs after a change in the ASIO driver (not when changing the ASIO input selection.)
 
-                // mapping to the defaults (first two available channels)
-                ResetChannelMapping();
+            // mapping to the defaults (first two available channels)
+            ResetChannelMapping();
 
-                // store ID of selected driver if initialization was successful
-                strCurDevName = cDriverNames[iDriverIdx - 1];
-            }
+            // store ID of selected driver if initialization was successful
+            strCurDevName = cDriverNames[iDriverIdx];
         }
     }
     else
@@ -131,7 +103,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
             OpenDriverSetup();
             QMessageBox::question ( nullptr,
                                     APP_NAME,
-                                    "Are you done with your ASIO driver settings of " + GetDeviceName ( iDriverIdx ) + "?",
+                                    "Are you done with your ASIO driver settings of device " + GetDeviceName ( iDriverIdx ) + "?",
                                     QMessageBox::Yes );
         }
 
@@ -171,10 +143,9 @@ QString CSound::CheckDeviceCapabilities()
     if ( ( CanSaRateReturn == ASE_NoClock ) || ( CanSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
-        return QString ( tr ( "The selected audio device is incompatible "
-                              "since it doesn't support a sample rate of %1 Hz. Please select another "
-                              "device." ) )
-            .arg ( SYSTEM_SAMPLE_RATE_HZ );
+        return tr ( "The audio device does not support the "
+                    "required sample rate. The required sample rate is: " ) +
+               QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz";
     }
 
     // check if sample rate can be set
@@ -183,11 +154,15 @@ QString CSound::CheckDeviceCapabilities()
     if ( ( SetSaRateReturn == ASE_NoClock ) || ( SetSaRateReturn == ASE_InvalidMode ) || ( SetSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
-        return QString ( tr ( "The current audio device configuration is incompatible "
-                              "because the sample rate couldn't be set to %2 Hz. Please check for a hardware switch or "
-                              "driver setting to set the sample rate manually and restart %1." ) )
-            .arg ( APP_NAME )
-            .arg ( SYSTEM_SAMPLE_RATE_HZ );
+        return tr ( "The audio device does not support setting the required sampling "
+                    "rate. This error can happen if you have an audio interface like the "
+                    "Roland UA-25EX where you set the sample rate with a hardware switch "
+                    "on the audio device. If this is the case, please change the sample rate "
+                    "to " ) +
+               QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) +
+               tr ( " Hz on the "
+                    "device and restart the " ) +
+               APP_NAME + tr ( " software." );
     }
 
     // check the number of available channels
@@ -196,9 +171,10 @@ QString CSound::CheckDeviceCapabilities()
     if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) || ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
     {
         // return error string
-        return QString ( tr ( "The selected audio device is incompatible since it doesn't support "
-                              "%1 in/out channels. Please select another device or configuration." ) )
-            .arg ( NUM_IN_OUT_CHANNELS );
+        return tr ( "The audio device does not support the "
+                    "required number of channels. The required number of channels "
+                    "for input and output is: " ) +
+               QString().setNum ( NUM_IN_OUT_CHANNELS );
     }
 
     // clip number of input/output channels to our maximum
@@ -231,8 +207,7 @@ QString CSound::CheckDeviceCapabilities()
         if ( !CheckSampleTypeSupported ( channelInfosInput[i].type ) )
         {
             // return error string
-            return tr ( "The selected audio device is incompatible since "
-                        "the required audio sample format isn't available. Please use another device." );
+            return tr ( "Required audio sample format not available." );
         }
 
         // store the name of the channel and check if channel mixing is supported
@@ -262,8 +237,7 @@ QString CSound::CheckDeviceCapabilities()
         if ( !CheckSampleTypeSupported ( channelInfosOutput[i].type ) )
         {
             // return error string
-            return tr ( "The selected audio device is incompatible since "
-                        "the required audio sample format isn't available. Please use another device." );
+            return tr ( "Required audio sample format not available." );
         }
     }
 
@@ -575,29 +549,23 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     loadAsioDriver ( cDummyName ); // to initialize external object
     lNumDevs = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
 
-    /* We KNOW we have a driver available now, so we don't need this */
-    // // in case we do not have a driver available, throw error
-    // if ( lNumDevs == 0 )
-    // {
-    //     throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
-    //                     QString ( tr ( "Please install an ASIO driver before running %1. "
-    //                                    "If you own a device with ASIO support, install its official ASIO driver. "
-    //                                    "If not, you'll need to download and install a universal driver like ASIO4ALL." ) )
-    //                         .arg ( APP_NAME ) );
-    // }
+    // in case we do not have a driver available, throw error
+    if ( lNumDevs == 0 )
+    {
+        throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
+                        QString ( tr ( "Please install an ASIO driver before running %1. "
+                                       "If you own a device with ASIO support, install its official ASIO driver. "
+                                       "If not, you'll need to download and install a universal driver like ASIO4ALL." ) )
+                            .arg ( APP_NAME ) );
+    }
     asioDrivers->removeCurrentDriver();
 
     // copy driver names to base class but internally we still have to use
-    // the char* variable because of the ASIO API :-(    
-    strDriverNames[0] = "KoordASIO_builtin"; // put KoordASIO_builtin at start of driver name list
+    // the char* variable because of the ASIO API :-(
     for ( i = 0; i < lNumDevs; i++ )
     {
-        strDriverNames[i + 1] = cDriverNames[i];
+        strDriverNames[i] = cDriverNames[i];
     }
-    // strDriverNames should look something like:
-    // 0 - strDriverNames[0] = "KoordASIO_builtin" --> no cDriverNames entry
-    // 1 - strDriverNames[1] = "ASIO4ALL" --> cDriverNames[0]
-    // 2 - strDriverNames[2] = "Focusrite ASIO" --> cDriverNames[1]
 
     // init device index as not initialized (invalid)
     strCurDevName = "";
