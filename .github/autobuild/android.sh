@@ -85,14 +85,16 @@ setup_qt() {
             --archives qtbase qtdeclarative qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
-        cp android/qt_build_fix/arm64_v8a/QtAndroidWebView.jar "${QT_BASEDIR}/${QT_VERSION}/android_arm64_v8a/jar/QtAndroidWebView.jar"
+        wget https://github.com/koord-live/koord-realtime/releases/download/${QT_VERSION}/QtAndroidWebView_arm64-v8a.jar -O \
+            "${QT_BASEDIR}/${QT_VERSION}/android_arm64_v8a/jar/QtAndroidWebView.jar"
 
         # Also install for arm_v7 to build for 32bit devices
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
             --archives qtbase qtdeclarative qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
-        cp android/qt_build_fix/armv7/QtAndroidWebView.jar "${QT_BASEDIR}/${QT_VERSION}/android_armv7/jar/QtAndroidWebView.jar"
+        wget https://github.com/koord-live/koord-realtime/releases/download/${QT_VERSION}/QtAndroidWebView_armeabi-v7a.jar -O \
+            "${QT_BASEDIR}/${QT_VERSION}/android_armv7/jar/QtAndroidWebView.jar"
 
     fi
 }

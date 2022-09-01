@@ -55,7 +55,7 @@ jobs:
         with:
           tag:                      "${QT_VERSION}"
           artifacts:                "deploy/*.jar"
-          draft:                    true
+          draft:                    false
           token:                    ${{ secrets.GITHUB_TOKEN }}
           name:                     "Qt_${QT_VERSION}"
       
