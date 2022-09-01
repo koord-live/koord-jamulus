@@ -3,7 +3,7 @@ set -eu
 
 export QT_VERSION=6.3.1
 
-## Utility to build Qt for Android, on Linux
+## Utility to build Qt for Android, on Linux (Ubuntu 2004 or 2204)
 # References:
 # - https://wiki.qt.io/Building_Qt_6_from_Git#Getting_the_source_code
 # - https://doc.qt.io/qt-6/android-building.html

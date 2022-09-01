@@ -47,11 +47,11 @@ jobs:
           if-no-files-found:        error
 
       - name:                       Create Release
-        # if:                         true
         id:                         create-release
         uses:                       ncipollo/release-action@v1
         with:
           commit:                   ${{ steps.vars.outputs.sha_short }}
+          artifacts:                "deploy/*.jar"
           draft:                    true
           token:                    ${{ secrets.GITHUB_TOKEN }}
           name:                     "Qt_6.3.1"
