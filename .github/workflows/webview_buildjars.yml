@@ -1,5 +1,8 @@
 name: Build hacked webview jars
 
+env:
+  QT_VERSION: 6.3.1
+
 on:
   push:
     branches:
@@ -22,7 +25,7 @@ jobs:
 
       - name:                       Build Webview jars
         id:                         webviewjar
-        run:                        ./.github/autobuild/webview_jars.sh build
+        run:                        QT_VER=$QT_VERSION ./.github/autobuild/webview_jars.sh build
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         
@@ -50,11 +53,11 @@ jobs:
         id:                         create-release
         uses:                       ncipollo/release-action@v1
         with:
-          tag:                      "6.3.1"
+          tag:                      "${QT_VERSION}"
           artifacts:                "deploy/*.jar"
           draft:                    true
           token:                    ${{ secrets.GITHUB_TOKEN }}
-          name:                     "Qt_6.3.1"
+          name:                     "Qt_${QT_VERSION}"
       
 
       # - name:                       Upload Jar 1 to Release
