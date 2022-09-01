@@ -94,8 +94,8 @@ build_jar() {
 pass_artifacts_to_job() {
     mkdir -p $HOME/deploy
     
-    mv $HOME/qt6_armeabi-v7a/jar/QtAndroidWebView.jar ~/deploy/QtAndroidWebView_armeabi-v7a.jar
-    mv $HOME/qt6_arm64-v8a/jar/QtAndroidWebView.jar ~/deploy/QtAndroidWebView_arm64-v8a.jar
+    mv -v $HOME/qt6_armeabi-v7a/jar/QtAndroidWebView.jar $HOME/deploy/QtAndroidWebView_armeabi-v7a.jar
+    mv -v $HOME/qt6_arm64-v8a/jar/QtAndroidWebView.jar $HOME/deploy/QtAndroidWebView_arm64-v8a.jar
 
     echo ">>> Setting output as such: name=artifact_1::QtAndroidWebView_armeabi-v7a.jar"
     echo "::set-output name=artifact_1::QtAndroidWebView_armeabi-v7a.jar"
