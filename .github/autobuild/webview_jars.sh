@@ -92,7 +92,7 @@ build_jar() {
 }
 
 pass_artifacts_to_job() {
-    mkdir -p deploy
+    mkdir -p $HOME/deploy
     
     mv $HOME/qt6_armeabi-v7a/jar/QtAndroidWebView.jar ~/deploy/QtAndroidWebView_armeabi-v7a.jar
     mv $HOME/qt6_arm64-v8a/jar/QtAndroidWebView.jar ~/deploy/QtAndroidWebView_arm64-v8a.jar
