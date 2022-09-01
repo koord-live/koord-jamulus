@@ -50,7 +50,7 @@ jobs:
         id:                         create-release
         uses:                       ncipollo/release-action@v1
         with:
-          commit:                   ${{ steps.vars.outputs.sha_short }}
+          tag:                      "6.3.1"
           artifacts:                "deploy/*.jar"
           draft:                    true
           token:                    ${{ secrets.GITHUB_TOKEN }}
