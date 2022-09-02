@@ -1,7 +1,8 @@
 #!/bin/bash
 set -eu
 
-export QT_VERSION=6.3.1
+QT_VERSION=${QT_VER}
+export QT_VERSION
 
 ## Utility to build Qt for Android, on Linux (Ubuntu 2004 or 2204)
 # References:
@@ -58,6 +59,8 @@ setup() {
     perl init-repository --module-subset=qtbase,qtwebview,qtshadertools,qtdeclarative # get submodule source code
 
     # Patch the QtAndroidWebViewController
+    # note: patch made as per:
+    #    diff -Naur QtAndroidWebViewController_orig.java QtAndroidWebViewController.java > webview_perms.patch
     patch -u qtwebview/src/jar/src/org/qtproject/qt/android/view/QtAndroidWebViewController.java -i \
         ${GITHUB_WORKSPACE}/android/qt_build_fix/webview_perms.patch
 
