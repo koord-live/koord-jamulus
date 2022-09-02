@@ -24,15 +24,30 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>AppIcon20x20</string>
-				<string>AppIcon29x29</string>
-				<string>AppIcon40x40</string>
-				<string>AppIcon60x60</string>
+				<string>AppIcon29x29.png</string>
+				<string>AppIcon29x29@2x.png</string>
+				<string>AppIcon40x40.png</string>
+				<string>AppIcon40x40@2x.png</string>
+				<string>AppIcon60x60@2x.png</string>
 			</array>
-			<key>CFBundleIconName</key>
-			<string>AppIcon</string>
 		</dict>
 	</dict>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon29x29.png</string>
+				<string>AppIcon29x29@2x.png</string>
+				<string>AppIcon40x40@2x.png</string>
+				<string>AppIcon60x60@2x.png</string>
+				<string>AppIcon76x76.png</string>
+				<string>AppIcon76x76@2x.png</string>
+				<string>AppIcon83.5x83.5@2x.png</string>
+			</array>
+		</dict>
+	</dict>	
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
@@ -65,6 +80,8 @@
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
