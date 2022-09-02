@@ -1,6 +1,11 @@
+### 1.9.15 (2022-00-02) ###
+
+- Client: refix ios submission
+
 ### 1.9.14 (2022-00-02) ###
 
 - Client: fix ios submission
+
 ### 1.9.13 (2022-00-02) ###
 
 - Client: android fix regression
