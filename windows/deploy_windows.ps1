@@ -1,10 +1,10 @@
 param (
     # Replace default path with system Qt installation folder if necessary
     [string] $QtPath = "C:\Qt",
-    [string] $QtInstallPath = "C:\Qt\6.3.0",
+    [string] $QtInstallPath = "C:\Qt\6.3.1",
 
-    [string] $QtInstallPath32 = "C:\Qt\6.3.0",
-    [string] $QtInstallPath64 = "C:\Qt\6.3.0",
+    [string] $QtInstallPath32 = "C:\Qt\6.3.1",
+    [string] $QtInstallPath64 = "C:\Qt\6.3.1",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
     # Important:
@@ -237,7 +237,7 @@ Function Initialize-Qt-Build-Environment
     {
         Throw "The Qt binaries for Microsoft Visual C++ 2017 or above could not be located at $QtMsvcSpecPath. " + `
             "Please install Qt with support for MSVC 2017 or above before running this script," + `
-            "then call this script with the Qt install location, for example C:\Qt\6.3.0"
+            "then call this script with the Qt install location, for example C:\Qt\6.3.1"
     }
 }
 
