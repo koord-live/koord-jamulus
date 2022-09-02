@@ -22,12 +22,13 @@ WizardImageFile=windows\koord-rt.bmp
 WizardSmallImageFile=windows\koord-rt-small.bmp
 
 [Files]
+Source:"deploy\x86_64\KoordASIO.dll"; DestDir: "{app}"; Flags: ignoreversion regserver 64bit; Check: Is64BitInstallMode
 ; install everything else in deploy dir, including portaudio.dll, KoordASIOControl.exe and all Qt dll deps
 Source:"deploy\x86_64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 64bit; Check: Is64BitInstallMode
 
 [Icons]
 Name: "{group}\Koord-RT"; Filename: "{app}\Koord-RT.exe"; WorkingDir: "{app}"
-Name: "{group}\KoordASIO (Built-in) Control"; Filename: "{app}\KoordASIOControl.exe"; WorkingDir: "{app}"
+Name: "{group}\KoordASIO Control"; Filename: "{app}\KoordASIOControl.exe"; WorkingDir: "{app}"
 
 [Run]
 Filename: "{app}\KoordASIOControl.exe"; Description: "Run KoordASIO Control (set up sound devices)"; Flags: postinstall nowait skipifsilent
