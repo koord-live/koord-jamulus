@@ -128,25 +128,25 @@ jobs:
           #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
           #   run_codeql:             false
 
-          ## Build disabled as XCode12 is fine as Qt6 build platform :) and gives us extra run target: 10.14 
-          # - config_name:            MacOS 10.15+ (artifacts)
-          #   target_os:              macos
-          #   building_on_os:         macos-11
-          #   base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-          #   # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
-          #   run_codeql:             false
-          #   xcode_version:          13.2.1
-
-          - config_name:            MacOS 10.14+ x64 pkg,dmg
+          # Build disabled as XCode12 is fine as Qt6 build platform :) and gives us extra run target: 10.14 
+          - config_name:            MacOS 10.15+ (artifacts)
             target_os:              macos
-            # Build platform can be newer than target platform
-            building_on_os:         macos-10.15
+            building_on_os:         macos-11
             base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
+            # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
-            # Target oldest macOS version supported by Qt6: 10.14 - so xcode 12 needed 
-            # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
-            # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
-            xcode_version:          12.1.1
+            xcode_version:          13.2.1
+
+          # - config_name:            MacOS 10.14+ x64 pkg,dmg
+          #   target_os:              macos
+          #   # Build platform can be newer than target platform
+          #   building_on_os:         macos-10.15
+          #   base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
+          #   run_codeql:             false
+          #   # Target oldest macOS version supported by Qt6: 10.14 - so xcode 12 needed 
+          #   # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
+          #   # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
+          #   xcode_version:          12.1.1
 
           - config_name:            iOS 10.13+ ipa
             target_os:              ios
