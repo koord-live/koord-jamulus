@@ -22,19 +22,19 @@ WizardImageFile=windows\koord-rt.bmp
 WizardSmallImageFile=windows\koord-rt-small.bmp
 
 [Files]
-; install everything else in deploy dir, including portaudio.dll, KoordASIOControl_builtin.exe and all Qt dll deps
+; install everything else in deploy dir, including portaudio.dll, KoordASIOControl.exe and all Qt dll deps
 Source:"deploy\x86_64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 64bit; Check: Is64BitInstallMode
 
 [Icons]
 Name: "{group}\Koord-RT"; Filename: "{app}\Koord-RT.exe"; WorkingDir: "{app}"
-Name: "{group}\KoordASIO (Built-in) Control"; Filename: "{app}\KoordASIOControl_builtin.exe"; WorkingDir: "{app}"
+Name: "{group}\KoordASIO (Built-in) Control"; Filename: "{app}\KoordASIOControl.exe"; WorkingDir: "{app}"
 
 [Run]
-Filename: "{app}\KoordASIOControl_builtin.exe"; Description: "Run KoordASIO (Built-in) Config"; Flags: postinstall nowait skipifsilent
-Filename: "{app}\Koord-RT.exe"; Description: "Launch Koord-RT"; Flags: postinstall nowait skipifsilent unchecked
+Filename: "{app}\KoordASIOControl.exe"; Description: "Run KoordASIO Control (set up sound devices)"; Flags: postinstall nowait skipifsilent
+; Filename: "{app}\Koord-RT.exe"; Description: "Launch Koord-RT"; Flags: postinstall nowait skipifsilent unchecked
 
-; install reg key to locate KoordASIOControl_builtin.exe at runtime
+; install reg key to locate KoordASIOControl.exe at runtime
 [Registry]
 Root: HKLM64; Subkey: "Software\Koord"; Flags: uninsdeletekeyifempty
-Root: HKLM64; Subkey: "Software\Koord\KoordASIO_builtin"; Flags: uninsdeletekey
-Root: HKLM64; Subkey: "Software\Koord\KoordASIO_builtin\Install"; ValueType: string; ValueName: "InstallPath"; ValueData: "{app}"
+Root: HKLM64; Subkey: "Software\Koord\KoordASIO"; Flags: uninsdeletekey
+Root: HKLM64; Subkey: "Software\Koord\KoordASIO\Install"; ValueType: string; ValueName: "InstallPath"; ValueData: "{app}"

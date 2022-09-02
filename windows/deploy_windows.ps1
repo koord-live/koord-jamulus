@@ -295,7 +295,7 @@ Function Build-App
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler",  "--no-opengl-sw", `
-        "$BuildPath\$BuildConfig\kdasioconfig\KoordASIOControl_builtin.exe")
+        "$BuildPath\$BuildConfig\kdasioconfig\KoordASIOControl.exe")
     # collect for Koord-RT.exe
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
@@ -316,14 +316,14 @@ Function Build-App
         # Also add KoordASIO build files:
             # kdasioconfig files inc qt dlls now in 
                 # D:/a/KoordASIO/KoordASIO/deploy/x86_64/
-                    # - KoordASIOControl_builtin.exe
+                    # - KoordASIOControl.exe
                     # all qt dlls etc ...
             # flexasio files in:
                 # D:\a\KoordASIO\KoordASIO\src\out\install\x64-Release\bin
                     # - KoordASIO.dll
                     # - portaudio.dll 
-    # Move KoordASIOControl_builtin.exe to deploy dir
-    Move-Item -Path "$BuildPath\$BuildConfig\kdasioconfig\KoordASIOControl_builtin.exe" -Destination "$DeployPath\$BuildArch" -Force
+    # Move KoordASIOControl.exe to deploy dir
+    Move-Item -Path "$BuildPath\$BuildConfig\kdasioconfig\KoordASIOControl.exe" -Destination "$DeployPath\$BuildArch" -Force
     # Move all KoordASIO dlls and exes to deploy dir
     Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\ASIOTest.dll" -Destination "$DeployPath\$BuildArch" -Force
     Move-Item -Path "$RootPath\KoordASIO\src\out\install\x64-Release\bin\FlexASIOTest.exe" -Destination "$DeployPath\$BuildArch" -Force
