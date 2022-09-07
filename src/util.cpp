@@ -876,6 +876,15 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
     return strAddress.simplified().replace ( " ", "" );
 }
 
+QString NetworkUtil::FixBadWebAddress ( const QString& strAddress )
+{
+    // remove any prefix of "http[s]://" from the address - may have been wrongly introduced by eg messenger app
+    // remove any "http://"
+    strAddress.simplified().replace( "http://", "" );
+    // remove any "https://"
+    return strAddress.simplified().replace ( "https://", "" );
+}
+
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
 //    QRegExp rx_gen1("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");

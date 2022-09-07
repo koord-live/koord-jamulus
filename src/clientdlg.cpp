@@ -1575,6 +1575,9 @@ void CClientDlg::OnJoinConnectClicked()
 {
     strSelectedAddress = NetworkUtil::FixAddress ( joinFieldEdit->toPlainText() );
 
+    // we ALSO have to check if we have received a prefix of eg "https://" on the address, and remove if so
+    strSelectedAddress = NetworkUtil::FixBadWebAddress ( strSelectedAddress );
+
 //    // tell the parent window that the connection shall be initiated
 //    done ( QDialog::Accepted );
     //      ---    nabbed from OnConnectDlgAccepted():

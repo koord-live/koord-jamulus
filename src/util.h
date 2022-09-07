@@ -1032,6 +1032,7 @@ public:
     static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );
+    static QString      FixBadWebAddress ( const QString& strAddress );
     static QString      FixJamAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static CHostAddress GetLocalAddress6();
