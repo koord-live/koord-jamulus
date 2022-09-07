@@ -873,17 +873,20 @@ QString NetworkUtil::GetDirectoryAddress ( const EDirectoryType eDirectoryType, 
 QString NetworkUtil::FixAddress ( const QString& strAddress )
 {
     // remove all spaces from the address string
-    return strAddress.simplified().replace ( " ", "" );
+    // also remove any prefix of "http[s]://" from the address - may have been wrongly introduced by eg messenger app
+    return strAddress.simplified().replace ( " ", "" )
+                .replace( "http://", "" )
+                .replace( "https://", "" );
 }
 
-QString NetworkUtil::FixBadWebAddress ( const QString& strAddress )
-{
-    // remove any prefix of "http[s]://" from the address - may have been wrongly introduced by eg messenger app
-    // remove any "http://"
-    strAddress.simplified().replace( "http://", "" );
-    // remove any "https://"
-    return strAddress.simplified().replace ( "https://", "" );
-}
+//QString NetworkUtil::FixBadWebAddress ( const QString& strAddress )
+//{
+//    // remove any prefix of "http[s]://" from the address - may have been wrongly introduced by eg messenger app
+//    // remove any "http://"
+//    strAddress.simplified().replace( "http://", "" );
+//    // remove any "https://"
+//    return strAddress.simplified().replace ( "https://", "" );
+//}
 
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
