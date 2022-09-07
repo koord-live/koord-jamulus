@@ -299,6 +299,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // init connection button text
     butConnect->setText ( tr ( "Join..." ) );
 
+    // don't show link info to start with
+    linkField->setVisible(false);
+
     // init new session button text
 //    butNewStart->setText ( tr ( "&New Session" ) );
     // FIXME DON'T hardcode here!
@@ -2264,6 +2267,12 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
         // change connect button text to "disconnect"
         butConnect->setText ( tr ( "&Disconnect" ) );
+        QString qss = QString("background-color: red");
+        butConnect->setStyleSheet(qss);
+        linkField->setVisible(true);
+        linkField->setText(strSelectedAddress);
+        butNewStart->setVisible(false);
+        defaultButtonWidget->setMaximumHeight(30);
 
         // set connection status in status bar
         if (strMixerBoardLabel.isEmpty())
@@ -2367,6 +2376,11 @@ void CClientDlg::Disconnect()
     }
 
     // change connect button text to "connect"
+    defaultButtonWidget->setMaximumHeight(80);
+    butConnect->setStyleSheet(QString("background-color: rgb(251, 143, 0);"));
+    butConnect->setToolTip("Click to Join a Session that's already started");
+    linkField->setVisible(false);
+    butNewStart->setVisible(true);
     butConnect->setText ( tr ( "Join..." ) );
 
     // reset session status bar

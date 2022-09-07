@@ -187,6 +187,9 @@
           <bold>false</bold>
          </font>
         </property>
+        <property name="toolTip">
+         <string>Displays the status of Session Connection</string>
+        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -256,6 +259,9 @@
           <bold>false</bold>
          </font>
         </property>
+        <property name="toolTip">
+         <string>Displays the Recording status of the session (RED = ON)</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(86, 86, 86);</string>
         </property>
@@ -319,12 +325,18 @@
        <bool>false</bool>
       </property>
       <widget class="QWidget" name="sessionTab">
+       <property name="toolTip">
+        <string/>
+       </property>
        <attribute name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/png/main/res/MainSession.png</normaloff>:/png/main/res/MainSession.png</iconset>
        </attribute>
        <attribute name="title">
         <string/>
+       </attribute>
+       <attribute name="toolTip">
+        <string>Session Tab - Main Controls</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <property name="leftMargin">
@@ -447,6 +459,9 @@
                            <bold>false</bold>
                            <underline>true</underline>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Monitor and control your Input level (don't go into the red!)</string>
                          </property>
                          <property name="styleSheet">
                           <string notr="true"/>
@@ -635,6 +650,9 @@ QCheckBox::indicator {
                                <bold>false</bold>
                               </font>
                              </property>
+                             <property name="toolTip">
+                              <string>Mute your sound (nobody else will hear you!)</string>
+                             </property>
                              <property name="styleSheet">
                               <string notr="true"/>
                              </property>
@@ -692,6 +710,9 @@ QCheckBox::indicator {
                                <bold>false</bold>
                               </font>
                              </property>
+                             <property name="toolTip">
+                              <string>Pan your stereo input from Left to Right in mix</string>
+                             </property>
                              <property name="styleSheet">
                               <string notr="true"/>
                              </property>
@@ -743,6 +764,9 @@ QCheckBox::indicator {
                                <bold>false</bold>
                               </font>
                              </property>
+                             <property name="toolTip">
+                              <string>Boost your Input if too quiet (careful!)</string>
+                             </property>
                              <property name="styleSheet">
                               <string notr="true"/>
                              </property>
@@ -776,6 +800,9 @@ QCheckBox::indicator {
                          <underline>true</underline>
                         </font>
                        </property>
+                       <property name="toolTip">
+                        <string>Monitor the health of your network connection</string>
+                       </property>
                        <property name="styleSheet">
                         <string notr="true"/>
                        </property>
@@ -800,6 +827,9 @@ QCheckBox::indicator {
                            <bold>false</bold>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Delay shows you the combined round-trip latency (in ms)</string>
+                         </property>
                          <property name="styleSheet">
                           <string notr="true"/>
                          </property>
@@ -818,6 +848,9 @@ QCheckBox::indicator {
                            <family>Rubik</family>
                            <bold>false</bold>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Jitter monitor shows you the variability of your net connection</string>
                          </property>
                          <property name="styleSheet">
                           <string notr="true"/>
@@ -909,6 +942,9 @@ QCheckBox::indicator {
                            <family>Rubik</family>
                            <bold>false</bold>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Ping value shows you the latency (in ms) to Region</string>
                          </property>
                          <property name="styleSheet">
                           <string notr="true"/>
@@ -1115,12 +1151,28 @@ QCheckBox::indicator {
                      <number>7</number>
                     </property>
                     <item>
+                     <spacer name="verticalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
                      <widget class="QLabel" name="label_3">
                       <property name="font">
                        <font>
                         <family>Rubik</family>
                         <bold>false</bold>
                        </font>
+                      </property>
+                      <property name="toolTip">
+                       <string>Paste the Session link you created, or received from a band member</string>
                       </property>
                       <property name="text">
                        <string>PASTE THE SESSION LINK HERE:</string>
@@ -1156,7 +1208,7 @@ QCheckBox::indicator {
                          <string notr="true">QLineEdit {
     background-color: rgb(0, 0, 0);
     border: 1px solid gray;
-    border-radius: 10px;
+    border-radius: 5px;
 }</string>
                         </property>
                         <property name="placeholderText">
@@ -1188,7 +1240,7 @@ QCheckBox::indicator {
                         <property name="maximumSize">
                          <size>
                           <width>100</width>
-                          <height>16777215</height>
+                          <height>30</height>
                          </size>
                         </property>
                         <property name="font">
@@ -1198,10 +1250,8 @@ QCheckBox::indicator {
                          </font>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">QPushButton {
-    background-color: rgb(251, 143, 0);
-    padding: 6px;
-}</string>
+                         <string notr="true">background-color: rgb(251, 143, 0);
+</string>
                         </property>
                         <property name="text">
                          <string>Cancel</string>
@@ -1235,10 +1285,7 @@ QCheckBox::indicator {
                          </font>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">QPushButton {
-    background-color: rgb(0, 170, 0);
-    padding: 6px;
-}</string>
+                         <string notr="true">background-color: rgb(0, 170, 0);</string>
                         </property>
                         <property name="text">
                          <string>Connect!</string>
@@ -1246,6 +1293,19 @@ QCheckBox::indicator {
                        </widget>
                       </item>
                      </layout>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
                   </item>
@@ -1276,18 +1336,24 @@ QCheckBox::indicator {
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
                 <property name="topMargin">
-                 <number>3</number>
+                 <number>0</number>
                 </property>
                 <property name="bottomMargin">
-                 <number>3</number>
+                 <number>0</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>0</number>
                 </property>
                 <item row="0" column="0">
                  <layout class="QHBoxLayout" name="defaultLayout">
                   <property name="topMargin">
-                   <number>6</number>
+                   <number>3</number>
                   </property>
                   <property name="rightMargin">
                    <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>3</number>
                   </property>
                   <item>
                    <widget class="QPushButton" name="butConnect">
@@ -1318,14 +1384,15 @@ QCheckBox::indicator {
                       <bold>true</bold>
                      </font>
                     </property>
+                    <property name="toolTip">
+                     <string>Click to Join a Session that's already started</string>
+                    </property>
                     <property name="autoFillBackground">
                      <bool>false</bool>
                     </property>
                     <property name="styleSheet">
-                     <string notr="true">QPushButton {
-    background-color: rgb(251, 143, 0);
-    padding: 6px;
-}</string>
+                     <string notr="true">background-color: rgb(251, 143, 0);
+</string>
                     </property>
                     <property name="text">
                      <string>Join...</string>
@@ -1337,6 +1404,9 @@ QCheckBox::indicator {
                      <bool>false</bool>
                     </property>
                    </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="linkField"/>
                   </item>
                   <item>
                    <widget class="QPushButton" name="butNewStart">
@@ -1367,11 +1437,11 @@ QCheckBox::indicator {
                       <bold>true</bold>
                      </font>
                     </property>
+                    <property name="toolTip">
+                     <string>Click to start a new Session with Koord.Live</string>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">QPushButton {
-    background-color: rgb(251, 143, 0);
-    padding: 6px;
-}</string>
+                     <string notr="true">background-color: rgb(251, 143, 0);</string>
                     </property>
                     <property name="text">
                      <string>Create!</string>
@@ -2252,6 +2322,9 @@ QCheckBox::indicator {
        </layout>
       </widget>
       <widget class="QWidget" name="videoTab">
+       <property name="toolTip">
+        <string>Video</string>
+       </property>
        <attribute name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/png/main/res/Video04.png</normaloff>:/png/main/res/Video04.png</iconset>
@@ -2259,18 +2332,21 @@ QCheckBox::indicator {
        <attribute name="title">
         <string/>
        </attribute>
+       <attribute name="toolTip">
+        <string>Video Tab - see your band members!</string>
+       </attribute>
        <layout class="QGridLayout" name="gridLayout_8">
         <property name="leftMargin">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="topMargin">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="rightMargin">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="bottomMargin">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="spacing">
          <number>0</number>
@@ -2280,6 +2356,9 @@ QCheckBox::indicator {
       <widget class="QWidget" name="chatTab">
        <property name="toolTip">
         <string/>
+       </property>
+       <property name="statusTip">
+        <string>Chat Status</string>
        </property>
        <property name="autoFillBackground">
         <bool>false</bool>
@@ -2293,6 +2372,9 @@ QCheckBox::indicator {
        </attribute>
        <attribute name="title">
         <string/>
+       </attribute>
+       <attribute name="toolTip">
+        <string>Chat via text with band members</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <property name="leftMargin">
@@ -2319,6 +2401,9 @@ QCheckBox::indicator {
            <widget class="QTextBrowser" name="txvChatWindow">
             <property name="acceptDrops">
              <bool>false</bool>
+            </property>
+            <property name="autoFillBackground">
+             <bool>true</bool>
             </property>
             <property name="textInteractionFlags">
              <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -2393,12 +2478,18 @@ QCheckBox::indicator {
          <bold>false</bold>
         </font>
        </property>
+       <property name="toolTip">
+        <string/>
+       </property>
        <attribute name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/png/main/res/Settings.png</normaloff>:/png/main/res/Settings.png</iconset>
        </attribute>
        <attribute name="title">
         <string/>
+       </attribute>
+       <attribute name="toolTip">
+        <string>Settings for the Koord app</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <property name="leftMargin">
@@ -3404,6 +3495,9 @@ QCheckBox::indicator {
        </layout>
       </widget>
       <widget class="QWidget" name="helpTab">
+       <property name="toolTip">
+        <string/>
+       </property>
        <property name="autoFillBackground">
         <bool>false</bool>
        </property>
@@ -3413,6 +3507,9 @@ QCheckBox::indicator {
        </attribute>
        <attribute name="title">
         <string/>
+       </attribute>
+       <attribute name="toolTip">
+        <string>Help and Updates</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <property name="leftMargin">
@@ -3443,7 +3540,7 @@ QCheckBox::indicator {
             <property name="styleSheet">
              <string notr="true">QTabWidget::pane { 
     border: 1px solid gray;
-    border-radius: 12px;
+    border-radius: 4px;
 	border-color: rgb(255, 255, 255);;
 };
 </string>
@@ -3452,62 +3549,50 @@ QCheckBox::indicator {
              <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
-            <widget class="QWidget" name="tab_13">
+            <widget class="QWidget" name="tabHelp">
              <attribute name="title">
               <string>Help</string>
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_26">
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
               <item>
                <widget class="QTextBrowser" name="txvHelp">
                 <property name="html">
                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;title&gt;koordhelp&lt;/title&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt; font-weight:700;&quot;&gt;Welcome to Koord!&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;Koord makes it easy for you to play with other musicians online, with the best possible audio quality.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;See more at &lt;/span&gt;&lt;a href=&quot;https://koord.live&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt; text-decoration: underline; color:#007af4;&quot;&gt;the Koord website.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;How to get started:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Set your Session user display name in Settings tab (this sets your display name to other band members)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Select the Session Tab (img) and click the Create button&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- browser: sign up or login to koord.live and create a Session near you, and copy the Session link&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- back in the Koord app Session tab, click Join and paste the Session link&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- you're connected and ready to play!&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Session Tab&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;  - Input&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	Control and monitor input &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;  - Net Check&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	Displays the health of your network connection and the round-trip latency&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;  - Session Control Area&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	Join, Create and Disconnect Sessions from here&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;  - Session Mixer &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;	Control and monitor your personal mix of all band members in the Session&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt; font-weight:700;&quot;&gt;Video Tab&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;When you have joined a Session, you will see video from all your band members here.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;  - Disable/Enable video&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;  - toggle view mode&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;  - set Performance/Quality of video&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt; font-weight:700;&quot;&gt;Session Chat Tab&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;When you have joined a Session, you chat via text with your band members here.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt; font-weight:700;&quot;&gt;Settings Tab&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;  - Personal Settings&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;	Username&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;	Mixer preferences&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;  - Audio Settings&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;	Set audio device (soundcard)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;	Set channels and quality options&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;  - Network Settings (advanced)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;	Buffer controls for specialist use cases&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot; bgcolor=&quot;#303638&quot;&gt;
+&lt;h1 style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:xx-large; font-weight:700; color:#ffffff;&quot;&gt;Welcome to Koord!&lt;/span&gt;&lt;/h1&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;Koord makes it easy for you to play with other musicians online, with the best possible audio quality.&lt;br /&gt;See more at the Koord website.&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:x-large; font-weight:700; color:#ffffff;&quot;&gt;How to get started:&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;1 - Set your Session user display name in Settings tab (this sets your display name to other band members)&lt;br /&gt;2 - Select the Session Tab (img) and click the &amp;quot;Create!&amp;quot; button. A webpage will open ...&lt;br /&gt;3 - In webpage: sign up / login to koord.live, create a Session near you, and copy the Session link&lt;br /&gt;4 - Back in the Koord app Session tab, click &amp;quot;Join...&amp;quot; and paste the Session link, then click Connect!&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;&lt;br /&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;It's time to play!&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:x-large; font-weight:700; color:#ffffff;&quot;&gt;Important tips:&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;1 - Best to use Wifi6, 5G or wired connection to your router. Otherwise latency will suffer!&lt;br /&gt;2 - Use headphones to listen to the Session mix.&lt;/span&gt;&lt;span style=&quot; font-family:'Rubik'; font-weight:700; color:#ffffff;&quot;&gt; &lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:x-large; font-weight:700; color:#ffffff;&quot;&gt;Using the Koord app:&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;Click on the Tab icons at the left side of the screen to navigate to the different parts of the Koord app.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;&lt;br /&gt;The descriptions of each tab are shown below:&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Session Tab&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;  - Input&lt;br /&gt;    Control and monitor input&lt;br /&gt;  - Net Check&lt;br /&gt;    Displays the health of your network connection and the round-trip latency&lt;br /&gt;  - Session Control Area&lt;br /&gt;    Join, Create and Disconnect Sessions from here&lt;br /&gt;  - Session Mixer&lt;br /&gt;    Control and monitor your personal mix of all band members in the Session&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Video Tab&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;When you have joined a Session, you will see video from all your band members here.&lt;br /&gt;  - Disable/Enable video&lt;br /&gt;  - toggle view mode&lt;br /&gt;  - set Performance/Quality of video&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Session Chat Tab&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;When you have joined a Session, you chat via text with your band members here.&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Settings Tab&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;  - Personal Settings&lt;br /&gt;    Username&lt;br /&gt;    Mixer preferences&lt;br /&gt;  - Audio Settings&lt;br /&gt;    Set audio device (soundcard)&lt;br /&gt;    Set channels and quality options&lt;br /&gt;  - Network Settings (advanced)&lt;br /&gt;    Buffer controls for specialist use cases&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="textInteractionFlags">
                  <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
@@ -3519,119 +3604,117 @@ hr { height: 1px; border-width: 0; }
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="tab_14">
+            <widget class="QWidget" name="tabAbout">
              <attribute name="title">
               <string>About</string>
              </attribute>
-             <layout class="QHBoxLayout" name="horizontalLayout_27">
-              <item>
-               <widget class="QLabel" name="lblVersion_4">
-                <property name="font">
-                 <font>
-                  <pointsize>8</pointsize>
-                 </font>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <property name="horizontalSpacing">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout_27">
+                <property name="spacing">
+                 <number>7</number>
                 </property>
-                <property name="text">
-                 <string>VERSION 1.9.16</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-                <property name="margin">
-                 <number>2</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="pxlLogo_4">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>22</width>
-                  <height>22</height>
-                 </size>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="lineWidth">
-                 <number>2</number>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="pixmap">
-                 <pixmap resource="resources.qrc">:/png/main/res/fronticon.png</pixmap>
-                </property>
-                <property name="scaledContents">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QTextBrowser" name="txvAbout">
-                <property name="html">
-                 <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <item>
+                   <widget class="QLabel" name="pxlLogo_4">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>22</width>
+                      <height>22</height>
+                     </size>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::StyledPanel</enum>
+                    </property>
+                    <property name="lineWidth">
+                     <number>2</number>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="pixmap">
+                     <pixmap resource="resources.qrc">:/png/main/res/fronticon.png</pixmap>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblVersion_4">
+                    <property name="font">
+                     <font>
+                      <family>Rubik</family>
+                      <pointsize>9</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>VERSION 1.9.16</string>
+                    </property>
+                    <property name="wordWrap">
+                     <bool>false</bool>
+                    </property>
+                    <property name="margin">
+                     <number>2</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButton">
+                    <property name="text">
+                     <string>Check For Updates</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QTextBrowser" name="txvAbout">
+                  <property name="html">
+                   <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:12pt;&quot;&gt;Koord version 1.9.16&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;Release details: ...&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:700;&quot;&gt;Koord is 100% free and open-source software, published under the GNU Public Licence v2 (link), and builds on the following upstream open-source projects and communities:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;- Jamulus&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;- Qt&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;- FlexASIO (for Windows version)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;- Opus&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;- Oboe (for Android version)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="textInteractionFlags">
-                 <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
-                </property>
-                <property name="openExternalLinks">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="tab">
-             <attribute name="title">
-              <string>License</string>
-             </attribute>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <item>
-               <widget class="QTextBrowser" name="txvLicense">
-                <property name="html">
-                 <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPL LICENSE &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Other notices&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-               </widget>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot; bgcolor=&quot;#303638&quot;&gt;
+&lt;h1 style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:xx-large; font-weight:700; color:#ffffff;&quot;&gt;About&lt;/span&gt;&lt;/h1&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;Koord is 100% free and open-source software, published under the GNU Public Licence.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;&lt;br /&gt;It builds on these upstream open-source projects:&lt;br /&gt;&lt;br /&gt;- Jamulus&lt;br /&gt;- Opus&lt;br /&gt;- Qt&lt;br /&gt;- Jitsi&lt;br /&gt;- FlexASIO (for Windows version)&lt;br /&gt;- Oboe (for Android version)&lt;br /&gt;&lt;br /&gt;Koord.Live is dedicated to bringing musicians around the world together, with the tools to connect and create easily.&lt;br /&gt;&lt;br /&gt;https://koord.live&lt;br /&gt;(c) Koord, Inc&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="textInteractionFlags">
+                   <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+                  </property>
+                  <property name="openExternalLinks">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>

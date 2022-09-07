@@ -6,7 +6,7 @@ import QtQuick.Controls 2.15
 Rectangle {
 
     id: grayrect
-    color: "gray"
+    color: "#303638"
     anchors.fill: parent
 
     BusyIndicator{
