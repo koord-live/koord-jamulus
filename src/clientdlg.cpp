@@ -290,6 +290,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // reset mixer board
     MainMixerBoard->HideAll();
 
+    // don't show mixerboard when no session
+    MainMixerBoard->setMaximumHeight(0);
+
     // init status label
     OnTimerStatus();
 
@@ -1573,10 +1576,10 @@ void CClientDlg::OnJoinCancelClicked()
 
 void CClientDlg::OnJoinConnectClicked()
 {
-    strSelectedAddress = NetworkUtil::FixAddress ( joinFieldEdit->toPlainText() );
+    strSelectedAddress = NetworkUtil::FixAddress ( joinFieldEdit->text() );
 
-    // we ALSO have to check if we have received a prefix of eg "https://" on the address, and remove if so
-    strSelectedAddress = NetworkUtil::FixBadWebAddress ( strSelectedAddress );
+    // update joinFieldEdit with corrected address
+    joinFieldEdit->setText(strSelectedAddress);
 
 //    // tell the parent window that the connection shall be initiated
 //    done ( QDialog::Accepted );
@@ -2273,6 +2276,8 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
             sessionStatusLabel->setText("CONNECTING...");
             sessionStatusLabel->setStyleSheet ( "QLabel { color: orange; font: bold; }" );
         }
+        // session is live, show mixerboard
+        MainMixerBoard->setMaximumHeight(2000);
 //        MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
         // start timer for level meter bar and ping time measurement
@@ -2416,6 +2421,7 @@ OnTimerStatus();
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+    MainMixerBoard->setMaximumHeight(0);
 }
 
 void CClientDlg::replyFinished(QNetworkReply *rep)
@@ -2486,7 +2492,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         padding:       2px;"
             "                         margin:        2px, 2px, 2px, 2px; }"
             "QLabel {                 color:          rgb(220, 220, 220);"
-            "                         font:           bold; }"
+            "                         font:           Rubik; }"
             "QRadioButton {           color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
             "QScrollArea {            background:     transparent; }"
