@@ -2763,7 +2763,7 @@ void CClientDlg::UpdateSoundDeviceChannelSelectionFrame()
     const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
     const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
 
-    if ( ( iNumInChannels <= 2 ) && ( iNumOutChannels <= 2 ) )
+    if ( ( iNumInChannels < MIN_IN_CHANNELS ) || ( iNumOutChannels < MIN_OUT_CHANNELS ) )
     {
         // as defined, make settings invisible
         FrameSoundcardChannelSelection->setVisible ( false );

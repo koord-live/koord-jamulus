@@ -168,7 +168,7 @@ QString CSound::CheckDeviceCapabilities()
     // check the number of available channels
     ASIOGetChannels ( &lNumInChan, &lNumOutChan );
 
-    if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) || ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
+    if ( ( lNumInChan < MIN_IN_CHANNELS  ) || ( lNumOutChan < MIN_OUT_CHANNELS ) )
     {
         // return error string
         return tr ( "The audio device does not support the "
@@ -585,9 +585,9 @@ void CSound::ResetChannelMapping()
     // init selected channel numbers with defaults: use first available
     // channels for input and output
     vSelectedInputChannels[0]  = 0;
-    vSelectedInputChannels[1]  = 1;
+    vSelectedInputChannels[1]  = GetNumInputChannels() > 1 ? 1 : 0;
     vSelectedOutputChannels[0] = 0;
-    vSelectedOutputChannels[1] = 1;
+    vSelectedOutputChannels[1] = GetNumOutputChannels() > 1 ? 1 : 0;
 }
 
 // ASIO callbacks -------------------------------------------------------------

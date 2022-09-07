@@ -190,6 +190,10 @@ LED bar:      lbr
 // of channels by the audio device)
 #define MAX_NUM_IN_OUT_CHANNELS 64
 
+// fixes Windows (at least) failing startup with mono mic - https://github.com/jamulussoftware/jamulus/issues/2344
+#define MIN_IN_CHANNELS 1
+#define MIN_OUT_CHANNELS 2
+
 // maximum number of elemts in the server address combo box
 #define MAX_NUM_SERVER_ADDR_ITEMS 12
 
