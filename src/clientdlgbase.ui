@@ -307,7 +307,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <property name="iconSize">
        <size>
@@ -1111,13 +1111,13 @@ QCheckBox::indicator {
               <number>3</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>3</number>
              </property>
              <property name="rightMargin">
               <number>3</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>3</number>
              </property>
              <item>
               <widget class="QWidget" name="sessionJoinWidget" native="true">
@@ -1317,7 +1317,7 @@ QCheckBox::indicator {
              <item>
               <widget class="QWidget" name="defaultButtonWidget" native="true">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -1325,7 +1325,7 @@ QCheckBox::indicator {
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>20</height>
+                 <height>0</height>
                 </size>
                </property>
                <property name="maximumSize">
@@ -1341,19 +1341,25 @@ QCheckBox::indicator {
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <property name="horizontalSpacing">
+                 <number>7</number>
+                </property>
                 <property name="verticalSpacing">
                  <number>0</number>
                 </property>
                 <item row="0" column="0">
                  <layout class="QHBoxLayout" name="defaultLayout">
+                  <property name="spacing">
+                   <number>9</number>
+                  </property>
                   <property name="topMargin">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <property name="rightMargin">
                    <number>0</number>
                   </property>
                   <property name="bottomMargin">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <item>
                    <widget class="QPushButton" name="butConnect">
@@ -1369,7 +1375,7 @@ QCheckBox::indicator {
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
-                      <height>30</height>
+                      <height>25</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -1406,7 +1412,41 @@ QCheckBox::indicator {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="linkField"/>
+                   <widget class="QComboBox" name="inviteComboBox">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>25</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>140</width>
+                      <height>55</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Rubik</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string>Invite your band members to join the Session</string>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">background-color: rgb(0, 170, 0);</string>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>25</width>
+                      <height>25</height>
+                     </size>
+                    </property>
+                    <property name="placeholderText">
+                     <string/>
+                    </property>
+                   </widget>
                   </item>
                   <item>
                    <widget class="QPushButton" name="butNewStart">
@@ -1422,7 +1462,7 @@ QCheckBox::indicator {
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
-                      <height>30</height>
+                      <height>25</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -3549,7 +3589,7 @@ QCheckBox::indicator {
              <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tabHelp">
              <attribute name="title">
@@ -3631,6 +3671,18 @@ hr { height: 1px; border-width: 0; }
                 </property>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <property name="leftMargin">
+                   <number>7</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>3</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>7</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>3</number>
+                  </property>
                   <item>
                    <widget class="QLabel" name="pxlLogo_4">
                     <property name="sizePolicy">
@@ -3687,8 +3739,30 @@ hr { height: 1px; border-width: 0; }
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton">
+                    <property name="styleSheet">
+                     <string notr="true">background-color: rgb(251, 143, 0);
+</string>
+                    </property>
                     <property name="text">
                      <string>Check For Updates</string>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="resources.qrc">
+                      <normaloff>:/png/LEDs/res/CLEDRedSmall.png</normaloff>:/png/LEDs/res/CLEDRedSmall.png</iconset>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButton_2">
+                    <property name="styleSheet">
+                     <string notr="true">background-color: rgb(0, 170, 0);</string>
+                    </property>
+                    <property name="text">
+                     <string>Download Update</string>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="resources.qrc">
+                      <normaloff>:/png/LEDs/res/HLEDGreenSmall.png</normaloff>:/png/LEDs/res/HLEDGreenSmall.png</iconset>
                     </property>
                    </widget>
                   </item>

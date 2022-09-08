@@ -26,7 +26,8 @@ CONFIG += qt \
 
 QT += network \
     xml \
-    concurrent
+    concurrent \
+    svg
 
 contains(CONFIG, "nosound") {
     CONFIG -= "nosound"

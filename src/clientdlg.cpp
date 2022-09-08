@@ -293,6 +293,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // don't show mixerboard when no session
     MainMixerBoard->setMaximumHeight(0);
 
+    // don't show Invite combobox
+    inviteComboBox->setVisible(false);
+
     // init status label
     OnTimerStatus();
 
@@ -300,7 +303,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     butConnect->setText ( tr ( "Join..." ) );
 
     // don't show link info to start with
-    linkField->setVisible(false);
+//    linkField->setVisible(false);
 
     // init new session button text
 //    butNewStart->setText ( tr ( "&New Session" ) );
@@ -1096,6 +1099,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
     QObject::connect ( butNewStart, &QPushButton::clicked, this, &CClientDlg::OnNewStartClicked );
 
+    QObject::connect ( inviteComboBox, &QComboBox::activated, this, &CClientDlg::OnInviteBoxActivated );
+//    QObject::connect ( butNewStart, &QPushButton::clicked, this, &CClientDlg::OnNewStartClicked );
+
+
     // session chat stuff
 
     // Connections -------------------------------------------------------------
@@ -1673,6 +1680,36 @@ void CClientDlg::OnConnectDisconBut()
     {
 //        ShowBasicConnectionSetupDialog();
         ShowJoinWidget();
+    }
+}
+
+void CClientDlg::OnInviteBoxActivated()
+{
+    QString text = inviteComboBox->currentText();
+
+    QString subject = tr("Koord.Live - Session Invite");
+    QString body = tr("You have an invite to play on Koord.Live.\n\n") +
+                    tr("Copy (don't Click!) the Session Link and paste in the Koord app.\n") +
+                    tr("Session Link: %1 \n\n").arg(strSelectedAddress) +
+                    tr("If you don't have the free Koord app installed yet,\n") +
+                    tr("go to https://koord.live/downloads and follow the links.");
+
+    if ( text.contains( "Copy Session Link" ) )
+    {
+        inviteComboBox->setCurrentIndex(0);
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        clipboard->setText(strSelectedAddress);
+    }
+    else if ( text.contains( "Share via Email" ) )
+    {
+        inviteComboBox->setCurrentIndex(0);
+        QDesktopServices::openUrl(QUrl("mailto:?subject=" + subject + "&body=" + body, QUrl::TolerantMode));
+    }
+    else if ( text.contains( "Share via Whatsapp" ) )
+    {
+//        qInfo() << "Share via Whatsapp sleecte";
+        inviteComboBox->setCurrentIndex(0);
+        QDesktopServices::openUrl(QUrl("https://api.whatsapp.com/send?text=" + body, QUrl::TolerantMode));
     }
 }
 
@@ -2267,10 +2304,20 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
         // change connect button text to "disconnect"
         butConnect->setText ( tr ( "&Disconnect" ) );
+        butConnect->setToolTip( tr("Click to leave the Session"));
         QString qss = QString("background-color: red");
         butConnect->setStyleSheet(qss);
-        linkField->setVisible(true);
-        linkField->setText(strSelectedAddress);
+        inviteComboBox->setVisible(true);
+        QListView *view = new QListView(inviteComboBox);
+        view->setStyleSheet("QListView::item{height: 50px}");
+        inviteComboBox->setView(view);
+        inviteComboBox->addItem("Invite ...");
+        inviteComboBox->addItem(QIcon(":/svg/main/res/copy-link.svg"), "Copy Session Link");
+        inviteComboBox->addItem(QIcon(":/svg/main/res/mail-to.svg"), "Share via Email");
+        inviteComboBox->addItem(QIcon(":/svg/main/res/whatsapp.svg"), "Share via Whatsapp");
+
+//        linkField->setVisible(true);
+//        linkField->setText(strSelectedAddress);
         butNewStart->setVisible(false);
         defaultButtonWidget->setMaximumHeight(30);
 
@@ -2379,9 +2426,14 @@ void CClientDlg::Disconnect()
     defaultButtonWidget->setMaximumHeight(80);
     butConnect->setStyleSheet(QString("background-color: rgb(251, 143, 0);"));
     butConnect->setToolTip("Click to Join a Session that's already started");
-    linkField->setVisible(false);
+//    linkField->setVisible(false);
     butNewStart->setVisible(true);
+    inviteComboBox->setVisible(false);
+    inviteComboBox->clear();
     butConnect->setText ( tr ( "Join..." ) );
+
+    // reset Rec label (if server ends session)
+    recLabel->setStyleSheet ( "QLabel { color: rgb(86, 86, 86); font: normal; }" );
 
     // reset session status bar
     sessionStatusLabel->setText("NO SESSION");

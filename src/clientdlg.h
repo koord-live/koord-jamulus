@@ -182,6 +182,7 @@ protected:
 
 public slots:
     void OnConnectDisconBut();
+    void OnInviteBoxActivated();
     void OnNewStartClicked();
     void OnTimerSigMet();
     void OnTimerBuffersLED();

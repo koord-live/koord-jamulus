@@ -875,6 +875,7 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
     // remove all spaces from the address string
     // also remove any prefix of "http[s]://" from the address - may have been wrongly introduced by eg messenger app
     return strAddress.simplified().replace ( " ", "" )
+                .replace ( "/", "" )
                 .replace( "http://", "" )
                 .replace( "https://", "" );
 }

@@ -66,4 +66,10 @@
         <file>nosessionview.qml</file>
         <file>androidwebview.qml</file>
     </qresource>
+    <qresource prefix="/svg/main">
+        <file>res/share-via.svg</file>
+        <file>res/copy-link.svg</file>
+        <file>res/whatsapp.svg</file>
+        <file>res/mail-to.svg</file>
+    </qresource>
 </RCC>
