@@ -307,7 +307,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -3589,7 +3589,7 @@ QCheckBox::indicator {
              <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tabHelp">
              <attribute name="title">
@@ -3738,7 +3738,13 @@ hr { height: 1px; border-width: 0; }
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton">
+                   <widget class="QPushButton" name="checkUpdateButton">
+                    <property name="font">
+                     <font>
+                      <family>Rubik</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
                     <property name="styleSheet">
                      <string notr="true">background-color: rgb(251, 143, 0);
 </string>
@@ -3748,12 +3754,18 @@ hr { height: 1px; border-width: 0; }
                     </property>
                     <property name="icon">
                      <iconset resource="resources.qrc">
-                      <normaloff>:/png/LEDs/res/CLEDRedSmall.png</normaloff>:/png/LEDs/res/CLEDRedSmall.png</iconset>
+                      <normaloff>:/svg/main/res/update.svg</normaloff>:/svg/main/res/update.svg</iconset>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton_2">
+                   <widget class="QPushButton" name="downloadLinkButton">
+                    <property name="font">
+                     <font>
+                      <family>Rubik</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
                     <property name="styleSheet">
                      <string notr="true">background-color: rgb(0, 170, 0);</string>
                     </property>
@@ -3762,9 +3774,22 @@ hr { height: 1px; border-width: 0; }
                     </property>
                     <property name="icon">
                      <iconset resource="resources.qrc">
-                      <normaloff>:/png/LEDs/res/HLEDGreenSmall.png</normaloff>:/png/LEDs/res/HLEDGreenSmall.png</iconset>
+                      <normaloff>:/svg/main/res/download.svg</normaloff>:/svg/main/res/download.svg</iconset>
                     </property>
                    </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_4">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
                   </item>
                  </layout>
                 </item>

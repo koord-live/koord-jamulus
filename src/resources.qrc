@@ -71,5 +71,7 @@
         <file>res/copy-link.svg</file>
         <file>res/whatsapp.svg</file>
         <file>res/mail-to.svg</file>
+        <file>res/download.svg</file>
+        <file>res/update.svg</file>
     </qresource>
 </RCC>

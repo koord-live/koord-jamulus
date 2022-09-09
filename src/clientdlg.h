@@ -302,6 +302,10 @@ public slots:
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 
+    // updates
+    void OnCheckForUpdate();
+    void OnDownloadUpdateClicked();
+
     // session chat stuff ========================
     void OnSendText();
     void OnLocalInputTextTextChanged ( const QString& strNewText );

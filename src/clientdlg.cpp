@@ -296,6 +296,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // don't show Invite combobox
     inviteComboBox->setVisible(false);
 
+    // don't show downloadUpdate button
+    downloadLinkButton->setVisible(false);
+
     // init status label
     OnTimerStatus();
 
@@ -1098,9 +1101,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
     QObject::connect ( butNewStart, &QPushButton::clicked, this, &CClientDlg::OnNewStartClicked );
-
+    QObject::connect ( downloadLinkButton, &QPushButton::clicked, this, &CClientDlg::OnDownloadUpdateClicked );
     QObject::connect ( inviteComboBox, &QComboBox::activated, this, &CClientDlg::OnInviteBoxActivated );
-//    QObject::connect ( butNewStart, &QPushButton::clicked, this, &CClientDlg::OnNewStartClicked );
+    QObject::connect ( checkUpdateButton, &QPushButton::clicked, this, &CClientDlg::OnCheckForUpdate );
 
 
     // session chat stuff
@@ -1719,6 +1722,12 @@ void CClientDlg::OnNewStartClicked()
     QDesktopServices::openUrl(QUrl("https://koord.live", QUrl::TolerantMode));
 }
 
+void CClientDlg::OnDownloadUpdateClicked()
+{
+    // just open website for now
+    QDesktopServices::openUrl(QUrl("https://koord.live/downloads", QUrl::TolerantMode));
+}
+
 void CClientDlg::OnClearAllStoredSoloMuteSettings()
 {
     // if we are in an active connection, we first have to store all fader settings in
@@ -2315,9 +2324,6 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         inviteComboBox->addItem(QIcon(":/svg/main/res/copy-link.svg"), "Copy Session Link");
         inviteComboBox->addItem(QIcon(":/svg/main/res/mail-to.svg"), "Share via Email");
         inviteComboBox->addItem(QIcon(":/svg/main/res/whatsapp.svg"), "Share via Whatsapp");
-
-//        linkField->setVisible(true);
-//        linkField->setText(strSelectedAddress);
         butNewStart->setVisible(false);
         defaultButtonWidget->setMaximumHeight(30);
 
@@ -2366,11 +2372,11 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
             hostname = reg_match.captured(1);
             port = reg_match.captured(3);
         }
-        qInfo() << ">>> hostname = " << hostname;
-        qInfo() << ">>> port = " << port;
+//        qInfo() << ">>> hostname = " << hostname;
+//        qInfo() << ">>> port = " << port;
 
         // create request body
-        //        const QByteArray vid_req = "{'audio_port': '23455', 'session_dns': 'lively.kv.koord.live'}";
+        // const QByteArray vid_req = "{'audio_port': '23455', 'session_dns': 'lively.kv.koord.live'}";
         QJsonObject obj;
         obj["audio_port"] = port;
         obj["session_dns"] = hostname;
@@ -2386,8 +2392,6 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 QString err = reply->errorString();
                 QString contents = QString::fromUtf8(reply->readAll());
 //                qInfo() << ">>> CONNECT: " << reply->error();
-//                qInfo() << ">>> CONNECT - err: " << err;
-//                qInfo() << ">>> CONNECT - contents: " << contents;
 
                 // if reply - no error
                 // parse the JSON response
@@ -2495,6 +2499,69 @@ void CClientDlg::replyFinished(QNetworkReply *rep)
     QByteArray bts = rep->readAll();
     QString str(bts);
     QMessageBox::information(this,"sal",str,"ok");
+}
+
+void CClientDlg::OnCheckForUpdate()
+{
+    // read from Github API to get latest release ie tag rX_X_X
+    QUrl url("https://api.github.com/repos/koord-live/koord-realtime/releases");
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // send request and assign reply pointer
+    QNetworkReply *reply = qNam->get(request);
+
+    // connect reply pointer with callback for finished signal
+    QObject::connect(reply, &QNetworkReply::finished, this, [=]()
+        {
+            QString err = reply->errorString();
+            QString contents = QString::fromUtf8(reply->readAll());
+            if ( reply->error() != QNetworkReply::NoError)
+            {
+                QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Network Error!" );
+                return;
+            }
+            //qInfo() << ">>> CONNECT: " << reply->error();
+
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(contents.toUtf8());
+            QJsonArray jsonArray = jsonResponse.array();
+
+            for (int jsIndex = 0; jsIndex < jsonArray.size(); ++jsIndex) {
+                QJsonObject jsObject = jsonArray[jsIndex].toObject();
+                foreach(const QString& key, jsObject.keys()) {
+                    if ( key == "tag_name")
+                    {
+                        QJsonValue value = jsObject.value(key);
+                        //qInfo() << "Key = " << key << ", Value = " << value.toString();
+                        QRegularExpression rx_release("^r[0-9]+_[0-9]+_[0-9]+$");
+                        QRegularExpressionMatch rel_match = rx_release.match(value.toString());
+                        if (rel_match.hasMatch()) {
+                            QString latestVersion =  rel_match.captured(0)
+                                                       .replace("r", "")
+                                                       .replace("_", ".");
+                            if ( APP_VERSION == latestVersion )
+                            {
+                                //qInfo() << "WE HAVE A MATCH - no update necessary";
+                                QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Up to date!" );
+                            }
+                            else
+                            {
+                                //qInfo() << "Later version available: " << latestVersion;
+                                downloadLinkButton->setVisible(true);
+                                QToolTip::showText( downloadLinkButton->mapToGlobal( QPoint( 0, 0 ) ), "Update Available!" );
+                                downloadLinkButton->setText(QString("Download Version %1").arg(latestVersion));
+                            }
+                            ;
+                            // IF we have a match, then that is the latest version
+                            // Github returns array with latest releases at start of index
+                            // So return after first successful match
+                            return;
+                        };
+                    }
+                }
+            }
+        });
+
 }
 
 void CClientDlg::UpdateDisplay()
