@@ -116,6 +116,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // set a placeholder text to make sure where to type the message in (#384)
     edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+    // disable chat widgets
+    butSend->setEnabled(false);
+    edtLocalInputText->setEnabled(false);
 
     // Add help text to controls -----------------------------------------------
     // input level meter
@@ -1107,14 +1110,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
 
     // session chat stuff
-
-    // Connections -------------------------------------------------------------
     QObject::connect ( edtLocalInputText, &QLineEdit::textChanged, this, &CClientDlg::OnLocalInputTextTextChanged );
-
+    QObject::connect ( this, &CClientDlg::NewLocalInputText, this, &CClientDlg::OnNewLocalInputText );
     QObject::connect ( butSend, &QPushButton::clicked, this, &CClientDlg::OnSendText );
-
+    QObject::connect ( edtLocalInputText, &QLineEdit::returnPressed, this, &CClientDlg::OnSendText );
     QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked, this, &CClientDlg::OnAnchorClicked );
-
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
@@ -1213,7 +1213,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::NumClientsChanged, this, &CClientDlg::OnNumClientsChanged );
 
-    QObject::connect ( this, &CClientDlg::NewLocalInputText, this, &CClientDlg::OnNewLocalInputText );
 
 //    QObject::connect ( &ConnectDlg, &CConnectDlg::ReqServerListQuery, this, &CClientDlg::OnReqServerListQuery );
 
@@ -2327,6 +2326,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         butNewStart->setVisible(false);
         defaultButtonWidget->setMaximumHeight(30);
 
+        // enable chat widgets
+        butSend->setEnabled(true);
+        edtLocalInputText->setEnabled(true);
+
         // set connection status in status bar
         if (strMixerBoardLabel.isEmpty())
         {
@@ -2435,6 +2438,10 @@ void CClientDlg::Disconnect()
     inviteComboBox->setVisible(false);
     inviteComboBox->clear();
     butConnect->setText ( tr ( "Join..." ) );
+
+    // disable chat widgets
+    butSend->setEnabled(false);
+    edtLocalInputText->setEnabled(false);
 
     // reset Rec label (if server ends session)
     recLabel->setStyleSheet ( "QLabel { color: rgb(86, 86, 86); font: normal; }" );
@@ -2548,10 +2555,9 @@ void CClientDlg::OnCheckForUpdate()
                             {
                                 //qInfo() << "Later version available: " << latestVersion;
                                 downloadLinkButton->setVisible(true);
-                                QToolTip::showText( downloadLinkButton->mapToGlobal( QPoint( 0, 0 ) ), "Update Available!" );
+                                QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Update Available!" );
                                 downloadLinkButton->setText(QString("Download Version %1").arg(latestVersion));
-                            }
-                            ;
+                            };
                             // IF we have a match, then that is the latest version
                             // Github returns array with latest releases at start of index
                             // So return after first successful match

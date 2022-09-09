@@ -307,7 +307,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="iconSize">
        <size>
@@ -2445,6 +2445,9 @@ QCheckBox::indicator {
             <property name="autoFillBackground">
              <bool>true</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(101, 113, 119);</string>
+            </property>
             <property name="textInteractionFlags">
              <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
             </property>
@@ -2458,21 +2461,24 @@ QCheckBox::indicator {
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>3</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>3</number>
+            </property>
             <item>
-             <widget class="QPushButton" name="clearchatButton">
-              <property name="font">
-               <font>
-                <family>Rubik</family>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Clear</string>
+             <widget class="QLineEdit" name="edtLocalInputText">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
               </property>
              </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="edtLocalInputText"/>
             </item>
             <item>
              <widget class="QPushButton" name="butSend">
