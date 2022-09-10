@@ -4,7 +4,7 @@
 AppID=Koord
 AppName=Koord
 AppVerName=Koord
-AppVersion=1.9.17
+AppVersion=1.9.18
 AppPublisher=Koord.Live
 AppPublisherURL=https://koord.live
 AppSupportURL=https://github.com/koord-live/koord-realtime/issues
