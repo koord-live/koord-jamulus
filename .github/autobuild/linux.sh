@@ -56,9 +56,8 @@ setup_x64() {
     # Note: icu archive is needed on Linux unlike others
     # - and webchannel and positioning modules, only needed for qmake on Linux - don't know why!
     sudo python3 -m aqt install-qt --outputdir "${QT_DIR}" linux desktop "${QT_VERSION}" \
-        --modules qtwebview qtwebengine \
+        --modules qtwebview qtwebengine qtwebchannel qtpositioning qtserialport \
         --archives qtbase qtdeclarative qtsvg qttools icu
-
 }
 
 setup_arm() {

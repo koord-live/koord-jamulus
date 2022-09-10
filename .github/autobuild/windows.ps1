@@ -41,7 +41,7 @@ Function Install-Qt
         "desktop",
         "$QtVersion",
         "$QtArch",
-        "--modules", "qtwebengine", "qtwebview", "qtmultimedia",
+        "--modules", "qtwebengine", "qtwebview", "qtmultimedia", "qtwebchannel", "qtpositioning",
         "--archives", "qtbase", "qtdeclarative", "qtsvg", "qttools"
     )
     aqt install-qt @Args
