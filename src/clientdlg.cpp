@@ -1701,6 +1701,7 @@ void CClientDlg::OnInviteBoxActivated()
         inviteComboBox->setCurrentIndex(0);
         QClipboard *clipboard = QGuiApplication::clipboard();
         clipboard->setText(strSelectedAddress);
+        QToolTip::showText( inviteComboBox->mapToGlobal( QPoint( 0, 0 ) ), "Link Copied!" );
     }
     else if ( text.contains( "Share via Email" ) )
     {
@@ -2566,6 +2567,7 @@ void CClientDlg::OnCheckForUpdate()
                     }
                 }
             }
+            QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "No Update Found" );
         });
 
 }

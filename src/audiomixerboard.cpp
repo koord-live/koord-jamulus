@@ -210,15 +210,16 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
                                 "          border-top:    10px transparent;"
                                 "          border-bottom: 10px transparent;"
                                 "          border-left:   20px transparent;"
-                                "          border-right:  -25px transparent; }"
-                                "QSlider::groove { image:          url(:/png/fader/res/transparent1x1.png);"
+                                "          border-right:  -20px transparent; }"
+                                "QSlider::groove { image: url(:/png/fader/res/transparent1x1.png);"
+                                "                  padding-left:   -34px;"
                                 "                  padding-left:   -34px;"
                                 "                  padding-top:    -10px;"
                                 "                  padding-bottom: -15px; }"
                                 "QSlider::handle { image: url(:/png/fader/res/faderhandle.png);"
                                 "                  padding-left:   -4px;"
                                 "                  padding-top:    -2px;"
-                                "                  padding-bottom: -0px; }" 
+                                "                  padding-bottom: -0px; }"
                                 );
 
         pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
