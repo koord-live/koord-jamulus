@@ -3,6 +3,7 @@ set -eu
 
 QT_DIR=/usr/local/opt/qt
 AQTINSTALL_VERSION=2.1.0
+TARGET_ARCH="${TARGET_ARCH:-}"
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -86,7 +87,7 @@ build_app_as_dmg_installer() {
     if prepare_signing; then
         BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
-    ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
+    TARGET_ARCH="${TARGET_ARCH}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
 
 pass_artifact_to_job() {

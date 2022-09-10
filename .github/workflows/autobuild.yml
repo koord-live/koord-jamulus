@@ -129,13 +129,21 @@ jobs:
           #   run_codeql:             false
 
           # Build disabled as XCode12 is fine as Qt6 build platform :) and gives us extra run target: 10.14 
-          - config_name:            MacOS 10.15+ (artifacts)
+          - config_name:            MacOS 10.15+ intel (artifacts)
             target_os:              macos
             building_on_os:         macos-11
             base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
             xcode_version:          13.2.1
+
+          - config_name:            MacOS 10.15+ arm64 (artifacts)
+            target_os:              macos
+            building_on_os:         macos-12
+            base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 TARGET_ARCH=arm64 ARTIFACT_SUFFIX=_arm64 ./.github/autobuild/mac.sh
+            # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
+            run_codeql:             false
+            xcode_version:          13.4.1
 
           # - config_name:            MacOS 10.14+ x64 pkg,dmg
           #   target_os:              macos
