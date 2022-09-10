@@ -2,7 +2,7 @@
 set -eu
 
 root_path=$(pwd)
-project_path="${root_path}/Koord-RT.pro"
+project_path="${root_path}/Koord.pro"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
@@ -154,10 +154,10 @@ build_installer_pkg()
         productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
             --component "${build_path}_storesign/${target_name}.app" \
             /Applications \
-            "${build_path}_storesign/Koord-RT_${app_version}.pkg"  
+            "${build_path}_storesign/Koord_${app_version}.pkg"  
 
         # move created pkg file to prep for download
-        mv "${build_path}_storesign/Koord-RT_${app_version}.pkg" "${deploypkg_path}"
+        mv "${build_path}_storesign/Koord_${app_version}.pkg" "${deploypkg_path}"
     fi
 }
 
@@ -176,7 +176,7 @@ build_disk_image()
 
     # try and test signature of bundle before build
     echo ">>> Testing signature of bundle ...." 
-    codesign -vvv --deep --strict "${deploy_path}/Koord-RT.app/"
+    codesign -vvv --deep --strict "${deploy_path}/Koord.app/"
 
     # Build installer image
     create-dmg \

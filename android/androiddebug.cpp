@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-const char* const applicationName = "Koord-RT";
+const char* const applicationName = "Koord";
 
 #ifdef ANDROIDDEBUG // Set in my myapp.pro file for android builds
 #    include <android/log.h>

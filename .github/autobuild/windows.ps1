@@ -57,7 +57,7 @@ Function Install-Qt
     # Above should do:
     # aqt install --outputdir C:\Qt 5.15.2 windows desktop win64_msvc2019_64
 
-    # add vcredist and cmake - for Koord-RT build
+    # add vcredist and cmake - for Koord build
     aqt install-tool windows desktop --outputdir C:\Qt tools_vcredist qt.tools.vcredist_msvc2019_x64
     aqt install-tool windows desktop --outputdir C:\Qt tools_cmake qt.tools.cmake
 }
@@ -113,27 +113,13 @@ Function Pass-EXE-Artifact-to-Job
 
     echo "Copying artifact to ${artifact}"
     # "Output" is name of dir for innosetup output
-    move ".\Output\Koord-RT*.exe" ".\deploy\${artifact}"
+    move ".\Output\Koord*.exe" ".\deploy\${artifact}"
     if ( !$? )
     {
         throw "move failed with exit code $LastExitCode"
     }
     echo "Setting Github step output name=artifact_1::${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
-}
-
-Function Pass-MSIX-Artifact-to-Job
-{
-    $artifact = "Koord_${JamulusVersion}_win.msix"
-
-    echo "Copying artifact to ${artifact}"
-    move ".\????\Koord-RT*.msix" ".\deploy\${artifact}"
-    if ( !$? )
-    {
-        throw "move failed with exit code $LastExitCode"
-    }
-    echo "Setting Github step output name=artifact_2::${artifact}"
-    echo "::set-output name=artifact_2::${artifact}"
 }
 
 switch ( $Stage )
@@ -151,7 +137,6 @@ switch ( $Stage )
     "get-artifacts"
     {
         Pass-EXE-Artifact-to-Job
-        # Pass-MSIX-Artifact-to-Job
     }
     default
     {

@@ -388,7 +388,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     // general description of software
     txvAbout->setText ( "<p>" +
-                        tr ( "Koord-RT makes it easy for musicians to start real-time sessions "
+                        tr ( "Koord makes it easy for musicians to start real-time sessions "
                              "to play over the internet." ) +
                         "<br>" +
                         tr ( "It is based on Jamulus, "
@@ -607,7 +607,7 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
-    pAction = addAction ( tr ( "&About Koord-RT..." ), this, SLOT ( OnHelpAbout() ) );
+    pAction = addAction ( tr ( "&About Koord..." ), this, SLOT ( OnHelpAbout() ) );
     pAction->setMenuRole ( QAction::AboutRole ); // required for Mac
     pAction = addAction ( tr ( "About &Qt..." ), this, SLOT ( OnHelpAboutQt() ) );
     pAction->setMenuRole ( QAction::AboutQtRole ); // required for Mac

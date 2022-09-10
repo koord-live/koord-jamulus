@@ -33,7 +33,7 @@ $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
 $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
-$AppName = "Koord-RT"
+$AppName = "Koord"
 
 # Stop at all errors
 $ErrorActionPreference = "Stop"
@@ -296,7 +296,7 @@ Function Build-App
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler",  "--no-opengl-sw", `
         "$BuildPath\$BuildConfig\kdasioconfig\KoordASIOControl.exe")
-    # collect for Koord-RT.exe
+    # collect for Koord.exe
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--no-compiler-runtime", "--dir=$DeployPath\$BuildArch", `
         "--no-system-d3d-compiler", "--qmldir=$RootPath\src", `
@@ -340,7 +340,7 @@ Function Build-App
     Set-Location -Path $RootPath
 }
 
-# Build and deploy Koord-RT 64bit and 32bit variants
+# Build and deploy Koord 64bit and 32bit variants
 function Build-App-Variants
 {
     # foreach ($_ in ("x86_64", "x86"))
@@ -385,7 +385,7 @@ Function Build-Installer
     # Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
     Invoke-Native-Command -Command "iscc" `
         -Arguments ("$RootPath\kdinstaller.iss", `
-         "/FKoord-RT-${AppVersion}")
+         "/FKoord-${AppVersion}")
 }
 
 # Build MSIX Package

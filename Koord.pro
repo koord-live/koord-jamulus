@@ -2,8 +2,8 @@ VERSION = 1.9.16
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
-    message(The target name is koord-rt instead of Koord-RT.)
-    TARGET = koord-rt
+    message(The target name is koord instead of Koord.)
+    TARGET = koord
 }
 
 # allow detailed version info for intermediate builds (#475)
@@ -119,13 +119,13 @@ win32 {
     QMAKE_TARGET_BUNDLE_PREFIX = live.koord
     # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
-    OSX_ENTITLEMENTS.files = mac/Koord-RT.entitlements
+    OSX_ENTITLEMENTS.files = mac/Koord.entitlements
     OSX_ENTITLEMENTS.path = Contents/Resources
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
 
     QMAKE_INFO_PLIST = mac/Info-xcode.plist
     XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-    XCODE_ENTITLEMENTS.value = mac/Koord-RT.entitlements
+    XCODE_ENTITLEMENTS.value = mac/Koord.entitlements
     QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
     MACOSX_BUNDLE_ICON.path = Contents/Resources
     QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON

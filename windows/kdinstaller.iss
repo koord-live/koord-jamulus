@@ -1,8 +1,8 @@
 ; Inno Setup 6 or later is required for this script to work.
 
 [Setup]
-AppID=Koord-RT
-AppName=Koord-RT
+AppID=Koord
+AppName=Koord
 AppVerName=Koord
 AppVersion=1.9.16
 AppPublisher=Koord.Live
@@ -12,7 +12,7 @@ AppUpdatesURL=https://github.com/koord-live/koord-realtime/releases
 AppContact=contact@koord.live
 WizardStyle=modern
 
-DefaultDirName={autopf}\Koord-RT
+DefaultDirName={autopf}\Koord
 AppendDefaultDirName=no
 ArchitecturesInstallIn64BitMode=x64
 
@@ -27,12 +27,12 @@ Source:"deploy\x86_64\KoordASIO.dll"; DestDir: "{app}"; Flags: ignoreversion reg
 Source:"deploy\x86_64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 64bit; Check: Is64BitInstallMode
 
 [Icons]
-Name: "{group}\Koord-RT"; Filename: "{app}\Koord-RT.exe"; WorkingDir: "{app}"
+Name: "{group}\Koord"; Filename: "{app}\Koord.exe"; WorkingDir: "{app}"
 Name: "{group}\KoordASIO Control"; Filename: "{app}\KoordASIOControl.exe"; WorkingDir: "{app}"
 
 [Run]
 Filename: "{app}\KoordASIOControl.exe"; Description: "Run KoordASIO Control (set up sound devices)"; Flags: postinstall nowait skipifsilent
-; Filename: "{app}\Koord-RT.exe"; Description: "Launch Koord-RT"; Flags: postinstall nowait skipifsilent unchecked
+; Filename: "{app}\Koord.exe"; Description: "Launch Koord"; Flags: postinstall nowait skipifsilent unchecked
 
 ; install reg key to locate KoordASIOControl.exe at runtime
 [Registry]

@@ -74,7 +74,7 @@ LED bar:      lbr
 // version and application name (use version from qt prject file)
 #undef VERSION
 #define VERSION  APP_VERSION
-#define APP_NAME "Koord-RT"
+#define APP_NAME "Koord"
 
 // Windows registry key name of auto run entry for the server
 #define AUTORUN_SERVER_REG_NAME "Jamulus server"

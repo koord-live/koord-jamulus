@@ -7,8 +7,8 @@ TARGET_ARCH="${TARGET_ARCH:-amd64}"
 
 # cp -r distributions/debian .
 
-# get the koord-rt version from pro file
-KOORD_VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord-RT.pro)
+# get the koord version from pro file
+KOORD_VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord.pro)
 
 # set up QT path
 # NOTE: need to PREPEND to the path, to avoid running into all the alias crap that qtchooser installs to /usr/bin, all broken with Qt6 / qmake
@@ -41,7 +41,7 @@ echo "Configuring gui ...."
 cd $BDIR
 mkdir -p build-gui
 cd build-gui
-qmake "CONFIG+=noupcasename" PREFIX=/usr ../Koord-RT.pro
+qmake "CONFIG+=noupcasename" PREFIX=/usr ../Koord.pro
 
 echo "Building gui ...."
 make -j "$(nproc)"
@@ -65,14 +65,14 @@ linuxdeploy --desktop-file linux/koordrt.desktop \
             --library /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
             --appdir appdir_gui --plugin qt --output appimage
 mkdir gui_appimage
-mv Koord-RT-*.AppImage gui_appimage/Koord-RT-${VERSION}_x64.appimage
+mv Koord-*.AppImage gui_appimage/Koord-${VERSION}_x64.appimage
 
 # ## headless
 # echo "Configuring headless ...."
 # cd $BDIR
 # mkdir -p build-nox
 # cd build-nox
-# qmake "CONFIG+=headless serveronly" TARGET=koord-rt-headless PREFIX=/usr ../Koord-RT.pro
+# qmake "CONFIG+=headless serveronly" TARGET=koord-headless PREFIX=/usr ../Koord.pro
 
 # echo "Building headless ...."
 # make -j "$(nproc)"
@@ -85,4 +85,4 @@ mv Koord-RT-*.AppImage gui_appimage/Koord-RT-${VERSION}_x64.appimage
 # cd $BDIR
 # linuxdeploy -d linux/koordrt-headless.desktop -i linux/koordrt.png --appdir appdir_headless --plugin qt --output appimage
 # mkdir headless_appimage
-# mv Koord-RT-*.AppImage headless_appimage/Koord-RT-headless-${VERSION}_x64.appimage
+# mv Koord-*.AppImage headless_appimage/Koord-headless-${VERSION}_x64.appimage
