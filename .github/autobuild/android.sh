@@ -78,11 +78,11 @@ setup_qt() {
         # icu needs explicit installation 
         # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
-            --archives qtbase qtdeclarative qttools icu
+            --archives qtbase qtdeclarative qtsvg qttools icu
 
         # - 64bit required for Play Store
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_arm64_v8a \
-            --archives qtbase qtdeclarative qttools \
+            --archives qtbase qtdeclarative qtsvg qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
         wget https://github.com/koord-live/koord-realtime/releases/download/${QT_VERSION}/QtAndroidWebView_arm64-v8a.jar -O \
@@ -90,7 +90,7 @@ setup_qt() {
 
         # Also install for arm_v7 to build for 32bit devices
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
-            --archives qtbase qtdeclarative qttools \
+            --archives qtbase qtdeclarative qtsvg qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
         wget https://github.com/koord-live/koord-realtime/releases/download/${QT_VERSION}/QtAndroidWebView_armeabi-v7a.jar -O \
