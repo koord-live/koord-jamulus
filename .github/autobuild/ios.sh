@@ -21,14 +21,13 @@ setup() {
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         # Install actual ios Qt:
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" \
-            --archives qtbase qtdeclarative qtsvg qttools \
+            --archives qtbase qtdeclarative qttools \
             --modules qtwebview
         # Starting with Qt6, ios' qtbase install does no longer include a real qmake binary.
         # Instead, it is a script which invokes the mac desktop qmake.
         # As of aqtinstall 2.1.0 / 04/2022, desktop qtbase has to be installed manually:
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-            --archives qtbase qtdeclarative qtsvg qttools \
-            --modules qtwebview
+            --archives qtbase qtdeclarative qttools
     fi
 }
 
@@ -92,7 +91,7 @@ build_app_as_ipa() {
 
 pass_artifact_to_job() {
     # just pass the one IPA file
-    local SIGN_TEST=$(ls deploy/Koord_*.ipa | grep -i unsigned)
+    local SIGN_TEST=$(ls deploy/Koord-RT_*.ipa | grep -i unsigned)
     if [ "${SIGN_TEST}" == "" ]; then
         local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
     else
@@ -100,7 +99,7 @@ pass_artifact_to_job() {
     fi
 
     echo "Moving build artifact to deploy/${artifact}"
-    mv ./deploy/Koord_*.ipa "./deploy/${artifact}"
+    mv ./deploy/Koord-RT_*.ipa "./deploy/${artifact}"
     echo "::set-output name=artifact_1::${artifact}"
 }
 

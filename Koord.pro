@@ -149,6 +149,8 @@ win32 {
     SOURCES += mac/sound.cpp
 
 } else:ios {
+    # reset TARGET for iOS only since rename
+    TARGET = koord-rt
     QMAKE_INFO_PLIST = ios/Info-xcode.plist
     QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
     QMAKE_ASSET_CATALOGS += ios/Images.xcassets
@@ -156,20 +158,13 @@ win32 {
 
     ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
     QMAKE_BUNDLE_DATA += ios_icon
-    # force setting of PRODUCT_BUNDLE_IDENTIFIER - since rename to Koord
-#    xcode_product_bundle_identifier_setting.value = "live.koord.Koord-RT"
 
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = live.koord
-    # force naming of framework since rename TARGET to Koord
-    QMAKE_APPLICATION_BUNDLE_NAME = Koord-RT
     # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
-    # force setting of PRODUCT_BUNDLE_IDENTIFIER - since rename to Koord
-    QMAKE_BUNDLE = Koord-RT
-#    QMAKE_IOS_LAUNCH_SCREEN = file
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 
@@ -190,17 +185,17 @@ win32 {
     # sdk version = 30 is required by Google Play store
     ANDROID_TARGET_SDK_VERSION = 30
     ANDROID_VERSION_NAME = $$VERSION
-    
+
     ## note: stop setting this here, screws up autobuild for 2 x aabs
     # if ANDROID_VERSION_CODE is passed as env var to qmake, will override this
-    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)    
+    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
 
 ## FOR LOCAL DEV USE:
 #    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = 7717
 #    ANDROID_ABIS = x86_64
 
     # need to bump version code for 2nd abi build otherwise Play Store rejects
-    # also add 10 to be def greater than git log increments... 
+    # also add 10 to be def greater than git log increments...
     contains (ANDROID_ABIS, armeabi-v7a) {
         ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 10)
         message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
