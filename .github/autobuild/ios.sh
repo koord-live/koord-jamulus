@@ -27,7 +27,8 @@ setup() {
         # Instead, it is a script which invokes the mac desktop qmake.
         # As of aqtinstall 2.1.0 / 04/2022, desktop qtbase has to be installed manually:
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-            --archives qtbase qtdeclarative qttools
+            --archives qtbase qtdeclarative qtsvg qttools \
+            --modules qtwebview
     fi
 }
 
