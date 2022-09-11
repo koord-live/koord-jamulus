@@ -109,7 +109,7 @@ jobs:
             building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/android.sh
             run_codeql:             false
-            # Jamulus.pro needs to count git history length for android versioning:
+            # Koord.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
           # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
@@ -128,7 +128,6 @@ jobs:
           #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
           #   run_codeql:             false
 
-          # Build disabled as XCode12 is fine as Qt6 build platform :) and gives us extra run target: 10.14 
           - config_name:            MacOS 10.15+ intel (artifacts)
             target_os:              macos
             building_on_os:         macos-11
@@ -341,10 +340,12 @@ jobs:
 
       ## RELEASE PROCEDURE FOR:
       ## - macOS App Store - storesign pkg
+      ## note: macos-12 flag as quick-hack way to avoid uploading Silicon build to app store - until Universal build done
       - name:                       Validate and Upload macOS Storesign Pkg
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    matrix.config.building_on_os != 'macos-12'
         id:                         macos_validate_upload
         run:                        ${{ matrix.config.base_command }} validate_and_upload
         env:

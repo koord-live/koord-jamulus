@@ -153,13 +153,15 @@ win32 {
     ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
     QMAKE_BUNDLE_DATA += ios_icon
     # force setting of PRODUCT_BUNDLE_IDENTIFIER - since rename to Koord
-    xcode_product_bundle_identifier_setting.value = "live.koord.Koord-RT"
+#    xcode_product_bundle_identifier_setting.value = "live.koord.Koord-RT"
 
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = live.koord
+    # force setting of PRODUCT_BUNDLE_IDENTIFIER - since rename to Koord
+    QMAKE_BUNDLE = Koord-RT
     # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
