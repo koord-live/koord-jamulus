@@ -1,3 +1,7 @@
+### 1.9.24 (2022-09-11) ###
+
+- Client: bugfix ios
+
 ### 1.9.16 (2022-09-02) ###
 
 - Client: fix Windows KoordASIO, macOS 11 build
