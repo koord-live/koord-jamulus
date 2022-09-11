@@ -3733,7 +3733,7 @@ hr { height: 1px; border-width: 0; }
                      </font>
                     </property>
                     <property name="text">
-                     <string>VERSION 1.9.19</string>
+                     <string>VERSION 1.9.20</string>
                     </property>
                     <property name="wordWrap">
                      <bool>false</bool>
