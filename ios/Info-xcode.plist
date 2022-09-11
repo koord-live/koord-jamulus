@@ -9,9 +9,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>live.koord.Koord-RT</string>
 	<key>CFBundleVersion</key>
-	<string>1.9.20</string>
+	<string>${QMAKE_FULL_VERSION}</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.9.20</string>
+	<string>${QMAKE_FULL_VERSION}</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

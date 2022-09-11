@@ -3724,7 +3724,7 @@ hr { height: 1px; border-width: 0; }
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="lblVersion_4">
+                   <widget class="QLabel" name="lblVersion">
                     <property name="font">
                      <font>
                       <family>Rubik</family>
@@ -3733,7 +3733,7 @@ hr { height: 1px; border-width: 0; }
                      </font>
                     </property>
                     <property name="text">
-                     <string>VERSION 1.9.20</string>
+                     <string>VERSION X.Y.Z</string>
                     </property>
                     <property name="wordWrap">
                      <bool>false</bool>

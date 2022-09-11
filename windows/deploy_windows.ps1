@@ -385,7 +385,8 @@ Function Build-Installer
     # Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
     Invoke-Native-Command -Command "iscc" `
         -Arguments ("$RootPath\kdinstaller.iss", `
-         "/FKoord-${AppVersion}")
+         "/FKoord-${AppVersion}", `
+         "/DApplicationVersion=${AppVersion}")
 }
 
 # Build MSIX Package

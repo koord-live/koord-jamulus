@@ -91,6 +91,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // initialize video_url with blank value to start
     strVideoUrl = "";
 
+    // set Version in Help tab
+    lblVersion->setText(QString("VERSION %1").arg(VERSION));
+
     // Set up touch on all widgets' viewports which inherit from QAbstractScrollArea
     // https://doc.qt.io/qt-6/qtouchevent.html#details
     scrollArea->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
