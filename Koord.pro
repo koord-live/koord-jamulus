@@ -150,7 +150,7 @@ win32 {
 
 } else:ios {
     # reset TARGET for iOS only since rename
-    TARGET = koord-rt
+    TARGET = Koord-RT
     QMAKE_INFO_PLIST = ios/Info-xcode.plist
     QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
     QMAKE_ASSET_CATALOGS += ios/Images.xcassets

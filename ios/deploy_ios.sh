@@ -59,6 +59,7 @@ build_ipa()
 
     # Build
     if [[ -z "$iosdist_cert_name" ]]; then
+        /usr/bin/xcodebuild -project Koord-RT.xcodeproj  -list
         # Build unsigned
         /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
             -archivePath "build/Koord-RT.xcarchive" \
@@ -67,6 +68,7 @@ build_ipa()
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_ENTITLEMENTS=""
     else
+        /usr/bin/xcodebuild -project Koord-RT.xcodeproj  -list
         # Build signed ipa file
         # Ref: https://developer.apple.com/forums/thread/70326
         # // Builds the app into an archive
