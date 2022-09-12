@@ -365,6 +365,7 @@ jobs:
         with:
           project-path:             Koord-RT.xcodeproj
           p12-base64:               ${{ secrets.IOSDIST_CERT }}
+          certificate-password:     ${{ secrets.IOSDIST_CERT_PWD }}
           mobileprovision-base64:   ${{ secrets.IOS_PROVISIONING_PROFILE }}
           code-signing-identity:    ${{ secrets.IOSDIST_CERT_ID }}
           team-id:                  "TXZ4FR95HG"
