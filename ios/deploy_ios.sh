@@ -53,8 +53,13 @@ build_ipa()
     mv Koord.pro Koord-RT.pro
     qmake -spec macx-xcode Koord-RT.pro
 
-    echo "Removing .xcode/...."
-    rm -fr .xcode
+    # Note: presence of "SYMROOT" variable forces xcodebuild to use the legacy option instead of default
+    # To force default Build Location (and thus avoid project clean errors with fastlane) we need to edit file
+    echo "Removing these lines from Koord-RT.xcodeproj/project.pbxproj ... "
+    grep SYMROOT Koord-RT.xcodeproj/project.pbxproj
+    grep -v SYMROOT Koord-RT.xcodeproj/project.pbxproj > Koord-RT.xcodeproj/tmpproj
+    mv Koord-RT.xcodeproj/tmpproj Koord-RT.xcodeproj/project.pbxproj
+    echo "File Koord-RT.xcodeproj/project.pbxproj edited."
 
     # disable deprecation warnings re legacy build system - XCode 13 errors on this
     # /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
