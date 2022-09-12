@@ -369,8 +369,8 @@ jobs:
           mobileprovision-base64:   ${{ secrets.IOS_PROVISIONING_PROFILE }}
           code-signing-identity:    ${{ secrets.IOSDIST_CERT_ID }}
           team-id:                  "TXZ4FR95HG"
-          output-path:              "/Users/runner/work/koord-realtime/koord-realtime/Koord-RT.ipa"
-          # workspace-path: Unity-iPhone.xcworkspace # optional
+          output-path:              Koord-RT.ipa
+          workspace-path:           Koord-RT.xcworkspace
 
       - name:                       Upload iOS app to TestFlight
         id:                         ios_testflight_upload
