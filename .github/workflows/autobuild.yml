@@ -369,6 +369,7 @@ jobs:
           mobileprovision-base64:   ${{ secrets.IOS_PROVISIONING_PROFILE }}
           code-signing-identity:    ${{ secrets.IOSDIST_CERT_ID }}
           team-id:                  "TXZ4FR95HG"
+          output-path:              "/Users/runner/work/koord-realtime/koord-realtime/Koord-RT.ipa"
           # workspace-path: Unity-iPhone.xcworkspace # optional
 
       - name:                       Upload iOS app to TestFlight
@@ -378,7 +379,7 @@ jobs:
                                     needs.create_release.outputs.publish_to_release == 'true'
         uses:                       apple-actions/upload-testflight-build@v1
         with: 
-          app-path:                 'output.ipa' 
+          app-path:                 "/Users/runner/work/koord-realtime/koord-realtime/Koord-RT.ipa"
           issuer-id:                ${{ secrets.APPLE_APPSTORE_ISSUER_ID }}
           api-key-id:               ${{ secrets.APPLE_APPSTORE_API_KEY_ID }}
           api-private-key:          ${{ secrets.APPL_APPSTORE_API_PRIVATE_KEY }}
