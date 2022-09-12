@@ -366,7 +366,7 @@ jobs:
           project-path:             Koord-RT.xcodeproj
           p12-base64:               ${{ secrets.IOSDIST_CERT }}
           mobileprovision-base64:   ${{ secrets.IOS_PROVISIONING_PROFILE }}
-          code-signing-identity:    "iOS Distribution"
+          code-signing-identity:    ${{ secrets.IOSDIST_CERT_ID }}
           team-id:                  "TXZ4FR95HG"
           # workspace-path: Unity-iPhone.xcworkspace # optional
 
