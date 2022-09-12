@@ -378,6 +378,7 @@ jobs:
                                     steps.build.outputs.ios_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
         uses:                       actions/upload-artifact@v2
+        id:                         upload-job-iostest
         with:
           name:                     Koord-RT.ipa
           path:                     build/Koord-RT.ipa
@@ -388,7 +389,7 @@ jobs:
         if:                         >-
                                     steps.build.outputs.ios_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
-        id:                         upload-release-asset1
+        id:                         upload-release-iostest
         uses:                       actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
