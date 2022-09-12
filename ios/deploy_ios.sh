@@ -54,8 +54,8 @@ build_ipa()
     qmake -spec macx-xcode Koord-RT.pro
 
     # disable deprecation warnings re legacy build system - XCode 13 errors on this
-    /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-    /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+    # /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+    # /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
 
     # Build
     if [[ -z "$iosdist_cert_name" ]]; then
@@ -84,7 +84,7 @@ build_ipa()
         ls -alR build/Koord-RT.xcarchive
 
         #FIXME this may be redundant - since provisioning profile is specified in exportOptionsRelease.plist
-        cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
+        # cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
 
         # // Exports the archive according to the export options specified by the plist
         # export signed installer to build/Exports/Koord-RT.ipa

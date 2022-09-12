@@ -70,8 +70,8 @@ prepare_signing() {
     
     # apply provisioning profile
     #FIXME - maybe redundant?
-    mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-    cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+    # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    # cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
     # Tell Github Workflow that we need to validate and upload
     echo "::set-output name=ios_signed::true"
