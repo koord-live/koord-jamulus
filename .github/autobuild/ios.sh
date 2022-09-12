@@ -95,8 +95,12 @@ pass_artifact_to_job() {
     # just pass the one IPA file
     local SIGN_TEST=$(ls deploy/Koord-RT_*.ipa | grep -i unsigned)
     if [ "${SIGN_TEST}" == "" ]; then
-        echo "No artifact to pass..."
+        echo "Signed, No artifact to pass..."
         # local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
+        # echo "Moving build artifact to deploy/${artifact}"
+        mkdir -p deploy
+        mv ./build/Koord-RT.ipa ./deploy/Koord-RT.ipa
+        echo "::set-output name=artifact_1::Koord-RT.ipa"
     else
         local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_unsigned${ARTIFACT_SUFFIX:-}.ipa"
         echo "Moving build artifact to deploy/${artifact}"
@@ -106,12 +110,12 @@ pass_artifact_to_job() {
 
 }
 
-# valid8_n_upload() {
-#     echo ">>> Processing validation and upload..."
-#     # attempt validate and then upload of ipa file, using previously-made keychain item
-#     xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-#     xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-# }
+valid8_n_upload() {
+    echo ">>> Processing validation and upload..."
+    # attempt validate and then upload of ipa file, using previously-made keychain item
+    xcrun altool --validate-app -f ${ARTIFACT_PATH} -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    xcrun altool --upload-app -f ${ARTIFACT_PATH} -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+}
 
 case "${1:-}" in
     setup)
@@ -123,9 +127,9 @@ case "${1:-}" in
     get-artifacts)
         pass_artifact_to_job
         ;;
-    # validate_and_upload)
-    #     valid8_n_upload
-    #     ;;
+    validate_and_upload)
+        valid8_n_upload
+        ;;
     *)
         echo "Unknown stage '${1:-}'"
         exit 1

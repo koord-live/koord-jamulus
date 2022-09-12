@@ -377,12 +377,12 @@ jobs:
         if:                         >-
                                     steps.build.outputs.ios_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
-        uses:                       apple-actions/upload-testflight-build@v1
-        with: 
-          app-path:                 build/Koord-RT.ipa
-          issuer-id:                ${{ secrets.APPLE_APPSTORE_ISSUER_ID }}
-          api-key-id:               ${{ secrets.APPLE_APPSTORE_API_KEY_ID }}
-          api-private-key:          ${{ secrets.APPL_APPSTORE_API_PRIVATE_KEY }}
+        run:                        ${{ matrix.config.base_command }} validate_and_upload
+        env: 
+          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       ## RELEASE PROCEDURE FOR:
       ## - Android Play Store - aab
