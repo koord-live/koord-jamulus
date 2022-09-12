@@ -53,7 +53,8 @@ build_ipa()
     mv Koord.pro Koord-RT.pro
     qmake -spec macx-xcode Koord-RT.pro
 
-    # rm -fr .xcode
+    echo "Removing .xcode/...."
+    rm -fr .xcode
 
     # disable deprecation warnings re legacy build system - XCode 13 errors on this
     # /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
