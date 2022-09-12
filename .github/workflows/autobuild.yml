@@ -399,17 +399,17 @@ jobs:
           asset_name:               Koord-RT.ipa
           asset_content_type:       application/octet-stream
 
-      - name:                       Upload iOS app to TestFlight
-        id:                         ios_testflight_upload
-        if:                         >-
-                                    steps.build.outputs.ios_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
-        run:                        ${{ matrix.config.base_command }} validate_and_upload
-        env: 
-          ARTIFACT_PATH:            build/Koord-RT.ipa
-          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
-          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
-          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+      # - name:                       Upload iOS app to TestFlight
+      #   id:                         ios_testflight_upload
+      #   if:                         >-
+      #                               steps.build.outputs.ios_signed == 'true' &&
+      #                               needs.create_release.outputs.publish_to_release == 'true'
+      #   run:                        ${{ matrix.config.base_command }} validate_and_upload
+      #   env: 
+      #     ARTIFACT_PATH:            build/Koord-RT.ipa
+      #     NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
+      #     NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+      #     JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       ## RELEASE PROCEDURE FOR:
       ## - Android Play Store - aab
