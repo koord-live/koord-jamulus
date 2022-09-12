@@ -1,7 +1,7 @@
-VERSION = 1.9.23
+VERSION = 1.9.29
 # mac build needs separate version for now
 macx {
-    VERSION = 3.9.23
+    VERSION = 3.9.29
 }
 
 # use target name which does not use a capital letter at the beginning
