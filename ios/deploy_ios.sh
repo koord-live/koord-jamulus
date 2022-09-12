@@ -84,7 +84,7 @@ build_ipa()
         ls -alR build/Koord-RT.xcarchive
 
         #FIXME this may be redundant - since provisioning profile is specified in exportOptionsRelease.plist
-        # cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
+        cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
 
         # // Exports the archive according to the export options specified by the plist
         # export signed installer to build/Exports/Koord-RT.ipa
