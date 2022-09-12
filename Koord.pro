@@ -164,6 +164,7 @@ win32 {
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = live.koord
+    QMAKE_BUNDLE = Koord-RT
     # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox

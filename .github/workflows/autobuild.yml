@@ -372,6 +372,32 @@ jobs:
           output-path:              build/Koord-RT.ipa
           # workspace-path:           Koord-RT.xcworkspace
 
+      - name:                       Upload iOS Signed ipa to Job -- test
+        # builds such as iOS with signing produce no artifact to upload
+        if:                         >-
+                                    steps.build.outputs.ios_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
+        uses:                       actions/upload-artifact@v2
+        with:
+          name:                     Koord-RT.ipa
+          path:                     build/Koord-RT.ipa
+          retention-days:           31
+          if-no-files-found:        error
+
+      - name:                       Upload iOS Signed ipa to Release -- Test
+        if:                         >-
+                                    steps.build.outputs.ios_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
+        id:                         upload-release-asset1
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               build/Koord-RT.ipa
+          asset_name:               Koord-RT.ipa
+          asset_content_type:       application/octet-stream
+
       - name:                       Upload iOS app to TestFlight
         id:                         ios_testflight_upload
         if:                         >-
