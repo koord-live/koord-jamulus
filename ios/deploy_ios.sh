@@ -68,39 +68,40 @@ build_ipa()
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_ENTITLEMENTS=""
     else
-        /usr/bin/xcodebuild -project Koord-RT.xcodeproj  -list
-        # Build signed ipa file
-        # Ref: https://developer.apple.com/forums/thread/70326
-        # // Builds the app into an archive
-        /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
-            -archivePath "build/Koord-RT.xcarchive" \
-            DEVELOPMENT_TEAM="TXZ4FR95HG" \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+        ## NOTE: don't do anything here - leave this to later Github action
 
-        # debug
-        echo "Archive contents after creating archive"
-        ls -alR build/Koord-RT.xcarchive
+        # /usr/bin/xcodebuild -project Koord-RT.xcodeproj  -list
+        # # Ref: https://developer.apple.com/forums/thread/70326
+        # # // Builds the app into an archive
+        # /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
+        #     -archivePath "build/Koord-RT.xcarchive" \
+        #     DEVELOPMENT_TEAM="TXZ4FR95HG" \
+        #     CODE_SIGN_IDENTITY="" \
+        #     CODE_SIGNING_REQUIRED=NO \
+        #     CODE_SIGNING_ALLOWED=NO
 
-        #FIXME this may be redundant - since provisioning profile is specified in exportOptionsRelease.plist
-        cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
+        # # debug
+        # echo "Archive contents after creating archive"
+        # ls -alR build/Koord-RT.xcarchive
 
-        # // Exports the archive according to the export options specified by the plist
-        # export signed installer to build/Exports/Koord-RT.ipa
-        /usr/bin/xcodebuild -exportArchive \
-            -archivePath "build/Koord-RT.xcarchive" \
-            -exportPath  "build/Exports/" \
-            -exportOptionsPlist "ios/exportOptionsRelease.plist" \
-            DEVELOPMENT_TEAM="TXZ4FR95HG" \
-            CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
-            CODE_SIGNING_REQUIRED=YES \
-            CODE_SIGNING_ALLOWED=YES \
-            CODE_SIGN_STYLE="Manual"
+        # #FIXME this may be redundant - since provisioning profile is specified in exportOptionsRelease.plist
+        # cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
 
-        # debug
-        echo "Archive contents after creating signed installer"
-        ls -alR build/Koord-RT.xcarchive
+        # # // Exports the archive according to the export options specified by the plist
+        # # export signed installer to build/Exports/Koord-RT.ipa
+        # /usr/bin/xcodebuild -exportArchive \
+        #     -archivePath "build/Koord-RT.xcarchive" \
+        #     -exportPath  "build/Exports/" \
+        #     -exportOptionsPlist "ios/exportOptionsRelease.plist" \
+        #     DEVELOPMENT_TEAM="TXZ4FR95HG" \
+        #     CODE_SIGN_IDENTITY="${iosdist_cert_name}" \
+        #     CODE_SIGNING_REQUIRED=YES \
+        #     CODE_SIGNING_ALLOWED=YES \
+        #     CODE_SIGN_STYLE="Manual"
+
+        # # debug
+        # echo "Archive contents after creating signed installer"
+        # ls -alR build/Koord-RT.xcarchive
     fi
 
     # if no dist_cert, just create unsigned ipa file
@@ -117,9 +118,11 @@ build_ipa()
         cd ${root_path}
         mv build/unsigned/Koord-RT.ipa deploy/Koord-RT_unsigned.ipa
     else
-        cd ${root_path}
-        # move signed ipa file for upload
-        mv build/Exports/Koord-RT.ipa deploy/Koord-RT_signed.ipa
+        # NOTE: don't do anything here now
+
+        # cd ${root_path}
+        # # move signed ipa file for upload
+        # mv build/Exports/Koord-RT.ipa deploy/Koord-RT_signed.ipa
     fi
 }
 

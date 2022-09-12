@@ -157,13 +157,13 @@ jobs:
 
           - config_name:            iOS 10.13+ ipa
             target_os:              ios
-            building_on_os:         macos-11
+            building_on_os:         macos-12
             base_command:           QT_VERSION=6.4.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
             run_codeql:             false
-            xcode_version:          13.2.1
+            xcode_version:          13.4.1
 
           # - config_name:            Windows 10+ x64 exe
           #   target_os:              windows
@@ -356,17 +356,31 @@ jobs:
 
       ## RELEASE PROCEDURE FOR:
       ## - iOS App Store - signed ipa
-      - name:                       Validate and Upload iOS ipa file
+      - name:                       Build AppStore-signed iOS ipa file
+        id:                         ios_build_signed_archive
         if:                         >-
                                     steps.build.outputs.ios_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
-        id:                         ios_validate_upload
-        run:                        ${{ matrix.config.base_command }} validate_and_upload
-        env:
-          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
-          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
-          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
-          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+        uses:                       yukiarrr/ios-build-action@v1.5.0
+        with:
+          project-path:             Koord-RT.xcodeproj
+          p12-base64:               ${{ secrets.IOSDIST_CERT }}
+          mobileprovision-base64:   ${{ secrets.IOS_PROVISIONING_PROFILE }}
+          code-signing-identity:    "iOS Distribution"
+          team-id:                  "TXZ4FR95HG"
+          # workspace-path: Unity-iPhone.xcworkspace # optional
+
+      - name:                       Upload iOS app to TestFlight
+        id:                         ios_testflight_upload
+        if:                         >-
+                                    steps.build.outputs.ios_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
+        uses:                       apple-actions/upload-testflight-build@v1
+        with: 
+          app-path:                 'output.ipa' 
+          issuer-id:                ${{ secrets.APPLE_APPSTORE_ISSUER_ID }}
+          api-key-id:               ${{ secrets.APPLE_APPSTORE_API_KEY_ID }}
+          api-private-key:          ${{ secrets.APPL_APPSTORE_API_PRIVATE_KEY }}
 
       ## RELEASE PROCEDURE FOR:
       ## - Android Play Store - aab
