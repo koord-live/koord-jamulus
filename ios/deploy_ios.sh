@@ -69,6 +69,7 @@ build_ipa()
             CODE_SIGN_ENTITLEMENTS=""
     else
         ## NOTE: don't do anything here - leave this to later Github action
+        echo "Not building anything here, deferring to later Github Action..."
 
         # /usr/bin/xcodebuild -project Koord-RT.xcodeproj  -list
         # # Ref: https://developer.apple.com/forums/thread/70326
@@ -119,6 +120,7 @@ build_ipa()
         mv build/unsigned/Koord-RT.ipa deploy/Koord-RT_unsigned.ipa
     else
         # NOTE: don't do anything here now
+        echo "Not doing anything here, deferring to later Github Action..."
 
         # cd ${root_path}
         # # move signed ipa file for upload
