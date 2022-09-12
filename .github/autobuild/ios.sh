@@ -47,31 +47,32 @@ prepare_signing() {
 
     echo "Signing was requested and all dependencies are satisfied"
 
-    # use this as filename for Provisioning Profile
-    IOS_PP_PATH="embedded.mobileprovision"
+    ## NOTE: These actions not needed since using new GH action
+    # # use this as filename for Provisioning Profile
+    # IOS_PP_PATH="embedded.mobileprovision"
 
-    ## Put the cert to a file
-    # IOSDIST_CERTIFICATE - iOS Distribution
-    echo "${IOSDIST_CERTIFICATE}" | base64 --decode > iosdist_certificate.p12
+    # ## Put the cert to a file
+    # # IOSDIST_CERTIFICATE - iOS Distribution
+    # echo "${IOSDIST_CERTIFICATE}" | base64 --decode > iosdist_certificate.p12
 
-    ## Echo Provisioning Profile to file
-    echo -n "${IOS_PROV_PROFILE_B64}" | base64 --decode > $IOS_PP_PATH
+    # ## Echo Provisioning Profile to file
+    # echo -n "${IOS_PROV_PROFILE_B64}" | base64 --decode > $IOS_PP_PATH
 
-    # Set up a keychain for the build:
-    security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security default-keychain -s build.keychain
-    security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import iosdist_certificate.p12 -k build.keychain -P "${IOSDIST_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
-    security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
-    # add notarization/validation/upload password to keychain
-    xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-    # set lock timeout on keychain to 6 hours
-    security set-keychain-settings -lut 21600
+    # # Set up a keychain for the build:
+    # security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
+    # security default-keychain -s build.keychain
+    # security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
+    # security import iosdist_certificate.p12 -k build.keychain -P "${IOSDIST_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
+    # security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    # # add notarization/validation/upload password to keychain
+    # xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    # # set lock timeout on keychain to 6 hours
+    # security set-keychain-settings -lut 21600
     
-    # apply provisioning profile
-    #FIXME - maybe redundant?
-    mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-    cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+    # # apply provisioning profile
+    # #FIXME - maybe redundant?
+    # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    # cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
     # Tell Github Workflow that we need to validate and upload
     echo "::set-output name=ios_signed::true"
@@ -105,12 +106,12 @@ pass_artifact_to_job() {
 
 }
 
-valid8_n_upload() {
-    echo ">>> Processing validation and upload..."
-    # attempt validate and then upload of ipa file, using previously-made keychain item
-    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-}
+# valid8_n_upload() {
+#     echo ">>> Processing validation and upload..."
+#     # attempt validate and then upload of ipa file, using previously-made keychain item
+#     xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+#     xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t ios -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+# }
 
 case "${1:-}" in
     setup)
@@ -122,9 +123,9 @@ case "${1:-}" in
     get-artifacts)
         pass_artifact_to_job
         ;;
-    validate_and_upload)
-        valid8_n_upload
-        ;;
+    # validate_and_upload)
+    #     valid8_n_upload
+    #     ;;
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
