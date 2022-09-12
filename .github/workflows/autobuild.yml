@@ -379,7 +379,7 @@ jobs:
                                     needs.create_release.outputs.publish_to_release == 'true'
         run:                        ${{ matrix.config.base_command }} validate_and_upload
         env: 
-          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+          ARTIFACT_PATH:            build/Koord-RT.ipa
           NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}

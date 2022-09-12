@@ -98,8 +98,8 @@ pass_artifact_to_job() {
         echo "Signed, No artifact to pass..."
         # local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
         # echo "Moving build artifact to deploy/${artifact}"
-        mkdir -p deploy
-        mv ./build/Koord-RT.ipa ./deploy/Koord-RT.ipa
+        # mkdir -p deploy
+        # mv ./build/Koord-RT.ipa ./deploy/Koord-RT.ipa
         echo "::set-output name=artifact_1::Koord-RT.ipa"
     else
         local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_unsigned${ARTIFACT_SUFFIX:-}.ipa"
