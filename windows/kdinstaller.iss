@@ -4,8 +4,8 @@
 AppID=Koord
 AppName=Koord
 AppVerName=Koord
-AppVersion={#AppVersion}
-VersionInfoVersion={#AppVersion}
+AppVersion={#ApplicationVersion}
+VersionInfoVersion={#ApplicationVersion}
 AppPublisher=Koord.Live
 AppPublisherURL=https://koord.live
 AppSupportURL=https://github.com/koord-live/koord-realtime/issues
