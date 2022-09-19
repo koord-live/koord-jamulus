@@ -1,8 +1,4 @@
-VERSION = 1.9.35
-# mac build needs separate version for now
-macx {
-    VERSION = 3.9.35
-}
+VERSION = 3.9.36
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
