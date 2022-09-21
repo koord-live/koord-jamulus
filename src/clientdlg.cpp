@@ -99,29 +99,29 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     scrollArea->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     txvHelp->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     txvAbout->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
-    txvChatWindow->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
+//    txvChatWindow->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     QScroller::grabGesture(scrollArea, QScroller::TouchGesture);
     QScroller::grabGesture(txvHelp, QScroller::TouchGesture);
     QScroller::grabGesture(txvAbout, QScroller::TouchGesture);
-    QScroller::grabGesture(txvChatWindow, QScroller::TouchGesture);
+//    QScroller::grabGesture(txvChatWindow, QScroller::TouchGesture);
 
     // add Session Chat stuff
     // input message text
-    edtLocalInputText->setWhatsThis ( "<b>" + tr ( "Input Message Text" ) + ":</b> " +
-                                      tr ( "Chat here while a session is active." ) );
+//    edtLocalInputText->setWhatsThis ( "<b>" + tr ( "Input Message Text" ) + ":</b> " +
+//                                      tr ( "Chat here while a session is active." ) );
 
     // clear chat window and edit line
-    txvChatWindow->clear();
-    edtLocalInputText->clear();
+//    txvChatWindow->clear();
+//    edtLocalInputText->clear();
 
     // we do not want to show a cursor in the chat history
-    txvChatWindow->setCursorWidth ( 0 );
+//    txvChatWindow->setCursorWidth ( 0 );
 
-    // set a placeholder text to make sure where to type the message in (#384)
-    edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
-    // disable chat widgets
-    butSend->setEnabled(false);
-    edtLocalInputText->setEnabled(false);
+//    // set a placeholder text to make sure where to type the message in (#384)
+//    edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+//    // disable chat widgets
+//    butSend->setEnabled(false);
+//    edtLocalInputText->setEnabled(false);
 
     // Add help text to controls -----------------------------------------------
     // input level meter
@@ -1113,11 +1113,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
 
     // session chat stuff
-    QObject::connect ( edtLocalInputText, &QLineEdit::textChanged, this, &CClientDlg::OnLocalInputTextTextChanged );
-    QObject::connect ( this, &CClientDlg::NewLocalInputText, this, &CClientDlg::OnNewLocalInputText );
-    QObject::connect ( butSend, &QPushButton::clicked, this, &CClientDlg::OnSendText );
-    QObject::connect ( edtLocalInputText, &QLineEdit::returnPressed, this, &CClientDlg::OnSendText );
-    QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked, this, &CClientDlg::OnAnchorClicked );
+//    QObject::connect ( edtLocalInputText, &QLineEdit::textChanged, this, &CClientDlg::OnLocalInputTextTextChanged );
+//    QObject::connect ( this, &CClientDlg::NewLocalInputText, this, &CClientDlg::OnNewLocalInputText );
+//    QObject::connect ( butSend, &QPushButton::clicked, this, &CClientDlg::OnSendText );
+//    QObject::connect ( edtLocalInputText, &QLineEdit::returnPressed, this, &CClientDlg::OnSendText );
+//    QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked, this, &CClientDlg::OnAnchorClicked );
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
@@ -1153,7 +1153,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pClient, &CClient::Disconnected, this, &CClientDlg::OnDisconnected );
 
-    QObject::connect ( pClient, &CClient::ChatTextReceived, this, &CClientDlg::OnChatTextReceived );
+//    QObject::connect ( pClient, &CClient::ChatTextReceived, this, &CClientDlg::OnChatTextReceived );
 
     QObject::connect ( pClient, &CClient::ClientIDReceived, this, &CClientDlg::OnClientIDReceived );
 
@@ -1799,18 +1799,18 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 #endif
 }
 
-void CClientDlg::OnChatTextReceived ( QString strChatText )
-{
-    this->AddChatText ( strChatText );
+//void CClientDlg::OnChatTextReceived ( QString strChatText )
+//{
+//    this->AddChatText ( strChatText );
 
-    // Open chat dialog. If a server welcome message is received, we force
-    // the dialog to be upfront in case a licence text is shown. For all
-    // other new chat texts we do not want to force the dialog to be upfront
-    // always when a new message arrives since this is annoying.
-//    ShowChatWindow ( ( strChatText.indexOf ( WELCOME_MESSAGE_PREFIX ) == 0 ) );
+//    // Open chat dialog. If a server welcome message is received, we force
+//    // the dialog to be upfront in case a licence text is shown. For all
+//    // other new chat texts we do not want to force the dialog to be upfront
+//    // always when a new message arrives since this is annoying.
+////    ShowChatWindow ( ( strChatText.indexOf ( WELCOME_MESSAGE_PREFIX ) == 0 ) );
 
-    UpdateDisplay();
-}
+//    UpdateDisplay();
+//}
 
 void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
 {
@@ -1870,75 +1870,75 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 //void CClientDlg::OnOpenUserProfileSettings() { ShowGeneralSettings ( SETTING_TAB_USER ); }
 
 // session chat slot stuff
-void CClientDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
-{
-    // check and correct length
-    if ( strNewText.length() > MAX_LEN_CHAT_TEXT )
-    {
-        // text is too long, update control with shortened text
-        edtLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
-    }
-}
+//void CClientDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
+//{
+//    // check and correct length
+//    if ( strNewText.length() > MAX_LEN_CHAT_TEXT )
+//    {
+//        // text is too long, update control with shortened text
+//        edtLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
+//    }
+//}
 
-void CClientDlg::OnSendText()
-{
-    // send new text and clear line afterwards, do not send an empty message
-    if ( !edtLocalInputText->text().isEmpty() )
-    {
-        emit NewLocalInputText ( edtLocalInputText->text() );
-        edtLocalInputText->clear();
-    }
-}
+//void CClientDlg::OnSendText()
+//{
+//    // send new text and clear line afterwards, do not send an empty message
+//    if ( !edtLocalInputText->text().isEmpty() )
+//    {
+//        emit NewLocalInputText ( edtLocalInputText->text() );
+//        edtLocalInputText->clear();
+//    }
+//}
 
-void CClientDlg::OnClearChatHistory()
-{
-    // clear chat window
-    txvChatWindow->clear();
-}
+//void CClientDlg::OnClearChatHistory()
+//{
+//    // clear chat window
+//    txvChatWindow->clear();
+//}
 
-void CClientDlg::AddChatText ( QString strChatText )
-{
-    // notify accessibility plugin that text has changed
-    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
+//void CClientDlg::AddChatText ( QString strChatText )
+//{
+//    // notify accessibility plugin that text has changed
+//    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
 
-    // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
-    // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
-    // coding hisself and we should not mess with that)
-    if ( !strChatText.contains ( QRegularExpression ( "href\\s*=|src\\s*=" ) ) )
-    {
-        // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
-        // character and the + means that matches the previous element one or more times.)
-        // This regex now contains three parts:
-        // - https?://\\S+ matches as much non-whitespace as possible after the http:// or https://,
-        //   subject to the next two parts, which exclude terminating punctuation
-        // - (?<![!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
-        //   from ending with one of the characters !"'()+,.:;<=>?[]{}
-        // - (?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
-        //   from ending with a ? followed by one of the characters !"'()+,.:;<=>?[]{}
-        // These last two parts must be separate, as a look-behind assertion must be fixed length.
-#define PUNCT_NOEND_URL "[!\"'()+,.:;<=>?\\[\\]{}]"
-        strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<!" PUNCT_NOEND_URL ")(?<!\\?" PUNCT_NOEND_URL "))" ),
-                              "<a href=\"\\1\">\\1</a>" );
-    }
+//    // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
+//    // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
+//    // coding hisself and we should not mess with that)
+//    if ( !strChatText.contains ( QRegularExpression ( "href\\s*=|src\\s*=" ) ) )
+//    {
+//        // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
+//        // character and the + means that matches the previous element one or more times.)
+//        // This regex now contains three parts:
+//        // - https?://\\S+ matches as much non-whitespace as possible after the http:// or https://,
+//        //   subject to the next two parts, which exclude terminating punctuation
+//        // - (?<![!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
+//        //   from ending with one of the characters !"'()+,.:;<=>?[]{}
+//        // - (?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
+//        //   from ending with a ? followed by one of the characters !"'()+,.:;<=>?[]{}
+//        // These last two parts must be separate, as a look-behind assertion must be fixed length.
+//#define PUNCT_NOEND_URL "[!\"'()+,.:;<=>?\\[\\]{}]"
+//        strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<!" PUNCT_NOEND_URL ")(?<!\\?" PUNCT_NOEND_URL "))" ),
+//                              "<a href=\"\\1\">\\1</a>" );
+//    }
 
-    // add new text in chat window
-    txvChatWindow->append ( strChatText );
-}
+//    // add new text in chat window
+//    txvChatWindow->append ( strChatText );
+//}
 
-void CClientDlg::OnAnchorClicked ( const QUrl& Url )
-{
-    // only allow http(s) URLs to be opened in an external browser
-    if ( Url.scheme() == QLatin1String ( "https" ) || Url.scheme() == QLatin1String ( "http" ) )
-    {
-        if ( QMessageBox::question ( this,
-                                     APP_NAME,
-                                     tr ( "Do you want to open the link '%1' in your browser?" ).arg ( "<b>" + Url.toString() + "</b>" ),
-                                     QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
-        {
-            QDesktopServices::openUrl ( Url );
-        }
-    }
-}
+//void CClientDlg::OnAnchorClicked ( const QUrl& Url )
+//{
+//    // only allow http(s) URLs to be opened in an external browser
+//    if ( Url.scheme() == QLatin1String ( "https" ) || Url.scheme() == QLatin1String ( "http" ) )
+//    {
+//        if ( QMessageBox::question ( this,
+//                                     APP_NAME,
+//                                     tr ( "Do you want to open the link '%1' in your browser?" ).arg ( "<b>" + Url.toString() + "</b>" ),
+//                                     QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
+//        {
+//            QDesktopServices::openUrl ( Url );
+//        }
+//    }
+//}
 // end session chat stuff -------------------------------------------------------------
 
 void CClientDlg::SetMyWindowTitle ( const int iNumClients )
@@ -2330,9 +2330,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         butNewStart->setVisible(false);
         defaultButtonWidget->setMaximumHeight(30);
 
-        // enable chat widgets
-        butSend->setEnabled(true);
-        edtLocalInputText->setEnabled(true);
+//        // enable chat widgets
+//        butSend->setEnabled(true);
+//        edtLocalInputText->setEnabled(true);
 
         // set connection status in status bar
         if (strMixerBoardLabel.isEmpty())
@@ -2404,7 +2404,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 // parse the JSON response
                 QJsonDocument jsonResponse = QJsonDocument::fromJson(contents.toUtf8());
                 QJsonObject jsonObject = jsonResponse.object();
-                QString tmp_str = jsonObject.value("video_url").toString();
+                strVideoHost = jsonObject.value("video_url").toString();
 
                 // set the video url and update QML side
 #if defined(Q_OS_MACX) || defined(Q_OS_IOS)
@@ -2414,7 +2414,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 #else
                 quickView->setSource(QUrl("qrc:/webengineview.qml"));
 #endif
-                strVideoUrl = tmp_str;
+                strVideoUrl = strVideoHost + "#userInfo.displayName=\"" + pClient->ChannelInfo.strName + "\"";
                 qInfo() << "strVideoUrl set to: " << strVideoUrl;
                 // tell the QML side that value is updated
                 emit videoUrlChanged();
@@ -2443,9 +2443,9 @@ void CClientDlg::Disconnect()
     inviteComboBox->clear();
     butConnect->setText ( tr ( "Join..." ) );
 
-    // disable chat widgets
-    butSend->setEnabled(false);
-    edtLocalInputText->setEnabled(false);
+//    // disable chat widgets
+//    butSend->setEnabled(false);
+//    edtLocalInputText->setEnabled(false);
 
     // reset Rec label (if server ends session)
     recLabel->setStyleSheet ( "QLabel { color: rgb(86, 86, 86); font: normal; }" );
@@ -3165,6 +3165,11 @@ void CClientDlg::OnAliasTextChanged ( const QString& strNewName )
         // refresh internal name parameter
         pClient->ChannelInfo.strName = strNewName;
 
+        // reset videoUrl so that Jitsi/QML is updated
+        strVideoUrl = strVideoHost + "#userInfo.displayName=\"" + pClient->ChannelInfo.strName + "\"";
+        // tell the QML side that value is updated
+        emit videoUrlChanged();
+
         // update channel info at the server
         pClient->SetRemoteInfo();
     }
@@ -3173,6 +3178,7 @@ void CClientDlg::OnAliasTextChanged ( const QString& strNewName )
         // text is too long, update control with shortened text
         pedtAlias->setText ( TruncateString ( strNewName, MAX_LEN_FADER_TAG ) );
     }
+
 }
 
 void CClientDlg::OnInstrumentActivated ( int iCntryListItem )

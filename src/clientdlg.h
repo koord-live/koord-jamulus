@@ -94,8 +94,8 @@ public:
                  const bool       bMuteStream,
                  const bool       bNEnableIPv6,
                  QWidget*         parent = nullptr );
-    // session chat
-    void AddChatText ( QString strChatText );
+//    // session chat
+//    void AddChatText ( QString strChatText );
     // settings
     void UpdateUploadRate();
     void UpdateDisplay();
@@ -147,7 +147,8 @@ protected:
     QTimer         TimerDetectFeedback;
     // for join
     QString        strSelectedAddress;
-    QString        strVideoUrl;    
+    QString        strVideoUrl;
+    QString        strVideoHost;
 #if defined(ANDROID)
     QQuickWidget*   quickWidget;
 #else
@@ -248,7 +249,7 @@ public slots:
 //    void OnFeedbackDetectionChanged ( int state ) { SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
-    void OnChatTextReceived ( QString strChatText );
+//    void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
     void OnSoundDeviceChanged ( QString strError );
 
@@ -306,12 +307,12 @@ public slots:
     void OnCheckForUpdate();
     void OnDownloadUpdateClicked();
 
-    // session chat stuff ========================
-    void OnSendText();
-    void OnLocalInputTextTextChanged ( const QString& strNewText );
-    void OnClearChatHistory();
-    void OnAnchorClicked ( const QUrl& Url );
-    // end session chat stuff ========================
+//    // session chat stuff ========================
+//    void OnSendText();
+//    void OnLocalInputTextTextChanged ( const QString& strNewText );
+//    void OnClearChatHistory();
+//    void OnAnchorClicked ( const QUrl& Url );
+//    // end session chat stuff ========================
 
     // settings stuff ==========================================
 //    void OnTimerStatus() { UpdateDisplay(); }
