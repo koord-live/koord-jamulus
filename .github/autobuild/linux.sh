@@ -140,13 +140,13 @@ pass_artifacts_to_job() {
         mv ../koord*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
         echo "::set-output name=artifact_2::${artifact_2}"
     else        
-        local artifact_1="Koord_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
+        local artifact_1="Koord_${JAMULUS_BUILD_VERSION}.AppImage"
         echo "Moving regular build artifact to deploy/${artifact_1}"
         mv gui_appimage/*appimage "./deploy/${artifact_1}"
         echo "::set-output name=artifact_1::${artifact_1}"
 
         if [ -f headless_appimage/*appimage ]; then
-            local artifact_2="Koord_headless_${JAMULUS_BUILD_VERSION}_${TARGET_ARCH}.AppImage"
+            local artifact_2="Koord_headless_${JAMULUS_BUILD_VERSION}.AppImage"
             echo "Moving headless build artifact to deploy/${artifact_2}"
             mv headless_appimage/*appimage "./deploy/${artifact_2}"
             echo "::set-output name=artifact_2::${artifact_2}"

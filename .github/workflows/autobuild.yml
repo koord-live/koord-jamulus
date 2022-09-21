@@ -131,7 +131,7 @@ jobs:
           - config_name:            MacOS 10.15+ intel (artifacts)
             target_os:              macos
             building_on_os:         macos-11
-            base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
+            base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 ARTIFACT_SUFFIX=intel ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
             xcode_version:          13.2.1
@@ -139,7 +139,7 @@ jobs:
           - config_name:            MacOS 10.15+ arm64 (artifacts)
             target_os:              macos
             building_on_os:         macos-12
-            base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 TARGET_ARCH=arm64 ARTIFACT_SUFFIX=_arm64 ./.github/autobuild/mac.sh
+            base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 TARGET_ARCH=arm64 ARTIFACT_SUFFIX=silicon ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
             xcode_version:          13.4.1
