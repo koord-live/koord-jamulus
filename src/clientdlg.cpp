@@ -2515,7 +2515,7 @@ void CClientDlg::replyFinished(QNetworkReply *rep)
 void CClientDlg::OnCheckForUpdate()
 {
     // read from Github API to get latest release ie tag rX_X_X
-    QUrl url("https://api.github.com/repos/koord-live/koord-realtime/releases");
+    QUrl url("https://api.github.com/repos/koord-live/koord-app/releases");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 

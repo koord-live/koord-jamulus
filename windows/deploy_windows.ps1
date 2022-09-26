@@ -275,7 +275,7 @@ Function Build-App
     Invoke-Native-Command -Command "$Env:QtCmakePath" `
         -Arguments ("--build", "$BuildPath\$BuildConfig\flexasio")
 
-    # Now build rest of Koord-Realtime
+    # Now build rest of koord-app
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch $BuildOption", `
         "-o", "$BuildPath\Makefile")

@@ -8,8 +8,8 @@ AppVersion={#ApplicationVersion}
 VersionInfoVersion={#ApplicationVersion}
 AppPublisher=Koord.Live
 AppPublisherURL=https://koord.live
-AppSupportURL=https://github.com/koord-live/koord-realtime/issues
-AppUpdatesURL=https://github.com/koord-live/koord-realtime/releases
+AppSupportURL=https://github.com/koord-live/koord-app/issues
+AppUpdatesURL=https://github.com/koord-live/koord-app/releases
 AppContact=contact@koord.live
 WizardStyle=modern
 
