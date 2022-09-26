@@ -74,12 +74,7 @@ LED bar:      lbr
 // version and application name (use version from qt prject file)
 #undef VERSION
 #define VERSION  APP_VERSION
-#if defined(Q_OS_IOS)
-// since rename to Koord, iOS needs this
-#define APP_NAME "Koord-RT"
-#else
 #define APP_NAME "Koord"
-#endif
 
 // Windows registry key name of auto run entry for the server
 #define AUTORUN_SERVER_REG_NAME "Jamulus server"

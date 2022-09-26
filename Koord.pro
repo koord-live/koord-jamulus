@@ -146,7 +146,7 @@ win32 {
 
 } else:ios {
     # reset TARGET for iOS only since rename
-    TARGET = Koord-RT
+    TARGET = Koord
     QMAKE_INFO_PLIST = ios/Info-xcode.plist
     QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
     QMAKE_ASSET_CATALOGS += ios/Images.xcassets
@@ -160,7 +160,7 @@ win32 {
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = live.koord
-    QMAKE_BUNDLE = Koord-RT
+    QMAKE_BUNDLE = Koord
     # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox

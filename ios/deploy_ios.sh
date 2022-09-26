@@ -2,7 +2,7 @@
 set -eu
 
 root_path="$(pwd)"
-project_path="${root_path}/Koord-RT.pro"
+project_path="${root_path}/Koord.pro"
 iosdeploy_path="${root_path}/ios"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
@@ -50,27 +50,26 @@ build_ipa()
 
     # Create Xcode project file
     # rename project file for iOS to maintain consistency since rename
-    mv Koord.pro Koord-RT.pro
-    qmake -spec macx-xcode Koord-RT.pro
+    qmake -spec macx-xcode Koord.pro
 
     # Note: presence of "SYMROOT" variable forces xcodebuild to use the legacy option instead of default
     # To force default Build Location (and thus avoid project clean errors with fastlane) we need to edit file
-    echo "Removing these lines from Koord-RT.xcodeproj/project.pbxproj ... "
-    grep SYMROOT Koord-RT.xcodeproj/project.pbxproj
-    grep -v SYMROOT Koord-RT.xcodeproj/project.pbxproj > Koord-RT.xcodeproj/tmpproj
-    mv Koord-RT.xcodeproj/tmpproj Koord-RT.xcodeproj/project.pbxproj
-    echo "File Koord-RT.xcodeproj/project.pbxproj edited."
+    echo "Removing these lines from Koord.xcodeproj/project.pbxproj ... "
+    grep SYMROOT Koord.xcodeproj/project.pbxproj
+    grep -v SYMROOT Koord.xcodeproj/project.pbxproj > Koord.xcodeproj/tmpproj
+    mv Koord.xcodeproj/tmpproj Koord.xcodeproj/project.pbxproj
+    echo "File Koord.xcodeproj/project.pbxproj edited."
 
     # disable deprecation warnings re legacy build system - XCode 13 errors on this
-    # /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-    # /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" Koord-RT.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+    # /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" Koord.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+    # /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" Koord.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
 
     # Build
     if [[ -z "$iosdist_cert_name" ]]; then
-        /usr/bin/xcodebuild -project Koord-RT.xcodeproj  -list
+        /usr/bin/xcodebuild -project Koord.xcodeproj  -list
         # Build unsigned
-        /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
-            -archivePath "build/Koord-RT.xcarchive" \
+        /usr/bin/xcodebuild -project Koord.xcodeproj -scheme Koord -configuration Release clean archive \
+            -archivePath "build/Koord.xcarchive" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
@@ -79,11 +78,11 @@ build_ipa()
         ## NOTE: don't do anything here - leave this to later Github action
         echo "Not building anything here, deferring to later Github Action..."
 
-        # /usr/bin/xcodebuild -project Koord-RT.xcodeproj  -list
+        # /usr/bin/xcodebuild -project Koord.xcodeproj  -list
         # # Ref: https://developer.apple.com/forums/thread/70326
         # # // Builds the app into an archive
-        # /usr/bin/xcodebuild -project Koord-RT.xcodeproj -scheme Koord-RT -configuration Release clean archive \
-        #     -archivePath "build/Koord-RT.xcarchive" \
+        # /usr/bin/xcodebuild -project Koord.xcodeproj -scheme Koord -configuration Release clean archive \
+        #     -archivePath "build/Koord.xcarchive" \
         #     DEVELOPMENT_TEAM="TXZ4FR95HG" \
         #     CODE_SIGN_IDENTITY="" \
         #     CODE_SIGNING_REQUIRED=NO \
@@ -91,15 +90,15 @@ build_ipa()
 
         # # debug
         # echo "Archive contents after creating archive"
-        # ls -alR build/Koord-RT.xcarchive
+        # ls -alR build/Koord.xcarchive
 
         # #FIXME this may be redundant - since provisioning profile is specified in exportOptionsRelease.plist
-        # cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app/
+        # cp ~/Library/MobileDevice/Provisioning\ Profiles/embedded.mobileprovision build/Koord.xcarchive/Products/Applications/Koord.app/
 
         # # // Exports the archive according to the export options specified by the plist
-        # # export signed installer to build/Exports/Koord-RT.ipa
+        # # export signed installer to build/Exports/Koord.ipa
         # /usr/bin/xcodebuild -exportArchive \
-        #     -archivePath "build/Koord-RT.xcarchive" \
+        #     -archivePath "build/Koord.xcarchive" \
         #     -exportPath  "build/Exports/" \
         #     -exportOptionsPlist "ios/exportOptionsRelease.plist" \
         #     DEVELOPMENT_TEAM="TXZ4FR95HG" \
@@ -110,7 +109,7 @@ build_ipa()
 
         # # debug
         # echo "Archive contents after creating signed installer"
-        # ls -alR build/Koord-RT.xcarchive
+        # ls -alR build/Koord.xcarchive
     fi
 
     # if no dist_cert, just create unsigned ipa file
@@ -119,20 +118,20 @@ build_ipa()
         # Generate unsigned ipa by copying the .app structure from the xcarchive directory
         cd ${root_path}
         mkdir -p build/unsigned/Payload
-        cp -r build/Koord-RT.xcarchive/Products/Applications/Koord-RT.app build/unsigned/Payload/
+        cp -r build/Koord.xcarchive/Products/Applications/Koord.app build/unsigned/Payload/
         cd build/unsigned
-        zip -0 -y -r Koord-RT.ipa Payload/
+        zip -0 -y -r Koord.ipa Payload/
 
         # move unsigned ipa file for upload
         cd ${root_path}
-        mv build/unsigned/Koord-RT.ipa deploy/Koord-RT_unsigned.ipa
+        mv build/unsigned/Koord.ipa deploy/Koord_unsigned.ipa
     else
         # NOTE: don't do anything here now
         echo "Not doing anything here, deferring to later Github Action..."
 
         # cd ${root_path}
         # # move signed ipa file for upload
-        # mv build/Exports/Koord-RT.ipa deploy/Koord-RT_signed.ipa
+        # mv build/Exports/Koord.ipa deploy/Koord_signed.ipa
     fi
 }
 

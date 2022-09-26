@@ -93,18 +93,18 @@ build_app_as_ipa() {
 
 pass_artifact_to_job() {
     # just pass the one IPA file
-    local SIGN_TEST=$(ls deploy/Koord-RT_*.ipa | grep -i unsigned)
+    local SIGN_TEST=$(ls deploy/Koord_*.ipa | grep -i unsigned)
     if [ "${SIGN_TEST}" == "" ]; then
         echo "Signed, No artifact to pass..."
         # local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
         # echo "Moving build artifact to deploy/${artifact}"
         # mkdir -p deploy
-        # mv ./build/Koord-RT.ipa ./deploy/Koord-RT.ipa
-        # echo "::set-output name=artifact_1::Koord-RT.ipa"
+        # mv ./build/Koord.ipa ./deploy/Koord.ipa
+        # echo "::set-output name=artifact_1::Koord.ipa"
     else
         local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_unsigned${ARTIFACT_SUFFIX:-}.ipa"
         echo "Moving build artifact to deploy/${artifact}"
-        mv ./deploy/Koord-RT_*.ipa "./deploy/${artifact}"
+        mv ./deploy/Koord_*.ipa "./deploy/${artifact}"
         echo "::set-output name=artifact_1::${artifact}"
     fi
 
