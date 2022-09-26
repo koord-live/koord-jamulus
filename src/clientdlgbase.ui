@@ -307,7 +307,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -562,6 +562,9 @@
                          </property>
                          <item>
                           <layout class="QVBoxLayout" name="verticalLayout_4">
+                           <property name="bottomMargin">
+                            <number>4</number>
+                           </property>
                            <item>
                             <spacer name="verticalSpacer">
                              <property name="orientation">
@@ -668,6 +671,9 @@ QCheckBox::indicator {
                          </item>
                          <item>
                           <layout class="QVBoxLayout" name="verticalLayout_2">
+                           <property name="bottomMargin">
+                            <number>3</number>
+                           </property>
                            <item>
                             <widget class="QDial" name="panDial">
                              <property name="maximumSize">
@@ -728,6 +734,9 @@ QCheckBox::indicator {
                          </item>
                          <item>
                           <layout class="QVBoxLayout" name="verticalLayout_8">
+                           <property name="bottomMargin">
+                            <number>3</number>
+                           </property>
                            <item>
                             <widget class="QDial" name="dialInputBoost">
                              <property name="maximumSize">
@@ -3498,29 +3507,51 @@ QCheckBox::indicator {
               </property>
               <item>
                <widget class="QTextBrowser" name="txvHelp">
+                <property name="font">
+                 <font>
+                  <family>Rubik</family>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
                 <property name="html">
                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;title&gt;koordhelp&lt;/title&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot; bgcolor=&quot;#303638&quot;&gt;
-&lt;h1 style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:xx-large; font-weight:700; color:#ffffff;&quot;&gt;Welcome to Koord!&lt;/span&gt;&lt;/h1&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;Koord makes it easy for you to play with other musicians online, with the best possible audio quality.&lt;br /&gt;See more at the Koord website.&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:x-large; font-weight:700; color:#ffffff;&quot;&gt;How to get started:&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;1 - Set your Session user display name in Settings tab (this sets your display name to other band members)&lt;br /&gt;2 - Select the Session Tab (img) and click the &amp;quot;Create!&amp;quot; button. A webpage will open ...&lt;br /&gt;3 - In webpage: sign up / login to koord.live, create a Session near you, and copy the Session link&lt;br /&gt;4 - Back in the Koord app Session tab, click &amp;quot;Join...&amp;quot; and paste the Session link, then click Connect!&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;&lt;br /&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;It's time to play!&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:x-large; font-weight:700; color:#ffffff;&quot;&gt;Important tips:&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;1 - Best to use Wifi6, 5G or wired connection to your router. Otherwise latency will suffer!&lt;br /&gt;2 - Use headphones to listen to the Session mix.&lt;/span&gt;&lt;span style=&quot; font-family:'Rubik'; font-weight:700; color:#ffffff;&quot;&gt; &lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:x-large; font-weight:700; color:#ffffff;&quot;&gt;Using the Koord app:&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;Click on the Tab icons at the left side of the screen to navigate to the different parts of the Koord app.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;&lt;br /&gt;The descriptions of each tab are shown below:&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Session Tab&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;  - Input&lt;br /&gt;    Control and monitor input&lt;br /&gt;  - Net Check&lt;br /&gt;    Displays the health of your network connection and the round-trip latency&lt;br /&gt;  - Session Control Area&lt;br /&gt;    Join, Create and Disconnect Sessions from here&lt;br /&gt;  - Session Mixer&lt;br /&gt;    Control and monitor your personal mix of all band members in the Session&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Video Tab&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;When you have joined a Session, you will see video from all your band members here.&lt;br /&gt;  - Disable/Enable video&lt;br /&gt;  - toggle view mode&lt;br /&gt;  - set Performance/Quality of video&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Session Chat Tab&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;When you have joined a Session, you chat via text with your band members here.&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:large; font-weight:700; color:#ffffff;&quot;&gt;Settings Tab&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;  - Personal Settings&lt;br /&gt;    Username&lt;br /&gt;    Mixer preferences&lt;br /&gt;  - Audio Settings&lt;br /&gt;    Set audio device (soundcard)&lt;br /&gt;    Set channels and quality options&lt;br /&gt;  - Network Settings (advanced)&lt;br /&gt;    Buffer controls for specialist use cases&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Rubik'; font-size:12pt; font-weight:400; font-style:normal;&quot; bgcolor=&quot;#303638&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:14pt; font-weight:700;&quot;&gt;Welcome to Koord&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;Koord makes it easy for you to play with other musicians online, with the best possible audio quality.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;See more at the &lt;/span&gt;&lt;a href=&quot;https://koord.live&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#ffaa00;&quot;&gt;Koord website&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-weight:700;&quot;&gt;How to get started:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;1 - Set your Session user display name in Settings tab - this sets the name shown to other group members&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;2 - Select the Session Tab and click the &amp;quot;Create!&amp;quot; button&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;3 - Sign up / login, create a Session near you, and copy the Session link&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;4 - In the app, click &amp;quot;Join...&amp;quot;, paste the Session link, then click Connect!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;It's time to play!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-weight:700;&quot;&gt;Important tips!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;1 - Best to use Wifi6, 5G or wired connection to your router. Otherwise latency will suffer!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;2 - Use headphones to listen to the Session mix.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-weight:700;&quot;&gt;Using the Koord app&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;Click on the Tab icons at the left side of the screen to navigate to the different parts of the Koord app.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-weight:700;&quot;&gt;- Session Tab &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;This is the main tab for controlling and monitoring your Session.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;You can monitor your Input level, check how well your net connection is performing, and create your own personal mix from all the group members' sound.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;Hover the mouse over each section label to get tips on eg Input, Net Check and the Mixerboard.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-weight:700;&quot;&gt;- Video Tab&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;When you have joined a Session, you will see video from all your group members here.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;The controls here allow you to switch off your camera (or change camera device), and open a Chat messenger for text chat with your group.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-weight:700;&quot;&gt;- Settings Tab&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;This tab contains all your Personal, Audio and Network Settings.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI';&quot;&gt;Hover the mouse over the labels to get tips for each section.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="textInteractionFlags">
                  <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
@@ -3683,15 +3714,35 @@ hr { height: 1px; border-width: 0; }
                 </item>
                 <item>
                  <widget class="QTextBrowser" name="txvAbout">
+                  <property name="font">
+                   <font>
+                    <family>Rubik</family>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
                   <property name="html">
                    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot; bgcolor=&quot;#303638&quot;&gt;
-&lt;h1 style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; font-size:xx-large; font-weight:700; color:#ffffff;&quot;&gt;About&lt;/span&gt;&lt;/h1&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;Koord is 100% free and open-source software, published under the GNU Public Licence.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Rubik'; color:#ffffff;&quot;&gt;&lt;br /&gt;It builds on these upstream open-source projects:&lt;br /&gt;&lt;br /&gt;- Jamulus&lt;br /&gt;- Opus&lt;br /&gt;- Qt&lt;br /&gt;- Jitsi&lt;br /&gt;- FlexASIO (for Windows version)&lt;br /&gt;- Oboe (for Android version)&lt;br /&gt;&lt;br /&gt;Koord.Live is dedicated to bringing musicians around the world together, with the tools to connect and create easily.&lt;br /&gt;&lt;br /&gt;https://koord.live&lt;br /&gt;(c) Koord, Inc&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Rubik'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;About&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The Koord app is 100% free and open-source software, published under the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.en.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#ffaa00;&quot;&gt;GNU Public Licence&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It builds on these upstream open-source projects:&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Jamulus&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Opus&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Qt&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Jitsi&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- FlexASIO (for Windows version)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Oboe (for Android version)&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Koord.Live is dedicated to bringing musicians around the world together, with the tools to connect and create easily.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://koord.live&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#ffaa00;&quot;&gt;https://koord.live&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(c) Koord, Inc &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="textInteractionFlags">
                    <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>

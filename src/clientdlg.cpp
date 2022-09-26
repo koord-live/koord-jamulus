@@ -2364,10 +2364,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
         // do video_url lookup here ...
         //FIXME - unhardcode test url
-        QUrl url("https://test.koord.live/sess/sessionvideourl/");
+        QUrl url("https://koord.live/sess/sessionvideourl/");
         QNetworkRequest request(url);
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        request.setRawHeader("test-koord-login", "test17d3moin3s");
+//        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+//        request.setRawHeader("test-koord-login", "test17d3moin3s");
 
         QRegularExpression rx_sessaddr("^(([a-z]*[0-9]*\\.*)+):([0-9]+)$");
 //        qInfo() << ">>> strSelectedaddress = " << strSelectedAddress;
