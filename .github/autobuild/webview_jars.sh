@@ -3,7 +3,6 @@ set -eu
 
 # QT_VERSION=${QT_VER}
 # export QT_VERSION
-QT_VERSION=6.3.2
 
 ## Utility to build Qt for Android, on Linux (Ubuntu 2004 or 2204)
 # References:
