@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 
-QT_VERSION=${QT_VER}
-export QT_VERSION
+# QT_VERSION=${QT_VER}
+# export QT_VERSION
 
 ## Utility to build Qt for Android, on Linux (Ubuntu 2004 or 2204)
 # References:
