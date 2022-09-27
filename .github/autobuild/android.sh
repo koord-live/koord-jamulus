@@ -85,7 +85,8 @@ setup_qt() {
             --archives qtbase qtdeclarative qtsvg qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
-        wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_arm64-v8a.jar -O \
+        # wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_arm64-v8a.jar -O \
+        wget https://github.com/koord-live/koord-app/releases/download/%24%7BQT_VERSION%7D/QtAndroidWebView_arm64-v8a.jar -O \
             "${QT_BASEDIR}/${QT_VERSION}/android_arm64_v8a/jar/QtAndroidWebView.jar"
 
         # Also install for arm_v7 to build for 32bit devices
@@ -93,7 +94,8 @@ setup_qt() {
             --archives qtbase qtdeclarative qtsvg qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
-        wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_armeabi-v7a.jar -O \
+        # wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_armeabi-v7a.jar -O \
+        wget https://github.com/koord-live/koord-app/releases/download/%24%7BQT_VERSION%7D/QtAndroidWebView_armeabi-v7a.jar -O \
             "${QT_BASEDIR}/${QT_VERSION}/android_armv7/jar/QtAndroidWebView.jar"
 
     fi
