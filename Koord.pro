@@ -181,7 +181,7 @@ win32 {
     ANDROID_MIN_SDK_VERSION = 29
 
     # sdk version = 30 is required by Google Play store
-    ANDROID_TARGET_SDK_VERSION = 30
+    ANDROID_TARGET_SDK_VERSION = 31
     ANDROID_VERSION_NAME = $$VERSION
 
     ## note: stop setting this here, screws up autobuild for 2 x aabs
