@@ -6,7 +6,7 @@ ANDROID_NDK_VERSION=r22b
 ANDROID_PLATFORM=android-31
 ANDROID_BUILD_TOOLS=31.0.0
 AQTINSTALL_VERSION=2.1.0
-QT_VERSION=6.3.2
+QT_VERSION=6.4.0
 
 # Only variables which are really needed by sub-commands are exported.
 # Definitions have to stay in a specific order due to dependencies.
@@ -85,8 +85,7 @@ setup_qt() {
             --archives qtbase qtdeclarative qtsvg qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
-        # wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_arm64-v8a.jar -O \
-        wget https://github.com/koord-live/koord-app/releases/download/%24%7BQT_VERSION%7D/QtAndroidWebView_arm64-v8a.jar -O \
+        wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_arm64-v8a.jar -O \
             "${QT_BASEDIR}/${QT_VERSION}/android_arm64_v8a/jar/QtAndroidWebView.jar"
 
         # Also install for arm_v7 to build for 32bit devices
@@ -94,8 +93,7 @@ setup_qt() {
             --archives qtbase qtdeclarative qtsvg qttools \
             --modules qtwebview 
         ##FIXME - HACK - SUBSTITUTE webview jar
-        # wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_armeabi-v7a.jar -O \
-        wget https://github.com/koord-live/koord-app/releases/download/%24%7BQT_VERSION%7D/QtAndroidWebView_armeabi-v7a.jar -O \
+        wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_armeabi-v7a.jar -O \
             "${QT_BASEDIR}/${QT_VERSION}/android_armv7/jar/QtAndroidWebView.jar"
 
     fi
