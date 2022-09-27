@@ -28,7 +28,7 @@ jobs:
         run:                        ./.github/autobuild/webview_jars.sh build
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-          QT_VERSION:               $QT_VERSION
+          QT_VERSION:               ${{ env.QT_VERSION }}
         
       - name:                       Post-Build for jar build
         id:                         get-artifacts
@@ -54,11 +54,11 @@ jobs:
         id:                         create-release
         uses:                       ncipollo/release-action@v1
         with:
-          tag:                      $QT_VERSION
+          tag:                      ${{ env.QT_VERSION }}
           artifacts:                "deploy/*.jar"
           draft:                    false
           token:                    ${{ secrets.GITHUB_TOKEN }}
-          name:                     Qt_$QT_VERSION
+          name:                     Qt_${{ env.QT_VERSION }}
       
 
       # - name:                       Upload Jar 1 to Release
