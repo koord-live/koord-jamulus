@@ -144,24 +144,10 @@ jobs:
             run_codeql:             false
             xcode_version:          13.4.1
 
-          # # - config_name:            MacOS 10.14+ x64 pkg,dmg
-          # #   target_os:              macos
-          # #   # Build platform can be newer than target platform
-          # #   building_on_os:         macos-10.15
-          # #   base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-          # #   run_codeql:             false
-          # #   # Target oldest macOS version supported by Qt6: 10.14 - so xcode 12 needed 
-          # #   # Xcode 12.1.1 is the most-recent release which still ships SDK 10.15:
-          # #   # https://developer.apple.com/support/xcode/ -  https://xcodereleases.com/
-          # #   xcode_version:          12.1.1
-
           - config_name:            iOS 10.13+ ipa
             target_os:              ios
             building_on_os:         macos-12
             base_command:           QT_VERSION=6.4.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
-            # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
-            # There are no hints that iOS is supposed to be supported by CodeQL.
-            # Therefore, disable it:
             run_codeql:             false
             xcode_version:          13.4.1
 
