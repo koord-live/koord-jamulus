@@ -28,6 +28,7 @@ jobs:
         run:                        QT_VER=$QT_VERSION ./.github/autobuild/webview_jars.sh build
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+          QT_VERSION:               6.3.2
         
       - name:                       Post-Build for jar build
         id:                         get-artifacts
