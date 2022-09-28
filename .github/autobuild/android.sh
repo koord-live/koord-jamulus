@@ -1,27 +1,46 @@
-    #!/bin/bash
+#!/bin/bash
 set -eu
 
-COMMANDLINETOOLS_VERSION=8512546
-ANDROID_NDK_VERSION=r22b
-ANDROID_PLATFORM=android-31
-ANDROID_BUILD_TOOLS=31.0.0
-AQTINSTALL_VERSION=2.1.0
-QT_VERSION=6.4.0
+## From https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md
+# Tools already installed:
+    # Android Command Line Tools 	7.0
+    # Android SDK Build-tools  	33.0.0
+    # Android SDK Platform-Tools 	33.0.3
+    # Android SDK Platforms 	android-33 (rev 2)
+    # Android SDK Tools 	26.1.1
 
-# Only variables which are really needed by sub-commands are exported.
-# Definitions have to stay in a specific order due to dependencies.
-QT_BASEDIR="/opt/Qt"
-ANDROID_BASEDIR="/opt/android"
-BUILD_DIR=build
-export ANDROID_SDK_ROOT="${ANDROID_BASEDIR}/android-sdk"
-COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
-export ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
+# Env vars set: 
+    # ANDROID_HOME 	/usr/local/lib/android/sdk
+    # ANDROID_NDK 	/usr/local/lib/android/sdk/ndk/25.1.8937393
+    # ANDROID_NDK_HOME 	/usr/local/lib/android/sdk/ndk/25.1.8937393
+    # ANDROID_NDK_LATEST_HOME 	/usr/local/lib/android/sdk/ndk/25.1.8937393
+    # ANDROID_NDK_ROOT 	/usr/local/lib/android/sdk/ndk/25.1.8937393
+    # ANDROID_SDK_ROOT 	/usr/local/lib/android/sdk
+
+## CRAP:
+# COMMANDLINETOOLS_VERSION=8512546
+# ANDROID_NDK_VERSION=r22b
+# ANDROID_BUILD_TOOLS=31.0.0
+# ANDROID_BASEDIR="/opt/android"
+# export ANDROID_SDK_ROOT="${ANDROID_BASEDIR}/android-sdk"
+# COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
+# export ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
 # # WARNING: Support for ANDROID_NDK_HOME is deprecated and will be removed in the future. Use android.ndkVersion in build.gradle instead.
 # # ref: https://bugreports.qt.io/browse/QTBUG-81978?focusedCommentId=497578&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-497578
 # ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
+# ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
+#--
+
+ANDROID_PLATFORM=android-33
+AQTINSTALL_VERSION=2.1.0
+QT_VERSION=6.3.1
+# Only variables which are really needed by sub-commands are exported.
+# Definitions have to stay in a specific order due to dependencies.
+QT_BASEDIR="/opt/Qt"
+BUILD_DIR=build
 ANDROID_NDK_HOST="linux-x86_64"
-ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
-export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
+# export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
+export JAVA_HOME=${JAVA_HOME_11_X64}
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
 
@@ -38,36 +57,36 @@ setup_ubuntu_dependencies() {
         build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-11-jdk-headless
 }
 
-setup_android_sdk() {
-    mkdir -p "${ANDROID_BASEDIR}"
+# setup_android_sdk() {
+#     mkdir -p "${ANDROID_BASEDIR}"
 
-    if [[ -d "${COMMANDLINETOOLS_DIR}" ]]; then
-        echo "Using commandlinetools installation from previous run (actions/cache)"
-    else
-        mkdir -p "${COMMANDLINETOOLS_DIR}"
-        curl -s -o downloadfile "https://dl.google.com/android/repository/commandlinetools-linux-${COMMANDLINETOOLS_VERSION}_latest.zip"
-        unzip -q downloadfile
-        mv cmdline-tools/* "${COMMANDLINETOOLS_DIR}"
-    fi
+#     if [[ -d "${COMMANDLINETOOLS_DIR}" ]]; then
+#         echo "Using commandlinetools installation from previous run (actions/cache)"
+#     else
+#         mkdir -p "${COMMANDLINETOOLS_DIR}"
+#         curl -s -o downloadfile "https://dl.google.com/android/repository/commandlinetools-linux-${COMMANDLINETOOLS_VERSION}_latest.zip"
+#         unzip -q downloadfile
+#         mv cmdline-tools/* "${COMMANDLINETOOLS_DIR}"
+#     fi
 
-    yes | "${ANDROID_SDKMANAGER}" --licenses
-    "${ANDROID_SDKMANAGER}" --update
-    "${ANDROID_SDKMANAGER}" "platforms;${ANDROID_PLATFORM}"
-    "${ANDROID_SDKMANAGER}" "build-tools;${ANDROID_BUILD_TOOLS}"
-}
+#     yes | "${ANDROID_SDKMANAGER}" --licenses
+#     "${ANDROID_SDKMANAGER}" --update
+#     "${ANDROID_SDKMANAGER}" "platforms;${ANDROID_PLATFORM}"
+#     "${ANDROID_SDKMANAGER}" "build-tools;${ANDROID_BUILD_TOOLS}"
+# }
 
-setup_android_ndk() {
-    mkdir -p "${ANDROID_BASEDIR}"
+# setup_android_ndk() {
+#     mkdir -p "${ANDROID_BASEDIR}"
 
-    if [[ -d "${ANDROID_NDK_ROOT}" ]]; then
-        echo "Using NDK installation from previous run (actions/cache)"
-    else
-        echo "Installing NDK from dl.google.com to ${ANDROID_NDK_ROOT}..."
-        curl -s -o downloadfile "https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip"
-        unzip -q downloadfile
-        mv "android-ndk-${ANDROID_NDK_VERSION}" "${ANDROID_NDK_ROOT}"
-    fi
-}
+#     if [[ -d "${ANDROID_NDK_ROOT}" ]]; then
+#         echo "Using NDK installation from previous run (actions/cache)"
+#     else
+#         echo "Installing NDK from dl.google.com to ${ANDROID_NDK_ROOT}..."
+#         curl -s -o downloadfile "https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip"
+#         unzip -q downloadfile
+#         mv "android-ndk-${ANDROID_NDK_VERSION}" "${ANDROID_NDK_ROOT}"
+#     fi
+# }
 
 setup_qt() {
     if [[ -d "${QT_BASEDIR}" ]]; then
@@ -191,8 +210,8 @@ pass_artifact_to_job() {
 case "${1:-}" in
     setup)
         setup_ubuntu_dependencies
-        setup_android_ndk
-        setup_android_sdk
+        # setup_android_ndk
+        # setup_android_sdk
         setup_qt
         install_android_openssl
         ;;
