@@ -180,8 +180,7 @@ win32 {
     # BUT: crashes on Android 9, sdk=28
     ANDROID_MIN_SDK_VERSION = 29
 
-    # sdk version = 30 is required by Google Play store
-    ANDROID_TARGET_SDK_VERSION = 31
+    ANDROID_TARGET_SDK_VERSION = 33
     ANDROID_VERSION_NAME = $$VERSION
 
     ## note: stop setting this here, screws up autobuild for 2 x aabs
