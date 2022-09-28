@@ -1,7 +1,7 @@
 name: Build hacked webview jars
 
 env:
-  QT_VERSION: 6.4.0
+  QT_VERSION: 6.3.2
 
 on:
   push:
