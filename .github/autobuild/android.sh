@@ -33,7 +33,7 @@ set -eu
 
 ANDROID_PLATFORM=android-33
 AQTINSTALL_VERSION=2.1.0
-QT_VERSION=6.3.1
+QT_VERSION=6.3.2
 # Only variables which are really needed by sub-commands are exported.
 # Definitions have to stay in a specific order due to dependencies.
 QT_BASEDIR="/opt/Qt"
