@@ -1,3 +1,7 @@
+### 4.0.3 (2022-09-28) ###
+
+- Client: Android rebuild qt 6.3.1, NDK 25 
+
 ### 4.0.2 (2022-09-27) ###
 
 - Client: Android build with Qt 6.4.0 
