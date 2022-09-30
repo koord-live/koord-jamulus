@@ -61,110 +61,6 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 
 // Implementation **************************************************************
 
-//// is this the right ifdef or should it be ...
-//// #    if defined( __APPLE__ ) || defined( __MACOSX )
-//// note: below class definition doesn't compile on Linux
-//#if defined( Q_OS_MACX )
-
-//// POC:
-//// HACKED duplicated selected code from int main()
-//// Adding this for MacOS custom URL handler
-//// as per https://doc.qt.io/qt-5/qfileopenevent.html#macos-example
-//class KJApplication : public QApplication
-//{
-//public:
-//    KJApplication(int &argc=0, char **argv=0)
-//}
-
-//KJApplication::KJApplication( int &argc, char **argv )
-//    : QApplication(argc, argv)
-//{
-//    // all main int main stuff ?
-
-
-//    // add event handler for koord:// url
-//    bool event(QEvent *event) override
-//    {
-//        if (event->type() == QEvent::FileOpen) {
-//            QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-//            qDebug() << "Open URL" << openEvent->url();
-
-//            // Set up QApplication with normal GUI, autoconnect options ...
-//            QString      strConnOnStartupAddress     = openEvent->url().toString();
-//            quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
-//            quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
-//            QString      strMIDISetup                = "";
-//            bool         bNoAutoJackConnect          = false;
-//            QString      strClientName               = "";
-//            bool         bMuteMeInPersonalMix        = false;
-//            // more
-//            QString      strIniFileName              = "";
-//            QList<QString> CommandLineOptions;
-//            bool         bUseTranslation             = true;
-//            bool         bShowComplRegConnList       = false;
-//            bool         bShowAnalyzerConsole       = false;
-//            bool         bMuteStream       = false;
-
-//            // set only option we need
-//            CommandLineOptions << "--autoconnect";
-
-//            QCoreApplication* pApp = QCoreApplication::instance();
-//            if (pApp == nullptr) {
-//                // ?? set args here "artificially"?
-//                int i = 2;
-//                char *strthing[2];
-//                pApp = new QApplication (i, strthing);
-//            }
-
-//            // On OSX we need to declare an activity to ensure the process doesn't get
-//            // throttled by OS level Nap, Sleep, and Thread Priority systems.
-//            CActivity activity;
-//            activity.BeginActivity();
-
-//            // init resources
-//            Q_INIT_RESOURCE ( resources );
-
-//            try {
-//                // Client:
-//                // actual client object
-//                CClient
-//                    Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, strMIDISetup, bNoAutoJackConnect, strClientName, bMuteMeInPersonalMix );
-//                // load settings from init-file (command line options override)
-//                CClientSettings Settings ( &Client, strIniFileName );
-//                Settings.Load ( CommandLineOptions );
-//                // load translation
-//                if ( bUseTranslation )
-//                {
-//                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-//                    CInstPictures::UpdateTableOnLanguageChange();
-//                }
-
-//                // GUI object
-//                CClientDlg ClientDlg ( &Client,
-//                                       &Settings,
-//                                       strConnOnStartupAddress,
-//                                       strMIDISetup,
-//                                       bShowComplRegConnList,
-//                                       bShowAnalyzerConsole,
-//                                       bMuteStream,
-//                                       nullptr );
-
-//                // show dialog
-//                ClientDlg.show();
-//                pApp->exec();
-//            }
-
-//            catch ( const CGenErr& generr ) {
-//            // show generic error
-//                QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
-//            }
-//        }
-
-//        return QApplication::event(event);
-//    }
-//};
-//#endif
-
 int main ( int argc, char** argv )
 {
 
@@ -592,26 +488,6 @@ int main ( int argc, char** argv )
 
         // If single argument ie argc=2 check to see if direct exec of /usr/share/applications/koordrt.desktopkoord url --------------------------------------
         if ( argc == 2) {
-//            // if argv[1] matches "koord://{IPv4_addr}"
-//            QRegExp rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
-//            // gen2 url - if argv[1] matches "koord://{IPv4_addr}:{port}"
-//            QRegExp rx_gen2("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
-//            int pos_gen1 = rx_gen1.indexIn(argv[1]); // match gen1 url
-//            int pos_gen2 = rx_gen2.indexIn(argv[1]); // match gen2 url
-//            if (pos_gen2 != -1) { // try to match gen2 url first
-//                // add -x {IPv4_addr} to CommandLineOptions
-//                strConnOnStartupAddress = rx_gen2.cap(1);
-//                qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
-//                CommandLineOptions << "--autoconnect";
-//                continue;
-//            } else if (pos_gen1 != -1) { // if no joy, try to match gen1 url
-//                // add -x {IPv4_addr} to CommandLineOptions
-//                strConnOnStartupAddress = rx_gen1.cap(1);
-//                qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
-//                CommandLineOptions << "--autoconnect";
-//                continue;
-//            }
-
             // if argv[1] matches "koord://{IPv4_addr}"
             QRegularExpression rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
             QRegularExpressionMatch gen1_match = rx_gen1.match(argv[1]);
@@ -937,13 +813,6 @@ int main ( int argc, char** argv )
     // need this before new QApplication created
     // AND before QPlatformOpenGLContext is created - https://doc.qt.io/qt-6/qtwebview-index.html#prerequisites
     QtWebView::initialize();
-
-    // need to set OpenGL specifically for at least Mac! maybe iOS too
-    //
-//    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
-    // https://doc.qt.io/qt-6/qml-qtwebengine-webengineview.html#details
-//    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-//    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     //FIXME - gui vs nogui handling
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
@@ -1362,7 +1231,3 @@ bool GetNumericArgument ( int     argc,
         return false;
     }
 }
-
-
-
-

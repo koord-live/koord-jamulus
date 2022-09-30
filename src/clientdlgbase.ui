@@ -3486,7 +3486,7 @@ QCheckBox::indicator {
              <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tabHelp">
              <attribute name="title">

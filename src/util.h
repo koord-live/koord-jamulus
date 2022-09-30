@@ -41,7 +41,6 @@
 #    include <QDesktopServices>
 #    include <QKeyEvent>
 #    include <QStackedLayout>
-#    include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
 #include <QDirIterator>
@@ -383,49 +382,49 @@ public slots:
     }
 };
 
-// About dialog ----------------------------------------------------------------
-class CAboutDlg : public CBaseDlg, private Ui_CAboutDlgBase
-{
-    Q_OBJECT
+//// About dialog ----------------------------------------------------------------
+//class CAboutDlg : public CBaseDlg, private Ui_CAboutDlgBase
+//{
+//    Q_OBJECT
 
-public:
-    CAboutDlg ( QWidget* parent = nullptr );
-};
+//public:
+//    CAboutDlg ( QWidget* parent = nullptr );
+//};
 
 // Licence dialog --------------------------------------------------------------
-class CLicenceDlg : public CBaseDlg
-{
-    Q_OBJECT
+//class CLicenceDlg : public CBaseDlg
+//{
+//    Q_OBJECT
 
-public:
-    CLicenceDlg ( QWidget* parent = nullptr );
+//public:
+//    CLicenceDlg ( QWidget* parent = nullptr );
 
-protected:
-    QPushButton* butAccept;
+//protected:
+//    QPushButton* butAccept;
 
-public slots:
-    void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
-};
+//public slots:
+//    void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
+//};
 
-// Help menu -------------------------------------------------------------------
-class CHelpMenu : public QMenu
-{
-    Q_OBJECT
+//// Help menu -------------------------------------------------------------------
+//class CHelpMenu : public QMenu
+//{
+//    Q_OBJECT
 
-public:
-    CHelpMenu ( const bool bIsClient, QWidget* parent = nullptr );
+//public:
+//    CHelpMenu ( const bool bIsClient, QWidget* parent = nullptr );
 
-protected:
-    CAboutDlg AboutDlg;
+//protected:
+//    CAboutDlg AboutDlg;
 
-public slots:
-    void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
-    void OnHelpAbout() { AboutDlg.exec(); }
-    void OnHelpAboutQt() { QMessageBox::aboutQt ( nullptr, QString ( tr ( "About Qt" ) ) ); }
-    void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
-    void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
-    void OnHelpSoftwareMan() { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
-};
+//public slots:
+//    void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
+//    void OnHelpAbout() { AboutDlg.exec(); }
+//    void OnHelpAboutQt() { QMessageBox::aboutQt ( nullptr, QString ( tr ( "About Qt" ) ) ); }
+//    void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
+//    void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
+//    void OnHelpSoftwareMan() { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
+//};
 
 // Language combo box ----------------------------------------------------------
 class CLanguageComboBox : public QComboBox
@@ -575,24 +574,6 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
     {
     case AT_NONE:
         return QCoreApplication::translate ( "CServerDlg", "None" );
-
-    case AT_ANY_GENRE2:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 2" );
-
-    case AT_ANY_GENRE3:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 3" );
-
-    case AT_GENRE_ROCK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock" );
-
-    case AT_GENRE_JAZZ:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
-
-    case AT_GENRE_CLASSICAL_FOLK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk" );
-
-    case AT_GENRE_CHORAL:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Choral/Barbershop" );
 
     case AT_CUSTOM:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );

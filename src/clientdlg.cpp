@@ -39,14 +39,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
-    bBasicConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
     strSelectedAddress (""),
-    BasicConnectDlg ( pNSetP, parent ),
     AnalyzerConsole ( pNCliP, parent )
 {
     //FIXME cruft to remove later - just remove compiler warnings for now
@@ -60,10 +58,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 #if defined(ANDROID)
     setCentralWidget(backgroundFrame);
 #endif
-
-    // full screen on iOS
-//    QWidget::setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint);
-    parent->setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint);
 
     // setup main UI
     setupUi ( this );
@@ -103,29 +97,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     scrollArea->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     txvHelp->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     txvAbout->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
-//    txvChatWindow->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     QScroller::grabGesture(scrollArea, QScroller::TouchGesture);
     QScroller::grabGesture(txvHelp, QScroller::TouchGesture);
     QScroller::grabGesture(txvAbout, QScroller::TouchGesture);
-//    QScroller::grabGesture(txvChatWindow, QScroller::TouchGesture);
-
-    // add Session Chat stuff
-    // input message text
-//    edtLocalInputText->setWhatsThis ( "<b>" + tr ( "Input Message Text" ) + ":</b> " +
-//                                      tr ( "Chat here while a session is active." ) );
-
-    // clear chat window and edit line
-//    txvChatWindow->clear();
-//    edtLocalInputText->clear();
-
-    // we do not want to show a cursor in the chat history
-//    txvChatWindow->setCursorWidth ( 0 );
-
-//    // set a placeholder text to make sure where to type the message in (#384)
-//    edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
-//    // disable chat widgets
-//    butSend->setEnabled(false);
-//    edtLocalInputText->setEnabled(false);
 
     // Add help text to controls -----------------------------------------------
     // input level meter
@@ -315,14 +289,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // init connection button text
     butConnect->setText ( tr ( "Join..." ) );
 
-    // don't show link info to start with
-//    linkField->setVisible(false);
-
-    // init new session button text
-//    butNewStart->setText ( tr ( "&New Session" ) );
-    // FIXME DON'T hardcode here!
-//    butNewStart->setText ( tr ( "Create" ) );
-
     // init input level meter bars
     lbrInputLevelL->SetValue ( 0 );
     lbrInputLevelR->SetValue ( 0 );
@@ -335,7 +301,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
     sldAudioReverb->setValue ( iCurAudReverb );
-//    sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
     // init input boost
     pClient->SetInputBoost ( pSettings->iInputBoost );
@@ -343,20 +308,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // init reverb channel
     UpdateRevSelection();
 
-    // init connect dialog
-//    ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
-
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
-
-    // prepare Mute Myself info label (invisible by default)
-//    lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
-//    lblGlobalInfoLabel->hide();
-
-    // prepare update check info label (invisible by default)
-//    lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
-//    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
-//    lblUpdateCheck->hide();
 
     // setup timers
     TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
@@ -370,130 +323,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
     }
 
-//    // File menu  --------------------------------------------------------------
-//    QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
-
-//    pFileMenu->addAction ( tr ( "&Connection Setup..." ), this, SLOT ( OnOpenConnectionSetupDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
-
-//    pFileMenu->addSeparator();
-
-//    pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this, SLOT ( OnLoadChannelSetup() ) );
-
-//    pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this, SLOT ( OnSaveChannelSetup() ) );
-
-//    pFileMenu->addSeparator();
-
-//    pFileMenu->addAction ( tr ( "E&xit" ), this, SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
-
-//    // Edit menu  --------------------------------------------------------------
-//    QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
-
-//    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this, SLOT ( OnClearAllStoredSoloMuteSettings() ) );
-
-//    pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ),
-//                           this,
-//                           SLOT ( OnSetAllFadersToNewClientLevel() ),
-//                           QKeySequence ( Qt::CTRL + Qt::Key_L ) );
-
-//    pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
-
-//    // View menu  --------------------------------------------------------------
-//    QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
-
-//    // own fader first option: works from server version 3.5.5 which supports sending client ID back to client
-//    QAction* OwnFaderFirstAction =
-//        pViewMenu->addAction ( tr ( "O&wn Fader First" ), this, SLOT ( OnOwnFaderFirst() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
-
-//    pViewMenu->addSeparator();
-
-//    QAction* NoSortAction =
-//        pViewMenu->addAction ( tr ( "N&o User Sorting" ), this, SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
-
-//    QAction* ByNameAction =
-//        pViewMenu->addAction ( tr ( "Sort Users by &Name" ), this, SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
-
-//    QAction* ByInstrAction = pViewMenu->addAction ( tr ( "Sort Users by &Instrument" ),
-//                                                    this,
-//                                                    SLOT ( OnSortChannelsByInstrument() ),
-//                                                    QKeySequence ( Qt::CTRL + Qt::Key_I ) );
-
-//    QAction* ByGroupAction =
-//        pViewMenu->addAction ( tr ( "Sort Users by &Group" ), this, SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
-
-//    QAction* ByCityAction =
-//        pViewMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
-
-//    OwnFaderFirstAction->setCheckable ( true );
-//    OwnFaderFirstAction->setChecked ( pSettings->bOwnFaderFirst );
-
-//    // the sorting menu entries shall be checkable and exclusive
-//    QActionGroup* SortActionGroup = new QActionGroup ( this );
-//    SortActionGroup->setExclusive ( true );
-//    NoSortAction->setCheckable ( true );
-//    SortActionGroup->addAction ( NoSortAction );
-//    ByNameAction->setCheckable ( true );
-//    SortActionGroup->addAction ( ByNameAction );
-//    ByInstrAction->setCheckable ( true );
-//    SortActionGroup->addAction ( ByInstrAction );
-//    ByGroupAction->setCheckable ( true );
-//    SortActionGroup->addAction ( ByGroupAction );
-//    ByCityAction->setCheckable ( true );
-//    SortActionGroup->addAction ( ByCityAction );
-
-//    // initialize sort type setting (i.e., recover stored setting)
-//    switch ( pSettings->eChannelSortType )
-//    {
-//    case ST_NO_SORT:
-//        NoSortAction->setChecked ( true );
-//        break;
-//    case ST_BY_NAME:
-//        ByNameAction->setChecked ( true );
-//        break;
-//    case ST_BY_INSTRUMENT:
-//        ByInstrAction->setChecked ( true );
-//        break;
-//    case ST_BY_GROUPID:
-//        ByGroupAction->setChecked ( true );
-//        break;
-//    case ST_BY_CITY:
-//        ByCityAction->setChecked ( true );
-//        break;
-//    }
-//    MainMixerBoard->SetFaderSorting ( pSettings->eChannelSortType );
-
-//    pViewMenu->addSeparator();
-
-//    pViewMenu->addAction ( tr ( "C&hat..." ), this, SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
-
-//    // optionally show analyzer console entry
-//    if ( bShowAnalyzerConsole )
-//    {
-//        pViewMenu->addAction ( tr ( "&Analyzer Console..." ), this, SLOT ( OnOpenAnalyzerConsole() ) );
-//    }
-
-//    pViewMenu->addSeparator();
-
-//    // Settings menu  --------------------------------------------------------------
-//    QMenu* pSettingsMenu = new QMenu ( tr ( "Sett&ings" ), this );
-
-//    pSettingsMenu->addAction ( tr ( "My &Profile..." ), this, SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
-
-//    pSettingsMenu->addAction ( tr ( "Audio/Network &Settings..." ), this, SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
-
-//    pSettingsMenu->addAction ( tr ( "A&dvanced Settings..." ), this, SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
-
-//    // Main menu bar -----------------------------------------------------------
-//    QMenuBar* pMenu = new QMenuBar ( this );
-
-//    pMenu->addMenu ( pFileMenu );
-//    pMenu->addMenu ( pEditMenu );
-//    pMenu->addMenu ( pViewMenu );
-//    pMenu->addMenu ( pSettingsMenu );
-//    pMenu->addMenu ( new CHelpMenu ( true, this ) );
-
-//    // Now tell the layout about the menu
-//    layout()->setMenuBar ( pMenu );
-
     // Window positions --------------------------------------------------------
     // main window
     if ( !pSettings->vecWindowPosMain.isEmpty() && !pSettings->vecWindowPosMain.isNull() )
@@ -501,39 +330,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         restoreGeometry ( pSettings->vecWindowPosMain );
     }
 
-//    // settings window
-//    if ( !pSettings->vecWindowPosSettings.isEmpty() && !pSettings->vecWindowPosSettings.isNull() )
-//    {
-//        ClientSettingsDlg.restoreGeometry ( pSettings->vecWindowPosSettings );
-//    }
-
-//    if ( pSettings->bWindowWasShownSettings )
-//    {
-//        ShowGeneralSettings ( pSettings->iSettingsTab );
-//    }
-
-//    // chat window
-//    if ( !pSettings->vecWindowPosChat.isEmpty() && !pSettings->vecWindowPosChat.isNull() )
-//    {
-//        ChatDlg.restoreGeometry ( pSettings->vecWindowPosChat );
-//    }
-
-//    if ( pSettings->bWindowWasShownChat )
-//    {
-//        ShowChatWindow();
-//    }
-
-//    // connection setup window
-//    if ( !pSettings->vecWindowPosConnect.isEmpty() && !pSettings->vecWindowPosConnect.isNull() )
-//    {
-//        ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
-//    }
-
-    // basic connection setup window
-    if ( !pSettings->vecWindowPosBasicConnect.isEmpty() && !pSettings->vecWindowPosBasicConnect.isNull() )
-    {
-        BasicConnectDlg.restoreGeometry ( pSettings->vecWindowPosBasicConnect );
-    }
 
 // START OF SETTINGS STUFF ===========================================================
 
@@ -763,7 +559,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Interface Language
     lblLanguage->setWhatsThis ( "<b>" + tr ( "Language" ) + ":</b> " + tr ( "Select the language to be used for the user interface." ) );
 
-    cbxLanguage->setAccessibleName ( tr ( "Language combo box" ) );
+//    cbxLanguage->setAccessibleName ( tr ( "Language combo box" ) );
 
     // audio channels
     QString strAudioChannels = "<b>" + tr ( "Audio Channels" ) + ":</b> " +
@@ -978,134 +774,132 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Add help text to controls -----------------------------------------------
     // Musician Profile
-    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
-                          tr ( "Write your name or an alias here so the other musicians you want to "
-                               "play with know who you are. You may also add a picture of the instrument "
-                               "you play and a flag of the country or region you are located in. "
-                               "Your city and skill level playing your instrument may also be added." ) +
-                          "<br>" +
-                          tr ( "What you set here will appear at your fader on the mixer "
-                               "board when you are connected to a %1 server. This tag will "
-                               "also be shown at each client which is connected to the same server as "
-                               "you." )
-                              .arg ( APP_NAME );
+//    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
+//                          tr ( "Write your name or an alias here so the other musicians you want to "
+//                               "play with know who you are. You may also add a picture of the instrument "
+//                               "you play and a flag of the country or region you are located in. "
+//                               "Your city and skill level playing your instrument may also be added." ) +
+//                          "<br>" +
+//                          tr ( "What you set here will appear at your fader on the mixer "
+//                               "board when you are connected to a %1 server. This tag will "
+//                               "also be shown at each client which is connected to the same server as "
+//                               "you." )
+//                              .arg ( APP_NAME );
 
-    plblAlias->setWhatsThis ( strFaderTag );
+//    plblAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
-    plblInstrument->setWhatsThis ( strFaderTag );
-    pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
-    plblCountry->setWhatsThis ( strFaderTag );
-    pcbxCountry->setAccessibleName ( tr ( "Country/region flag button" ) );
-    plblCity->setWhatsThis ( strFaderTag );
-    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
-    plblSkill->setWhatsThis ( strFaderTag );
-    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
+//    plblInstrument->setWhatsThis ( strFaderTag );
+//    pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
+//    plblCountry->setWhatsThis ( strFaderTag );
+//    pcbxCountry->setAccessibleName ( tr ( "Country/region flag button" ) );
+//    plblCity->setWhatsThis ( strFaderTag );
+//    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
+//    plblSkill->setWhatsThis ( strFaderTag );
+//    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
 
-    // Instrument pictures combo box -------------------------------------------
-    // add an entry for all known instruments
-    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
-    {
-        // create a combo box item with text, image and background color
-        QColor InstrColor;
+//    // Instrument pictures combo box -------------------------------------------
+//    // add an entry for all known instruments
+//    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
+//    {
+//        // create a combo box item with text, image and background color
+//        QColor InstrColor;
 
-        pcbxInstrument->addItem ( QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ), CInstPictures::GetName ( iCurInst ), iCurInst );
+//        pcbxInstrument->addItem ( QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ), CInstPictures::GetName ( iCurInst ), iCurInst );
 
-        switch ( CInstPictures::GetCategory ( iCurInst ) )
-        {
-        case CInstPictures::IC_OTHER_INSTRUMENT:
-            InstrColor = QColor ( Qt::blue );
-            break;
-        case CInstPictures::IC_WIND_INSTRUMENT:
-            InstrColor = QColor ( Qt::green );
-            break;
-        case CInstPictures::IC_STRING_INSTRUMENT:
-            InstrColor = QColor ( Qt::red );
-            break;
-        case CInstPictures::IC_PLUCKING_INSTRUMENT:
-            InstrColor = QColor ( Qt::cyan );
-            break;
-        case CInstPictures::IC_PERCUSSION_INSTRUMENT:
-            InstrColor = QColor ( Qt::white );
-            break;
-        case CInstPictures::IC_KEYBOARD_INSTRUMENT:
-            InstrColor = QColor ( Qt::yellow );
-            break;
-        case CInstPictures::IC_MULTIPLE_INSTRUMENT:
-            InstrColor = QColor ( Qt::black );
-            break;
-        }
+//        switch ( CInstPictures::GetCategory ( iCurInst ) )
+//        {
+//        case CInstPictures::IC_OTHER_INSTRUMENT:
+//            InstrColor = QColor ( Qt::blue );
+//            break;
+//        case CInstPictures::IC_WIND_INSTRUMENT:
+//            InstrColor = QColor ( Qt::green );
+//            break;
+//        case CInstPictures::IC_STRING_INSTRUMENT:
+//            InstrColor = QColor ( Qt::red );
+//            break;
+//        case CInstPictures::IC_PLUCKING_INSTRUMENT:
+//            InstrColor = QColor ( Qt::cyan );
+//            break;
+//        case CInstPictures::IC_PERCUSSION_INSTRUMENT:
+//            InstrColor = QColor ( Qt::white );
+//            break;
+//        case CInstPictures::IC_KEYBOARD_INSTRUMENT:
+//            InstrColor = QColor ( Qt::yellow );
+//            break;
+//        case CInstPictures::IC_MULTIPLE_INSTRUMENT:
+//            InstrColor = QColor ( Qt::black );
+//            break;
+//        }
 
-        InstrColor.setAlpha ( 10 );
-        pcbxInstrument->setItemData ( iCurInst, InstrColor, Qt::BackgroundRole );
-    }
+//        InstrColor.setAlpha ( 10 );
+//        pcbxInstrument->setItemData ( iCurInst, InstrColor, Qt::BackgroundRole );
+//    }
 
-    // sort the items in alphabetical order
-    pcbxInstrument->model()->sort ( 0 );
+//    // sort the items in alphabetical order
+//    pcbxInstrument->model()->sort ( 0 );
 
-    // Country flag icons combo box --------------------------------------------
-    // add an entry for all known country flags
-    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry ); iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
-    {
-        // exclude the "None" entry since it is added after the sorting
-        if ( static_cast<QLocale::Country> ( iCurCntry ) == QLocale::AnyCountry )
-        {
-            continue;
-        }
+//    // Country flag icons combo box --------------------------------------------
+//    // add an entry for all known country flags
+//    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry ); iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
+//    {
+//        // exclude the "None" entry since it is added after the sorting
+//        if ( static_cast<QLocale::Country> ( iCurCntry ) == QLocale::AnyCountry )
+//        {
+//            continue;
+//        }
 
-        if ( !CLocale::IsCountryCodeSupported ( iCurCntry ) )
-        {
-            // The current Qt version which is the base for the loop may support
-            // more country codes than our protocol does. Therefore, skip
-            // the unsupported options to avoid surprises.
-            continue;
-        }
+//        if ( !CLocale::IsCountryCodeSupported ( iCurCntry ) )
+//        {
+//            // The current Qt version which is the base for the loop may support
+//            // more country codes than our protocol does. Therefore, skip
+//            // the unsupported options to avoid surprises.
+//            continue;
+//        }
 
-        // get current country enum
-        QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
+//        // get current country enum
+//        QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
 
-        // try to load icon from resource file name
-        QIcon CurFlagIcon;
-        CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
+//        // try to load icon from resource file name
+//        QIcon CurFlagIcon;
+//        CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
 
-        // only add the entry if a flag is available
-        if ( !CurFlagIcon.isNull() )
-        {
-            // create a combo box item with text and image
-            pcbxCountry->addItem ( QIcon ( CurFlagIcon ), QLocale::countryToString ( eCountry ), iCurCntry );
-        }
-    }
+//        // only add the entry if a flag is available
+//        if ( !CurFlagIcon.isNull() )
+//        {
+//            // create a combo box item with text and image
+//            pcbxCountry->addItem ( QIcon ( CurFlagIcon ), QLocale::countryToString ( eCountry ), iCurCntry );
+//        }
+//    }
 
-    // sort country combo box items in alphabetical order
-    pcbxCountry->model()->sort ( 0, Qt::AscendingOrder );
+//    // sort country combo box items in alphabetical order
+//    pcbxCountry->model()->sort ( 0, Qt::AscendingOrder );
 
-    // the "None" country gets a special icon and is the very first item
-    QIcon FlagNoneIcon;
-    FlagNoneIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
-    pcbxCountry->insertItem ( 0, FlagNoneIcon, tr ( "None" ), static_cast<int> ( QLocale::AnyCountry ) );
+//    // the "None" country gets a special icon and is the very first item
+//    QIcon FlagNoneIcon;
+//    FlagNoneIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
+//    pcbxCountry->insertItem ( 0, FlagNoneIcon, tr ( "None" ), static_cast<int> ( QLocale::AnyCountry ) );
 
-    // Skill level combo box ---------------------------------------------------
-    // create a pixmap showing the skill level colors
-    QPixmap SLPixmap ( 16, 11 ); // same size as the country flags
+//    // Skill level combo box ---------------------------------------------------
+//    // create a pixmap showing the skill level colors
+//    QPixmap SLPixmap ( 16, 11 ); // same size as the country flags
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_NOT_SET, RGBCOL_G_SL_NOT_SET, RGBCOL_B_SL_NOT_SET ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_NOT_SET, RGBCOL_G_SL_NOT_SET, RGBCOL_B_SL_NOT_SET ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "None" ), SL_NOT_SET );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "None" ), SL_NOT_SET );
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER, RGBCOL_G_SL_BEGINNER, RGBCOL_B_SL_BEGINNER ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER, RGBCOL_G_SL_BEGINNER, RGBCOL_B_SL_BEGINNER ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Beginner" ), SL_BEGINNER );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Beginner" ), SL_BEGINNER );
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE, RGBCOL_G_SL_INTERMEDIATE, RGBCOL_B_SL_INTERMEDIATE ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE, RGBCOL_G_SL_INTERMEDIATE, RGBCOL_B_SL_INTERMEDIATE ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Intermediate" ), SL_INTERMEDIATE );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Intermediate" ), SL_INTERMEDIATE );
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL, RGBCOL_G_SL_SL_PROFESSIONAL, RGBCOL_B_SL_SL_PROFESSIONAL ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL, RGBCOL_G_SL_SL_PROFESSIONAL, RGBCOL_B_SL_SL_PROFESSIONAL ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Expert" ), SL_PROFESSIONAL );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Expert" ), SL_PROFESSIONAL );
 
 // end of settings stuff ---------------------------------------------------------------
-
-
 
     // Connections -------------------------------------------------------------
     // push buttons
@@ -1114,14 +908,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( downloadLinkButton, &QPushButton::clicked, this, &CClientDlg::OnDownloadUpdateClicked );
     QObject::connect ( inviteComboBox, &QComboBox::activated, this, &CClientDlg::OnInviteBoxActivated );
     QObject::connect ( checkUpdateButton, &QPushButton::clicked, this, &CClientDlg::OnCheckForUpdate );
-
-
-    // session chat stuff
-//    QObject::connect ( edtLocalInputText, &QLineEdit::textChanged, this, &CClientDlg::OnLocalInputTextTextChanged );
-//    QObject::connect ( this, &CClientDlg::NewLocalInputText, this, &CClientDlg::OnNewLocalInputText );
-//    QObject::connect ( butSend, &QPushButton::clicked, this, &CClientDlg::OnSendText );
-//    QObject::connect ( edtLocalInputText, &QLineEdit::returnPressed, this, &CClientDlg::OnSendText );
-//    QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked, this, &CClientDlg::OnAnchorClicked );
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
@@ -1157,19 +943,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pClient, &CClient::Disconnected, this, &CClientDlg::OnDisconnected );
 
-//    QObject::connect ( pClient, &CClient::ChatTextReceived, this, &CClientDlg::OnChatTextReceived );
-
     QObject::connect ( pClient, &CClient::ClientIDReceived, this, &CClientDlg::OnClientIDReceived );
 
     QObject::connect ( pClient, &CClient::MuteStateHasChangedReceived, this, &CClientDlg::OnMuteStateHasChangedReceived );
 
     QObject::connect ( pClient, &CClient::RecorderStateReceived, this, &CClientDlg::OnRecorderStateReceived );
-
-    // This connection is a special case. On receiving a licence required message via the
-    // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
-    // a queued connection to make sure the core protocol mechanism is not blocked, too.
-    qRegisterMetaType<ELicenceType> ( "ELicenceType" );
-    QObject::connect ( pClient, &CClient::LicenceRequired, this, &CClientDlg::OnLicenceRequired, Qt::QueuedConnection );
 
     QObject::connect ( pClient, &CClient::PingTimeReceived, this, &CClientDlg::OnPingTimeResult );
 
@@ -1206,40 +984,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( this, &CClientDlg::AudioChannelsChanged, this, &CClientDlg::OnAudioChannelsChanged );
 
-//    QObject::connect ( this, &CClientDlg::CustomDirectoriesChanged, &ConnectDlg, &CConnectDlg::OnCustomDirectoriesChanged );
-
     QObject::connect ( this, &CClientDlg::NumMixerPanelRowsChanged, this, &CClientDlg::OnNumMixerPanelRowsChanged );
-
-//    QObject::connect ( this, &CClientDlg::SendTabChange, this, &CClientDlg::OnMakeTabChange );
     // end of settings slots --------------------------------
-
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanGain, this, &CClientDlg::OnChangeChanGain );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanPan, this, &CClientDlg::OnChangeChanPan );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::NumClientsChanged, this, &CClientDlg::OnNumClientsChanged );
-
-
-//    QObject::connect ( &ConnectDlg, &CConnectDlg::ReqServerListQuery, this, &CClientDlg::OnReqServerListQuery );
-
-    // note that this connection must be a queued connection, otherwise the server list ping
-    // times are not accurate and the client list may not be retrieved for all servers listed
-    // (it seems the sendto() function needs to be called from different threads to fire the
-    // packet immediately and do not collect packets before transmitting)
-//    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListPingMes, this, &CClientDlg::OnCreateCLServerListPingMes, Qt::QueuedConnection );
-
-//    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListReqVerAndOSMes, this, &CClientDlg::OnCreateCLServerListReqVerAndOSMes );
-
-//    QObject::connect ( &ConnectDlg,
-//                       &CConnectDlg::CreateCLServerListReqConnClientsListMes,
-//                       this,
-//                       &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
-
-//    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
-//    QObject::connect ( &BasicConnectDlg, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
-    // with sessionInputField ....????
-//    QObject::connect ( this, &CBasicConnectDlg::accepted, this, &CClientDlg::OnBasicConnectDlgAccepted );
 
     QObject::connect ( sessionCancelButton, &QPushButton::clicked, this, &CClientDlg::OnJoinCancelClicked );
     QObject::connect ( sessionConnectButton, &QPushButton::clicked, this, &CClientDlg::OnJoinConnectClicked );
@@ -1263,10 +1015,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( chbDetectFeedback, &QCheckBox::stateChanged, this, &CClientDlg::OnFeedbackDetectionChanged );
 
-//    // line edits
-//    QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished, this, &CClientDlg::OnNewClientLevelEditingFinished );
-    // line edits
-//    QObject::connect ( newInputLevelDial, &QLineEdit::editingFinished, this, &CClientDlg::OnNewClientLevelEditingFinished );
     QObject::connect ( newInputLevelDial,
                        &QSlider::valueChanged,
                        this,
@@ -1327,11 +1075,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientDlg::OnLanguageChanged );
 
-//    QObject::connect ( cbxInputBoost,
-//                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                       this,
-//                       &CClientDlg::OnInputBoostChanged );
-
     QObject::connect ( dialInputBoost,
                        &QSlider::valueChanged,
                        this,
@@ -1345,7 +1088,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // misc
     // sliders
-//    QObject::connect ( sldAudioPan, &QSlider::valueChanged, this, &CClientDlg::OnAudioPanValueChanged );
     // panDial
     QObject::connect ( panDial, &QSlider::valueChanged, this, &CClientDlg::OnAudioPanValueChanged );
 
@@ -1363,22 +1105,19 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Musician Profile
     QObject::connect ( pedtAlias, &QLineEdit::textChanged, this, &CClientDlg::OnAliasTextChanged );
 
-    QObject::connect ( pcbxInstrument,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CClientDlg::OnInstrumentActivated );
+//    QObject::connect ( pcbxInstrument,
+//                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+//                       this,
+//                       &CClientDlg::OnInstrumentActivated );
 
-    QObject::connect ( pcbxCountry,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CClientDlg::OnCountryActivated );
+//    QObject::connect ( pcbxCountry,
+//                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+//                       this,
+//                       &CClientDlg::OnCountryActivated );
 
-    QObject::connect ( pedtCity, &QLineEdit::textChanged, this, &CClientDlg::OnCityTextChanged );
+//    QObject::connect ( pedtCity, &QLineEdit::textChanged, this, &CClientDlg::OnCityTextChanged );
 
-    QObject::connect ( pcbxSkill, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CClientDlg::OnSkillActivated );
-
-//    QObject::connect ( qNam, SIGNAL(finished(QNetworkReply *)), this, &CClientDlg::replyFinished );
-//    QObject::connect( qNam, &QNetworkReply::finished, this, &CClientDlg::replyFinished );
+//    QObject::connect ( pcbxSkill, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CClientDlg::OnSkillActivated );
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -1391,17 +1130,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // start timer for status bar
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
 
-//    // restore connect dialog
-//    if ( pSettings->bWindowWasShownConnect )
-//    {
-//         ShowConnectionSetupDialog();
-//    }
-
-//    // restore basic connect dialog
-//    if ( pSettings->bWindowWasShownBasicConnect )
-//    {
-//        ShowBasicConnectionSetupDialog();
-//    }
     sessionJoinWidget->setVisible(false);
 
     // mute stream on startup (must be done after the signal connections)
@@ -1434,21 +1162,6 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
 {
     // store window positions
     pSettings->vecWindowPosMain     = saveGeometry();
-//    pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
-//    pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
-//    pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
-    pSettings->vecWindowPosBasicConnect  = BasicConnectDlg.saveGeometry();
-
-//    pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
-//    pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
-//    pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
-    pSettings->bWindowWasShownConnect  = BasicConnectDlg.isVisible();
-
-    // if settings/connect dialog or chat dialog is open, close it
-//    ClientSettingsDlg.close();
-//    ChatDlg.close();
-//    ConnectDlg.close();
-    BasicConnectDlg.close();
     AnalyzerConsole.close();
 
     // if connected, terminate connection
@@ -1526,68 +1239,6 @@ void CClientDlg::UpdateRevSelection()
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
 
-//void CClientDlg::OnConnectDlgAccepted()
-//{
-//    // We had an issue that the accepted signal was emit twice if a list item was double
-//    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
-//    // we process the accepted signal only once after the dialog was initially shown.
-//    if ( bConnectDlgWasShown )
-//    {
-//        // get the address from the connect dialog
-//        QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
-
-//        // only store new host address in our data base if the address is
-//        // not empty and it was not a server list item (only the addresses
-//        // typed in manually are stored by definition)
-//        if ( !strSelectedAddress.isEmpty() && !ConnectDlg.GetServerListItemWasChosen() )
-//        {
-//            // store new address at the top of the list, if the list was already
-//            // full, the last element is thrown out
-//            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
-//        }
-
-//        // get name to be set in audio mixer group box title
-//        QString strMixerBoardLabel;
-
-//        if ( ConnectDlg.GetServerListItemWasChosen() )
-//        {
-//            // in case a server in the server list was chosen,
-//            // display the server name of the server list
-//            strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
-//        }
-//        else
-//        {
-//            // an item of the server address combo box was chosen,
-//            // just show the address string as it was entered by the
-//            // user
-//            strMixerBoardLabel = strSelectedAddress;
-
-//            // special case: if the address is empty, we substitute the default
-//            // directory address so that a user who just pressed the connect
-//            // button without selecting an item in the table or manually entered an
-//            // address gets a successful connection
-//            if ( strSelectedAddress.isEmpty() )
-//            {
-//                strSelectedAddress = DEFAULT_SERVER_ADDRESS;
-//                strMixerBoardLabel = tr ( "%1 Directory" ).arg ( DirectoryTypeToString ( AT_DEFAULT ) );
-//            }
-//        }
-
-//        // first check if we are already connected, if this is the case we have to
-//        // disconnect the old server first
-//        if ( pClient->IsRunning() )
-//        {
-//            Disconnect();
-//        }
-
-//        // initiate connection
-//        Connect ( strSelectedAddress, strMixerBoardLabel );
-
-//        // reset flag
-//        bConnectDlgWasShown = false;
-//    }
-//}
-
 void CClientDlg::OnJoinCancelClicked()
 {
     HideJoinWidget();
@@ -1632,49 +1283,6 @@ void CClientDlg::OnJoinConnectClicked()
     Connect ( strSelectedAddress, strMixerBoardLabel );
 
     HideJoinWidget();
-}
-
-void CClientDlg::OnBasicConnectDlgAccepted()
-{
-    // We had an issue that the accepted signal was emit twice if a list item was double
-    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
-    // we process the accepted signal only once after the dialog was initially shown.
-    if ( bBasicConnectDlgWasShown )
-    {
-        // get the address from the connect dialog
-        QString strSelectedAddress = BasicConnectDlg.GetSelectedAddress();
-
-        // only store new host address in our data base if the address is
-        // not empty and it was not a server list item (only the addresses
-        // typed in manually are stored by definition)
-        if ( !strSelectedAddress.isEmpty() )
-        {
-            // store new address at the top of the list, if the list was already
-            // full, the last element is thrown out
-            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
-        }
-
-        // get name to be set in audio mixer group box title
-        QString strMixerBoardLabel;
-
-        // an item of the server address combo box was chosen,
-        // just show the address string as it was entered by the
-        // user
-        strMixerBoardLabel = strSelectedAddress;
-
-        // first check if we are already connected, if this is the case we have to
-        // disconnect the old server first
-        if ( pClient->IsRunning() )
-        {
-            Disconnect();
-        }
-
-        // initiate connection
-        Connect ( strSelectedAddress, strMixerBoardLabel );
-
-        // reset flag
-        bBasicConnectDlgWasShown = false;
-    }
 }
 
 void CClientDlg::OnConnectDisconBut()
@@ -1803,45 +1411,6 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 #endif
 }
 
-//void CClientDlg::OnChatTextReceived ( QString strChatText )
-//{
-//    this->AddChatText ( strChatText );
-
-//    // Open chat dialog. If a server welcome message is received, we force
-//    // the dialog to be upfront in case a licence text is shown. For all
-//    // other new chat texts we do not want to force the dialog to be upfront
-//    // always when a new message arrives since this is annoying.
-////    ShowChatWindow ( ( strChatText.indexOf ( WELCOME_MESSAGE_PREFIX ) == 0 ) );
-
-//    UpdateDisplay();
-//}
-
-void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
-{
-    // right now only the creative common licence is supported
-    if ( eLicenceType == LT_CREATIVECOMMONS )
-    {
-        CLicenceDlg LicenceDlg;
-
-        // mute the client output stream
-        pClient->SetMuteOutStream ( true );
-
-        // Open the licence dialog and check if the licence was accepted. In
-        // case the dialog is just closed or the decline button was pressed,
-        // disconnect from that server.
-        if ( !LicenceDlg.exec() )
-        {
-            Disconnect();
-        }
-
-        // unmute the client output stream if local mute button is not pressed
-        if ( chbLocalMute->checkState() == Qt::Unchecked )
-        {
-            pClient->SetMuteOutStream ( false );
-        }
-    }
-}
-
 void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
     // show channel numbers if --ctrlmidich is used (#241, #95)
@@ -1866,84 +1435,6 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }
-
-//void CClientDlg::OnOpenAudioNetSettings() { ShowGeneralSettings ( SETTING_TAB_AUDIONET ); }
-
-//void CClientDlg::OnOpenAdvancedSettings() { ShowGeneralSettings ( SETTING_TAB_ADVANCED ); }
-
-//void CClientDlg::OnOpenUserProfileSettings() { ShowGeneralSettings ( SETTING_TAB_USER ); }
-
-// session chat slot stuff
-//void CClientDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
-//{
-//    // check and correct length
-//    if ( strNewText.length() > MAX_LEN_CHAT_TEXT )
-//    {
-//        // text is too long, update control with shortened text
-//        edtLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
-//    }
-//}
-
-//void CClientDlg::OnSendText()
-//{
-//    // send new text and clear line afterwards, do not send an empty message
-//    if ( !edtLocalInputText->text().isEmpty() )
-//    {
-//        emit NewLocalInputText ( edtLocalInputText->text() );
-//        edtLocalInputText->clear();
-//    }
-//}
-
-//void CClientDlg::OnClearChatHistory()
-//{
-//    // clear chat window
-//    txvChatWindow->clear();
-//}
-
-//void CClientDlg::AddChatText ( QString strChatText )
-//{
-//    // notify accessibility plugin that text has changed
-//    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
-
-//    // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
-//    // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
-//    // coding hisself and we should not mess with that)
-//    if ( !strChatText.contains ( QRegularExpression ( "href\\s*=|src\\s*=" ) ) )
-//    {
-//        // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
-//        // character and the + means that matches the previous element one or more times.)
-//        // This regex now contains three parts:
-//        // - https?://\\S+ matches as much non-whitespace as possible after the http:// or https://,
-//        //   subject to the next two parts, which exclude terminating punctuation
-//        // - (?<![!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
-//        //   from ending with one of the characters !"'()+,.:;<=>?[]{}
-//        // - (?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
-//        //   from ending with a ? followed by one of the characters !"'()+,.:;<=>?[]{}
-//        // These last two parts must be separate, as a look-behind assertion must be fixed length.
-//#define PUNCT_NOEND_URL "[!\"'()+,.:;<=>?\\[\\]{}]"
-//        strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<!" PUNCT_NOEND_URL ")(?<!\\?" PUNCT_NOEND_URL "))" ),
-//                              "<a href=\"\\1\">\\1</a>" );
-//    }
-
-//    // add new text in chat window
-//    txvChatWindow->append ( strChatText );
-//}
-
-//void CClientDlg::OnAnchorClicked ( const QUrl& Url )
-//{
-//    // only allow http(s) URLs to be opened in an external browser
-//    if ( Url.scheme() == QLatin1String ( "https" ) || Url.scheme() == QLatin1String ( "http" ) )
-//    {
-//        if ( QMessageBox::question ( this,
-//                                     APP_NAME,
-//                                     tr ( "Do you want to open the link '%1' in your browser?" ).arg ( "<b>" + Url.toString() + "</b>" ),
-//                                     QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
-//        {
-//            QDesktopServices::openUrl ( Url );
-//        }
-//    }
-//}
-// end session chat stuff -------------------------------------------------------------
 
 void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 {
@@ -2005,30 +1496,6 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 #endif
 }
 
-//void CClientDlg::ShowConnectionSetupDialog()
-//{
-//    // show connect dialog
-//    bConnectDlgWasShown = true;
-//    ConnectDlg.show();
-//    ConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
-
-//    // make sure dialog is upfront and has focus
-//    ConnectDlg.raise();
-//    ConnectDlg.activateWindow();
-//}
-
-//void CClientDlg::ShowBasicConnectionSetupDialog()
-//{
-//    // show connect dialog
-//    bBasicConnectDlgWasShown = true;
-//    BasicConnectDlg.show();
-//    BasicConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ), pClient->strClientName ) );
-
-//    // make sure dialog is upfront and has focus
-//    BasicConnectDlg.raise();
-//    BasicConnectDlg.activateWindow();
-//}
-
 void CClientDlg::ShowJoinWidget()
 {
     sessionJoinWidget->setVisible(true);
@@ -2040,34 +1507,6 @@ void CClientDlg::HideJoinWidget()
     sessionJoinWidget->setVisible(false);
     defaultButtonWidget->setVisible(true);
 }
-
-//void CClientDlg::ShowGeneralSettings ( int iTab )
-//{
-//    // open general settings dialog
-//    emit SendTabChange ( iTab );
-//    ClientSettingsDlg.show();
-//    ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Settings" ), pClient->strClientName ) );
-
-//    // make sure dialog is upfront and has focus
-//    ClientSettingsDlg.raise();
-//    ClientSettingsDlg.activateWindow();
-//}
-
-//void CClientDlg::ShowChatWindow ( const bool bForceRaise )
-//{
-//    ChatDlg.show();
-//    ChatDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Chat" ), pClient->strClientName ) );
-
-//    if ( bForceRaise )
-//    {
-//        // make sure dialog is upfront and has focus
-//        ChatDlg.showNormal();
-//        ChatDlg.raise();
-//        ChatDlg.activateWindow();
-//    }
-
-//    UpdateDisplay();
-//}
 
 void CClientDlg::ShowAnalyzerConsole()
 {
@@ -2093,18 +1532,6 @@ void CClientDlg::OnSettingsStateChanged ( int value )
     }
 }
 
-//void CClientDlg::OnPubConnectStateChanged ( int value )
-//{
-//    if ( !bConnectDlgWasShown )
-//    {
-//        ShowConnectionSetupDialog();
-//    }
-//    else
-//    {
-//        bConnectDlgWasShown = false;
-//        ConnectDlg.close();
-//    }
-//}
 
 void CClientDlg::OnChatStateChanged ( int value )
 {
@@ -2581,45 +2008,8 @@ void CClientDlg::OnCheckForUpdate()
 
 void CClientDlg::UpdateDisplay()
 {
-//    // update settings/chat buttons (do not fire signals since it is an update)
-//    if ( chbSettings->isChecked() && !ClientSettingsDlg.isVisible() )
-//    {
-//        chbSettings->blockSignals ( true );
-//        chbSettings->setChecked ( false );
-//        chbSettings->blockSignals ( false );
-//    }
-//    if ( !chbSettings->isChecked() && ClientSettingsDlg.isVisible() )
-//    {
-//        chbSettings->blockSignals ( true );
-//        chbSettings->setChecked ( true );
-//        chbSettings->blockSignals ( false );
-//    }
-
-//    if ( chbChat->isChecked() && !ChatDlg.isVisible() )
-//    {
-//        chbChat->blockSignals ( true );
-//        chbChat->setChecked ( false );
-//        chbChat->blockSignals ( false );
-//    }
-//    if ( !chbChat->isChecked() && ChatDlg.isVisible() )
-//    {
-//        chbChat->blockSignals ( true );
-//        chbChat->setChecked ( true );
-//        chbChat->blockSignals ( false );
-//    }
-
-//    if ( chbPubJam->isChecked() && !ConnectDlg.isVisible() )
-//    {
-//        chbPubJam->blockSignals ( true );
-//        chbPubJam->setChecked ( false );
-//        chbPubJam->blockSignals ( false );
-//    }
-//    if ( !chbPubJam->isChecked() && ConnectDlg.isVisible() )
-//    {
-//        chbPubJam->blockSignals ( true );
-//        chbPubJam->setChecked ( true );
-//        chbPubJam->blockSignals ( false );
-//    }
+    // nothing
+    ;
 }
 
 void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -2810,17 +2200,17 @@ void CClientDlg::showEvent ( QShowEvent* )
     // set the name
     pedtAlias->setText ( pClient->ChannelInfo.strName );
 
-    // select current instrument
-    pcbxInstrument->setCurrentIndex ( pcbxInstrument->findData ( pClient->ChannelInfo.iInstrument ) );
+//    // select current instrument
+//    pcbxInstrument->setCurrentIndex ( pcbxInstrument->findData ( pClient->ChannelInfo.iInstrument ) );
 
-    // select current country
-    pcbxCountry->setCurrentIndex ( pcbxCountry->findData ( static_cast<int> ( pClient->ChannelInfo.eCountry ) ) );
+//    // select current country
+//    pcbxCountry->setCurrentIndex ( pcbxCountry->findData ( static_cast<int> ( pClient->ChannelInfo.eCountry ) ) );
 
-    // set the city
-    pedtCity->setText ( pClient->ChannelInfo.strCity );
+//    // set the city
+//    pedtCity->setText ( pClient->ChannelInfo.strCity );
 
-    // select the skill level
-    pcbxSkill->setCurrentIndex ( pcbxSkill->findData ( static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
+//    // select the skill level
+//    pcbxSkill->setCurrentIndex ( pcbxSkill->findData ( static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
 }
 
 void CClientDlg::UpdateJitterBufferFrame()
@@ -3185,59 +2575,50 @@ void CClientDlg::OnAliasTextChanged ( const QString& strNewName )
 
 }
 
-void CClientDlg::OnInstrumentActivated ( int iCntryListItem )
-{
-    // set the new value in the data base
-    pClient->ChannelInfo.iInstrument = pcbxInstrument->itemData ( iCntryListItem ).toInt();
-
-    // update channel info at the server
-    pClient->SetRemoteInfo();
-}
-
-void CClientDlg::OnCountryActivated ( int iCntryListItem )
-{
-    // set the new value in the data base
-    pClient->ChannelInfo.eCountry = static_cast<QLocale::Country> ( pcbxCountry->itemData ( iCntryListItem ).toInt() );
-
-    // update channel info at the server
-    pClient->SetRemoteInfo();
-}
-
-void CClientDlg::OnCityTextChanged ( const QString& strNewCity )
-{
-    // check length
-    if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
-    {
-        // refresh internal name parameter
-        pClient->ChannelInfo.strCity = strNewCity;
-
-        // update channel info at the server
-        pClient->SetRemoteInfo();
-    }
-    else
-    {
-        // text is too long, update control with shortened text
-        pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
-    }
-}
-
-void CClientDlg::OnSkillActivated ( int iCntryListItem )
-{
-    // set the new value in the data base
-    pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( pcbxSkill->itemData ( iCntryListItem ).toInt() );
-
-    // update channel info at the server
-    pClient->SetRemoteInfo();
-}
-
-//void CClientDlg::OnMakeTabChange ( int iTab )
+//void CClientDlg::OnInstrumentActivated ( int iCntryListItem )
 //{
-//    tabSettings->setCurrentIndex ( iTab );
+//    // set the new value in the data base
+//    pClient->ChannelInfo.iInstrument = pcbxInstrument->itemData ( iCntryListItem ).toInt();
 
-//    pSettings->iSettingsTab = iTab;
+//    // update channel info at the server
+//    pClient->SetRemoteInfo();
 //}
 
-//void CClientDlg::OnTabChanged ( void ) { pSettings->iSettingsTab = tabSettings->currentIndex(); }
+//void CClientDlg::OnCountryActivated ( int iCntryListItem )
+//{
+//    // set the new value in the data base
+//    pClient->ChannelInfo.eCountry = static_cast<QLocale::Country> ( pcbxCountry->itemData ( iCntryListItem ).toInt() );
+
+//    // update channel info at the server
+//    pClient->SetRemoteInfo();
+//}
+
+//void CClientDlg::OnCityTextChanged ( const QString& strNewCity )
+//{
+//    // check length
+//    if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
+//    {
+//        // refresh internal name parameter
+//        pClient->ChannelInfo.strCity = strNewCity;
+
+//        // update channel info at the server
+//        pClient->SetRemoteInfo();
+//    }
+//    else
+//    {
+//        // text is too long, update control with shortened text
+//        pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
+//    }
+//}
+
+//void CClientDlg::OnSkillActivated ( int iCntryListItem )
+//{
+//    // set the new value in the data base
+//    pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( pcbxSkill->itemData ( iCntryListItem ).toInt() );
+
+//    // update channel info at the server
+//    pClient->SetRemoteInfo();
+//}
 
 void CClientDlg::UpdateAudioFaderSlider()
 {
@@ -3274,9 +2655,3 @@ void CClientDlg::OnAudioPanValueChanged ( int value )
 }
 
 // END SETTINGS FUNCTIONS ==========================================================================================
-
-// QML FUNCTIONS
-//QString CClientDlg::getVideoUrl()
-//{
-//    return strVideoUrl;
-//}

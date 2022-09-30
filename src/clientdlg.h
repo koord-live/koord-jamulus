@@ -51,10 +51,6 @@
 #include "settings.h"
 #include "multicolorled.h"
 #include "audiomixerboard.h"
-//#include "clientsettingsdlg.h"
-//#include "chatdlg.h"
-// #include "connectdlg.h"
-#include "basicconnectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
 #if defined( Q_OS_MACX )
@@ -133,7 +129,7 @@ protected:
 
     bool           bConnected;
     bool           bConnectDlgWasShown;
-    bool           bBasicConnectDlgWasShown;
+//    bool           bBasicConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
     bool           bEnableIPv6;
@@ -155,18 +151,11 @@ protected:
     QQuickView*     quickView;
 #endif
     QNetworkAccessManager*   qNam;
-//    QScopedPointer<QNetworkReply> netreply;
-//    QNetworkReply netreply;
 
     virtual void closeEvent ( QCloseEvent* Event );
     virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
     virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
-//    void         UpdateDisplay();
 
-//    CClientSettingsDlg ClientSettingsDlg;
-//    CChatDlg           ChatDlg;
-    // CConnectDlg        ConnectDlg;
-    CBasicConnectDlg   BasicConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
 
     // settings stuff
@@ -227,9 +216,9 @@ public slots:
     }
     void OnNoSortChannels() { MainMixerBoard->SetFaderSorting ( ST_NO_SORT ); }
     void OnSortChannelsByName() { MainMixerBoard->SetFaderSorting ( ST_BY_NAME ); }
-    void OnSortChannelsByInstrument() { MainMixerBoard->SetFaderSorting ( ST_BY_INSTRUMENT ); }
+//    void OnSortChannelsByInstrument() { MainMixerBoard->SetFaderSorting ( ST_BY_INSTRUMENT ); }
     void OnSortChannelsByGroupID() { MainMixerBoard->SetFaderSorting ( ST_BY_GROUPID ); }
-    void OnSortChannelsByCity() { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
+//    void OnSortChannelsByCity() { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
     void OnClearAllStoredSoloMuteSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
     void OnAutoAdjustAllFaderLevels() { MainMixerBoard->AutoAdjustAllFaderLevels(); }
@@ -250,7 +239,7 @@ public slots:
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
 //    void OnChatTextReceived ( QString strChatText );
-    void OnLicenceRequired ( ELicenceType eLicenceType );
+//    void OnLicenceRequired ( ELicenceType eLicenceType );
     void OnSoundDeviceChanged ( QString strError );
 
     void OnChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader ) { pClient->SetRemoteChanGain ( iId, fGain, bIsMyOwnFader ); }
@@ -293,7 +282,7 @@ public slots:
 
     void OnJoinCancelClicked();
     void OnJoinConnectClicked();
-    void OnBasicConnectDlgAccepted();
+//    void OnBasicConnectDlgAccepted();
 //    void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
@@ -337,10 +326,10 @@ public slots:
     void OnMeterStyleActivated ( int iMeterStyleIdx );
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnAliasTextChanged ( const QString& strNewName );
-    void OnInstrumentActivated ( int iCntryListItem );
-    void OnCountryActivated ( int iCntryListItem );
-    void OnCityTextChanged ( const QString& strNewName );
-    void OnSkillActivated ( int iCntryListItem );
+//    void OnInstrumentActivated ( int iCntryListItem );
+//    void OnCountryActivated ( int iCntryListItem );
+//    void OnCityTextChanged ( const QString& strNewName );
+//    void OnSkillActivated ( int iCntryListItem );
 //    void OnTabChanged();
 //    void OnMakeTabChange ( int iTabIdx );
     void OnAudioPanValueChanged ( int value );

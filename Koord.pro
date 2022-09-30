@@ -29,12 +29,6 @@ QT += network \
     concurrent \
     svg
 
-contains(CONFIG, "nosound") {
-    CONFIG -= "nosound"
-    CONFIG += "serveronly"
-    warning("\"nosound\" is deprecated: please use \"serveronly\" for a server-only build.")
-}
-
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
@@ -306,14 +300,10 @@ win32 {
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS_GUI = src/aboutdlgbase.ui \
-    src/serverdlgbase.ui
+FORMS_GUI = src/serverdlgbase.ui
 
 !contains(CONFIG, "serveronly") {
-    FORMS_GUI += src/clientdlgbase.ui \
-        src/clientsettingsdlgbase.ui \
-        src/chatdlgbase.ui \
-        src/basicconnectdlgbase.ui
+    FORMS_GUI += src/clientdlgbase.ui
 }
 
 HEADERS += src/buffer.h \
@@ -346,9 +336,6 @@ HEADERS_GUI = src/serverdlg.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS_GUI += src/audiomixerboard.h \
-        src/chatdlg.h \
-        src/clientsettingsdlg.h \
-        src/basicconnectdlg.h \
         src/clientdlg.h \
         src/levelmeter.h \
         src/analyzerconsole.h \
@@ -455,9 +442,6 @@ SOURCES_GUI = src/serverdlg.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES_GUI += src/audiomixerboard.cpp \
-        src/chatdlg.cpp \
-        src/clientsettingsdlg.cpp \
-        src/basicconnectdlg.cpp \
         src/clientdlg.cpp \
         src/multicolorled.cpp \
         src/levelmeter.cpp \

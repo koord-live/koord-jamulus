@@ -392,7 +392,7 @@ lvwClients->setMinimumHeight ( 140 );
     pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pViewMenu );
-    pMenu->addMenu ( new CHelpMenu ( false, this ) );
+//    pMenu->addMenu ( new CHelpMenu ( false, this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );

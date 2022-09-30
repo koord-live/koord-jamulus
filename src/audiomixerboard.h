@@ -40,6 +40,7 @@
 #include <QMutex>
 #include <QTextBoundaryFinder>
 #include "global.h"
+#include "qguiapplication.h"
 #include "util.h"
 #include "levelmeter.h"
 #include "settings.h"

@@ -519,7 +519,7 @@ else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, st
     vecWindowPosConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
 
     // window position of the basic connect window
-    vecWindowPosBasicConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposbascon_base64" ) );
+//    vecWindowPosBasicConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposbascon_base64" ) );
 
     // visibility state of the settings window
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisset", bValue ) )
@@ -539,11 +539,11 @@ else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, st
         bWindowWasShownConnect = bValue;
     }
 
-    // visibility state of the connect window
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisbascon", bValue ) )
-    {
-        bWindowWasShownBasicConnect = bValue;
-    }
+//    // visibility state of the connect window
+//    if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisbascon", bValue ) )
+//    {
+//        bWindowWasShownBasicConnect = bValue;
+//    }
 
     // selected Settings Tab
     if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 2, iValue ) )
@@ -729,7 +729,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     PutIniSetting ( IniXMLDocument, "client", "winposcon_base64", ToBase64 ( vecWindowPosConnect ) );
 
     // window position of the basic connect window
-    PutIniSetting ( IniXMLDocument, "client", "winposbascon_base64", ToBase64 ( vecWindowPosBasicConnect ) );
+//    PutIniSetting ( IniXMLDocument, "client", "winposbascon_base64", ToBase64 ( vecWindowPosBasicConnect ) );
 
     // visibility state of the settings window
     SetFlagIniSet ( IniXMLDocument, "client", "winvisset", bWindowWasShownSettings );
@@ -741,7 +741,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetFlagIniSet ( IniXMLDocument, "client", "winviscon", bWindowWasShownConnect );
 
     // visibility state of the basic connect window
-    SetFlagIniSet ( IniXMLDocument, "client", "winvisbascon", bWindowWasShownBasicConnect );
+//    SetFlagIniSet ( IniXMLDocument, "client", "winvisbascon", bWindowWasShownBasicConnect );
 
     // Settings Tab
     SetNumericIniSet ( IniXMLDocument, "client", "settingstab", iSettingsTab );
@@ -857,40 +857,40 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
     else
     {
         // clang-format off
-// TODO compatibility to old version < 3.4.7
-if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
-{
-    directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
-}
-else
+        // TODO compatibility to old version < 3.4.7
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
+        {
+            directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
+        }
+        else
             // clang-format on
 
-            // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
-            // clang-format off
-// TODO compatibility to old version < 3.8.2
-if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype", static_cast<int> ( AT_DEFAULT ), static_cast<int> ( AT_CUSTOM ), iValue ) )
-{
-    directoryType = static_cast<EDirectoryType> ( iValue );
-}
-else
-            // clang-format on
-            if ( GetNumericIniSet ( IniXMLDocument,
-                                    "server",
-                                    "directorytype",
-                                    static_cast<int> ( AT_NONE ),
-                                    static_cast<int> ( AT_CUSTOM ),
-                                    iValue ) )
+        // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
+        // clang-format off
+        // TODO compatibility to old version < 3.8.2
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype", static_cast<int> ( AT_DEFAULT ), static_cast<int> ( AT_CUSTOM ), iValue ) )
+        {
+            directoryType = static_cast<EDirectoryType> ( iValue );
+        }
+        else
+        // clang-format on
+        if ( GetNumericIniSet ( IniXMLDocument,
+                                "server",
+                                "directorytype",
+                                static_cast<int> ( AT_NONE ),
+                                static_cast<int> ( AT_CUSTOM ),
+                                iValue ) )
         {
             directoryType = static_cast<EDirectoryType> ( iValue );
         }
 
         // clang-format off
-// TODO compatibility to old version < 3.9.0
-// override type to AT_NONE if servlistenabled exists and is false
-if (  GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
-{
-    directoryType = AT_NONE;
-}
+        // TODO compatibility to old version < 3.9.0
+        // override type to AT_NONE if servlistenabled exists and is false
+        if (  GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
+        {
+            directoryType = AT_NONE;
+        }
         // clang-format on
     }
 
