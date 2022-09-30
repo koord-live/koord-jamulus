@@ -382,49 +382,6 @@ public slots:
     }
 };
 
-//// About dialog ----------------------------------------------------------------
-//class CAboutDlg : public CBaseDlg, private Ui_CAboutDlgBase
-//{
-//    Q_OBJECT
-
-//public:
-//    CAboutDlg ( QWidget* parent = nullptr );
-//};
-
-// Licence dialog --------------------------------------------------------------
-//class CLicenceDlg : public CBaseDlg
-//{
-//    Q_OBJECT
-
-//public:
-//    CLicenceDlg ( QWidget* parent = nullptr );
-
-//protected:
-//    QPushButton* butAccept;
-
-//public slots:
-//    void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
-//};
-
-//// Help menu -------------------------------------------------------------------
-//class CHelpMenu : public QMenu
-//{
-//    Q_OBJECT
-
-//public:
-//    CHelpMenu ( const bool bIsClient, QWidget* parent = nullptr );
-
-//protected:
-//    CAboutDlg AboutDlg;
-
-//public slots:
-//    void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
-//    void OnHelpAbout() { AboutDlg.exec(); }
-//    void OnHelpAboutQt() { QMessageBox::aboutQt ( nullptr, QString ( tr ( "About Qt" ) ) ); }
-//    void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
-//    void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
-//    void OnHelpSoftwareMan() { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
-//};
 
 // Language combo box ----------------------------------------------------------
 class CLanguageComboBox : public QComboBox

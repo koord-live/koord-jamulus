@@ -300,7 +300,7 @@ win32 {
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS_GUI = src/serverdlgbase.ui
+#FORMS_GUI = src/serverdlgbase.ui
 
 !contains(CONFIG, "serveronly") {
     FORMS_GUI += src/clientdlgbase.ui
@@ -332,7 +332,7 @@ HEADERS += src/buffer.h \
         src/testbench.h
 }
 
-HEADERS_GUI = src/serverdlg.h
+#HEADERS_GUI = src/serverdlg.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS_GUI += src/audiomixerboard.h \
@@ -438,7 +438,7 @@ SOURCES += src/buffer.cpp \
         src/soundbase.cpp \
 }
 
-SOURCES_GUI = src/serverdlg.cpp
+#SOURCES_GUI = src/serverdlg.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES_GUI += src/audiomixerboard.cpp \

@@ -1041,13 +1041,13 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object for the server
-                CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
+//                CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
 
-                // show dialog (if not the minimized flag is set)
-                if ( !bStartMinimized )
-                {
-                    ServerDlg.show();
-                }
+//                // show dialog (if not the minimized flag is set)
+//                if ( !bStartMinimized )
+//                {
+//                    ServerDlg.show();
+//                }
 
                 pApp->exec();
             }
