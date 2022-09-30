@@ -61,6 +61,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     setCentralWidget(backgroundFrame);
 #endif
 
+    // full screen on iOS
+    QWidget::setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint);
+
     // setup main UI
     setupUi ( this );
 
