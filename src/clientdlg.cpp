@@ -62,7 +62,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 #endif
 
     // full screen on iOS
-    QWidget::setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint);
+//    QWidget::setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint);
+    parent->setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint);
 
     // setup main UI
     setupUi ( this );
