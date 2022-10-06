@@ -983,7 +983,7 @@ int main ( int argc, char** argv )
                                        bEnableIPv6,
                                        nullptr );
                 //FIXME - for iOS only really
-                ClientDlg.setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint, true);
+//                ClientDlg.setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint, true);
                 // show dialog
                 ClientDlg.show();
                 pApp->exec();
