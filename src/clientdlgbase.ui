@@ -2366,6 +2366,30 @@ QCheckBox::indicator {
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>258</width>
+             <height>229</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="regionCheckLayout">
+            <item>
+             <widget class="QComboBox" name="cbxDirectoryServer"/>
+            </item>
+            <item>
+             <widget class="QTreeWidget" name="lvwServers">
+              <column>
+               <property name="text">
+                <string notr="true">1</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -2479,7 +2503,7 @@ QCheckBox::indicator {
              <x>0</x>
              <y>0</y>
              <width>507</width>
-             <height>1560</height>
+             <height>1712</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -3138,7 +3162,7 @@ QCheckBox::indicator {
             <item>
              <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>NETWORK SETTINGS (advanced!)</string>
+               <string>NETWORK SETTINGS (advanced)</string>
               </property>
              </widget>
             </item>
@@ -3412,6 +3436,96 @@ QCheckBox::indicator {
               </item>
               <item>
                <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="Line" name="line_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>DEVELOPER SETTINGS (advanced - test only)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="devsettingLayout">
+              <item>
+               <spacer name="horizontalSpacer_14">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="settingVBLayout">
+                <item>
+                 <layout class="QHBoxLayout" name="devsetting1Layout">
+                  <item>
+                   <widget class="QLabel" name="label_9">
+                    <property name="text">
+                     <string>setting1</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="devsetting1"/>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="devsetting2Layout">
+                  <item>
+                   <widget class="QLabel" name="label_5">
+                    <property name="text">
+                     <string>setting2</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="devsetting2"/>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="devsetting3Layout">
+                  <item>
+                   <widget class="QLabel" name="label_10">
+                    <property name="text">
+                     <string>setting3</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="devsetting3"/>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_15">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>

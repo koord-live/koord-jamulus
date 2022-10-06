@@ -32,7 +32,7 @@
 #    include <QtWebView>
 #    include <QQuickWindow>
 #    include <QMessageBox>
-#    include "serverdlg.h"
+//#    include "serverdlg.h"
 #    ifndef SERVER_ONLY
 #        include "clientdlg.h"
 #    endif
@@ -982,7 +982,8 @@ int main ( int argc, char** argv )
                                        bMuteStream,
                                        bEnableIPv6,
                                        nullptr );
-
+                //FIXME - for iOS only really
+                ClientDlg.setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint, true);
                 // show dialog
                 ClientDlg.show();
                 pApp->exec();

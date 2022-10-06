@@ -533,10 +533,10 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
         return QCoreApplication::translate ( "CServerDlg", "None" );
 
     case AT_CUSTOM:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
+        return QCoreApplication::translate ( "CClientDlg", "Custom" );
 
     default: // AT_DEFAULT
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 1" );
+        return QCoreApplication::translate ( "CClientDlg", "Any Genre 1" );
     }
 }
 

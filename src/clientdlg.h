@@ -58,6 +58,7 @@
 #endif
 #include <QQuickWidget>
 #include <QQuickView>
+#include "unsafearea.h"
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
@@ -72,6 +73,7 @@
 
 #define DISPLAY_UPDATE_TIME 1000 // ms
 
+#define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
 /* Classes ********************************************************************/
 class CClientDlg : public QMainWindow, private Ui_CClientDlgBase
@@ -105,6 +107,16 @@ public:
         return strVideoUrl;
     };
 
+    // region checker stuff
+    void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
+    bool GetShowAllMusicians() { return bShowAllMusicians; }
+    void SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList = false );
+    void SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
+    void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
+    bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
+    QString GetSelectedAddress() const { return strSelectedAddress; }
+    QString GetSelectedServerName() const { return strSelectedServerName; }
+
 
 protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -126,6 +138,7 @@ protected:
 
     CClient*         pClient;
     CClientSettings* pSettings;
+    UnsafeArea*    mUnsafeArea;
 
     bool           bConnected;
     bool           bConnectDlgWasShown;
@@ -170,6 +183,31 @@ protected:
 //    QTimer           TimerStatus;
     QButtonGroup     SndCrdBufferDelayButtonGroup;
 
+    // regionchecker stuff
+//    virtual void showEvent ( QShowEvent* );
+//    virtual void hideEvent ( QHideEvent* );
+    QTreeWidgetItem* FindListViewItem ( const CHostAddress& InetAddr );
+    QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
+    void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
+    void             UpdateListFilter();
+    void             ShowAllMusicians ( const bool bState );
+    void             RequestServerList();
+    void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress );
+//    void             UpdateDirectoryServerComboBox();
+//    CClientSettings* pSettings;
+    QTimer       RegionTimerPing;
+    QTimer       TimerReRequestServList;
+    QTimer       TimerInitialSort;
+    CHostAddress haDirectoryAddress;
+    QString      strSelectedServerName;
+    bool         bShowCompleteRegList;
+    bool         bServerListReceived;
+    bool         bReducedServerListReceived;
+    bool         bServerListItemWasChosen;
+    bool         bListFilterWasActive;
+    bool         bShowAllMusicians;
+//    bool         bEnableIPv6;
+
 public slots:
     void OnConnectDisconBut();
     void OnInviteBoxActivated();
@@ -185,7 +223,7 @@ public slots:
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
-//    void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
+    void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
 
     void OnControllerInFaderLevel ( const int iChannelIdx, const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx, iValue ); }
 
@@ -256,20 +294,20 @@ public slots:
 
     void OnCreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListReqConnClientsListMes ( InetAddr ); }
 
-    // void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
-    // {
-    //     ConnectDlg.SetServerList ( InetAddr, vecServerInfo );
-    // }
+     void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
+     {
+         SetServerList ( InetAddr, vecServerInfo );
+     }
 
-    // void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
-    // {
-    //     ConnectDlg.SetServerList ( InetAddr, vecServerInfo, true );
-    // }
+     void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
+     {
+         SetServerList ( InetAddr, vecServerInfo, true );
+     }
 
-    // void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
-    // {
-    //     ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo );
-    // }
+     void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
+     {
+         SetConnClientsList ( InetAddr, vecChanInfo );
+     }
 
     void OnClientIDReceived ( int iChanID ) { MainMixerBoard->SetMyChannelID ( iChanID ); }
 
@@ -341,6 +379,20 @@ public slots:
 
     void accept() { close(); } // introduced by pljones
 
+
+    // regionchecker stuff
+//    void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
+    void OnServerAddrEditTextChanged ( const QString& );
+    void OnDirectoryServerChanged ( int iTypeIdx );
+//    void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
+//    void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
+    void OnCustomDirectoriesChanged();
+//    void OnConnectClicked();
+    void OnRegionTimerPing();
+    void OnTimerReRequestServList();
+
+
+
 signals:
     void SendTabChange ( int iTabIdx );
     void NewLocalInputText ( QString strNewText );
@@ -354,4 +406,10 @@ signals:
 
     // for QML
     void videoUrlChanged();
+
+    //region checker stuff
+    void ReqServerListQuery ( CHostAddress InetAddr );
+    void CreateCLServerListPingMes ( CHostAddress InetAddr );
+    void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
+    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
 };

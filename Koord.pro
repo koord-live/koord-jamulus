@@ -149,6 +149,9 @@ win32 {
     ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
     QMAKE_BUNDLE_DATA += ios_icon
 
+    SOURCES += src/unsafearea.cpp
+    HEADERS += src/unsafearea.h
+
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
