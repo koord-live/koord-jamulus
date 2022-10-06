@@ -68,7 +68,7 @@
 	<key>UILaunchScreen</key>
         <dict>
                 <key>UIColorName</key>
-                <string>gray</string>
+                <string>BackgroundColor</string>
                 <key>UIImageName</key>
                 <string>Launchimage</string>
                 <key>UIImageRespectsSafeAreaInsets</key>
