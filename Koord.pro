@@ -180,21 +180,18 @@ win32 {
     ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
 
-    ## note: stop setting this here, screws up autobuild for 2 x aabs
-    # if ANDROID_VERSION_CODE is passed as env var to qmake, will override this
-    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    # date-based unique value
+    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
 
 ## FOR LOCAL DEV USE:
 #    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = 7717
 #    ANDROID_ABIS = x86_64
 
-    # need to bump version code for 2nd abi build otherwise Play Store rejects
-    # also add 10 to be def greater than git log increments...
+    # make separate version codes for each abi build otherwise Play Store rejects
     contains (ANDROID_ABIS, armeabi-v7a) {
-        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 10)
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
         message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     } else {
-        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 11)
         message("Setting for armv8a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     }
 
