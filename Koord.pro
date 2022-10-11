@@ -177,7 +177,7 @@ win32 {
     # BUT: crashes on Android 9, sdk=28
     ANDROID_MIN_SDK_VERSION = 29
 
-    ANDROID_TARGET_SDK_VERSION = 33
+    ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
 
     ## note: stop setting this here, screws up autobuild for 2 x aabs
