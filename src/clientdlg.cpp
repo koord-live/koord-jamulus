@@ -1400,7 +1400,6 @@ void CClientDlg::OnInviteBoxActivated()
     }
     else if ( text.contains( "Share via Whatsapp" ) )
     {
-//        qInfo() << "Share via Whatsapp sleecte";
         inviteComboBox->setCurrentIndex(0);
         QDesktopServices::openUrl(QUrl("https://api.whatsapp.com/send?text=" + body, QUrl::TolerantMode));
     }
@@ -1869,24 +1868,28 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         }
 
         // do video_url lookup here ...
-        //FIXME - unhardcode test url
         QUrl url("https://koord.live/sess/sessionvideourl/");
+        //FIXME - for test only
+        if (devsetting1->text() != "")
+        {
+            url.setUrl(QString("https://%1/sess/sessionvideourl/").arg(devsetting1->text()));
+        }
         QNetworkRequest request(url);
-//        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-//        request.setRawHeader("test-koord-login", "test17d3moin3s");
+        //FIXME - for test only
+        if (devsetting1->text() != "")
+        {
+            request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+            request.setRawHeader(devsetting2->text().toUtf8(), devsetting3->text().toUtf8());
+        }
 
         QRegularExpression rx_sessaddr("^(([a-z]*[0-9]*\\.*)+):([0-9]+)$");
-//        qInfo() << ">>> strSelectedaddress = " << strSelectedAddress;
         QRegularExpressionMatch reg_match = rx_sessaddr.match(strSelectedAddress);
-
         QString hostname;
         QString port;
         if (reg_match.hasMatch()) {
             hostname = reg_match.captured(1);
             port = reg_match.captured(3);
         }
-//        qInfo() << ">>> hostname = " << hostname;
-//        qInfo() << ">>> port = " << port;
 
         // create request body
         // const QByteArray vid_req = "{'audio_port': '23455', 'session_dns': 'lively.kv.koord.live'}";
@@ -1904,8 +1907,6 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
             {
                 QString err = reply->errorString();
                 QString contents = QString::fromUtf8(reply->readAll());
-//                qInfo() << ">>> CONNECT: " << reply->error();
-
                 // if reply - no error
                 // parse the JSON response
                 QJsonDocument jsonResponse = QJsonDocument::fromJson(contents.toUtf8());
