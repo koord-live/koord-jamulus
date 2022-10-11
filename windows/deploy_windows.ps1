@@ -1,10 +1,10 @@
 param (
     # Replace default path with system Qt installation folder if necessary
     [string] $QtPath = "C:\Qt",
-    [string] $QtInstallPath = "C:\Qt\6.3.1",
+    [string] $QtInstallPath = "C:\Qt\6.3.2",
 
-    [string] $QtInstallPath32 = "C:\Qt\6.3.1",
-    [string] $QtInstallPath64 = "C:\Qt\6.3.1",
+    [string] $QtInstallPath32 = "C:\Qt\6.3.2",
+    [string] $QtInstallPath64 = "C:\Qt\6.3.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
     # Important:
