@@ -65,16 +65,18 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<string>YES</string>
 	<key>UILaunchScreen</key>
-        <dict>
-                <key>UIColorName</key>
-                <string>BackgroundColor</string>
-                <key>UIImageName</key>
-                <string>Launchimage</string>
-                <key>UIImageRespectsSafeAreaInsets</key>
-                <false/>
-        </dict>
-        <key>UIRequiredDeviceCapabilities</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>BackgroundColor</string>
+		<key>UIImageName</key>
+		<string>Launchimage</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<false/>
+	</dict>
+	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
@@ -92,16 +94,16 @@
 	</array>
 
 	<!-- Add URL Handler for koord:// URLs -->
-        <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleURLName</key>
-                <string>Koord-RT</string>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>koord</string>
-                </array>
-            </dict>
-        </array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Koord-RT</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>koord</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
