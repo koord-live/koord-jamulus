@@ -1,3 +1,7 @@
+### 4.0.4 (2022-10-11) ###
+
+- Client: bump version for store submissions
+
 ### 4.0.3 (2022-10-11) ###
 
 - Client: QT 6.3.2, Android NDK 25 
