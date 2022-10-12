@@ -89,7 +89,7 @@ build_app() {
     echo "${GOOGLE_RELEASE_KEYSTORE}" | base64 --decode > android/android_release.keystore
 
     ##FIXME - temporary Oboe lib hackfix for Android12
-    cp -v android/QuirksManager.cpp libs/oboe/src/common/QuirksManager.cpp
+    # cp -v android/QuirksManager.cpp libs/oboe/src/common/QuirksManager.cpp
 
     echo ">>> Compiling for ${ARCH_ABI} ..."
     # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
