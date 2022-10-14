@@ -411,7 +411,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName:              live.koord.koordrt
-          releaseFiles:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }},deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+          releaseFiles:             deploy/Koord*.aab
           releaseName:              ${{ needs.create_release.outputs.build_version }}
           track:                    beta
           status:                   draft

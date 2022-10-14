@@ -165,7 +165,7 @@ win32 {
 
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-    # note: only armeabi-v7a arm64-v8a are targeted, others are dead/deprecated
+    # Build all targets, as per: https://developer.android.com/topic/arc/device-support
 
     # get ANDROID_ABIS from environment - passed directly to qmake
     ANDROID_ABIS = $$getenv(ANDROID_ABIS)
@@ -176,23 +176,30 @@ win32 {
     # by default is 23 apparently = Android 6 !
     # BUT: crashes on Android 9, sdk=28
     ANDROID_MIN_SDK_VERSION = 29
-
     ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
 
-    # date-based unique value
-    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
-
-## FOR LOCAL DEV USE:
-#    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = 7717
-#    ANDROID_ABIS = x86_64
+    ## FOR LOCAL DEV USE:
+    equals(QMAKE_HOST.os, Windows) {
+        ANDROID_ABIS = x86_64
+        ANDROID_VERSION_CODE = 1234 # dummy int value
+    } else {
+        # date-based unique integer value for Play Store submission
+        !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
+    }
 
     # make separate version codes for each abi build otherwise Play Store rejects
     contains (ANDROID_ABIS, armeabi-v7a) {
         ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
         message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
-    } else {
-        message("Setting for armv8a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 2)
+        message("Setting for x86: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86_64) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 3)
+        message("Setting for x86_64: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     }
 
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
@@ -205,7 +212,6 @@ win32 {
     # prob unnecesssary:
     QT += gui quick widgets quickwidgets
 
-#    CONFIG += qmltypes qml_debug
     # enabled only for debugging on android devices
     #DEFINES += ANDROIDDEBUG
 

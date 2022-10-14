@@ -53,6 +53,12 @@ setup_qt() {
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qtsvg qttools icu
 
+        # Patch in Webview jars for Intel-based 32/64-bit
+        wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_x86.jar -O \
+            "${QT_BASEDIR}/${QT_VERSION}/android_x86/jar/QtAndroidWebView.jar"
+        wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_x86_64.jar -O \
+            "${QT_BASEDIR}/${QT_VERSION}/android_x86_64/jar/QtAndroidWebView.jar"
+
         # - 64bit required for Play Store
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_arm64_v8a \
             --archives qtbase qtdeclarative qtsvg qttools \
@@ -88,19 +94,25 @@ build_app() {
 
     echo "${GOOGLE_RELEASE_KEYSTORE}" | base64 --decode > android/android_release.keystore
 
-    ##FIXME - temporary Oboe lib hackfix for Android12
-    # cp -v android/QuirksManager.cpp libs/oboe/src/common/QuirksManager.cpp
-
     echo ">>> Compiling for ${ARCH_ABI} ..."
-    # if ARCH_ABI=android_armv7 we need to override ANDROID_ABIS for qmake 
+
+    # Override ANDROID_ABIS according to build target 
     # note: seems ANDROID_ABIS can be set here at cmdline, but ANDROID_VERSION_CODE cannot - must be in qmake file
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
         echo ">>> Running qmake with ANDROID_ABIS=armeabi-v7a ..."
         ANDROID_ABIS=armeabi-v7a \
             "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
-    else
+    elif [ "${ARCH_ABI}" == "android_arm64_v8a" ]; then
         echo ">>> Running qmake with ANDROID_ABIS=arm64-v8a ..."
         ANDROID_ABIS=arm64-v8a \
+            "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+    elif [ "${ARCH_ABI}" == "android_x86" ]; then
+        echo ">>> Running qmake with ANDROID_ABIS=arm64-v8a ..."
+        ANDROID_ABIS=x86 \
+            "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
+    elif [ "${ARCH_ABI}" == "android_x86_64" ]; then
+        echo ">>> Running qmake with ANDROID_ABIS=arm64-v8a ..."
+        ANDROID_ABIS=x86_64 \
             "${QT_BASEDIR}/${QT_VERSION}/${ARCH_ABI}/bin/qmake" -spec android-clang
     fi
     "${MAKE}" -j "$(nproc)"
@@ -119,8 +131,12 @@ build_aab() {
 
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
         TARGET_ABI=armeabi-v7a
-    else
+    elif [ "${ARCH_ABI}" == "android_armv7" ]; then
         TARGET_ABI=arm64-v8a
+    elif [ "${ARCH_ABI}" == "android_x86" ]; then
+        TARGET_ABI=x86
+    elif [ "${ARCH_ABI}" == "android_x86_64" ]; then
+        TARGET_ABI=x86_64
     fi
     echo ">>> Building .aab file for ${TARGET_ABI}...."
 
@@ -143,9 +159,15 @@ pass_artifact_to_job() {
     if [ "${ARCH_ABI}" == "android_armv7" ]; then
         NUM="1"
         BUILDNAME="arm"
-    else
+    elif [ "${ARCH_ABI}" == "android_arm64_v8a" ]; then
         NUM="2"
         BUILDNAME="arm64"
+    elif [ "${ARCH_ABI}" == "android_x86" ]; then
+        NUM="3"
+        BUILDNAME="x86"
+    elif [ "${ARCH_ABI}" == "android_x86_64" ]; then
+        NUM="4"
+        BUILDNAME="x86_64"
     fi
 
     mkdir -p deploy
@@ -164,21 +186,28 @@ pass_artifact_to_job() {
 case "${1:-}" in
     setup)
         setup_ubuntu_dependencies
-        # setup_android_ndk
-        # setup_android_sdk
         setup_qt
         install_android_openssl
         ;;
     build)
+        # Build all targets in sequence
         build_app "android_armv7"
         build_aab "android_armv7"
         build_make_clean
         build_app "android_arm64_v8a"
         build_aab "android_arm64_v8a"
+        build_make_clean
+        build_app "android_x86"
+        build_aab "android_x86"
+        build_make_clean
+        build_app "android_x86_64"
+        build_aab "android_x86_64"
         ;;
     get-artifacts)
         pass_artifact_to_job "android_armv7"
         pass_artifact_to_job "android_arm64_v8a"
+        pass_artifact_to_job "android_x86"
+        pass_artifact_to_job "android_x86_64"
         ;;
     *)
         echo "Unknown stage '${1:-}'"
