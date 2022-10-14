@@ -53,9 +53,18 @@ setup_qt() {
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
             --archives qtbase qtdeclarative qtsvg qttools icu
 
-        # Patch in Webview jars for Intel-based 32/64-bit
+        # Install Qt for target and patch in hacked Webview jars
+        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_x86 \
+            --archives qtbase qtdeclarative qtsvg qttools \
+            --modules qtwebview 
+        ##FIXME - HACK - SUBSTITUTE webview jar
         wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_x86.jar -O \
             "${QT_BASEDIR}/${QT_VERSION}/android_x86/jar/QtAndroidWebView.jar"
+        
+        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_x86_64 \
+            --archives qtbase qtdeclarative qtsvg qttools \
+            --modules qtwebview 
+        ##FIXME - HACK - SUBSTITUTE webview jar
         wget https://github.com/koord-live/koord-app/releases/download/${QT_VERSION}/QtAndroidWebView_x86_64.jar -O \
             "${QT_BASEDIR}/${QT_VERSION}/android_x86_64/jar/QtAndroidWebView.jar"
 
