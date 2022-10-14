@@ -99,11 +99,18 @@ pass_artifacts_to_job() {
     
     mv -v $HOME/qt6_armeabi-v7a/jar/QtAndroidWebView.jar ${GITHUB_WORKSPACE}/deploy/QtAndroidWebView_armeabi-v7a.jar
     mv -v $HOME/qt6_arm64-v8a/jar/QtAndroidWebView.jar ${GITHUB_WORKSPACE}/deploy/QtAndroidWebView_arm64-v8a.jar
+    mv -v $HOME/qt6_x86/jar/QtAndroidWebView.jar ${GITHUB_WORKSPACE}/deploy/QtAndroidWebView_x86.jar
+    mv -v $HOME/qt6_x86_64/jar/QtAndroidWebView.jar ${GITHUB_WORKSPACE}/deploy/QtAndroidWebView_x86_64.jar
+
 
     echo ">>> Setting output as such: name=artifact_1::QtAndroidWebView_armeabi-v7a.jar"
     echo "::set-output name=artifact_1::QtAndroidWebView_armeabi-v7a.jar"
     echo ">>> Setting output as such: name=artifact_2::QtAndroidWebView_arm64-v8a.jar"
     echo "::set-output name=artifact_2::QtAndroidWebView_arm64-v8a.jar"
+    echo ">>> Setting output as such: name=artifact_3::QtAndroidWebView_x86.jar"
+    echo "::set-output name=artifact_3::QtAndroidWebView_x86.jar"
+    echo ">>> Setting output as such: name=artifact_4::QtAndroidWebView_x86_64.jar"
+    echo "::set-output name=artifact_4::QtAndroidWebView_x86_64.jar"
 }
 
 case "${1:-}" in
@@ -111,6 +118,8 @@ case "${1:-}" in
         setup
         build_jar "armeabi-v7a"
         build_jar "arm64-v8a"
+        build_jar "x86"
+        build_jar "x86_64"
         ;;
     get-artifacts)
         pass_artifacts_to_job
