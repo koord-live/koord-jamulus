@@ -104,7 +104,7 @@ jobs:
         # Think of this like a foreach loop. Basically runs the steps with every combination of
         # the contents of this.
         config:
-          - config_name:            Android 10+ armv7,arm64_v8a .aab
+          - config_name:            Android 10+ armv7,arm64_v8a, x86, x86_64
             target_os:              android
             building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/android.sh
