@@ -1,11 +1,12 @@
 # Koord - Cloud Rehearsals with Koord.Live
 
+
+## Installation (all devices):
+- please go to the [Koord.Live downloads page](https://koord.live/downloads)
+
+
 ![macOS_Screens_Mixer](https://user-images.githubusercontent.com/584572/195409629-15ea1060-3b95-4849-9789-2013152854de.png)
 ![macOS_Screens_Video](https://user-images.githubusercontent.com/584572/195409693-efbeacd9-6efc-4e87-bd67-0228ac423ac7.png)
-
-
-## Installation:
-- please see Releases page or the [Koord.Live downloads page](https://koord.live/downloads)
 
 ## Description:
 Create rehearsal sessions in the cloud and play remote with your band-mates. The Koord App allows you to mix the session audio, and watch your band play in the video tab.
