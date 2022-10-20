@@ -40,3 +40,10 @@ Filename: "{app}\KoordASIOControl.exe"; Description: "Run KoordASIO Control (set
 Root: HKLM64; Subkey: "Software\Koord"; Flags: uninsdeletekeyifempty
 Root: HKLM64; Subkey: "Software\Koord\KoordASIO"; Flags: uninsdeletekey
 Root: HKLM64; Subkey: "Software\Koord\KoordASIO\Install"; ValueType: string; ValueName: "InstallPath"; ValueData: "{app}"
+
+; install reg keys to setup custom "koord://" or "koord:" URL handling
+[Registry]
+Root: HKCR; Subkey: "koord"; ValueType: "string"; ValueData: "URL:Koord Protocol"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "koord"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "koord\DefaultIcon"; ValueType: "string"; ValueData: "{app}\Koord.exe,0"
+Root: HKCR; Subkey: "koord\shell\open\command"; ValueType: "string"; ValueData: """{app}\Koord.exe"" ""%1"""

@@ -32,6 +32,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+            <intent-filter android:autoVerify="true">
             <!-- Application arguments -->
             <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
             <meta-data android:value="@string/unsupported_android_version" android:name="android.app.unsupported_android_version"/>

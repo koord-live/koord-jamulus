@@ -1194,6 +1194,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
 //    QObject::connect ( pcbxSkill, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CClientDlg::OnSkillActivated );
 
+    // for custom URL handler ie koord://...
+    QDesktopServices::setUrlHandler("koord", this, "connectFromURLHandler");
+
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
@@ -2819,6 +2822,14 @@ void CClientDlg::OnTimerReRequestServList()
         // and therefore it makes sense to re-transmit it
         emit ReqServerListQuery ( haDirectoryAddress );
     }
+}
+
+void CClientDlg::connectFromURLHandler(const QUrl &url)
+{
+    // connect directly to url koord://fqdnfqdn.kv.koord.live:30231
+    QString connect_addr = url.toString().replace("koord://", "");
+    strSelectedAddress = connect_addr;
+    Connect ( strSelectedAddress, strSelectedAddress );
 }
 
 void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )

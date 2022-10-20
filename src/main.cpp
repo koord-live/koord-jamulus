@@ -477,35 +477,44 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Autoconnect on startup - koord URI  eg koord://XX.XX.XX.XX ------------
-        if ( GetStringArgument ( argc, argv, i, "-x", "--autoconnect", strArgument ) )
-        {
-            strConnOnStartupAddress = NetworkUtil::FixJamAddress ( strArgument );
-            qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
-            CommandLineOptions << "--autoconnect";
-            continue;
-        }
+        // DEPRECATED
+        // // Autoconnect on startup - koord URI  eg koord://XX.XX.XX.XX ------------
+        // if ( GetStringArgument ( argc, argv, i, "-x", "--autoconnect", strArgument ) )
+        // {
+        //     strConnOnStartupAddress = NetworkUtil::FixJamAddress ( strArgument );
+        //     qInfo() << qUtf8Printable ( QString ( "- xautoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
+        //     CommandLineOptions << "--autoconnect";
+        //     continue;
+        // }
 
-        // If single argument ie argc=2 check to see if direct exec of /usr/share/applications/koordrt.desktopkoord url --------------------------------------
+        // If single argument ie argc=2 
+        // THEN: we are being called by custom url handler ie "Koord.app "
         if ( argc == 2) {
-            // if argv[1] matches "koord://{IPv4_addr}"
-            QRegularExpression rx_gen1("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3})");
+            // if argv[1] matches "koord://fqdnfqdn.kv.koord.live:30333" or "koord:fqdnfqdn.kv.koord.live:30333
+            // or just straight "{IPv4_addr}"
+//            QRegularExpression rx_gen1("^[koord\\:\\/\\/]?(([0-9]{1,3}\\.){3}[0-9]{1,3})");
+            QRegularExpression rx_gen1("^[koord\\:]?[\\/\\/]?([a-z0-9]+\\.kv.koord.live)");
             QRegularExpressionMatch gen1_match = rx_gen1.match(argv[1]);
-            // gen2 url - if argv[1] matches "koord://{IPv4_addr}:{port}"
-            QRegularExpression rx_gen2("^koord\\:\\/\\/(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
+            // gen2 url - if argv[1] matches "koord://{IPv4_addr}:{port}" or just straight "{IPv4_addr}:{port}"
+//            QRegularExpression rx_gen2("^[koord\\:\\/\\/]?(([0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5})");
+            QRegularExpression rx_gen2("^[koord\\:]?[\\/\\/]?([a-z0-9]+\\.kv.koord.live:[0-9]{3,5})");
             QRegularExpressionMatch gen2_match = rx_gen2.match(argv[1]);
 
             if (gen2_match.hasMatch()) {
                 // add -x {IPv4_addr} to CommandLineOptions
                 strConnOnStartupAddress = gen2_match.captured(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
-                CommandLineOptions << "--autoconnect";
+                // CommandLineOptions << "--autoconnect";
+                CommandLineOptions << "--connect";
+                ClientOnlyOptions << "--connect";
                 continue;
             } else if (gen1_match.hasMatch()) { // if no joy, try to match gen1 url
                 // add -x {IPv4_addr} to CommandLineOptions
                 strConnOnStartupAddress = gen1_match.captured(1);
                 qInfo() << qUtf8Printable ( QString ( "- autoconnect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
-                CommandLineOptions << "--autoconnect";
+                // CommandLineOptions << "--autoconnect";
+                CommandLineOptions << "--connect";
+                ClientOnlyOptions << "--connect";
                 continue;
             }
         }

@@ -391,7 +391,7 @@ public slots:
     void OnRegionTimerPing();
     void OnTimerReRequestServList();
 
-
+    void connectFromURLHandler(const QUrl &url);
 
 signals:
     void SendTabChange ( int iTabIdx );
