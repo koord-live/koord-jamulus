@@ -653,21 +653,27 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 
 QString NetworkUtil::FixJamAddress ( const QString& strAddress )
 {
+    // if argv[1] matches "koord://fqdnfqdn.kv.koord.live:30333" or "koord:fqdnfqdn.kv.koord.live:30333
+    // or just straight ".*fqdnfqdn.kv.koord.live:30333"
+    // -> return "fqdnfqdn.kv.koord.live:30333"
 
-    QRegularExpression rx_gen1("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}");
+    // gen1 url
+    QRegularExpression rx_gen1("[koord\\:]?[\\/\\/]?([a-z0-9]+\\.kv.koord.live)");
     QRegularExpressionMatch gen1_match = rx_gen1.match(strAddress);
-
-    QRegularExpression rx_gen2("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{3,5}");
+    // gen2 url
+    QRegularExpression rx_gen2("[koord\\:]?[\\/\\/]?([a-z0-9]+\\.kv.koord.live:[0-9]{3,5})");
     QRegularExpressionMatch gen2_match = rx_gen2.match(strAddress);
 
     if (gen2_match.hasMatch()) {
-        QString ipAddress = gen2_match.captured(0);
-        return ipAddress;
+        QString sessAddress = gen2_match.captured(1);
+        return sessAddress;
     } else if (gen1_match.hasMatch()) {
-        QString ipAddress = gen1_match.captured(0);
-        return ipAddress;
+        QString sessAddress = gen1_match.captured(1);
+        return sessAddress;
     }
 
+    // Failed to find any valid address, just return the passed string
+    return strAddress;
 }
 
 // Return whether the given HostAdress is within a private IP range
