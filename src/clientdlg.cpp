@@ -24,8 +24,9 @@
 
 #include "clientdlg.h"
 #include <QtQuickWidgets>
-#include "unsafearea.h"
+//#include "unsafearea.h"
 #include <QtConcurrent>
+#include <QDesktopServices>
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -64,6 +65,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // setup main UI
     setupUi ( this );
 
+    //FIXME - right place? registering early here, not sure if makes difference
+    // for custom URL handler ie koord://...
+    QDesktopServices::setUrlHandler("koord", this, "connectFromURLHandler");
+
+
 //    // if on iPhone / iPad (notches prob only on iPhone)
 //#if defined(Q_OS_IOS)
 //    QSize size = qApp->screens()[0]->size();
@@ -82,50 +88,44 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // set up net manager for https requests
     qNam = new QNetworkAccessManager;
 
-    // setup dir servers
-    // set up list view for connected clients (note that the last column size
-    // must not be specified since this column takes all the remaining space)
-#ifdef ANDROID
-    // for Android we need larger numbers because of the default font size
-    lvwServers->setColumnWidth ( 0, 200 );
-    lvwServers->setColumnWidth ( 1, 130 );
-    lvwServers->setColumnWidth ( 2, 100 );
-#else
-    lvwServers->setColumnWidth ( 0, 180 );
-    lvwServers->setColumnWidth ( 1, 75 );
-    lvwServers->setColumnWidth ( 2, 70 );
-    lvwServers->setColumnWidth ( 3, 220 );
-#endif
-    lvwServers->clear();
 
-    // make sure we do not get a too long horizontal scroll bar
-    lvwServers->header()->setStretchLastSection ( false );
+    // regionChecker stuff
+//    // setup dir servers
+//    // set up list view for connected clients (note that the last column size
+//    // must not be specified since this column takes all the remaining space)
+//#ifdef ANDROID
+//    // for Android we need larger numbers because of the default font size
+//    lvwServers->setColumnWidth ( 0, 200 );
+//    lvwServers->setColumnWidth ( 1, 130 );
+//    lvwServers->setColumnWidth ( 2, 100 );
+//#else
+//    lvwServers->setColumnWidth ( 0, 180 );
+//    lvwServers->setColumnWidth ( 1, 75 );
+//    lvwServers->setColumnWidth ( 2, 70 );
+//    lvwServers->setColumnWidth ( 3, 220 );
+//#endif
+//    lvwServers->clear();
 
-    // add invisible columns which are used for sorting the list and storing
-    // the current/maximum number of clients
-    // 0: server name
-    // 1: ping time
-    // 2: number of musicians (including additional strings like " (full)")
-    // 3: location
-    // 4: minimum ping time (invisible)
-    // 5: maximum number of clients (invisible)
-    lvwServers->setColumnCount ( 6 );
-    lvwServers->hideColumn ( 4 );
-    lvwServers->hideColumn ( 5 );
+//    // make sure we do not get a too long horizontal scroll bar
+//    lvwServers->header()->setStretchLastSection ( false );
 
-    // per default the root shall not be decorated (to save space)
-    lvwServers->setRootIsDecorated ( false );
+//    // add invisible columns which are used for sorting the list and storing
+//    // the current/maximum number of clients
+//    // 0: server name
+//    // 1: ping time
+//    // 2: number of musicians (including additional strings like " (full)")
+//    // 3: location
+//    // 4: minimum ping time (invisible)
+//    // 5: maximum number of clients (invisible)
+//    lvwServers->setColumnCount ( 6 );
+//    lvwServers->hideColumn ( 4 );
+//    lvwServers->hideColumn ( 5 );
 
-    // setup timers
-    TimerInitialSort.setSingleShot ( true ); // only once after list request
+//    // per default the root shall not be decorated (to save space)
+//    lvwServers->setRootIsDecorated ( false );
 
-
-
-
-
-
-
-
+//    // setup timers
+//    TimerInitialSort.setSingleShot ( true ); // only once after list request
 
 
 
@@ -1193,9 +1193,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //    QObject::connect ( pedtCity, &QLineEdit::textChanged, this, &CClientDlg::OnCityTextChanged );
 
 //    QObject::connect ( pcbxSkill, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CClientDlg::OnSkillActivated );
-
-    // for custom URL handler ie koord://...
-    QDesktopServices::setUrlHandler("koord", this, "connectFromURLHandler");
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -2827,9 +2824,15 @@ void CClientDlg::OnTimerReRequestServList()
 void CClientDlg::connectFromURLHandler(const QUrl &url)
 {
     // connect directly to url koord://fqdnfqdn.kv.koord.live:30231
+    qInfo() << "connectFromURLHandler URL: " << url;
     QString connect_addr = url.toString().replace("koord://", "");
+    qInfo() << "connectFromURLHandler connect_addr: " << connect_addr;
     strSelectedAddress = connect_addr;
-    Connect ( strSelectedAddress, strSelectedAddress );
+    // set text in the dialog as well to keep OnJoinConnectClicked() implementation consistent
+    joinFieldEdit->setText(strSelectedAddress);
+
+    OnJoinConnectClicked();
+//    Connect ( strSelectedAddress, strSelectedAddress );
 }
 
 void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )

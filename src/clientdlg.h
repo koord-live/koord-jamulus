@@ -45,7 +45,7 @@
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
-#include "global.h"
+//#include "global.h"
 #include "util.h"
 #include "client.h"
 #include "settings.h"
@@ -58,7 +58,7 @@
 #endif
 #include <QQuickWidget>
 #include <QQuickView>
-#include "unsafearea.h"
+//#include "unsafearea.h"
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
@@ -138,7 +138,7 @@ protected:
 
     CClient*         pClient;
     CClientSettings* pSettings;
-    UnsafeArea*    mUnsafeArea;
+//    UnsafeArea*    mUnsafeArea;
 
     bool           bConnected;
     bool           bConnectDlgWasShown;
