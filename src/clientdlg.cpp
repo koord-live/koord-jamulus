@@ -1319,11 +1319,11 @@ void CClientDlg::OnJoinCancelClicked()
     HideJoinWidget();
 }
 
-void CClientDlg::OnEventJoinConnectClicked( QString url )
+void CClientDlg::OnEventJoinConnectClicked( const QString& url )
 {
     strSelectedAddress = url;
     joinFieldEdit->setText ( url );
-    OnJoinConnectClicked();
+    emit OnJoinConnectClicked();
 }
 
 void CClientDlg::OnJoinConnectClicked()
@@ -2837,7 +2837,7 @@ void CClientDlg::connectFromURLHandler(const QUrl &url)
     strSelectedAddress = connect_addr;
     // set text in the dialog as well to keep OnJoinConnectClicked() implementation consistent
     joinFieldEdit->setText(strSelectedAddress);
-    OnJoinConnectClicked();
+    emit OnJoinConnectClicked();
 }
 
 void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )

@@ -318,7 +318,7 @@ public slots:
     }
 
     void OnJoinCancelClicked();
-    void OnEventJoinConnectClicked ( QString url );
+    void OnEventJoinConnectClicked ( const QString& url );
     void OnJoinConnectClicked();
 //    void OnBasicConnectDlgAccepted();
 //    void OnConnectDlgAccepted();

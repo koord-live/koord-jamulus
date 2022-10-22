@@ -28,7 +28,8 @@ public:
                 if(mainWindow)
                     qDebug() << "MainWindow found" << w;
                     qInfo() << "Calling OnEventJoinConnectClicked with url: " << nu_address;
-                    mainWindow->OnEventJoinConnectClicked ( nu_address );
+                    emit mainWindow->OnEventJoinConnectClicked(nu_address);
+//                    mainWindow->OnEventJoinConnectClicked ( nu_address );
             }
             // IF above doesn't work ...
             // emit urlOpened(nu_address);
