@@ -329,7 +329,8 @@ HEADERS += src/buffer.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/signalhandler.h
+    src/signalhandler.h \
+    src/kdapplication.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \

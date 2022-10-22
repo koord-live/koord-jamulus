@@ -117,7 +117,6 @@ public:
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
 
-
 protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
@@ -319,6 +318,7 @@ public slots:
     }
 
     void OnJoinCancelClicked();
+    void OnEventJoinConnectClicked ( QString url );
     void OnJoinConnectClicked();
 //    void OnBasicConnectDlgAccepted();
 //    void OnConnectDlgAccepted();

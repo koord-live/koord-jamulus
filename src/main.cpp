@@ -58,6 +58,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #ifndef SERVER_ONLY
 #    include "clientrpc.h"
 #endif
+#include "kdapplication.h"
 
 // Implementation **************************************************************
 
@@ -822,7 +823,7 @@ int main ( int argc, char** argv )
 
     //FIXME - gui vs nogui handling
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
-    QApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QApplication ( argc, argv );
+    QApplication* pApp = bUseGUI ? new KdApplication ( argc, argv ) : new KdApplication ( argc, argv );
 
     if (bUseGUI == true)
     {
