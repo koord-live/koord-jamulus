@@ -412,4 +412,7 @@ signals:
     void CreateCLServerListPingMes ( CHostAddress InetAddr );
     void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
     void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
+
+    // custom macOS url handler stuff
+    void EventJoinConnectClicked( const QString &url );
 };

@@ -973,6 +973,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( inviteComboBox, &QComboBox::activated, this, &CClientDlg::OnInviteBoxActivated );
     QObject::connect ( checkUpdateButton, &QPushButton::clicked, this, &CClientDlg::OnCheckForUpdate );
 
+    // connection for macOS custom url event handler
+    QObject::connect ( this, &CClientDlg::EventJoinConnectClicked, this, &CClientDlg::OnEventJoinConnectClicked );
+
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
 
@@ -2837,7 +2840,7 @@ void CClientDlg::connectFromURLHandler(const QUrl &url)
     strSelectedAddress = connect_addr;
     // set text in the dialog as well to keep OnJoinConnectClicked() implementation consistent
     joinFieldEdit->setText(strSelectedAddress);
-    emit OnJoinConnectClicked();
+    OnJoinConnectClicked();
 }
 
 void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )
