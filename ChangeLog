@@ -1,3 +1,7 @@
+### 4.0.10 (2022-10-22) ###
+
+- Client: subclass QApplication
+
 ### 4.0.9 (2022-10-21) ###
 
 - Client: macOS/iOS autoconnect fixes
