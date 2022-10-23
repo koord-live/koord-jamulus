@@ -27,6 +27,7 @@
 //#include "unsafearea.h"
 #include <QtConcurrent>
 #include <QDesktopServices>
+#include "urlhandler.h"
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -65,10 +66,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // setup main UI
     setupUi ( this );
 
-    //FIXME - right place? registering early here, not sure if makes difference
-    // for custom URL handler ie koord://...
-    QDesktopServices::setUrlHandler("koord", this, "connectFromURLHandler");
-
+    // Set up Custom URL handling ie koord://... for iOS (and Android)
+    auto url_handler = UrlHandler::getInstance();
+    connect(url_handler, &UrlHandler::connectUrlSet, this, &CClientDlg::connectFromURLHandler);
+    // Other example:
+    // connect(url_handler, &UrlHandler::defaultSingleUserModeSet, this, &CClientDlg::setDefaultSingleUserMode);
 
 //    // if on iPhone / iPad (notches prob only on iPhone)
 //#if defined(Q_OS_IOS)
@@ -87,7 +89,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // set up net manager for https requests
     qNam = new QNetworkAccessManager;
-
 
     // regionChecker stuff
 //    // setup dir servers
@@ -2831,17 +2832,23 @@ void CClientDlg::OnTimerReRequestServList()
     }
 }
 
-void CClientDlg::connectFromURLHandler(const QUrl &url)
+void CClientDlg::connectFromURLHandler(const QString& connect_url)
 {
     // connect directly to url koord://fqdnfqdn.kv.koord.live:30231
-    qInfo() << "connectFromURLHandler URL: " << url;
-    QString connect_addr = url.toString().replace("koord://", "");
-    qInfo() << "connectFromURLHandler connect_addr: " << connect_addr;
-    strSelectedAddress = connect_addr;
+    qInfo() << "connectFromURLHandler URL: " << connect_url;
+//    QString connect_addr = connect_url.replace("koord://", "");
+    qInfo() << "connectFromURLHandler connect_addr: " << connect_url;
+    strSelectedAddress = connect_url;
     // set text in the dialog as well to keep OnJoinConnectClicked() implementation consistent
     joinFieldEdit->setText(strSelectedAddress);
-    emit EventJoinConnectClicked( connect_addr );
+    emit EventJoinConnectClicked( connect_url );
 }
+
+//void CClientDlg::setDefaultSingleUserMode(const QString& value)
+//{
+//    // Set from URL or command line so string not boolean
+//    m_default_single_user_mode = (value.toLower() == "true");
+//}
 
 void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )
 {
