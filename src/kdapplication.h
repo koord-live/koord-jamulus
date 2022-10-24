@@ -15,7 +15,7 @@ public:
     int run();
 
 public slots:
-    void OnConnectFromURLHandler(const QString& connect_url);
+    void OnConnectFromURLHandler(const QString& value);
 
     // custom event handler for macOS (+ iOS?) custom url handling - koord://<address> urls
 //    bool event(QEvent *event) override;
