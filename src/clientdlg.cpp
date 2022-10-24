@@ -28,6 +28,7 @@
 #include <QtConcurrent>
 #include <QDesktopServices>
 #include "urlhandler.h"
+#include <kdapplication.h>
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -973,9 +974,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Set up Custom URL handling ie koord://... for iOS (and Android)
     auto url_handler = UrlHandler::getInstance();
-//    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, this, &CClientDlg::OnConnectFromURLHandler );
+    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, qobject_cast<KdApplication*>qApp, &KdApplication::OnConnectFromURLHandler );
     // Other example:
-    // connect(url_handler, &UrlHandler::defaultSingleUserModeSet, this, &CClientDlg::setDefaultSingleUserMode);
+//     connect(url_handler, &UrlHandler::defaultSingleUserModeSet, this, &CClientDlg::setDefaultSingleUserMode);
 
 //    FIXME _ TEST force send signal  ???
     emit url_handler->connectUrlSet("koord://ladida.kv.koord.live:32321");
