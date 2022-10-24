@@ -823,7 +823,7 @@ int main ( int argc, char** argv )
 
     //FIXME - gui vs nogui handling
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
-    QApplication* pApp = bUseGUI ? new KdApplication ( argc, argv ) : new KdApplication ( argc, argv );
+    KdApplication* pApp = bUseGUI ? new KdApplication ( argc, argv ) : new KdApplication ( argc, argv );
 
     if (bUseGUI == true)
     {
@@ -993,7 +993,8 @@ int main ( int argc, char** argv )
 //                ClientDlg.setWindowFlag(Qt::MaximizeUsingFullscreenGeometryHint, true);
                 // show dialog
                 ClientDlg.show();
-                pApp->exec();
+                // In main client mode - so call run() rather than exec() to setup url handler stuff
+                pApp->run();
             }
             else
 #    endif

@@ -972,8 +972,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( this, &CClientDlg::EventJoinConnectClicked, this, &CClientDlg::OnEventJoinConnectClicked );
 
     // Set up Custom URL handling ie koord://... for iOS (and Android)
-    url_handler = UrlHandler::getInstance();
-    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, this, &CClientDlg::OnConnectFromURLHandler );
+//    url_handler = UrlHandler::getInstance();
+//    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, this, &CClientDlg::OnConnectFromURLHandler );
     // Other example:
     // connect(url_handler, &UrlHandler::defaultSingleUserModeSet, this, &CClientDlg::setDefaultSingleUserMode);
 
