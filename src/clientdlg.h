@@ -26,6 +26,7 @@
 
 #include "qnetworkaccessmanager.h"
 #include "qnetworkreply.h"
+#include "urlhandler.h"
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>
@@ -206,6 +207,9 @@ protected:
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
 //    bool         bEnableIPv6;
+
+    // for urlhandler
+    UrlHandler* url_handler;
 
 public slots:
     void OnConnectDisconBut();
