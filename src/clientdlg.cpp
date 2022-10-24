@@ -66,12 +66,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // setup main UI
     setupUi ( this );
 
-    // Set up Custom URL handling ie koord://... for iOS (and Android)
-    auto url_handler = UrlHandler::getInstance();
-    connect(url_handler, &UrlHandler::connectUrlSet, this, &CClientDlg::connectFromURLHandler);
-    // Other example:
-    // connect(url_handler, &UrlHandler::defaultSingleUserModeSet, this, &CClientDlg::setDefaultSingleUserMode);
-
 //    // if on iPhone / iPad (notches prob only on iPhone)
 //#if defined(Q_OS_IOS)
 //    QSize size = qApp->screens()[0]->size();
@@ -976,6 +970,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // connection for macOS custom url event handler
     QObject::connect ( this, &CClientDlg::EventJoinConnectClicked, this, &CClientDlg::OnEventJoinConnectClicked );
+
+    // Set up Custom URL handling ie koord://... for iOS (and Android)
+    auto url_handler = UrlHandler::getInstance();
+    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, this, &CClientDlg::OnConnectFromURLHandler );
+    // Other example:
+    // connect(url_handler, &UrlHandler::defaultSingleUserModeSet, this, &CClientDlg::setDefaultSingleUserMode);
+
+//    FIXME _ TEST force send signal  ???
+    emit url_handler->connectUrlSet("ladida.kv.koord.live:32321");
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
@@ -2832,12 +2835,12 @@ void CClientDlg::OnTimerReRequestServList()
     }
 }
 
-void CClientDlg::connectFromURLHandler(const QString& connect_url)
+void CClientDlg::OnConnectFromURLHandler(const QString& connect_url)
 {
     // connect directly to url koord://fqdnfqdn.kv.koord.live:30231
-    qInfo() << "connectFromURLHandler URL: " << connect_url;
+    qInfo() << "OnConnectFromURLHandler URL: " << connect_url;
 //    QString connect_addr = connect_url.replace("koord://", "");
-    qInfo() << "connectFromURLHandler connect_addr: " << connect_url;
+    qInfo() << "OnConnectFromURLHandler connect_addr: " << connect_url;
     strSelectedAddress = connect_url;
     // set text in the dialog as well to keep OnJoinConnectClicked() implementation consistent
     joinFieldEdit->setText(strSelectedAddress);

@@ -11,13 +11,12 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <clientdlg.h>
+#include "urlhandler.h"
 
 // Temp disable Android custom handling, since it's already working without custom parameter handling
 //#ifdef Q_OS_ANDROID
 //#include <jni.h>
 //#endif
-
-#include "urlhandler.h"
 
 UrlHandler* UrlHandler::m_instance = NULL;
 
@@ -26,15 +25,18 @@ UrlHandler::UrlHandler()
     m_instance = this;
 
     QDesktopServices::setUrlHandler("koord", this, "handleUrl");
+    qInfo() << "url_handler - setUrlHandler called";
 }
 
 void UrlHandler::handleUrl(const QUrl& url)
 {
-    qDebug() << Q_FUNC_INFO << url;
+    qInfo() << Q_FUNC_INFO << url;
 
     // url will be: koord://fqdnfqdn.kv.koord.live:30123
     auto connect_url = url.toString();
     emit connectUrlSet(connect_url);
+
+    qInfo() << "EMITTED connectUrlSet with url: " << connect_url;
 
 //    auto query = QUrlQuery(url);
 //    auto default_single_user_mode = query.queryItemValue("default_single_user_mode");
@@ -59,6 +61,7 @@ UrlHandler* UrlHandler::getInstance()
 {
     if (!m_instance)
         m_instance = new UrlHandler;
+    qInfo() << "url_handler - getInstance called";
     return m_instance;
 }
 

@@ -97,8 +97,8 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleURLName</key>
-			<string>live.koord.Koord-RT</string>
+			<key>CFBundleTypeRole</key>
+        	<string>Viewer</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>koord</string>

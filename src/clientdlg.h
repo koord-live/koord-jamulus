@@ -391,7 +391,7 @@ public slots:
     void OnRegionTimerPing();
     void OnTimerReRequestServList();
 
-    void connectFromURLHandler(const QString& connect_url);
+    void OnConnectFromURLHandler(const QString& connect_url);
 //    void setDefaultSingleUserMode(const QString& value);
 
 signals:
