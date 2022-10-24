@@ -16,9 +16,7 @@ KdApplication::KdApplication (int& argc, char* argv[]) :
 // for iOS
 void KdApplication::OnConnectFromURLHandler(const QString& connect_url)
 {
-    // connect directly to url koord://fqdnfqdn.kv.koord.live:30231
-    qInfo() << "OnConnectFromURLHandler URL: " << connect_url;
-//    QString connect_addr = connect_url.replace("koord://", "");
+    // url format: "koord://<fqdn>:<port>"
     qInfo() << "OnConnectFromURLHandler connect_addr: " << connect_url;
 
     // here we have a URL open event on iOS
@@ -29,7 +27,7 @@ void KdApplication::OnConnectFromURLHandler(const QString& connect_url)
         CClientDlg *mainWindow = qobject_cast<CClientDlg*>(w);
         if(mainWindow)
         {
-            qDebug() << "MainWindow found" << w;
+//            qDebug() << "MainWindow found" << w;
             qInfo() << "Emitting EventJoinConnectClicked signal with url: " << connect_url;
             // send EventJoinConnectClicked signal, trigger OnEventJoinConnectClicked
             emit mainWindow->EventJoinConnectClicked(connect_url);

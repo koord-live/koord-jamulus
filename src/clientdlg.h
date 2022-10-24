@@ -26,7 +26,7 @@
 
 #include "qnetworkaccessmanager.h"
 #include "qnetworkreply.h"
-#include "urlhandler.h"
+//#include "urlhandler.h"
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>
@@ -209,7 +209,7 @@ protected:
 //    bool         bEnableIPv6;
 
     // for urlhandler
-    UrlHandler* url_handler;
+//    UrlHandler* url_handler;
 
 public slots:
     void OnConnectDisconBut();

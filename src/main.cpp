@@ -809,13 +809,13 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
-#    if defined( Q_OS_IOS )
-    bUseGUI        = true;
-    bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
+//#    if defined( Q_OS_IOS )
+//    bUseGUI        = true;
+//    bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
 
-    // bUseMultithreading = true;
-    KdApplication* pApp = new KdApplication ( argc, argv );
-#    else
+//    // bUseMultithreading = true;
+//    KdApplication* pApp = new KdApplication ( argc, argv );
+//#    else
 
     // need this before new QApplication created
     // AND before QPlatformOpenGLContext is created - https://doc.qt.io/qt-6/qtwebview-index.html#prerequisites
@@ -823,7 +823,8 @@ int main ( int argc, char** argv )
 
     //FIXME - gui vs nogui handling
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
-    KdApplication* pApp = bUseGUI ? new KdApplication ( argc, argv ) : new KdApplication ( argc, argv );
+//    KdApplication* pApp = bUseGUI ? new KdApplication ( argc, argv ) : new KdApplication ( argc, argv );
+    KdApplication* pApp = new KdApplication ( argc, argv );
 
     if (bUseGUI == true)
     {
@@ -847,7 +848,7 @@ int main ( int argc, char** argv )
         pApp->setPalette(palette);
     }
 
-#    endif
+//#    endif
 #endif
 
 #ifdef ANDROID
