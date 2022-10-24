@@ -814,7 +814,7 @@ int main ( int argc, char** argv )
     bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
 
     // bUseMultithreading = true;
-    QApplication* pApp = new QApplication ( argc, argv );
+    KdApplication* pApp = new KdApplication ( argc, argv );
 #    else
 
     // need this before new QApplication created
