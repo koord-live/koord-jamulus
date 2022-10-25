@@ -142,24 +142,26 @@ win32 {
     # reset TARGET for iOS only since rename
     TARGET = Koord
     QMAKE_INFO_PLIST = ios/Info-xcode.plist
+    # needed to fix "Error: You are creating QApplication before calling UIApplicationMain."
     QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
+
     QMAKE_ASSET_CATALOGS += ios/Images.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
-
     ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
     QMAKE_BUNDLE_DATA += ios_icon
 
-    SOURCES += src/unsafearea.cpp
-    HEADERS += src/unsafearea.h
-
-    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
-    HEADERS += ios/ios_app_delegate.h
+#    SOURCES += src/unsafearea.cpp
+#    HEADERS += src/unsafearea.h
+#    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
+#    HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
+
+    # PRODUCT_BUNDLE_IDENTIFIER is set like
+    #  ${PRODUCT_BUNDLE_IDENTIFIER} = QMAKE_TARGET_BUNDLE_PREFIX.QMAKE_BUNDLE
     QMAKE_TARGET_BUNDLE_PREFIX = live.koord
-    # ${PRODUCT_BUNDLE_IDENTIFIER} = QMAKE_TARGET_BUNDLE_PREFIX.QMAKE_BUNDLE
     QMAKE_BUNDLE = Koord-RT
-    # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
+    
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 

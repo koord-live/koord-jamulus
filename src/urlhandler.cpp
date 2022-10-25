@@ -32,7 +32,7 @@ void UrlHandler::handleUrl(const QUrl& url)
 {
     qInfo() << Q_FUNC_INFO << url;
 
-    // url will be: koord://fqdnfqdn.kv.koord.live:30123
+    // url will be: koord://<host>:<port>
     auto connect_url = url.toString();
     emit connectUrlSet(connect_url);
 
