@@ -1327,6 +1327,27 @@ void CClientDlg::OnEventJoinConnectClicked( const QString& url )
 
 void CClientDlg::OnJoinConnectClicked()
 {
+    // process if user has entered https://koord.live/kd/?ks={hash} style url
+    QRegularExpression rx("https://[test\\.]?koord.live/kd/\\?ks=(.*)");
+    QRegularExpressionMatch rx_match = rx.match(joinFieldEdit->text());
+    if (rx_match.hasMatch()) {
+//        QString sessHash = rx_match.captured(1);
+        // look up session address from endpoint
+        // call https://koord.live/kd/?ks={hash}
+        QNetworkRequest request(QUrl(joinFieldEdit->text()));
+        // send request and assign reply pointer
+        QNetworkReply *endpoint_reply = qNam->get(request);
+        // connect reply pointer with callback for finished signal
+        QObject::connect(endpoint_reply, &QNetworkReply::finished, this, [=]()
+            {
+                QString err = endpoint_reply->errorString();
+                QString contents = QString::fromUtf8(endpoint_reply->readAll());
+                // if reply - no error
+                // response should be url style "koord://<host>:<port>" so assign this directly
+                strSelectedAddress = contents.toUtf8();
+            });
+    }
+
     strSelectedAddress = NetworkUtil::FixAddress ( joinFieldEdit->text() );
 
     // update joinFieldEdit with corrected address
@@ -1386,9 +1407,14 @@ void CClientDlg::OnInviteBoxActivated()
     QString text = inviteComboBox->currentText();
 
     QString subject = tr("Koord.Live - Session Invite");
+    QString host_prefix = "";
+    if (devsetting1->text() != "")
+    {
+        host_prefix = devsetting1->text() + ".";
+    }
     QString body = tr("You have an invite to play on Koord.Live.\n\n") +
                     tr("Click the Session Link to join your session.\n") +
-                    tr("Session Link: https://koord.live/kd/?ks=%1 \n\n").arg(strSessionHash) +
+                    tr("Session Link: https://%1koord.live/kd/?ks=%2 \n\n").arg(host_prefix, strSessionHash) +
                     tr("If you don't have the free Koord app installed yet,\n") +
                     tr("go to https://koord.live/downloads and follow the links.");
 
@@ -1396,7 +1422,7 @@ void CClientDlg::OnInviteBoxActivated()
     {
         inviteComboBox->setCurrentIndex(0);
         QClipboard *clipboard = QGuiApplication::clipboard();
-        clipboard->setText(tr("https://koord.live/kd/?ks=%1 \n\n").arg(strSessionHash));
+        clipboard->setText(tr("https://%1koord.live/kd/?ks=%2 \n\n").arg(host_prefix, strSessionHash));
         QToolTip::showText( inviteComboBox->mapToGlobal( QPoint( 0, 0 ) ), "Link Copied!" );
     }
     else if ( text.contains( "Share via Email" ) )
@@ -1878,15 +1904,15 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         //FIXME - for test only
         if (devsetting1->text() != "")
         {
-            url.setUrl(QString("https://%1/sess/sessionvideourl/").arg(devsetting1->text()));
+            url.setUrl(QString("https://%1.koord.live/sess/sessionvideourl/").arg(devsetting1->text()));
         }
         QNetworkRequest request(url);
         //FIXME - for test only
-        if (devsetting1->text() != "")
-        {
-            request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-            request.setRawHeader(devsetting2->text().toUtf8(), devsetting3->text().toUtf8());
-        }
+//        if (devsetting1->text() != "")
+//        {
+//            request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+//            request.setRawHeader(devsetting2->text().toUtf8(), devsetting3->text().toUtf8());
+//        }
 
         QRegularExpression rx_sessaddr("^(([a-z]*[0-9]*\\.*)+):([0-9]+)$");
         QRegularExpressionMatch reg_match = rx_sessaddr.match(strSelectedAddress);
