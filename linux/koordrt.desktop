@@ -7,6 +7,6 @@ Terminal=false
 Type=Application
 Categories=AudioVideo;Audio;Mixer;Qt;Network;Application;
 Keywords=jam;play;rehearse;live;online;music;
-Exec=Koord.AppImage %u
+Exec=koord %u
 Encoding=UTF-8
 MimeType=x-scheme-handler/koord;
