@@ -158,6 +158,7 @@ protected:
     QString        strSelectedAddress;
     QString        strVideoUrl;
     QString        strVideoHost;
+    QString        strSessionHash;
 #if defined(ANDROID)
     QQuickWidget*   quickWidget;
 #else

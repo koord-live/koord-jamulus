@@ -972,15 +972,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // connection for macOS custom url event handler
     QObject::connect ( this, &CClientDlg::EventJoinConnectClicked, this, &CClientDlg::OnEventJoinConnectClicked );
 
-    // Set up Custom URL handling ie koord://... for iOS (and Android)
-    auto url_handler = UrlHandler::getInstance();
-    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, qobject_cast<KdApplication*>qApp, &KdApplication::OnConnectFromURLHandler );
-    // Other example:
-//     connect(url_handler, &UrlHandler::defaultSingleUserModeSet, this, &CClientDlg::setDefaultSingleUserMode);
-
-//    FIXME _ TEST force send signal  ???
-    emit url_handler->connectUrlSet("koord://ladida.kv.koord.live:32321");
-
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
 
@@ -1396,8 +1387,8 @@ void CClientDlg::OnInviteBoxActivated()
 
     QString subject = tr("Koord.Live - Session Invite");
     QString body = tr("You have an invite to play on Koord.Live.\n\n") +
-                    tr("Copy (don't Click!) the Session Link and paste in the Koord app.\n") +
-                    tr("Session Link: https://%1 \n\n").arg(strSelectedAddress) +
+                    tr("Click the Session Link to join your session.\n") +
+                    tr("Session Link: https://koord.live/kd/?ks=%1 \n\n").arg(strSessionHash) +
                     tr("If you don't have the free Koord app installed yet,\n") +
                     tr("go to https://koord.live/downloads and follow the links.");
 
@@ -1405,7 +1396,7 @@ void CClientDlg::OnInviteBoxActivated()
     {
         inviteComboBox->setCurrentIndex(0);
         QClipboard *clipboard = QGuiApplication::clipboard();
-        clipboard->setText(strSelectedAddress);
+        clipboard->setText(tr("https://koord.live/kd/?ks=%1 \n\n").arg(strSessionHash));
         QToolTip::showText( inviteComboBox->mapToGlobal( QPoint( 0, 0 ) ), "Link Copied!" );
     }
     else if ( text.contains( "Share via Email" ) )
@@ -1927,6 +1918,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 QJsonDocument jsonResponse = QJsonDocument::fromJson(contents.toUtf8());
                 QJsonObject jsonObject = jsonResponse.object();
                 strVideoHost = jsonObject.value("video_url").toString();
+                strSessionHash = jsonObject.value("session_hash").toString();
 
                 // set the video url and update QML side
 #if defined(Q_OS_MACX) || defined(Q_OS_IOS)
