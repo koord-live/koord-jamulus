@@ -38,6 +38,10 @@ contains(CONFIG, "headless") {
         webview
 }
 
+# add SingleApplication support
+include(singleapplication/singleapplication.pri)
+DEFINES += QAPPLICATION_CLASS=QApplication
+
 INCLUDEPATH += src
 
 INCLUDEPATH_OPUS = libs/opus/include \

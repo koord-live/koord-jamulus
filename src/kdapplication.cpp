@@ -7,7 +7,7 @@
 
 
 KdApplication::KdApplication (int& argc, char* argv[]) :
-        QApplication(argc, argv)
+        SingleApplication(argc, argv)
 {
 
 }

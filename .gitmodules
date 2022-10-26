@@ -5,3 +5,6 @@
 	branch = bltin
 	path = KoordASIO
 	url = git@github.com:koord-live/KoordASIO.git
+[submodule "singleapplication"]
+	path = singleapplication
+	url = https://github.com/itay-grudev/SingleApplication.git

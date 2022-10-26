@@ -1,11 +1,11 @@
 #include <QApplication>
 #include <QDebug>
 #include <QFileOpenEvent>
-#include <clientdlg.h>
+//#include <clientdlg.h>
 //#include <urlhandler.h>
+#include <singleapplication.h>
 
-
-class KdApplication : public QApplication
+class KdApplication : public SingleApplication
 {
     Q_OBJECT
 
