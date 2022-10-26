@@ -337,7 +337,8 @@ HEADERS += src/buffer.h \
     src/recorder/cwavestream.h \
     src/signalhandler.h \
     src/kdapplication.h \
-    src/urlhandler.h
+    src/urlhandler.h \
+    src/messagereceiver.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
@@ -446,7 +447,8 @@ SOURCES += src/buffer.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
     src/recorder/cwavestream.cpp \
-    src/urlhandler.cpp
+    src/urlhandler.cpp \
+    src/messagereceiver.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \

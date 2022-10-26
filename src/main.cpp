@@ -59,6 +59,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #    include "clientrpc.h"
 #endif
 #include "kdapplication.h"
+#include "messagereceiver.h"
 
 // Implementation **************************************************************
 
@@ -121,6 +122,8 @@ int main ( int argc, char** argv )
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
     QString      strJsonRpcSecretFileName    = "";
+    // handle primary / secondary instances
+    MessageReceiver msgReceiver;
 
 #if !defined( HEADLESS ) && defined( _WIN32 )
     if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
@@ -825,6 +828,22 @@ int main ( int argc, char** argv )
 //    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
 //    KdApplication* pApp = bUseGUI ? new KdApplication ( argc, argv ) : new KdApplication ( argc, argv );
     KdApplication* pApp = new KdApplication ( argc, argv );
+
+    // singleapplication - handle primary / secondary instances
+    if( pApp->isSecondary() ) {
+        // pApp->sendMessage( pApp->arguments().join(' ').toUtf8() );
+        //FIXME - arguments() list is all args including executable ie "Koord.exe koord://<host>:<port>"
+        // so we take arguments().last() as that SHOULD be the URL in typical circumstances
+        pApp->sendMessage( pApp->arguments().last().toUtf8() );
+        pApp->exit( 0 );
+    } else {
+        QObject::connect(
+            pApp,
+            &SingleApplication::receivedMessage,
+            &msgReceiver,
+            &MessageReceiver::receivedMessage
+        );
+    }
 
     if (bUseGUI == true)
     {
