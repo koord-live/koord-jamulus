@@ -177,6 +177,9 @@ public:
     bool       bOwnFaderFirst;
 //    bool       bWindowWasShownBasicConnect;
 
+    // for Test mode setting
+    QByteArray strTestMode;
+
 protected:
     // No CommandLineOptions used when reading Client inifile
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;

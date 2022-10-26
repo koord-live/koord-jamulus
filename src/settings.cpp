@@ -518,6 +518,9 @@ else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, st
     // window position of the connect window
     vecWindowPosConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
 
+    // set Test setting
+    strTestMode = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "test_setting" ) );
+
     // window position of the basic connect window
 //    vecWindowPosBasicConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposbascon_base64" ) );
 
@@ -727,6 +730,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // window position of the connect window
     PutIniSetting ( IniXMLDocument, "client", "winposcon_base64", ToBase64 ( vecWindowPosConnect ) );
+
+    // save if in Test mode
+    PutIniSetting ( IniXMLDocument, "client", "test_setting", ToBase64 ( strTestMode ) );
 
     // window position of the basic connect window
 //    PutIniSetting ( IniXMLDocument, "client", "winposbascon_base64", ToBase64 ( vecWindowPosBasicConnect ) );

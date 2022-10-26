@@ -161,6 +161,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QScroller::grabGesture(txvHelp, QScroller::TouchGesture);
     QScroller::grabGesture(txvAbout, QScroller::TouchGesture);
 
+    // set Test Mode
+    devsetting1->setText(pSettings->strTestMode);
+
     // Add help text to controls -----------------------------------------------
     // input level meter
     QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " +
