@@ -851,11 +851,14 @@ int main ( int argc, char** argv )
     // AND before QPlatformOpenGLContext is created - https://doc.qt.io/qt-6/qtwebview-index.html#prerequisites
     QtWebView::initialize();
 
-    //FIXME - gui vs nogui handling
-//    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
-//    KdApplication* pApp = bUseGUI ? new KdApplication ( argc, argv ) : new KdApplication ( argc, argv );
+    // Make main application object
     KdApplication* pApp = new KdApplication ( argc, argv );
 
+    //FIXME ONLY set up primary/secondary instance stuff if NOT on M1 Mac
+    // due to https://github.com/itay-grudev/SingleApplication/issues/136
+#if (defined ( Q_OS_MACX ) && ifndef Q_PROCESSOR_X86_64)
+    // do Nothing here, we have no SingleApplication
+#else
     // singleapplication - handle primary / secondary instances
     if( pApp->isSecondary() ) {
         // pApp->sendMessage( pApp->arguments().join(' ').toUtf8() );
@@ -871,6 +874,7 @@ int main ( int argc, char** argv )
             &MessageReceiver::receivedMessage
         );
     }
+#endif
 
     if (bUseGUI == true)
     {
