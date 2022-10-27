@@ -130,11 +130,11 @@ jobs:
 
           - config_name:            MacOS 10.15+ intel (artifacts)
             target_os:              macos
-            building_on_os:         macos-11
+            building_on_os:         macos-12
             base_command:           QT_VERSION=6.3.2 SIGN_IF_POSSIBLE=1 ARTIFACT_SUFFIX=intel ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
-            xcode_version:          13.2.1
+            xcode_version:          13.4.1
 
           - config_name:            MacOS 10.15+ arm64 (artifacts)
             target_os:              macos
@@ -326,12 +326,10 @@ jobs:
 
       ## RELEASE PROCEDURE FOR:
       ## - macOS App Store - storesign pkg
-      ## note: macos-12 flag as quick-hack way to avoid uploading Silicon build to app store - until Universal build done
       - name:                       Validate and Upload macOS Storesign Pkg
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true' &&
-                                    matrix.config.building_on_os != 'macos-12'
+                                    needs.create_release.outputs.publish_to_release == 'true'
         id:                         macos_validate_upload
         run:                        ${{ matrix.config.base_command }} validate_and_upload
         env:
