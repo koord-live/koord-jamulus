@@ -219,7 +219,7 @@ jobs:
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
             is_main_build_target:   true
-            xcode_version:          13.4.1
+            xcode_version:          14.0.1
 
           # - config_name:            MacOS 10.15+ arm64 (artifacts)
           #   target_os:              macos
@@ -235,7 +235,7 @@ jobs:
             base_command:           QT_VERSION=6.4.0 SIGN_IF_POSSIBLE=1 ./.github/autobuild/ios.sh
             run_codeql:             false
             is_main_build_target:   true
-            xcode_version:          13.4.1
+            xcode_version:          14.0.1
 
           - config_name:            Windows 10+ x64 exe
             target_os:              windows
@@ -483,31 +483,31 @@ jobs:
           retention-days:           31
           if-no-files-found:        error
 
-      - name:                       Upload iOS Signed ipa to Release -- Test
-        if:                         >-
-                                    steps.build.outputs.ios_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
-        id:                         upload-release-iostest
-        uses:                       actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               build/Koord.ipa
-          asset_name:               Koord.ipa
-          asset_content_type:       application/octet-stream
-
-      # - name:                       Upload iOS app to TestFlight
-      #   id:                         ios_testflight_upload
+      # - name:                       Upload iOS Signed ipa to Release -- Test
       #   if:                         >-
       #                               steps.build.outputs.ios_signed == 'true' &&
       #                               needs.create_release.outputs.publish_to_release == 'true'
-      #   run:                        ${{ matrix.config.base_command }} validate_and_upload
-      #   env: 
-      #     ARTIFACT_PATH:            build/Koord.ipa
-      #     NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
-      #     NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
-      #     JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+      #   id:                         upload-release-iostest
+      #   uses:                       actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url:               ${{ needs.create_release.outputs.upload_url }}
+      #     asset_path:               build/Koord.ipa
+      #     asset_name:               Koord.ipa
+      #     asset_content_type:       application/octet-stream
+
+      - name:                       Upload iOS app to TestFlight
+        id:                         ios_testflight_upload
+        if:                         >-
+                                    steps.build.outputs.ios_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
+        run:                        ${{ matrix.config.base_command }} validate_and_upload
+        env: 
+          ARTIFACT_PATH:            build/Koord.ipa
+          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       ## RELEASE PROCEDURE FOR:
       ## - Android Play Store - aab
