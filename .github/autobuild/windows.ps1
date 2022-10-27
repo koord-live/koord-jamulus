@@ -18,7 +18,7 @@ $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
 $Qt32Version = "6.3.2"
 $Qt64Version = "6.3.2"
-$AqtinstallVersion = "2.1.0"
+$AqtinstallVersion = "3.0.1"
 #$Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
@@ -44,6 +44,13 @@ Function Install-Qt
         "--modules", "qtwebengine", "qtwebview", "qtmultimedia", "qtwebchannel", "qtpositioning",
         "--archives", "qtbase", "qtdeclarative", "qtsvg", "qttools"
     )
+    if ( $QtVersion -notmatch '^5\.' )
+    {
+        # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+        # as an archive anymore.
+        $Args += ("--modules")
+    }
+    $Args += ("qtmultimedia")
     aqt install-qt @Args
     if ( !$? )
     {

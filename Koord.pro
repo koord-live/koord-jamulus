@@ -95,6 +95,15 @@ win32 {
 
     !exists(windows/ASIOSDK2) {
         error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
+
+    HEADERS += src/sound/asio/sound.h
+    SOURCES += src/sound/asio/sound.cpp \
+                libs/ASIOSDK2/common/asio.cpp \
+                libs/ASIOSDK2/host/asiodrivers.cpp \
+                libs/ASIOSDK2/host/pc/asiolist.cpp
+    INCLUDEPATH += libs/ASIOSDK2/common \
+        libs/ASIOSDK2/host \
+        libs/ASIOSDK2/host/pc
     }
     # Important: Keep those ASIO includes local to this build target in
     # order to avoid poisoning other builds license-wise.
@@ -111,8 +120,8 @@ win32 {
     MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
     RC_FILE = mac/mainicon.icns
 
-    HEADERS += mac/activity.h mac/badgelabel.h
-    OBJECTIVE_SOURCES += mac/activity.mm mac/badgelabel.mm
+    HEADERS += src/mac/activity.h src/mac/badgelabel.h
+    OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = live.koord
     # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
@@ -139,8 +148,10 @@ win32 {
 
     # defo use CoreAudio and not Jack
     message(Using CoreAudio.)
-    HEADERS += mac/sound.h
-    SOURCES += mac/sound.cpp
+    #HEADERS += mac/sound.h
+    #SOURCES += mac/sound.cpp
+    HEADERS += src/sound/coreaudio-mac/sound.h
+    SOURCES += src/sound/coreaudio-mac/sound.cpp
 
 } else:ios {
     # reset TARGET for iOS only since rename
@@ -158,8 +169,10 @@ win32 {
 #    HEADERS += src/unsafearea.h
 #    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
 #    HEADERS += ios/ios_app_delegate.h
-    HEADERS += ios/sound.h
-    OBJECTIVE_SOURCES += ios/sound.mm
+#    HEADERS += ios/sound.h
+#    OBJECTIVE_SOURCES += ios/sound.mm
+    HEADERS += src/sound/coreaudio-ios/sound.h
+    OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
 
     # PRODUCT_BUNDLE_IDENTIFIER is set like
     #  ${PRODUCT_BUNDLE_IDENTIFIER} = QMAKE_TARGET_BUNDLE_PREFIX.QMAKE_BUNDLE
@@ -224,10 +237,10 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
-    HEADERS += android/sound.h
+    HEADERS += src/sound/oboe/sound.h
 
-    SOURCES += android/sound.cpp \
-        android/androiddebug.cpp
+    SOURCES += src/sound/oboe/sound.cpp \
+        src/android/androiddebug.cpp
 
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
@@ -275,18 +288,18 @@ win32 {
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H
 
-    # only include jack support if CONFIG serveronly is not set
+    # only include JACK support if CONFIG serveronly is not set
     contains(CONFIG, "serveronly") {
         message(Restricting build to server-only due to CONFIG+=serveronly.)
         DEFINES += SERVER_ONLY
     } else {
-        message(Jack Audio Interface Enabled.)
+        message(JACK Audio Interface Enabled.)
 
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
+        HEADERS += src/sound/jack/sound.h
+        SOURCES += src/sound/jack/sound.cpp
 
         contains(CONFIG, "raspijamulus") {
-            message(Using Jack Audio in raspijamulus.sh mode.)
+            message(Using JACK Audio in raspijamulus.sh mode.)
             LIBS += -ljack
         } else {
             CONFIG += link_pkgconfig
@@ -327,8 +340,6 @@ HEADERS += src/buffer.h \
     src/server.h \
     src/serverlist.h \
     src/serverlogging.h \
-    src/serverrpc.h \
-    src/rpcserver.h \
     src/settings.h \
     src/socket.h \
     src/util.h \
@@ -342,8 +353,7 @@ HEADERS += src/buffer.h \
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
-        src/clientrpc.h \
-        src/soundbase.h \
+        src/sound/soundbase.h \
         src/testbench.h
 }
 
@@ -438,8 +448,6 @@ SOURCES += src/buffer.cpp \
     src/server.cpp \
     src/serverlist.cpp \
     src/serverlogging.cpp \
-    src/serverrpc.cpp \
-    src/rpcserver.cpp \
     src/settings.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
@@ -452,8 +460,7 @@ SOURCES += src/buffer.cpp \
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
-        src/clientrpc.cpp \
-        src/soundbase.cpp \
+        src/sound/soundbase.cpp \
 }
 
 #SOURCES_GUI = src/serverdlg.cpp
@@ -701,6 +708,24 @@ contains(CONFIG, "headless") {
     FORMS += $$FORMS_GUI
 }
 
+contains(CONFIG, "nojsonrpc") {
+    message(JSON-RPC support excluded from build.)
+    DEFINES += NO_JSON_RPC
+} else {
+    HEADERS += \
+        src/rpcserver.h \
+        src/serverrpc.h
+    SOURCES += \
+        src/rpcserver.cpp \
+        src/serverrpc.cpp
+    contains(CONFIG, "serveronly") {
+        message("server only, skipping client rpc")
+    } else {
+        HEADERS += src/clientrpc.h
+        SOURCES += src/clientrpc.cpp
+    }
+}
+
 # use external OPUS library if requested
 contains(CONFIG, "opus_shared_lib") {
     message(OPUS codec is used from a shared library.)
@@ -768,6 +793,6 @@ contains(CONFIG, "disable_version_check") {
 # be sure to update .github/workflows/coding-style-check.yml and .clang-format-ignore as well.
 CLANG_FORMAT_SOURCES = $$files(*.cpp, true) $$files(*.mm, true) $$files(*.h, true)
 CLANG_FORMAT_SOURCES = $$find(CLANG_FORMAT_SOURCES, ^\(android|ios|mac|linux|src|windows\)/)
-CLANG_FORMAT_SOURCES ~= s!^\(windows/\(nsProcess|ASIOSDK2\)/|src/res/qrc_resources\.cpp\)\S*$!!g
+CLANG_FORMAT_SOURCES ~= s!^\(libs/.*/|src/res/qrc_resources\.cpp\)\S*$!!g
 clang_format.commands = 'clang-format -i $$CLANG_FORMAT_SOURCES'
 QMAKE_EXTRA_TARGETS += clang_format

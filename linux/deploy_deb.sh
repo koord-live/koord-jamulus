@@ -1,16 +1,16 @@
 #!/bin/bash
-set -eu
+set -eu -o pipefail
 
 # Create deb files
 
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 
-cp -r distributions/debian .
+cp -r linux/debian .
 
 # get the koord version from pro file
 VERSION=$(grep -oP '^VERSION = \K\w[^\s\\]*' Koord.pro)
 
-export DEBFULLNAME=GitHubActions DEBEMAIL=noemail@example.com
+export DEBFULLNAME="Jamulus Development Team" DEBEMAIL=team@jamulus.io
 
 # Generate Changelog
 echo -n generating changelog

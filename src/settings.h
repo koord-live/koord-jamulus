@@ -130,6 +130,7 @@ public:
         vstrDirectoryAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         eDirectoryType ( AT_DEFAULT ),
         bEnableFeedbackDetection ( true ),
+        bEnableAudioAlerts ( false ),
         vecWindowPosSettings(), // empty array
         vecWindowPosChat(),     // empty array
         vecWindowPosConnect(),  // empty array
@@ -165,6 +166,8 @@ public:
     EDirectoryType   eDirectoryType;
     int              iCustomDirectoryIndex; // index of selected custom directory server
     bool             bEnableFeedbackDetection;
+    bool             bEnableAudioAlerts;
+    bool             bCleanUpLegacyFaderSettings;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;
@@ -181,9 +184,11 @@ public:
     QByteArray strTestMode;
 
 protected:
-    // No CommandLineOptions used when reading Client inifile
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& ) override;
+    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
+
+    // Code for #2680 clean up
+    QString CleanUpLegacyFaderSetting ( QString strFaderTag, int iIdx );
 
     void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
     void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );

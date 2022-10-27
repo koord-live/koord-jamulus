@@ -18,7 +18,7 @@ set -eu
     # ANDROID_SDK_ROOT 	/usr/local/lib/android/sdk
 
 ANDROID_PLATFORM=android-33
-AQTINSTALL_VERSION=2.1.0
+AQTINSTALL_VERSION=3.0.1
 QT_VERSION=6.3.2
 QT_BASEDIR="/opt/Qt"
 BUILD_DIR=build
@@ -221,4 +221,5 @@ case "${1:-}" in
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
+        ;;
 esac

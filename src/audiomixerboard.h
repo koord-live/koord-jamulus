@@ -88,6 +88,8 @@ public:
     bool   GetIsMyOwnFader() { return bIsMyOwnFader; }
     void   UpdateSoloState ( const bool bNewOtherSoloState );
 
+    void SetMIDICtrlUsed ( const bool isMIDICtrlUsed ) { bMIDICtrlUsed = isMIDICtrlUsed; }
+
 protected:
     void UpdateGroupIDDependencies();
     void SetMute ( const bool bState );
@@ -130,6 +132,7 @@ protected:
     EGUIDesign  eDesign;
     EMeterStyle eMeterStyle;
     QPixmap     BitmapMutedIcon;
+    bool        bMIDICtrlUsed;
 
 public slots:
     void OnLevelValueChanged ( int value )
@@ -225,6 +228,8 @@ public:
     void AutoAdjustAllFaderLevels();
 
     void MuteMyChannel();
+
+    void SetMIDICtrlUsed ( const bool bMIDICtrlUsed );
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea

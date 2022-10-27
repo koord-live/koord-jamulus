@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eu -o pipefail
 
 root_path=$(pwd)
 project_path="${root_path}/Koord.pro"
@@ -48,8 +48,7 @@ while getopts 'hs:k:a:i:' flag; do
     esac
 done
 
-cleanup()
-{
+cleanup() {
     # Clean up previous deployments
     rm -rf "${build_path}"
     rm -rf "${deploy_path}"
@@ -68,21 +67,46 @@ build_app()
     # Note: not sure if this is useful here or only in Run env
     export QT_WEBVIEW_PLUGIN="native"
 
-    # Build Jamulus
-    declare -a BUILD_ARGS=("_UNUSED_DUMMY=''")  # old bash fails otherwise
-    if [[ "${TARGET_ARCH:-}" ]]; then
-        BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
-    fi
-    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${BUILD_ARGS[@]}" "${@:2}"
-    local target_name
-    target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
     local job_count
     job_count=$(sysctl -n hw.ncpu)
 
-    # Get Jamulus version
-    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+    # Build Jamulus for all requested architectures, defaulting to x86_64 if none provided:
+    local target_name
+    local target_arch
+    local target_archs_array
+    IFS=' ' read -ra target_archs_array <<< "${TARGET_ARCHS:-x86_64}"
+    for target_arch in "${target_archs_array[@]}"; do
+        if [[ "${target_arch}" != "${target_archs_array[0]}" ]]; then
+            # This is the second (or a later) first pass of a multi-architecture build.
+            # We need to prune all leftovers from the previous pass here in order to force re-compilation now.
+            make -f "${build_path}/Makefile" -C "${build_path}" distclean
+        fi
+        qmake "${project_path}" -o "${build_path}/Makefile" \
+            "CONFIG+=release" \
+            "QMAKE_APPLE_DEVICE_ARCHS=${target_arch}" "QT_ARCH=${target_arch}" \
+            "${@:2}"
+        make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
+        target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+        if [[ ${#target_archs_array[@]} -gt 1 ]]; then
+            # When building for multiple architectures, move the binary to a safe place to avoid overwriting/cleaning by the other passes.
+            mv "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${deploy_path}/${target_name}.arch_${target_arch}"
+        fi
+    done
+    if [[ ${#target_archs_array[@]} -gt 1 ]]; then
+        echo "Building universal binary from: " "${deploy_path}/${target_name}.arch_"*
+        lipo -create -output "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${deploy_path}/${target_name}.arch_"*
+        rm -f "${deploy_path}/${target_name}.arch_"*
 
-    make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
+        local file_output
+        file_output=$(file "${build_path}/${target_name}.app/Contents/MacOS/${target_name}")
+        echo "${file_output}"
+        for target_arch in "${target_archs_array[@]}"; do
+            if ! grep -q "for architecture ${target_arch}" <<< "${file_output}"; then
+                echo "Missing ${target_arch} in file output -- build went wrong?"
+                exit 1
+            fi
+        done
+    fi
 
     # Add Qt deployment dependencies
     if [[ -z "$macadhoc_cert_name" ]]; then
@@ -125,6 +149,7 @@ build_app()
         *)
             echo "build_app: invalid parameter '${client_or_server}'"
             exit 1
+            ;;
     esac
 }
 
@@ -172,7 +197,7 @@ build_disk_image()
 
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
-    brew_install_pinned "create-dmg" "1.0.9"
+    brew_install_pinned "create-dmg" "1.1.0"
 
     # Get Jamulus version
     local app_version

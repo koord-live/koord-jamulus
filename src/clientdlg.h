@@ -43,6 +43,7 @@
 #include <QFileDialog>
 #include <QActionGroup>
 #include <QMainWindow>
+#include <QSoundEffect>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
@@ -140,6 +141,7 @@ protected:
     CClientSettings* pSettings;
 //    UnsafeArea*    mUnsafeArea;
 
+    int            iClients;
     bool           bConnected;
     bool           bConnectDlgWasShown;
 //    bool           bBasicConnectDlgWasShown;

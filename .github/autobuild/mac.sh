@@ -2,8 +2,11 @@
 set -eu
 
 QT_DIR=/usr/local/opt/qt
-AQTINSTALL_VERSION=2.1.0
-TARGET_ARCH="${TARGET_ARCH:-}"
+# The following version pinnings are semi-automatically checked for
+# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
+AQTINSTALL_VERSION=3.0.1
+
+TARGET_ARCHS="${TARGET_ARCHS:-}"
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -60,6 +63,8 @@ prepare_signing() {
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
+    # Remove default re-lock timeout to avoid codesign hangs:
+    security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     # add certs to keychain
     security import macadhoc_certificate.p12 -k build.keychain -P "${MAC_ADHOC_CERT_PWD}" -A -T /usr/bin/codesign 
@@ -93,7 +98,7 @@ build_app_as_dmg_installer() {
     if prepare_signing; then
         BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
-    TARGET_ARCH="${TARGET_ARCH}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
+    TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
 
 pass_artifact_to_job() {
@@ -142,4 +147,5 @@ case "${1:-}" in
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
+        ;;
 esac
