@@ -4,7 +4,7 @@
 # Util to create iconset suitable for App Store submission
 
 input_filepath="$1"
-output_iconset_name="mac-mainicon.icns"
+output_iconset_name="mac-mainicon.iconset"
 mkdir $output_iconset_name
 
 sips -z 16 16     $input_filepath --out "${output_iconset_name}/icon_16x16.png"
