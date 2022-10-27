@@ -43,7 +43,7 @@
 #include <QFileDialog>
 #include <QActionGroup>
 #include <QMainWindow>
-#include <QSoundEffect>
+//#include <QSoundEffect>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif

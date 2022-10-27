@@ -1543,9 +1543,10 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
     if ( pSettings->bEnableAudioAlerts && iNewNumClients > iClients )
     {
-        QSoundEffect* sf = new QSoundEffect();
-        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
-        sf->play();
+//        QSoundEffect* sf = new QSoundEffect();
+//        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
+//        sf->play();
+        ; // do nothing for now
     }
 
     // iNewNumClients will be zero on the first trigger of this signal handler when connecting to a new server.
