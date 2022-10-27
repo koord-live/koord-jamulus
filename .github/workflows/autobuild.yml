@@ -414,7 +414,7 @@ jobs:
           releaseFiles:             deploy/Koord*.aab
           releaseName:              ${{ needs.create_release.outputs.build_version }}
           track:                    beta
-          status:                   draft
+          status:                   completed
 
       # ## RELEASE PROCEDURE FOR:
       # ## - Windows Store - msix
