@@ -44,13 +44,6 @@ Function Install-Qt
         "--modules", "qtwebengine", "qtwebview", "qtmultimedia", "qtwebchannel", "qtpositioning",
         "--archives", "qtbase", "qtdeclarative", "qtsvg", "qttools"
     )
-    if ( $QtVersion -notmatch '^5\.' )
-    {
-        # From Qt6 onwards, qtmultimedia is a module and cannot be installed
-        # as an archive anymore.
-        $Args += ("--modules")
-    }
-    $Args += ("qtmultimedia")
     aqt install-qt @Args
     if ( !$? )
     {
