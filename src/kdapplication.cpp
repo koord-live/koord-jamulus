@@ -5,15 +5,8 @@
 #include <urlhandler.h>
 #include <kdapplication.h>
 
-// ONLY create SingleApplication sub-class IF we are NOT on M1 Mac !!
-// due to https://github.com/itay-grudev/SingleApplication/issues/136
-#if (defined ( Q_OS_MACX ) && ifndef Q_PROCESSOR_X86_64)
-KdApplication::KdApplication (int& argc, char* argv[]) :
-        QApplication(argc, argv)
-#else
 KdApplication::KdApplication (int& argc, char* argv[]) :
         SingleApplication(argc, argv, true)
-#endif
 {
 
 }

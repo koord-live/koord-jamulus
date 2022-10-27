@@ -5,12 +5,7 @@
 //#include <urlhandler.h>
 #include <singleapplication.h>
 
-//FIXME - special handling for M1 Macs
-#if (defined ( Q_OS_MACX ) && ifndef Q_PROCESSOR_X86_64)
-class KdApplication : public QApplication
-#else
 class KdApplication : public SingleApplication
-#endif
 {
     Q_OBJECT
 

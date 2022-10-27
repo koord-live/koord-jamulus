@@ -58,9 +58,35 @@ cleanup() {
     mkdir -p "${deploypkg_path}"
 }
 
-build_app()
+build_app_compile()
 {
-    local client_or_server="${1}"
+    # local client_or_server="${1}"
+
+    # We need this in build environment otherwise defaults to webengine!!
+    # bug is here: https://code.qt.io/cgit/qt/qtwebview.git/tree/src/webview/qwebviewfactory.cpp?h=6.3.1#n51
+    # Note: not sure if this is useful here or only in Run env
+    export QT_WEBVIEW_PLUGIN="native"
+
+    # Build Jamulus
+    declare -a BUILD_ARGS=("_UNUSED_DUMMY=''")  # old bash fails otherwise
+    if [[ "${TARGET_ARCH:-}" ]]; then
+        BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
+    fi
+    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${BUILD_ARGS[@]}" "${@:2}"
+    local target_name
+    target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+    local job_count
+    job_count=$(sysctl -n hw.ncpu)
+
+    # Get Jamulus version
+    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+
+    make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
+}
+
+build_app_compile_universal()
+{
+    # local client_or_server="${1}"
 
     # We need this in build environment otherwise defaults to webengine!!
     # bug is here: https://code.qt.io/cgit/qt/qtwebview.git/tree/src/webview/qwebviewfactory.cpp?h=6.3.1#n51
@@ -107,7 +133,10 @@ build_app()
             fi
         done
     fi
+}
 
+build_app_package() 
+{
     # Add Qt deployment dependencies
     if [[ -z "$macadhoc_cert_name" ]]; then
         echo ">>> Doing macdeployqt WITHOUT notarization ..."
@@ -139,18 +168,19 @@ build_app()
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
     # Return app name for installer image
-    case "${client_or_server}" in
-        client_app)
-            CLIENT_TARGET_NAME="${target_name}"
-            ;;
-        # server_app)
-        #     SERVER_TARGET_NAME="${target_name}"
-        #     ;;
-        *)
-            echo "build_app: invalid parameter '${client_or_server}'"
-            exit 1
-            ;;
-    esac
+    # case "${client_or_server}" in
+    #     client_app)
+    #         CLIENT_TARGET_NAME="${target_name}"
+    #         ;;
+    #     # server_app)
+    #     #     SERVER_TARGET_NAME="${target_name}"
+    #     #     ;;
+    #     *)
+    #         echo "build_app: invalid parameter '${client_or_server}'"
+    #         exit 1
+    #         ;;
+    # esac
+    CLIENT_TARGET_NAME="${target_name}"
 }
 
 build_installer_pkg() 
@@ -257,7 +287,9 @@ cleanup
 
 # Build app
 # Just build client for Mac
-build_app client_app
+build_app_compile 
+# build_app_compile_universal
+build_app_package 
 
 build_installer_pkg
 
