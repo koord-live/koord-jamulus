@@ -73,8 +73,10 @@ build_app_compile()
         BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
     fi
     qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${BUILD_ARGS[@]}" "${@:2}"
+
     local target_name
     target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+    
     local job_count
     job_count=$(sysctl -n hw.ncpu)
 
@@ -137,6 +139,8 @@ build_app_compile_universal()
 
 build_app_package() 
 {
+    local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+
     # Add Qt deployment dependencies
     if [[ -z "$macadhoc_cert_name" ]]; then
         echo ">>> Doing macdeployqt WITHOUT notarization ..."
