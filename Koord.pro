@@ -67,7 +67,7 @@ win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     DEFINES += _WINSOCKAPI_ # try fix winsock / winsock2 redefinition problems
-    RC_FILE = windows/mainicon.rc
+    RC_FILE = src/res/win-mainicon.rc
 
     LIBS += ole32.lib \
         user32.lib \
@@ -96,19 +96,12 @@ win32 {
     !exists(windows/ASIOSDK2) {
         error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
 
-    HEADERS += src/sound/asio/sound.h
-    SOURCES += src/sound/asio/sound.cpp \
-                libs/ASIOSDK2/common/asio.cpp \
-                libs/ASIOSDK2/host/asiodrivers.cpp \
-                libs/ASIOSDK2/host/pc/asiolist.cpp
-    INCLUDEPATH += libs/ASIOSDK2/common \
-        libs/ASIOSDK2/host \
-        libs/ASIOSDK2/host/pc
     }
+
     # Important: Keep those ASIO includes local to this build target in
     # order to avoid poisoning other builds license-wise.
-    HEADERS += windows/sound.h
-    SOURCES += windows/sound.cpp \
+    HEADERS += src/sound/asio/sound.h
+    SOURCES += src/sound/asio/sound.cpp \
         windows/ASIOSDK2/common/asio.cpp \
         windows/ASIOSDK2/host/asiodrivers.cpp \
         windows/ASIOSDK2/host/pc/asiolist.cpp
