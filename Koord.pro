@@ -110,8 +110,8 @@ win32 {
         windows/ASIOSDK2/host/pc
 
 } else:macx {
-    MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
-    RC_FILE = mac/mainicon.icns
+    MACOSX_BUNDLE_ICON.files = src/res/mac-mainicon.icns
+    RC_FILE = src/res/mac-mainicon.icns
 
     HEADERS += src/mac/activity.h src/mac/badgelabel.h
     OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
