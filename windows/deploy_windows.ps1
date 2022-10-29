@@ -16,11 +16,6 @@ param (
     # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
-    # [string] $InnoSetupIsccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
-    [string] $MSIXPkgToolUrl = "https://download.microsoft.com/download/6/f/e/6fec9d4c-f570-4826-995a-5feba065fa8b/MSIXPackagingTool_1.2022.110.0.msixbundle",
-    [string] $MsixPkgToolPath = "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe\MsixPackagingToolCLI.exe",
-    # [string] $VsDistFile64Redist = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\",
-    # [string] $VsDistFile64Redist = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\",
     [string] $VsDistFile64Path = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\14.32.31326\x64\Microsoft.VC143.CRT",
     [string] $BuildOption = ""
 )
@@ -265,8 +260,8 @@ Function Initialize-Qt-Build-Environment
     }
 }
 
-# Build Jamulus x86_64 and x86
-Function Build-App
+# Build app for x86_64
+Function BuildApp
 {
     param(
         [Parameter(Mandatory=$true)]
@@ -274,6 +269,8 @@ Function Build-App
         [Parameter(Mandatory=$true)]
         [string] $BuildArch
     )
+    # $BuildConfig = "release"
+    # $BuildArch = "x86_64"
 
     # Build kdasioconfig Qt project with CMake / nmake
     # # Build FlexASIO dlls with CMake / nmake
@@ -365,29 +362,36 @@ Function Build-App
 }
 
 # Build and deploy Koord 64bit and 32bit variants
-function Build-App-Variants
+function BuildAppVariants
 {
     # foreach ($_ in ("x86_64", "x86"))
-    foreach ($_ in ("x86_64"))
-    {
-        $OriginalEnv = Get-ChildItem Env:
-        if ($_ -eq "x86")
-        {
-            Initialize-Build-Environment -BuildArch $_
-            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath32 -QtCompile $QtCompile32
-        }
-        else
-        {
-            Initialize-Build-Environment -BuildArch $_
-            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile $QtCompile64
-        }
-        Build-App -BuildConfig "release" -BuildArch $_
-        $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
-    }
+    # foreach ($_ in ("x86_64"))
+    # {
+    #     $OriginalEnv = Get-ChildItem Env:
+    #     if ($_ -eq "x86")
+    #     {
+    #         Initialize-Build-Environment -BuildArch $_
+    #         Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath32 -QtCompile $QtCompile32
+    #     }
+    #     else
+    #     {
+    #         Initialize-Build-Environment -BuildArch $_
+    #         Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile $QtCompile64
+    #     }
+    #     Build-App -BuildConfig "release" -BuildArch $_
+    #     $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
+    # }
+
+    # $OriginalEnv = Get-ChildItem Env:
+    Initialize-Build-Environment -BuildArch "x86_64"
+    Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile $QtCompile64
+    Build-App -BuildConfig "release" -BuildArch "x86_64"
+    # $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
+
 }
 
 # Build Windows installer
-Function Build-Installer
+Function BuildInstaller
 {
     # unused for now
     param(
@@ -403,69 +407,47 @@ Function Build-Installer
         }
     }
 
-    #FIXME for 64bit build only
     Set-Location -Path "$RootPath"
-    # /Program Files (x86)/Inno Setup 6/ISCC.exe
-    # Invoke-Native-Command -Command "${InnoSetupIsccPath}" `
+
     Invoke-Native-Command -Command "iscc" `
         -Arguments ("$RootPath\kdinstaller.iss", `
          "/FKoord-${AppVersion}", `
          "/DApplicationVersion=${AppVersion}")
 }
 
-# Build MSIX Package
-#FIXME this is all totally heinous
-# Function Build-MSIX-Package
-# {
-#     # set elevated / admin privileges??
-#     #FIXME does this even work?
-#     Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
+# Build APPX / MSIX Package
+Function BuildAppXPackage
+{
+    Invoke-Native-Command -Command "MakeAppx" `
+        -Arguments ("pack", "/nv", "/d", "${DeployPath}\x86_64\", `
+        "/f", "${WindowsPath}\AppxManifest.xml", `
+        "/p", "${DeployPath}\Koord.appx")
 
-#     #debug permissions
-#     whoami /groups
+}
 
-#     # Install MSIXPackagingTool
-#     # Using download tool and pattern from https://flexxible.com/automating-msix-packaging-with-powershell/
-#     echo ">>> Downloading MsixPackagingTool installer ..."
+Function SignAppx
+{
+    Invoke-Native-Command -Command "SignTool" `
+        -Arguments ("sign", "/a", "/f", "signingCert.pfx", `
+        "/p", "passwordhere", `
+        "/fd", "SHA256", `
+        "filepath.appx")
+}
 
-#     & "$WindowsPath\Get_Store_Downloads.ps1" -packageFamilyName Microsoft.MsixPackagingTool_8wekyb3d8bbwe `
-#         -downloadFolder C:\store-apps -excludeRegex '_arm__|_x86__|_arm64__'
-
-#     # enable Windows Update service to allow driver installation to succeed!
-#     # echo ">>> Enabling Windows Update service ..."
-#     # Start-Service wuauserv
-
-#     echo ">>> Installing MsixPackagingTool ..."
-#     #FIXME - the version of tool and therefore path WILL change - need to get dynamically
-#     # Check previous output for actual output path of download
-#     Add-AppxPackage -Path 'C:\store-apps\Microsoft.MSIXPackagingTool_2022.330.739.0_neutral_~_8wekyb3d8bbwe.msixbundle' `
-#         -Confirm:$false -ForceUpdateFromAnyVersion -InstallAllResources
-
-#     echo ">>> Outputting MSIX Package Driver version..."
-#     dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)'
-
-#     echo ">>> installing MSIX Package Driver....."
-#     dism /online /Get-Capabilities | Select-String -pattern '(\bmsix\.PackagingTool\.Driver\b.*$)' `
-#         |Select-Object -ExpandProperty Matches|Select-Object -ExpandProperty Value| `
-#         ForEach-Object { dism /online /add-capability /capabilityname:$_ }
-
-#     echo ">>> Outputting all installed AppxPackage ....."
-#     Get-AppxPackage -all | Where PackageFamilyName -match '_8wekyb3d8bbwe' | sort Name -Unique | select Name,PackageFamilyName
-
-#     echo ">>> Outputting details of installed tool: Microsoft.MSIXPackagingTool"
-#     Get-AppxPackage -Name Microsoft.MSIXPackagingTool
-
-#     # debug - list output of tool installation directory
-#     dir "C:\Program Files\WindowsApps\Microsoft.MSIXPackagingTool_1.2022.330.0_x64__8wekyb3d8bbwe"
-
-#     echo ">>> Invoking MsixPackagingTool ...."    
-#     Invoke-Native-Command -Command "$MsixPkgToolPath" `
-#         -Arguments ("create-package", "--template", "$WindowsPath\appXmanifest.xml")
-#     # & "$MsixPkgToolPath" create-package --template "$WindowsPath\msix_template.xml"
-# }
+Function SignExe
+{
+    Invoke-Native-Command -Command "SignTool" `
+        -Arguments ("sign", "/f", "c:\path\to\codesigningcertificate.pfx", `
+        "/p", "yourpasswordhere", `
+        "/tr", "https://timestamp.digicert.com", `
+        "/td", "SHA256", "/fd", "SHA256", `
+        "c:\path\to\Koord_installer.exe" )
+}
 
 Clean-Build-Environment
 Install-Dependencies
-Build-App-Variants
-Build-Installer -BuildOption $BuildOption
-# Build-MSIX-Package
+BuildAppVariants
+BuildInstaller -BuildOption $BuildOption
+#SignExe
+BuildAppXPackage
+#SignAppx

@@ -123,6 +123,21 @@ Function Pass-EXE-Artifact-to-Job
     echo "::set-output name=artifact_1::${artifact}"
 }
 
+Function Pass-APPX-Artifact-to-Job
+{
+    $artifact = "Koord_${JamulusVersion}.appx"
+
+    echo "Copying artifact to ${artifact}"
+    # "deploy" is dir of MakeAppx output
+    move ".\deploy\Koord.appx" ".\deploy\${artifact}"
+    if ( !$? )
+    {
+        throw "move failed with exit code $LastExitCode"
+    }
+    echo "Setting Github step output name=artifact_2::${artifact}"
+    echo "::set-output name=artifact_2::${artifact}"
+}
+
 switch ( $Stage )
 {
     "setup"
@@ -138,6 +153,7 @@ switch ( $Stage )
     "get-artifacts"
     {
         Pass-EXE-Artifact-to-Job
+        Pass-APPX-Artifact-to-Job
     }
     default
     {
