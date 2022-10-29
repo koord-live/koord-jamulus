@@ -385,7 +385,7 @@ function BuildAppVariants
     # $OriginalEnv = Get-ChildItem Env:
     Initialize-Build-Environment -BuildArch "x86_64"
     Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile $QtCompile64
-    Build-App -BuildConfig "release" -BuildArch "x86_64"
+    BuildApp -BuildConfig "release" -BuildArch "x86_64"
     # $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
 
 }
