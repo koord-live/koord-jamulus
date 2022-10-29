@@ -317,23 +317,23 @@ jobs:
         with:
           languages: 'cpp'
 
-      - name:                       Pre-build KoordASIO on Windows - set up msvc dev cmd
-        if:                         matrix.config.target_os == 'windows'
-        uses:                       ilammy/msvc-dev-cmd@v1
-        with:
-          arch:                     amd64
+      # - name:                       Pre-build KoordASIO on Windows - set up msvc dev cmd
+      #   if:                         matrix.config.target_os == 'windows'
+      #   uses:                       ilammy/msvc-dev-cmd@v1
+      #   with:
+      #     arch:                     amd64
 
-      - name:                       Pre-build KoordASIO on Windows - cmake
-        if:                         matrix.config.target_os == 'windows'      
-        run:                        cmake -S KoordASIO/src -B KoordASIO/src/out/build/x64-Release -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/KoordASIO/src/out/install/x64-Release
+      # - name:                       Pre-build KoordASIO on Windows - cmake
+      #   if:                         matrix.config.target_os == 'windows'      
+      #   run:                        cmake -S KoordASIO/src -B KoordASIO/src/out/build/x64-Release -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/KoordASIO/src/out/install/x64-Release
       
-      - name:                       Pre-build KoordASIO on Windows - cmake --build
-        if:                         matrix.config.target_os == 'windows'          
-        run:                        cmake --build KoordASIO/src/out/build/x64-Release
+      # - name:                       Pre-build KoordASIO on Windows - cmake --build
+      #   if:                         matrix.config.target_os == 'windows'          
+      #   run:                        cmake --build KoordASIO/src/out/build/x64-Release
 
-      - name:                       Pre-build KoordASIO on Windows - cmake --install
-        if:                         matrix.config.target_os == 'windows'
-        run:                        cmake --install KoordASIO/src/out/build/x64-Release
+      # - name:                       Pre-build KoordASIO on Windows - cmake --install
+      #   if:                         matrix.config.target_os == 'windows'
+      #   run:                        cmake --install KoordASIO/src/out/build/x64-Release
 
       - name:                       Build for ${{ matrix.config.config_name }}
         id:                         build
@@ -461,18 +461,18 @@ jobs:
           output-path:              build/Koord.ipa
           # workspace-path:           Koord.xcworkspace
 
-      - name:                       Upload iOS Signed ipa to Job -- test
-        # builds such as iOS with signing produce no artifact to upload
-        if:                         >-
-                                    steps.build.outputs.ios_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
-        uses:                       actions/upload-artifact@v2
-        id:                         upload-job-iostest
-        with:
-          name:                     Koord.ipa
-          path:                     build/Koord.ipa
-          retention-days:           31
-          if-no-files-found:        error
+      # - name:                       Upload iOS Signed ipa to Job -- test
+      #   # builds such as iOS with signing produce no artifact to upload
+      #   if:                         >-
+      #                               steps.build.outputs.ios_signed == 'true' &&
+      #                               needs.create_release.outputs.publish_to_release == 'true'
+      #   uses:                       actions/upload-artifact@v2
+      #   id:                         upload-job-iostest
+      #   with:
+      #     name:                     Koord.ipa
+      #     path:                     build/Koord.ipa
+      #     retention-days:           31
+      #     if-no-files-found:        error
 
       # - name:                       Upload iOS Signed ipa to Release -- Test
       #   if:                         >-
@@ -519,20 +519,20 @@ jobs:
           track:                    beta
           status:                   completed
 
-      # ## RELEASE PROCEDURE FOR:
-      # ## - Windows Store - msix
-      # - name:                       Publish msix Windows build to Store
-      #   if:                         >-
-      #                               needs.create_release.outputs.publish_to_release == 'true' &&
-      #                               matrix.config.target_os == 'windows'
-      #   id:                         publish_windows
-      #   uses:                       isaacrlevin/windows-store-action@1.0
-      #   with:
-      #     tenant-id:                ${{ secrets.AZURE_AD_TENANT_ID }}
-      #     client-id:                ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
-      #     client-secret:            ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
-      #     app-id:                   ${{ secrets.WINDOWS_STORE_APP_ID }}
-      #     package-path:             deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+      ## RELEASE PROCEDURE FOR:
+      ## - Windows Store - appx
+      - name:                       Publish appx Windows build to Store
+        if:                         >-
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    matrix.config.target_os == 'windows'
+        id:                         publish_windows
+        uses:                       isaacrlevin/windows-store-action@1.0
+        with:
+          tenant-id:                ${{ secrets.AZURE_AD_TENANT_ID }}
+          client-id:                ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+          client-secret:            ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+          app-id:                   ${{ secrets.WINDOWS_STORE_APP_ID }}
+          package-path:             deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
 
       ## All "Artifact 2" should be for Store upload only - do not put into Release
       ## ie macOS pkg, windows msix
