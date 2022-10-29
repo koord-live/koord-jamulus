@@ -860,7 +860,8 @@ int main ( int argc, char** argv )
         //FIXME - arguments() list is all args including executable ie "Koord.exe koord://<host>:<port>"
         // so we take arguments().last() as that SHOULD be the URL in typical circumstances
         pApp->sendMessage( pApp->arguments().last().toUtf8() );
-        pApp->exit( 0 );
+//        pApp->exit( 0 );
+        return 0;
     } else {
         QObject::connect(
             pApp,
