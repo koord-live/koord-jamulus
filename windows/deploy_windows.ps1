@@ -418,9 +418,12 @@ Function BuildInstaller
 # Build APPX / MSIX Package
 Function BuildAppXPackage
 {
+
+    # make sure we have valid app package manifest file named AppxManifest.xml in the content dir
+    Copy-Item -Path "${WindowsPath}\AppxManifest.xml" -Destination "${DeployPath}\x86_64\"
+
     Invoke-Native-Command -Command "MakeAppx" `
         -Arguments ("pack", "/nv", "/d", "${DeployPath}\x86_64\", `
-        "/f", "${WindowsPath}\AppxManifest.xml", `
         "/p", "${DeployPath}\Koord.appx")
 
 }
