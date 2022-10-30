@@ -1,44 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" xmlns:desktop7="http://schemas.microsoft.com/appx/manifest/desktop/windows10/7" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap10 desktop7 rescap">
-  <Identity Name="Koord.KoordRT" Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C" Version="4.0.4.0" ProcessorArchitecture="x64" />
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="Koord.KoordRT" 
+            Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C"
+            Version="4.0.4.0"
+            ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>Koord</DisplayName>
     <PublisherDisplayName>Koord</PublisherDisplayName>
     <Description>Play live online in real-time with other musicians</Description>
-    <Logo>Assets\StoreLogo.png</Logo>
-    <uap10:PackageIntegrity>
-      <uap10:Content Enforcement="on" />
-    </uap10:PackageIntegrity>
+    <Logo>mainicon.png</Logo>
   </Properties>
+  <Prerequisites>
+    <OSMinVersion></OSMinVersion>
+    <OSMaxVersionTested></OSMaxVersionTested>
+  </Prerequisites>
   <Resources>
     <Resource Language="en-us" />
   </Resources>
-  <Dependencies>
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22000.1" />
-  </Dependencies>
   <Applications>
-    <Application Id="KOORD" Executable="VFS\ProgramFilesX64\Koord\Koord.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements BackgroundColor="transparent" DisplayName="Koord" Square150x150Logo="Assets\KOORD-Square150x150Logo.png" Square44x44Logo="Assets\KOORD-Square44x44Logo.png" Description="Koord">
-        <uap:DefaultTile Wide310x150Logo="Assets\KOORD-Wide310x150Logo.png" Square310x310Logo="Assets\KOORD-Square310x310Logo.png" Square71x71Logo="Assets\KOORD-Square71x71Logo.png" />
-      </uap:VisualElements>
+    <Application Id="KOORD" Executable="Koord\Koord.exe" EntryPoint="Windows.FullTrustApplication">
+      <VisualElements BackgroundColor="transparent" DisplayName="Koord" Logo="mainicon.png" 
+                      SmallLogo="mainicon_small.png" ForegroundText="dark" BackgroundColor="#FFFFFF">
+        <SplashScreen Image="krt_logo.png" />      
+      </VisualElements>
       <Extensions>
-        <desktop7:Extension Category="windows.shortcut">
-          <desktop7:Shortcut File="[{Common Programs}]\(Default)\Koord.lnk" Icon="[{Package}]\VFS\ProgramFilesX64\Koord\Koord.exe" />
-        </desktop7:Extension>
         <Extension Category="windows.protocol">
           <Protocol Name="koord" />
-      </Extension>
+        </Extension>
       </Extensions>
     </Application>
-    <Application Id="KOORDASIOCONTROL" Executable="VFS\ProgramFilesX64\Koord\KoordASIOControl.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Square150x150Logo="Assets\KOORDASIOCONTROL-Square150x150Logo.png" Square44x44Logo="Assets\KOORDASIOCONTROL-Square44x44Logo.png" Description="KoordASIO Control">
-        <uap:DefaultTile Wide310x150Logo="Assets\KOORDASIOCONTROL-Wide310x150Logo.png" Square310x310Logo="Assets\KOORDASIOCONTROL-Square310x310Logo.png" Square71x71Logo="Assets\KOORDASIOCONTROL-Square71x71Logo.png" />
-      </uap:VisualElements>
-      <Extensions>
-        <desktop7:Extension Category="windows.shortcut">
-          <desktop7:Shortcut File="[{Common Programs}]\(Default)\KoordASIO Control.lnk" Icon="[{Package}]\VFS\ProgramFilesX64\Koord\KoordASIOControl.exe" />
-        </desktop7:Extension>
-      </Extensions>
+    <Application Id="KOORDASIOCONTROL" Executable="Koord\KoordASIOControl.exe" EntryPoint="Windows.FullTrustApplication">
+      <VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Logo="koordasioicon.png"
+                      SmallLogo="koordasioicon.png" ForegroundText="dark" BackgroundColor="#FFFFFF">
+      </VisualElements>
     </Application>
   </Applications>
   <Capabilities>

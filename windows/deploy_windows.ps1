@@ -422,6 +422,9 @@ Function BuildAppXPackage
     # make sure we have valid app package manifest file named AppxManifest.xml in the content dir
     Copy-Item -Path "${WindowsPath}\AppxManifest.xml" -Destination "${DeployPath}\x86_64\"
 
+    Copy-Item -Path "${RootPath}\src\res\main-ico-1024.png" -Destination "${DeployPath}\x86_64\mainicon.png"
+    Copy-Item -Path "${RootPath}\src\res\krt_logo.png" -Destination "${DeployPath}\x86_64\krt_logo.png"
+
     Invoke-Native-Command -Command "MakeAppx" `
         -Arguments ("pack", "/nv", "/d", "${DeployPath}\x86_64\", `
         "/p", "${DeployPath}\Koord.appx")
