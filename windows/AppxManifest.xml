@@ -20,7 +20,7 @@
   <Applications>
     <Application Id="KOORD" Executable="Koord\Koord.exe" EntryPoint="Windows.FullTrustApplication">
       <VisualElements BackgroundColor="transparent" DisplayName="Koord" Logo="mainicon.png" 
-                      SmallLogo="mainicon_small.png" ForegroundText="dark">
+                      Description="Koord Cloud Rehearsals" SmallLogo="mainicon_small.png" ForegroundText="dark">
         <SplashScreen Image="krt_logo.png" />      
       </VisualElements>
       <Extensions>
@@ -31,7 +31,7 @@
     </Application>
     <Application Id="KOORDASIOCONTROL" Executable="Koord\KoordASIOControl.exe" EntryPoint="Windows.FullTrustApplication">
       <VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Logo="koordasioicon.png"
-                      SmallLogo="koordasioicon.png" ForegroundText="dark">
+                      Description="KoordASIO Control" SmallLogo="koordasioicon.png" ForegroundText="dark">
       </VisualElements>
     </Application>
   </Applications>
