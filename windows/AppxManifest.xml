@@ -2,7 +2,7 @@
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
   <Identity Name="Koord.KoordRT" 
             Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C"
-            Version="4.0.4.0"
+            Version="4.0.20.0"
             ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>Koord</DisplayName>
@@ -11,8 +11,8 @@
     <Logo>mainicon.png</Logo>
   </Properties>
   <Prerequisites>
-    <OSMinVersion></OSMinVersion>
-    <OSMaxVersionTested></OSMaxVersionTested>
+    <OSMinVersion>6.2</OSMinVersion>
+    <OSMaxVersionTested>6.2</OSMaxVersionTested>
   </Prerequisites>
   <Resources>
     <Resource Language="en-us" />
