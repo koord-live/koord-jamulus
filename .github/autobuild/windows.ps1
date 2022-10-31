@@ -129,6 +129,12 @@ Function Pass-APPX-Artifact-to-Job
 
     echo "Copying artifact to ${artifact}"
     # "deploy" is dir of MakeAppx output
+
+    # make special dir for store upload
+    New-Item -Path  ".\publish" -ItemType Directory
+    # copy .appx artifact to publish/ dir
+    copy ".\deploy\Koord.appx" ".\publish\${artifact}"
+
     move ".\deploy\Koord.appx" ".\deploy\${artifact}"
     if ( !$? )
     {
