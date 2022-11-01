@@ -20,6 +20,30 @@ set -eu
 # - cmake 
 
 build_qt() {
+    # Clean up disk to make space
+    df -h
+
+    # remove Visual Studio
+    rm -fr /Applications/Visual*
+
+    # remove old Xcodes
+    rm -fr /Applications/Xcode_13*
+
+    # remove all Android stuff
+    rm -fr /Users/runner/Library/Android/
+
+    # rm chromewebdriver etc
+    rm -fr /usr/local/Caskroom/chromedriver
+    rm -fr /usr/local/share/edge_driver
+    rm -fr /usr/local/opt/geckodriver/bin
+
+    echo ">>> After free-ing up, disk space is:"
+    df -h
+
+    echo ">>> Getting disk usage in key dirs ...."
+    du -sh /Applications/*
+    du -sh /Users/*
+    du -sh /usr/local/*
 
     # Get Qt source -
     cd ${GITHUB_WORKSPACE}
