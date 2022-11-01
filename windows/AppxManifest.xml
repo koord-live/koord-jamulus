@@ -2,7 +2,7 @@
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
   <Identity Name="Koord.KoordRT" 
             Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C"
-            Version="4.0.21.0"
+            Version="4.0.22.0"
             ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>Koord</DisplayName>
