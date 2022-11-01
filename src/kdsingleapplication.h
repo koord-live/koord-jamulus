@@ -1,16 +1,17 @@
 #include <QApplication>
 #include <QDebug>
 #include <QFileOpenEvent>
-//#include <clientdlg.h>
-//#include <urlhandler.h>
-//#include <singleapplication.h>
+#include <singleapplication.h>
 
-class KdApplication : public QApplication
+// FIXME - DRY violation
+// COPIES KdApplication :(
+
+class KdSingleApplication : public SingleApplication
 {
     Q_OBJECT
 
 public:
-    KdApplication(int& argc, char* argv[]);
+    KdSingleApplication(int& argc, char* argv[]);
 
     int run();
 

@@ -7,7 +7,8 @@ MessageReceiver::MessageReceiver(QObject *parent) : QObject(parent)
 {
 }
 
-// Primary instance of app should receive this when
+// For use with SingleApplication ....
+// Primary instance of app should receive this when secondary is opened
 void MessageReceiver::receivedMessage(int instanceId, QByteArray message)
 {
     qDebug() << "Received message from instance: " << instanceId;

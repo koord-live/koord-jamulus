@@ -59,7 +59,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // end cruft
 
     //FIXME - possibly not necessary
-#if defined(ANDROID)
+#if defined(Q_OS_ANDROID)
     setCentralWidget(backgroundFrame);
 #endif
 
@@ -88,7 +88,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //    // setup dir servers
 //    // set up list view for connected clients (note that the last column size
 //    // must not be specified since this column takes all the remaining space)
-//#ifdef ANDROID
+//#ifdef (Q_OS_ANDROID)
 //    // for Android we need larger numbers because of the default font size
 //    lvwServers->setColumnWidth ( 0, 200 );
 //    lvwServers->setColumnWidth ( 1, 130 );
@@ -126,7 +126,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
 // FIXME - exception for Android
 // - QuickView does NOT work as for other OS - when setSource is changed from "nosession" to webview, view goes full-screen
-#if defined(ANDROID)
+#if defined(Q_OS_ANDROID)
     quickWidget = new QQuickWidget;
     // need SizeRootObjectToView for QuickWidget, otherwise web content doesn't load ??
     quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -1601,7 +1601,7 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 
     setWindowTitle ( strWinTitle );
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     // for MacOS only we show the number of connected clients as a
     // badge label text if more than one user is connected
     if ( iNumClients > 1 )
@@ -1962,9 +1962,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 strSessionHash = jsonObject.value("session_hash").toString();
 
                 // set the video url and update QML side
-#if defined(Q_OS_MACX) || defined(Q_OS_IOS)
+#if defined(Q_OS_MACOS) || defined(Q_OS_IOS)
                 quickView->setSource(QUrl("qrc:/webview.qml"));
-#elif defined(ANDROID)
+#elif defined(Q_OS_ANDROID)
 //                quickWidget->setSource(QUrl("qrc:/androidwebview.qml"));
 #else
                 quickView->setSource(QUrl("qrc:/webengineview.qml"));
@@ -2013,7 +2013,7 @@ void CClientDlg::Disconnect()
 
     // Reset video view to No Session
 //FIXME - we do special stuff for Android, because calling setSource() again causes webview to go FULL SCREEN
-#if defined(ANDROID)
+#if defined(Q_OS_ANDROID)
     strVideoUrl = "https://koord.live/about";
     emit videoUrlChanged();
     strVideoUrl = "";

@@ -4,16 +4,20 @@
 #include <clientdlg.h>
 #include <urlhandler.h>
 #include <kdapplication.h>
+#include <kdsingleapplication.h>
 
-KdApplication::KdApplication (int& argc, char* argv[]) :
-        QApplication(argc, argv)
+// FIXME - DRY violation
+// COPIES KdApplication :(
+
+KdSingleApplication::KdSingleApplication (int& argc, char* argv[]) :
+        SingleApplication(argc, argv, true)
 {
 
 }
 
 
 // for iOS
-void KdApplication::OnConnectFromURLHandler(const QString& connect_url)
+void KdSingleApplication::OnConnectFromURLHandler(const QString& connect_url)
 {
     // url format: "koord://<fqdn>:<port>"
     qInfo() << "OnConnectFromURLHandler connect_addr: " << connect_url;
@@ -36,18 +40,18 @@ void KdApplication::OnConnectFromURLHandler(const QString& connect_url)
 }
 
 
-int KdApplication::run()
+int KdSingleApplication::run()
 {
     // for iOS
     auto url_handler = UrlHandler::getInstance();
-    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, this, &KdApplication::OnConnectFromURLHandler );
+    QObject::connect ( url_handler, &UrlHandler::connectUrlSet, this, &KdSingleApplication::OnConnectFromURLHandler );
 
-    return KdApplication::exec();
+    return KdSingleApplication::exec();
 }
 
 
 // for macOS - custom url handling
-bool KdApplication::event(QEvent *event)
+bool KdSingleApplication::event(QEvent *event)
 {
     if (event->type() == QEvent::FileOpen)
     {

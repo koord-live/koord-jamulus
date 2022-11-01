@@ -44,13 +44,13 @@
 #if defined( _WIN32 ) && !defined( JACK_ON_WINDOWS )
 #    include "sound/asio/sound.h"
 #else
-#    if ( defined( Q_OS_MACX ) ) && !defined( JACK_REPLACES_COREAUDIO )
+#    if ( defined( Q_OS_MACOS ) ) && !defined( JACK_REPLACES_COREAUDIO )
 #        include "sound/coreaudio-mac/sound.h"
 #    else
 #        if defined( Q_OS_IOS )
 #            include "sound/coreaudio-ios/sound.h"
 #        else
-#            ifdef ANDROID
+#            if defined (Q_OS_ANDROID)
 #                include "sound/oboe/sound.h"
 #            else
 #                include "sound/jack/sound.h"

@@ -42,11 +42,11 @@
 #    include "testbench.h"
 #endif
 #include "util.h"
-#ifdef ANDROID
+#if defined (Q_OS_ANDROID)
 //#    include <QtAndroidExtras/QtAndroid>
 #    include <QtCore/private/qandroidextras_p.h>
 #endif
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #   include "mac/activity.h"
@@ -61,6 +61,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #    endif
 #endif
 #include "kdapplication.h"
+#include "kdsingleapplication.h"
 #include "messagereceiver.h"
 
 // Implementation **************************************************************
@@ -68,7 +69,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 int main ( int argc, char** argv )
 {
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
@@ -82,7 +83,7 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-#if ( defined( SERVER_BUNDLE ) && defined( Q_OS_MACX ) ) || defined( SERVER_ONLY )
+#if ( defined( SERVER_BUNDLE ) && defined( Q_OS_MACOS ) ) || defined( SERVER_ONLY )
     // if we are on MacOS and we are building a server bundle or requested build with serveronly, start Jamulus in server mode
     bool bIsClient = false;
     qInfo() << "- Starting in server mode by default (due to compile time option)";
@@ -640,7 +641,7 @@ int main ( int argc, char** argv )
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
-#if !( defined( Q_OS_MACX ) )
+#if !( defined( Q_OS_MACOS ) )
         exit ( 1 );
 #endif
     }
@@ -852,7 +853,11 @@ int main ( int argc, char** argv )
     QtWebView::initialize();
 
     // Make main application object
+    // Note: SingleApplication not needed or desired on mobile ie iOS and Android (also ChromeOS)
+#if defined(Q_OS_IOS) || defined (Q_OS_ANDROID)
     KdApplication* pApp = new KdApplication ( argc, argv );
+#elif defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+    KdSingleApplication* pApp = new KdSingleApplication (argc, argv);
 
     // singleapplication - handle primary / secondary instances
     if( pApp->isSecondary() ) {
@@ -870,6 +875,7 @@ int main ( int argc, char** argv )
             &MessageReceiver::receivedMessage
         );
     }
+#endif
 
     if (bUseGUI == true)
     {
@@ -896,7 +902,7 @@ int main ( int argc, char** argv )
 //#    endif
 #endif
 
-#ifdef ANDROID
+#if defined( Q_OS_ANDROID )
     // special Android code needed for record audio permission handling
     auto recaudio_check = QtAndroidPrivate::checkPermission( QString ("android.permission.RECORD_AUDIO"));
 
@@ -935,7 +941,7 @@ int main ( int argc, char** argv )
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.
     CActivity activity;
@@ -1151,7 +1157,7 @@ int main ( int argc, char** argv )
         }
     }
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     activity.EndActivity();
 #endif
 

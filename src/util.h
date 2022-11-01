@@ -376,7 +376,7 @@ public slots:
         // block escape key
         if ( pEvent->key() != Qt::Key_Escape )
         {
-#    ifdef ANDROID
+#    if defined ( Q_OS_ANDROID )
             if ( pEvent->key() == Qt::Key_Back )
             {
                 close(); // otherwise, dialog does not show properly again in android (nefarius2001, #832)
