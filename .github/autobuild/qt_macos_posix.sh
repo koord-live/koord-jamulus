@@ -23,8 +23,10 @@ build_qt() {
     cd /tmp
     MAJOR_VER=$(echo ${QT_VERSION} | cut -c -3) # get eg "6.3" when QT_VERSION=6.3.2
     wget https://download.qt.io/archive/qt/${MAJOR_VER}/${QT_VERSION}/single/qt-everywhere-src-${QT_VERSION}.tar.xz
+    echo ">>> Unzipping qt-everywhere tar.xz file ..."
     gunzip qt-everywhere-src-${QT_VERSION}.tar.xz        # uncompress the archive
-    tar xvf qt-everywhere-src-${QT_VERSION}.tar          # unpack it
+    echo ">>> Untarring qt-everywhere archive ..."
+    tar xf qt-everywhere-src-${QT_VERSION}.tar          # unpack it
 
     cd /tmp/qt-everywhere-src-${QT_VERSION}
     ## to build Qt with POSIX shared memory, instead of System V shared memory:
