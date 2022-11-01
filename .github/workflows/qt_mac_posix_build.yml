@@ -11,9 +11,20 @@ on:
       - qtmac
 
 jobs:
-  buildjars:
+  buildqtmac:
     runs-on: macos-12
     steps:
+      - name:                       Checkout code
+        id:                         codecheck
+        uses:                       actions/checkout@v2
+
+      - name:                       Get git short hash
+        id:                         vars
+        run:                        echo "::set-output name=sha_short::sha-$(git rev-parse --short HEAD)"
+        
+      - name:                       Echo git shorthash
+        run:                        echo ${{ steps.vars.outputs.sha_short }}
+
       - name:                       Build Qt for macOS - Posix
         id:                         macqtposix
         run:                        ./.github/autobuild/qt_macos_posix.sh build
