@@ -24,26 +24,25 @@ build_qt() {
     df -h
 
     # remove Visual Studio
+    echo ">>> Removing Visual Studio* ...."
     rm -fr /Applications/Visual*
 
     # remove old Xcodes
+    echo ">>> Removing Xcode 13* ...."
     rm -fr /Applications/Xcode_13*
 
     # remove all Android stuff
+    echo ">>> Removing /Users/runner/Library/Android/ ...."
     rm -fr /Users/runner/Library/Android/
 
     # rm chromewebdriver etc
+    echo ">>> Removing webdriver stuff ...."
     rm -fr /usr/local/Caskroom/chromedriver
     rm -fr /usr/local/share/edge_driver
     rm -fr /usr/local/opt/geckodriver/bin
 
     echo ">>> After free-ing up, disk space is:"
     df -h
-
-    echo ">>> Getting disk usage in key dirs ...."
-    du -sh /Applications/*
-    du -sh /Users/*
-    du -sh /usr/local/*
 
     # Get Qt source -
     cd ${GITHUB_WORKSPACE}
