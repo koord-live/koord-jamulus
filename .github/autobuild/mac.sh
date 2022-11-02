@@ -1,7 +1,9 @@
 #!/bin/bash
 set -eu
 
-QT_DIR=/usr/local/opt/qt
+# QT_DIR=/usr/local/opt/qt
+QT_DIR=/usr/local/Qt-${QT_VERSION}
+
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
 AQTINSTALL_VERSION=3.0.1
@@ -22,12 +24,26 @@ setup() {
         echo "Using Qt installation from previous run (actions/cache)"
     else
         echo "Installing Qt..."
-        python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        # python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        # # no need for webengine in Mac! At all! Like iOS
+        # python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
+        #     --archives qtbase qtdeclarative qtsvg qttools \
+        #     --modules qtwebview
 
-        # no need for webengine in Mac! At all! Like iOS
-        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-            --archives qtbase qtdeclarative qtsvg qttools \
-            --modules qtwebview
+        # Install Qt from POSIX build release
+        cd ~
+        wget https://github.com/koord-live/koord-app/releases/download/macqt_${QT_VERSION}/qt_mac_${QT_VERSION}_posix.tar.gz \
+            -O /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
+        cd /
+        tar xf /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
+        rm /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
+        # qt now installed in QT_DIR
+
+        echo "Patching SingleApplication for POSIX/AppStore compliance ..."
+        # note: patch made as per:
+        #    diff -Naur singleapplication_p_orig.cpp singleapplication_p.cpp > macOS_posix.patch
+        patch -u ${GITHUB_WORKSPACE}/singleapplication/singleapplication_p.cpp \
+            -i ${GITHUB_WORKSPACE}/mac/macOS_posix.patch
     fi
 }
 
@@ -90,8 +106,8 @@ prepare_signing() {
 
 build_app_as_dmg_installer() {
     # Add the qt binaries to the PATH.
-    # The clang_64 entry can be dropped when Qt <6.2 compatibility is no longer needed.
-    export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${QT_DIR}/${QT_VERSION}/clang_64/bin:${PATH}"
+    # export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${PATH}"
+    export PATH="${QT_DIR}/bin:${PATH}"
 
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
