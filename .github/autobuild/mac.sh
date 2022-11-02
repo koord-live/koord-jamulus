@@ -78,10 +78,10 @@ prepare_signing() {
     echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
     
     # ## Echo Provisioning Profile to file
-    echo -n "${MACOS_PP_PROFILE_B64}" | base64 --decode > embedded.provisioningprofile
+    echo -n "${MACOS_PP_PROFILE_B64}" | base64 --decode > ~/embedded.provisionprofile
     # debug
-    echo "Contents of embedded.provisioningprofile ..."
-    cat embedded.provisioningprofile
+    echo "Contents of embedded.provisionprofile ..."
+    cat ~/embedded.provisionprofile
 
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain

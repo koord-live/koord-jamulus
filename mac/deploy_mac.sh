@@ -162,7 +162,7 @@ build_app_package()
     ls -alR ${build_path}/${target_name}.app/
 
     # copy in provisioning profile
-    cp embedded.provisioningprofile ${build_path}/${target_name}.app/Contents/
+    cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
