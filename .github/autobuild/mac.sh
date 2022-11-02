@@ -68,6 +68,7 @@ prepare_signing() {
     [[ -n "${NOTARIZATION_USERNAME:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
+    [[ -n "${MACOS_PP_PROFILE_B64:-}" ]] || return 1
 
     echo "Signing was requested and all dependencies are satisfied"
 
@@ -76,6 +77,12 @@ prepare_signing() {
     echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
     echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
     
+    # ## Echo Provisioning Profile to file
+    echo -n "${MACOS_PP_PROFILE_B64}" | base64 --decode > embedded.provisioningprofile
+    # debug
+    echo "Contents of embedded.provisioningprofile ..."
+    cat embedded.provisioningprofile
+
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain

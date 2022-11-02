@@ -349,6 +349,7 @@ jobs:
           MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT}}
           MAC_STORE_INST_CERT_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
           MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
+          MACOS_PROV_PROFILE_B64:   ${{ secrets.MACOS_PROVISIONING_PROFILE }}
           IOSDIST_CERTIFICATE:      ${{ secrets.IOSDIST_CERT}}
           IOSDIST_CERTIFICATE_PWD:  ${{ secrets.IOSDIST_CERT_PWD }}
           IOSDIST_CERTIFICATE_ID:   ${{ secrets.IOSDIST_CERT_ID }}

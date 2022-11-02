@@ -147,14 +147,12 @@ build_app_package()
         macdeployqt "${build_path}/${target_name}.app" \
             -verbose=2 \
             -always-overwrite \
-            -hardened-runtime -timestamp -appstore-compliant \
             -qmldir="${root_path}/src"
     else     # we do this here for signed / notarized dmg ..?
         echo ">>> Doing macdeployqt for notarization ..."
         macdeployqt "${build_path}/${target_name}.app" \
             -verbose=2 \
             -always-overwrite \
-            -hardened-runtime -timestamp -appstore-compliant \
             -sign-for-notarization="${macadhoc_cert_name}" \
             -qmldir="${root_path}/src"
     fi
@@ -162,6 +160,9 @@ build_app_package()
     # debug:
     echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ follows:"
     ls -alR ${build_path}/${target_name}.app/
+
+    # copy in provisioning profile
+    cp embedded.provisioningprofile ${build_path}/${target_name}.app/Contents/
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
@@ -290,15 +291,29 @@ fi
 cleanup
 
 # Build app
-# Just build client for Mac
-build_app_compile 
-# build_app_compile_universal
+# build_app_compile 
+# compile code
+build_app_compile_universal
+# build .app/ structure
 build_app_package 
+# create versioned DMG installer image  
+build_disk_image "${CLIENT_TARGET_NAME}"
 
+# now build pkg for App store upload
 build_installer_pkg
+
+
+# ##FIXME - only necessary due to SingleApplication / Posix problems 
+# # Now build for App Store:
+# # - patch app code with SingleApplication patch
+# patch -u "${root_path}/src/main.cpp" -i mac/main_posix.patch 
+# # rebuild code again
+# build_app_compile_universal
+# # rebuild .app/ structure
+# build_app_package 
+# # now build pkg for App store upload
+# build_installer_pkg
 
 # make clean
 make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
-# Create versioned installer image 
-build_disk_image "${CLIENT_TARGET_NAME}"
