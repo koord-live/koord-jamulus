@@ -80,8 +80,8 @@ prepare_signing() {
     # ## Echo Provisioning Profile to file
     echo "${MACOS_PROV_PROFILE_B64}" | base64 --decode > ~/embedded.provisionprofile
     # debug
-    echo "Contents of embedded.provisionprofile ..."
-    cat ~/embedded.provisionprofile
+    # echo "Contents of embedded.provisionprofile ..."
+    # cat ~/embedded.provisionprofile
 
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
@@ -118,10 +118,9 @@ build_app_as_dmg_installer() {
 
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
-    MACOS_PP=$(echo "${MACOS_PROV_PROFILE_B64}" | base64 --decode)
     if prepare_signing; then
         BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" \
-            "-i" "${MAC_STORE_INST_CERT_ID}" "-p" "${MACOS_PP}")
+            "-i" "${MAC_STORE_INST_CERT_ID}")
     fi
     TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }

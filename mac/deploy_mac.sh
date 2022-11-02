@@ -12,7 +12,7 @@ macapp_cert_name=""
 macinst_cert_name=""
 macos_pp=""
 
-while getopts 'hs:k:a:i:' flag; do
+while getopts 'hs:a:i:' flag; do
     case "${flag}" in
         s)
             macadhoc_cert_name=$OPTARG
@@ -30,12 +30,6 @@ while getopts 'hs:k:a:i:' flag; do
             macinst_cert_name=$OPTARG
             if [[ -z "$macinst_cert_name" ]]; then
                 echo "Please add the name of the installer signing certificate to use: -i \"<name>\""
-            fi
-            ;;
-        p)
-            macos_pp=$OPTARG
-            if [[ -z "$macos_pp" ]]; then
-                echo "Please add mac provisioning profile to use: -p \"<name>\""
             fi
             ;;
         h)
@@ -163,9 +157,9 @@ build_app_package()
 
     # copy in provisioning profile
     echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
-    # cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
-    echo "${macos_pp}"
-    echo "${macos_pp}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
+    cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
+    # echo "${macos_pp}"
+    # echo "${macos_pp}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
