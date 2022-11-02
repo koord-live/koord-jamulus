@@ -20,30 +20,6 @@ set -eu
 # - cmake 
 
 build_qt() {
-    # # Clean up disk to make space
-    # df -h
-
-    # # remove Visual Studio
-    # echo ">>> Removing Visual Studio* ...."
-    # rm -fr /Applications/Visual*
-
-    # # remove old Xcodes
-    # echo ">>> Removing Xcode 13* ...."
-    # rm -fr /Applications/Xcode_13*
-
-    # # remove all Android stuff
-    # echo ">>> Removing /Users/runner/Library/Android/ ...."
-    # rm -fr /Users/runner/Library/Android/
-
-    # # rm chromewebdriver etc
-    # echo ">>> Removing webdriver stuff ...."
-    # rm -fr /usr/local/Caskroom/chromedriver
-    # rm -fr /usr/local/share/edge_driver
-    # rm -fr /usr/local/opt/geckodriver/bin
-
-    # echo ">>> After free-ing up, disk space is:"
-    # df -h
-
     # Get Qt source -
     cd ${GITHUB_WORKSPACE}
     MAJOR_VER=$(echo ${QT_VERSION} | cut -c -3) # get eg "6.3" when QT_VERSION=6.3.2
@@ -73,10 +49,12 @@ build_qt() {
     # Create archive
     cd ${GITHUB_WORKSPACE}
     echo ">>> Archiving QT installation..."
-    tar cvf qt_mac_${QT_VERSION}_posix.tar /usr/local/Qt-${QT_VERSION}
+    cd /usr/local/Qt-${QT_VERSION}
+    tar cf ${GITHUB_WORKSPACE}/qt_mac_${QT_VERSION}_posix.tar  .
+    cd ${GITHUB_WORKSPACE}
     gzip qt_mac_${QT_VERSION}_posix.tar
 
-    # Output: $HOME/qt_mac_${QT_VERSION}_posix.tar.gz
+    # Output: ${GITHUB_WORKSPACE}/qt_mac_${QT_VERSION}_posix.tar.gz
 
 }
 
