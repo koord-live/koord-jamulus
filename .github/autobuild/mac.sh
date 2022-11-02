@@ -31,8 +31,7 @@ setup() {
         #     --modules qtwebview
 
         # Install Qt from POSIX build release
-        cd ~
-        wget https://github.com/koord-live/koord-app/releases/download/macqt_${QT_VERSION}/qt_mac_${QT_VERSION}_posix.tar.gz \
+        wget -q https://github.com/koord-live/koord-app/releases/download/macqt_${QT_VERSION}/qt_mac_${QT_VERSION}_posix.tar.gz \
             -O /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
         echo "Creating QT_DIR : ${QT_DIR} ... "
         mkdir ${QT_DIR}
