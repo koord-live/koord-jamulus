@@ -6,7 +6,7 @@
      blockServerName = QString::fromUtf8(appData.result().toBase64().replace("/", "_"));
 +#if defined ( Q_OS_MACOS )
 +    // need to overwrite for macOS - app store - POSIX shmem requirements
-+    blockServerName = "TXZ4FR95HG.group.live.koord.koord-rt/shared";
++    blockServerName = "TXZ4FR95HG.koord/shared";
 +#endif
  }
  
