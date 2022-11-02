@@ -164,7 +164,7 @@ build_app_package()
     # copy in provisioning profile
     echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
     # cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
-    echo "${MACOS_PP}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
+    echo "${macos_pp}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
