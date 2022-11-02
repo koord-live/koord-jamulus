@@ -119,7 +119,8 @@ build_app_as_dmg_installer() {
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
-        BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
+        BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" \
+            "-i" "${MAC_STORE_INST_CERT_ID}" "-p" "${MACOS_PP}")
     fi
     TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }

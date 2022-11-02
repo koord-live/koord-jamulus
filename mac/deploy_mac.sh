@@ -10,7 +10,7 @@ deploypkg_path="${root_path}/deploypkg"
 macadhoc_cert_name=""
 macapp_cert_name=""
 macinst_cert_name=""
-keychain_pass=""
+macos_pp=""
 
 while getopts 'hs:k:a:i:' flag; do
     case "${flag}" in
@@ -32,14 +32,14 @@ while getopts 'hs:k:a:i:' flag; do
                 echo "Please add the name of the installer signing certificate to use: -i \"<name>\""
             fi
             ;;
-        k)
-            keychain_pass=$OPTARG
-            if [[ -z "$keychain_pass" ]]; then
-                echo "Please add keychain password to use: -k \"<name>\""
+        p)
+            macos_pp=$OPTARG
+            if [[ -z "$macos_pp" ]]; then
+                echo "Please add mac provisioning profile to use: -p \"<name>\""
             fi
             ;;
         h)
-            echo "Usage: -s <adhoccertname> -a <codesigncertname> -i <instlrsigncertname> -k <keychain_pass>"
+            echo "Usage: -s <adhoccertname> -a <codesigncertname> -i <instlrsigncertname> -p <macos_prov_profile>"
             exit 0
             ;;
         *)
@@ -159,10 +159,12 @@ build_app_package()
 
     # debug:
     echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ follows:"
-    ls -alR ${build_path}/${target_name}.app/
+    ls -al ${build_path}/${target_name}.app/
 
     # copy in provisioning profile
-    cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
+    echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
+    # cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
+    echo "${MACOS_PP}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
