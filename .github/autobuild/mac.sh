@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 
-# QT_DIR=/usr/local/opt/qt
-QT_DIR=/usr/local/Qt-${QT_VERSION}
+QT_DIR=/usr/local/opt/qt
+# QT_DIR=/usr/local/Qt-${QT_VERSION}
 
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
@@ -34,8 +34,9 @@ setup() {
         cd ~
         wget https://github.com/koord-live/koord-app/releases/download/macqt_${QT_VERSION}/qt_mac_${QT_VERSION}_posix.tar.gz \
             -O /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
-        cd /
-        tar xf /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
+        echo "Creating QT_DIR : ${QT_DIR} ... "
+        mkdir ${QT_DIR}
+        tar xf /tmp/qt_mac_${QT_VERSION}_posix.tar.gz -C ${QT_DIR}
         rm /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
         # qt now installed in QT_DIR
 
