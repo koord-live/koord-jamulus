@@ -277,6 +277,8 @@ build_disk_image "${CLIENT_TARGET_NAME}"
 
 # Cleanup - make clean
 make -f "${build_path}/Makefile" -C "${build_path}" distclean
+# Clean deploy dir
+rm -fr "${deploy_path}/*"
 
 ##FIXME - only necessary due to SingleApplication / Posix problems 
 ## Now build for App Store:
