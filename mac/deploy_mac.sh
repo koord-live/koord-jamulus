@@ -159,7 +159,7 @@ build_app_package()
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
     # must use -R to preserve symbolic links
-    cp -R "${build_path}/${target_name}.app" "${deploy_path}"
+    # cp -R "${build_path}/${target_name}.app" "${deploy_path}"
 
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
@@ -216,7 +216,7 @@ build_disk_image()
 
     # try and test signature of bundle before build
     echo ">>> Testing signature of bundle ...." 
-    codesign -vvv --deep --strict "${deploy_path}/Koord.app/"
+    codesign -vvv --deep --strict "${build_path}/Koord.app/"
 
     # Build installer image
     create-dmg \
@@ -230,7 +230,7 @@ build_disk_image()
       --icon "${client_target_name}.app" 630 210 \
       --eula "${root_path}/COPYING" \
       "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
-      "${deploy_path}/"
+      "${build_path}/"
 }
 
 brew_install_pinned() {
