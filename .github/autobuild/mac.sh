@@ -2,7 +2,7 @@
 set -eu
 
 QT_DIR=/usr/local/opt/qt
-# QT_DIR=/usr/local/Qt-${QT_VERSION}
+# QT_POSIX_DIR=/usr/local/opt/qt_posix
 
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
@@ -35,11 +35,11 @@ setup() {
         # # Install Qt from POSIX build release
         # wget -q https://github.com/koord-live/koord-app/releases/download/macqt_${QT_VERSION}/qt_mac_${QT_VERSION}_posix.tar.gz \
         #     -O /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
-        # echo "Creating QT_DIR : ${QT_DIR} ... "
-        # mkdir ${QT_DIR}
-        # tar xf /tmp/qt_mac_${QT_VERSION}_posix.tar.gz -C ${QT_DIR}
+        # echo "Creating QT_POSIX_DIR : ${QT_POSIX_DIR} ... "
+        # mkdir ${QT_POSIX_DIR}
+        # tar xf /tmp/qt_mac_${QT_VERSION}_posix.tar.gz -C ${QT_POSIX_DIR}
         # rm /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
-        # # qt now installed in QT_DIR
+        # # qt now installed in QT_POSIX_DIR
 
         # echo "Patching SingleApplication for POSIX/AppStore compliance ..."
         # # note: patch made as per:
@@ -121,8 +121,9 @@ prepare_signing() {
 
 build_app_and_packages() {
     # Add the qt binaries to the PATH.
-    # export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${PATH}"
-    export PATH="${QT_DIR}/bin:${PATH}"
+    export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${PATH}"
+    ## For POSIX QT:
+    # export PATH="${QT_DIR}/bin:${PATH}"
 
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
