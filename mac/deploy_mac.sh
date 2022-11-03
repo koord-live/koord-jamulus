@@ -83,7 +83,7 @@ cleanup() {
 build_app_compile_universal()
 {
     local posix_mode="${1}"
-    if [[ ${posix_mode} == "posixmac"]]; then
+    if [[ ${posix_mode} == "posixmac" ]]; then
         EXTRADEFINES="DEFINES+=POSIXMAC"
     else
         EXTRADEFINES=""
