@@ -137,7 +137,7 @@ build_app_package()
 
     # copy in provisioning profile - BEFORE codesigning with macdeployqt
     echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
-    cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
+    cp ~/embedded.provisionprofile_adhoc ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
     # echo "${macos_pp}"
     # echo "${macos_pp}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
 
@@ -199,6 +199,10 @@ build_installer_pkg()
 
         # Clone the build directory to leave the adhoc signed app untouched
         cp -a ${build_path} "${build_path}_storesign"
+
+        # copy in provisioning profile - BEFORE codesigning with macdeployqt
+        echo ">>> Adding embedded.provisionprofile to ${build_path}_storesign/${target_name}.app/Contents/"
+        cp ~/embedded.provisionprofile_store ${build_path}_storesign/${target_name}.app/Contents/embedded.provisionprofile
 
         # Add Qt deployment deps and codesign the app for App Store submission
         macdeployqt "${build_path}_storesign/${target_name}.app" \

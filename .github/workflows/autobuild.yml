@@ -343,13 +343,14 @@ jobs:
           MAC_ADHOC_CERT:           ${{ secrets.MAC_ADHOC_CERT}}
           MAC_ADHOC_CERT_PWD:       ${{ secrets.MAC_ADHOC_CERT_PWD }}
           MAC_ADHOC_CERT_ID:        ${{ secrets.MAC_ADHOC_CERT_ID }}
-          MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT}}
-          MAC_STORE_APP_CERT_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
-          MAC_STORE_APP_CERT_ID:    ${{ secrets.MACAPP_CERT_ID }}
-          MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT}}
-          MAC_STORE_INST_CERT_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
-          MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
-          MACOS_PROV_PROFILE_B64:   ${{ secrets.MACOS_PROVISIONING_PROFILE }}
+          MACAPP_CERT:              ${{ secrets.MACAPP_CERT}}
+          MACAPP_CERT_PWD:          ${{ secrets.MACAPP_CERT_PWD }}
+          MACAPP_CERT_ID:           ${{ secrets.MACAPP_CERT_ID }}
+          MACAPP_INST_CERT:         ${{ secrets.MACAPP_INST_CERT}}
+          MACAPP_INST_CERT_PWD:     ${{ secrets.MACAPP_INST_CERT_PWD }}
+          MACAPP_INST_CERT_ID:      ${{ secrets.MACAPP_INST_CERT_ID }}
+          MAC_PROV_PROF_STORE:      ${{ secrets.MAC_PROV_PROF_STORE }}
+          MAC_PROV_PROF_ADHOC:      ${{ secrets.MAC_PROV_PROF_ADHOC }}
           IOSDIST_CERTIFICATE:      ${{ secrets.IOSDIST_CERT}}
           IOSDIST_CERTIFICATE_PWD:  ${{ secrets.IOSDIST_CERT_PWD }}
           IOSDIST_CERTIFICATE_ID:   ${{ secrets.IOSDIST_CERT_ID }}

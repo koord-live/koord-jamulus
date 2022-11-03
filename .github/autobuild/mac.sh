@@ -50,8 +50,8 @@ setup() {
 prepare_signing() {
     ##  Certificate types in use:
     # - MAC_ADHOC_CERT - Developer ID Application - for codesigning for adhoc release
-    # - MAC_STORE_APP_CERT - Mac App Distribution - codesigning for App Store submission
-    # - MAC_STORE_INST_CERT - Mac Installer Distribution - for signing installer pkg file for App Store submission
+    # - MACAPP_CERT - Mac App Distribution - codesigning for App Store submission
+    # - MACAPP_INST_CERT - Mac Installer Distribution - for signing installer pkg file for App Store submission
 
     [[ "${SIGN_IF_POSSIBLE:-0}" == "1" ]] || return 1
 
@@ -59,29 +59,35 @@ prepare_signing() {
     [[ -n "${MAC_ADHOC_CERT:-}" ]] || return 1
     [[ -n "${MAC_ADHOC_CERT_ID:-}" ]] || return 1
     [[ -n "${MAC_ADHOC_CERT_PWD:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT_ID:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT_PWD:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
+    [[ -n "${MACAPP_CERT:-}" ]] || return 1
+    [[ -n "${MACAPP_CERT_ID:-}" ]] || return 1
+    [[ -n "${MACAPP_CERT_PWD:-}" ]] || return 1
+    [[ -n "${MACAPP_INST_CERT:-}" ]] || return 1
+    [[ -n "${MACAPP_INST_CERT_ID:-}" ]] || return 1
+    [[ -n "${MACAPP_INST_CERT_PWD:-}" ]] || return 1
+    [[ -n "${MAC_PROV_PROF_STORE:-}" ]] || return 1
+    [[ -n "${MAC_PROV_PROF_ADHOC:-}" ]] || return 1
     [[ -n "${NOTARIZATION_USERNAME:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
-    [[ -n "${MACOS_PROV_PROFILE_B64:-}" ]] || return 1
+    [[ -n "${MAC_PROV_PROF_STORE:-}" ]] || return 1
 
     echo "Signing was requested and all dependencies are satisfied"
 
     ## Put the certs to files
     echo "${MAC_ADHOC_CERT}" | base64 --decode > macadhoc_certificate.p12
-    echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
-    echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
+    echo "${MACAPP_CERT}" | base64 --decode > macapp_certificate.p12
+    echo "${MACAPP_INST_CERT}" | base64 --decode > macinst_certificate.p12
     
-    # ## Echo Provisioning Profile to file
-    echo "${MACOS_PROV_PROFILE_B64}" | base64 --decode > ~/embedded.provisionprofile
-    # debug
-    # echo "Contents of embedded.provisionprofile ..."
-    # cat ~/embedded.provisionprofile
+    # ## Echo Provisioning Profiles to files - store AND adhoc
+    # store pp corresponds to macapp_cert for store distribution
+    echo -n "${MAC_PROV_PROF_STORE}" | base64 --decode > ~/embedded.provisionprofile_store
+    # adhoc pp corresponds to mac_adhoc_cert for dmg installer adhoc distribution
+    echo -n "${MAC_PROV_PROF_ADHOC}" | base64 --decode > ~/embedded.provisionprofile_adhoc
+
+    # ## apply provisioning profile - yes or no?
+    # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    # cp ~/embedded.prov*  ~/Library/MobileDevice/Provisioning\ Profiles
 
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
@@ -91,8 +97,8 @@ prepare_signing() {
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     # add certs to keychain
     security import macadhoc_certificate.p12 -k build.keychain -P "${MAC_ADHOC_CERT_PWD}" -A -T /usr/bin/codesign 
-    security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
-    security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
+    security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERT_PWD}" -A -T /usr/bin/codesign
+    security import macinst_certificate.p12 -k build.keychain -P "${MACAPP_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
     # # add notarization/validation/upload password to keychain
     # xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
     # allow the default keychain access to cli utilities
@@ -119,8 +125,8 @@ build_app_as_dmg_installer() {
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
-        BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" \
-            "-i" "${MAC_STORE_INST_CERT_ID}")
+        BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MACAPP_CERT_ID}" \
+            "-i" "${MACAPP_INST_CERT_ID}")
     fi
     TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
