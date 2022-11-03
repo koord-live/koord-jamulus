@@ -108,8 +108,7 @@ build_app_compile_universal()
             make -f "${build_path}/Makefile" -C "${build_path}" distclean
         fi
         qmake "${project_path}" -o "${build_path}/Makefile" \
-            "CONFIG+=release" \
-            ${EXTRADEFINES} \
+            "CONFIG+=release" ${EXTRADEFINES} \
             "QMAKE_APPLE_DEVICE_ARCHS=${target_arch}" "QT_ARCH=${target_arch}" \
             "${@:2}"
         make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
