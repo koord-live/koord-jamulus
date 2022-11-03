@@ -855,18 +855,16 @@ int main ( int argc, char** argv )
     // Make main application object
     // Note: SingleApplication not needed or desired on mobile ie iOS and Android (also ChromeOS)
     // Also: SingleApplication problematic on appstore macOS builds (posix)
-#if defined (Q_OS_IOS) || defined (Q_OS_ANDROID)
+#if defined (Q_OS_IOS) || defined (Q_OS_ANDROID) || (defined (Q_OS_MACOS) && defined (POSIXMAC))
     KdApplication* pApp = new KdApplication ( argc, argv );
-#elif defined (Q_OS_MACOS) || defined (Q_OS_WINDOWS) || defined (Q_OS_LINUX)
+#elif defined (Q_OS_WINDOWS) || defined (Q_OS_LINUX) || (defined (Q_OS_MACOS) && !defined (POSIXMAC))
     KdSingleApplication* pApp = new KdSingleApplication (argc, argv);
 
-    // singleapplication - handle primary / secondary instances
     if( pApp->isSecondary() ) {
         // pApp->sendMessage( pApp->arguments().join(' ').toUtf8() );
         //FIXME - arguments() list is all args including executable ie "Koord.exe koord://<host>:<port>"
         // so we take arguments().last() as that SHOULD be the URL in typical circumstances
         pApp->sendMessage( pApp->arguments().last().toUtf8() );
-//        pApp->exit( 0 );
         return 0;
     } else {
         QObject::connect(

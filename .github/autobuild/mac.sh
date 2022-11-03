@@ -24,26 +24,28 @@ setup() {
         echo "Using Qt installation from previous run (actions/cache)"
     else
         echo "Installing Qt..."
-        # python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-        # # no need for webengine in Mac! At all! Like iOS
-        # python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
-        #     --archives qtbase qtdeclarative qtsvg qttools \
-        #     --modules qtwebview
+        ## NORMAL QT - which we like
+        python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        # no need for webengine in Mac! At all! Like iOS
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" \
+            --archives qtbase qtdeclarative qtsvg qttools \
+            --modules qtwebview
 
-        # Install Qt from POSIX build release
-        wget -q https://github.com/koord-live/koord-app/releases/download/macqt_${QT_VERSION}/qt_mac_${QT_VERSION}_posix.tar.gz \
-            -O /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
-        echo "Creating QT_DIR : ${QT_DIR} ... "
-        mkdir ${QT_DIR}
-        tar xf /tmp/qt_mac_${QT_VERSION}_posix.tar.gz -C ${QT_DIR}
-        rm /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
-        # qt now installed in QT_DIR
+        # ## POSIX QT - for AppStore and SingleApplication compatibility (not working)
+        # # Install Qt from POSIX build release
+        # wget -q https://github.com/koord-live/koord-app/releases/download/macqt_${QT_VERSION}/qt_mac_${QT_VERSION}_posix.tar.gz \
+        #     -O /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
+        # echo "Creating QT_DIR : ${QT_DIR} ... "
+        # mkdir ${QT_DIR}
+        # tar xf /tmp/qt_mac_${QT_VERSION}_posix.tar.gz -C ${QT_DIR}
+        # rm /tmp/qt_mac_${QT_VERSION}_posix.tar.gz
+        # # qt now installed in QT_DIR
 
-        echo "Patching SingleApplication for POSIX/AppStore compliance ..."
-        # note: patch made as per:
-        #    diff -Naur singleapplication_p_orig.cpp singleapplication_p.cpp > macOS_posix.patch
-        patch -u ${GITHUB_WORKSPACE}/singleapplication/singleapplication_p.cpp \
-            -i ${GITHUB_WORKSPACE}/mac/macOS_posix.patch
+        # echo "Patching SingleApplication for POSIX/AppStore compliance ..."
+        # # note: patch made as per:
+        # #    diff -Naur singleapplication_p_orig.cpp singleapplication_p.cpp > macOS_posix.patch
+        # patch -u ${GITHUB_WORKSPACE}/singleapplication/singleapplication_p.cpp \
+        #     -i ${GITHUB_WORKSPACE}/mac/macOS_posix.patch
     fi
 }
 
@@ -117,7 +119,7 @@ prepare_signing() {
     return 0
 }
 
-build_app_as_dmg_installer() {
+build_app_and_packages() {
     # Add the qt binaries to the PATH.
     # export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${PATH}"
     export PATH="${QT_DIR}/bin:${PATH}"
@@ -166,7 +168,7 @@ case "${1:-}" in
         setup
         ;;
     build)
-        build_app_as_dmg_installer
+        build_app_and_packages
         ;;
     get-artifacts)
         pass_artifact_to_job

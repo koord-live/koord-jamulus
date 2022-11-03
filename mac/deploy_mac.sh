@@ -52,39 +52,44 @@ cleanup() {
     mkdir -p "${deploypkg_path}"
 }
 
-build_app_compile()
-{
-    # local client_or_server="${1}"
+# build_app_compile()
+# {
+#     # local client_or_server="${1}"
 
-    # We need this in build environment otherwise defaults to webengine!!
-    # bug is here: https://code.qt.io/cgit/qt/qtwebview.git/tree/src/webview/qwebviewfactory.cpp?h=6.3.1#n51
-    # Note: not sure if this is useful here or only in Run env
-    export QT_WEBVIEW_PLUGIN="native"
+#     # We need this in build environment otherwise defaults to webengine!!
+#     # bug is here: https://code.qt.io/cgit/qt/qtwebview.git/tree/src/webview/qwebviewfactory.cpp?h=6.3.1#n51
+#     # Note: not sure if this is useful here or only in Run env
+#     export QT_WEBVIEW_PLUGIN="native"
 
-    # Build Jamulus
-    declare -a BUILD_ARGS=("_UNUSED_DUMMY=''")  # old bash fails otherwise
-    if [[ "${TARGET_ARCH:-}" ]]; then
-        BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
-    fi
-    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${BUILD_ARGS[@]}" "${@:2}"
+#     # Build Jamulus
+#     declare -a BUILD_ARGS=("_UNUSED_DUMMY=''")  # old bash fails otherwise
+#     if [[ "${TARGET_ARCH:-}" ]]; then
+#         BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
+#     fi
+#     qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${BUILD_ARGS[@]}" "${@:2}"
 
-    local target_name
-    target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+#     local target_name
+#     target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
     
-    local job_count
-    job_count=$(sysctl -n hw.ncpu)
+#     local job_count
+#     job_count=$(sysctl -n hw.ncpu)
 
-    # Get Jamulus version
-    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+#     # Get Jamulus version
+#     local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
 
-    make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
-}
+#     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
+# }
 
 build_app_compile_universal()
 {
-    # local client_or_server="${1}"
+    local posix_mode="${1}"
+    if [[ ${posix_mode} == "posixmac"]]; then
+        EXTRADEFINES="DEFINES+=POSIXMAC"
+    else
+        EXTRADEFINES=""
+    fi
 
-    # We need this in build environment otherwise defaults to webengine!!
+    # We need this in build environment otherwise defaults to webengine!!?
     # bug is here: https://code.qt.io/cgit/qt/qtwebview.git/tree/src/webview/qwebviewfactory.cpp?h=6.3.1#n51
     # Note: not sure if this is useful here or only in Run env
     export QT_WEBVIEW_PLUGIN="native"
@@ -105,6 +110,7 @@ build_app_compile_universal()
         fi
         qmake "${project_path}" -o "${build_path}/Makefile" \
             "CONFIG+=release" \
+            "${EXTRADEFINES}" \
             "QMAKE_APPLE_DEVICE_ARCHS=${target_arch}" "QT_ARCH=${target_arch}" \
             "${@:2}"
         make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
@@ -138,27 +144,18 @@ build_app_package()
     # copy in provisioning profile - BEFORE codesigning with macdeployqt
     echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
     cp ~/embedded.provisionprofile_adhoc ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
-    # echo "${macos_pp}"
-    # echo "${macos_pp}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
 
     # Add Qt deployment dependencies
-    if [[ -z "$macadhoc_cert_name" ]]; then
-        echo ">>> Doing macdeployqt WITHOUT notarization ..."
-        macdeployqt "${build_path}/${target_name}.app" \
-            -verbose=2 \
-            -always-overwrite \
-            -qmldir="${root_path}/src"
-    else     # we do this here for signed / notarized dmg ..?
-        echo ">>> Doing macdeployqt for notarization ..."
-        macdeployqt "${build_path}/${target_name}.app" \
-            -verbose=2 \
-            -always-overwrite \
-            -sign-for-notarization="${macadhoc_cert_name}" \
-            -qmldir="${root_path}/src"
-    fi
-
+    # we do this here for signed / notarized dmg
+    echo ">>> Doing macdeployqt for notarization ..."
+    macdeployqt "${build_path}/${target_name}.app" \
+        -verbose=2 \
+        -always-overwrite \
+        -sign-for-notarization="${macadhoc_cert_name}" \
+        -qmldir="${root_path}/src"
+    
     # debug:
-    echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ follows:"
+    echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ :"
     ls -al ${build_path}/${target_name}.app/
 
     # copy app bundle to deploy dir to prep for dmg creation
@@ -169,19 +166,6 @@ build_app_package()
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
-    # Return app name for installer image
-    # case "${client_or_server}" in
-    #     client_app)
-    #         CLIENT_TARGET_NAME="${target_name}"
-    #         ;;
-    #     # server_app)
-    #     #     SERVER_TARGET_NAME="${target_name}"
-    #     #     ;;
-    #     *)
-    #         echo "build_app: invalid parameter '${client_or_server}'"
-    #         exit 1
-    #         ;;
-    # esac
     CLIENT_TARGET_NAME="${target_name}"
 }
 
@@ -192,38 +176,31 @@ build_installer_pkg()
     local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
 
     ## Build installer pkg file - for submission to App Store
-    if [[ -z "$macapp_cert_name" ]]; then
-        echo ">>> build_installer_pkg: No cert to sign for App Store, bypassing..."
-    else
-        echo ">>> build_installer_pkg: building with storesign certs...."
+    echo ">>> build_installer_pkg: building with storesign certs...."
 
-        # Clone the build directory to leave the adhoc signed app untouched
-        cp -a ${build_path} "${build_path}_storesign"
+    # Clone the build directory to leave the adhoc signed app untouched
+    cp -a ${build_path} "${build_path}_storesign"
 
-        # copy in provisioning profile - BEFORE codesigning with macdeployqt
-        echo ">>> Adding embedded.provisionprofile to ${build_path}_storesign/${target_name}.app/Contents/"
-        cp ~/embedded.provisionprofile_store ${build_path}_storesign/${target_name}.app/Contents/embedded.provisionprofile
+    # copy in provisioning profile - BEFORE codesigning with macdeployqt
+    echo ">>> Adding embedded.provisionprofile to ${build_path}_storesign/${target_name}.app/Contents/"
+    cp ~/embedded.provisionprofile_store ${build_path}_storesign/${target_name}.app/Contents/embedded.provisionprofile
 
-        # Add Qt deployment deps and codesign the app for App Store submission
-        macdeployqt "${build_path}_storesign/${target_name}.app" \
-            -verbose=2 \
-            -always-overwrite \
-            -hardened-runtime -timestamp -appstore-compliant \
-            -sign-for-notarization="${macapp_cert_name}" \
-            -qmldir="${root_path}/src/"
+    # Add Qt deployment deps and codesign the app for App Store submission
+    macdeployqt "${build_path}_storesign/${target_name}.app" \
+        -verbose=2 \
+        -always-overwrite \
+        -hardened-runtime -timestamp -appstore-compliant \
+        -sign-for-notarization="${macapp_cert_name}" \
+        -qmldir="${root_path}/src/"
 
-        echo ">>> Recursive ls in root_dir ...."
-        ls -alR
+    # Create pkg installer and sign for App Store submission
+    productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
+        --component "${build_path}_storesign/${target_name}.app" \
+        /Applications \
+        "${build_path}_storesign/Koord_${app_version}.pkg"  
 
-        # Create pkg installer and sign for App Store submission
-        productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
-            --component "${build_path}_storesign/${target_name}.app" \
-            /Applications \
-            "${build_path}_storesign/Koord_${app_version}.pkg"  
-
-        # move created pkg file to prep for download
-        mv "${build_path}_storesign/Koord_${app_version}.pkg" "${deploypkg_path}"
-    fi
+    # move created pkg file to prep for download
+    mv "${build_path}_storesign/Koord_${app_version}.pkg" "${deploypkg_path}"
 }
 
 build_disk_image()
@@ -291,29 +268,27 @@ fi
 # Cleanup previous deployments
 cleanup
 
-# Build app
-# build_app_compile 
+## Build app for DMG Installer
 # compile code
-build_app_compile_universal
+build_app_compile_universal notposix
 # build .app/ structure
 build_app_package 
 # create versioned DMG installer image  
 build_disk_image "${CLIENT_TARGET_NAME}"
 
+# Cleanup - make clean
+make -f "${build_path}/Makefile" -C "${build_path}" distclean
+
+##FIXME - only necessary due to SingleApplication / Posix problems 
+## Now build for App Store:
+# use a special preprocessor DEFINE for build-time flagging - avoid SingleApplication if for App Store!
+#   DEFINES+=POSIXMAC
+# rebuild code again
+build_app_compile_universal posixmac
+# rebuild .app/ structure
+build_app_package 
 # now build pkg for App store upload
 build_installer_pkg
-
-
-# ##FIXME - only necessary due to SingleApplication / Posix problems 
-# # Now build for App Store:
-# # - patch app code with SingleApplication patch
-# patch -u "${root_path}/src/main.cpp" -i mac/main_posix.patch 
-# # rebuild code again
-# build_app_compile_universal
-# # rebuild .app/ structure
-# build_app_package 
-# # now build pkg for App store upload
-# build_installer_pkg
 
 # make clean
 make -f "${build_path}/Makefile" -C "${build_path}" distclean
