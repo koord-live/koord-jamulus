@@ -10,7 +10,6 @@ deploypkg_path="${root_path}/deploypkg"
 macadhoc_cert_name=""
 macapp_cert_name=""
 macinst_cert_name=""
-macos_pp=""
 
 while getopts 'hs:a:i:' flag; do
     case "${flag}" in
@@ -85,8 +84,6 @@ build_app_compile_universal()
     local posix_mode="${1}"
     if [[ ${posix_mode} == "posixmac" ]]; then
         EXTRADEFINES="DEFINES+=POSIXMAC"
-    else
-        EXTRADEFINES=""
     fi
 
     # We need this in build environment otherwise defaults to webengine!!?
@@ -110,7 +107,7 @@ build_app_compile_universal()
         fi
         qmake "${project_path}" -o "${build_path}/Makefile" \
             "CONFIG+=release" \
-            "${EXTRADEFINES}" \
+            ${EXTRADEFINES} \
             "QMAKE_APPLE_DEVICE_ARCHS=${target_arch}" "QT_ARCH=${target_arch}" \
             "${@:2}"
         make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
