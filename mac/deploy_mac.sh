@@ -135,6 +135,12 @@ build_app_package()
 {
     local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
 
+    # copy in provisioning profile - BEFORE codesigning with macdeployqt
+    echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
+    cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
+    # echo "${macos_pp}"
+    # echo "${macos_pp}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
+
     # Add Qt deployment dependencies
     if [[ -z "$macadhoc_cert_name" ]]; then
         echo ">>> Doing macdeployqt WITHOUT notarization ..."
@@ -154,12 +160,6 @@ build_app_package()
     # debug:
     echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ follows:"
     ls -al ${build_path}/${target_name}.app/
-
-    # copy in provisioning profile
-    echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
-    cp ~/embedded.provisionprofile ${build_path}/${target_name}.app/Contents/
-    # echo "${macos_pp}"
-    # echo "${macos_pp}" > ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
