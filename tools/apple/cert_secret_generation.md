@@ -8,6 +8,8 @@
 - Download as .cer file (x509)
 - In macOS, double-click to import to keychain
   - use login rather than Local
+  - MUST appear in "My Certificates" section!! So that you can export an identity (including private key)
+  - if NOT appearing in "My Certificates" - import an existing valid p12 with password
 - Export this certificate now as .p12 
   - Set password
   - copy password val as `MAC_CERT_PWD` to GITHUB secrets
