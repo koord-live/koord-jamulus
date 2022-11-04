@@ -54,7 +54,7 @@ setup() {
         ###################################
         ## Install other deps eg OpenSSL
         ###################################
-        brew install openssl@1.1
+        # brew install openssl@1.1 # 1.1 already installed !
     fi
 }
 
