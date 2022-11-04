@@ -23,6 +23,9 @@ setup() {
     if [[ -d "${QT_DIR}" ]]; then
         echo "Using Qt installation from previous run (actions/cache)"
     else
+        ###############################
+        ## Setup Qt
+        ###############################
         echo "Installing Qt..."
         ## NORMAL QT - which we like
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
@@ -46,6 +49,12 @@ setup() {
         # #    diff -Naur singleapplication_p_orig.cpp singleapplication_p.cpp > macOS_posix.patch
         # patch -u ${GITHUB_WORKSPACE}/singleapplication/singleapplication_p.cpp \
         #     -i ${GITHUB_WORKSPACE}/mac/macOS_posix.patch
+
+
+        ###################################
+        ## Install other deps eg OpenSSL
+        ###################################
+        brew install openssl@1.1
     fi
 }
 

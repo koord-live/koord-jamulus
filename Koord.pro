@@ -149,6 +149,9 @@ win32 {
         -framework Foundation \
         -framework AppKit
 
+    # avoid macOS error: qt.tlsbackend.ossl: Failed to load libssl/libcrypto.
+    LIBS += -L/usr/local/opt/openssl@1.1/lib
+
     # defo use CoreAudio and not Jack
     message(Using CoreAudio.)
     #HEADERS += mac/sound.h
