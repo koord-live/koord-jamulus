@@ -30,9 +30,9 @@
       </Extensions>
     </Application>
     <Application Id="KOORDASIOCONTROL" Executable="Koord\KoordASIOControl.exe" EntryPoint="main">
-      <VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Logo="koordasioicon.png"
-                      Description="KoordASIO Control" SmallLogo="koordasioicon.png" ForegroundText="dark">
-        <SplashScreen Image="koordasioicon.png" />
+      <VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Logo="koordasio-small.png"
+                      Description="KoordASIO Control" SmallLogo="koordasio-small.png" ForegroundText="dark">
+        <SplashScreen Image="koordasio-small.png" />
       </VisualElements>
     </Application>
   </Applications>
