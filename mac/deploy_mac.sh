@@ -146,9 +146,12 @@ build_app_package()
     # Add Qt deployment dependencies
     # we do this here for signed / notarized dmg
     echo ">>> Doing macdeployqt for notarization ..."
+    # Note: "-appstore-compliant" does NOT do any sandbox-enforcing or anything
+    # it just skips certain plugins/modules - useful not to include all of WebEngine!
     macdeployqt "${build_path}/${target_name}.app" \
         -verbose=2 \
         -always-overwrite \
+        -appstore-compliant \
         -sign-for-notarization="${macadhoc_cert_name}" \
         -qmldir="${root_path}/src"
     
