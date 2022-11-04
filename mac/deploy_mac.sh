@@ -163,28 +163,28 @@ build_app_package()
     echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ :"
     ls -al ${build_path}/${target_name}.app/
 
-    ## Copy in OpenSSL 1.x libs and add to Framework eg http://www.dafscollaborative.org/opencv-deploy.html
-    mkdir -p ${build_path}/${target_name}.app/Contents/Frameworks/
-    # Copy in SSL libs - from Homebrew installation 
-    cp /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib ${build_path}/${target_name}.app/Contents/Frameworks/
-    cp /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib ${build_path}/${target_name}.app/Contents/Frameworks/
+    # ## Copy in OpenSSL 1.x libs and add to Framework eg http://www.dafscollaborative.org/opencv-deploy.html
+    # mkdir -p ${build_path}/${target_name}.app/Contents/Frameworks/
+    # # Copy in SSL libs - from Homebrew installation 
+    # cp /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib ${build_path}/${target_name}.app/Contents/Frameworks/
+    # cp /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib ${build_path}/${target_name}.app/Contents/Frameworks/
 
-    # Update Framework registration stuff
-    # Firstly updating IDs:
-    install_name_tool -id @executable_path/../Frameworks/libssl.1.1.dylib \
-        "${build_path}/${target_name}.app/Contents/Frameworks/libssl.1.1.dylib"
-    install_name_tool -id @executable_path/../Frameworks/libcrypto.1.1.dylib \
-        "${build_path}/${target_name}.app/Contents/Frameworks/libcrypto.1.1.dylib"
+    # # Update Framework registration stuff
+    # # Firstly updating IDs:
+    # install_name_tool -id @executable_path/../Frameworks/libssl.1.1.dylib \
+    #     "${build_path}/${target_name}.app/Contents/Frameworks/libssl.1.1.dylib"
+    # install_name_tool -id @executable_path/../Frameworks/libcrypto.1.1.dylib \
+    #     "${build_path}/${target_name}.app/Contents/Frameworks/libcrypto.1.1.dylib"
 
-    # Changing libraries references:
-    install_name_tool -change lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib \
-        "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
-    install_name_tool -change lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib \
-        "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
+    # # Changing libraries references:
+    # install_name_tool -change lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib \
+    #     "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
+    # install_name_tool -change lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib \
+    #     "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
 
-    # # Changing internal libraries cross-references: - necessary ????
-    # install_name_tool -change lib/libopencv_core.2.3.dylib @executable_path/../Frameworks/libopencv_core.2.3.dylib \
-    #     "${build_path}/${target_name}.app/Contents/Frameworks/libopencv_highgui.2.3.dylib"
+    # # # Changing internal libraries cross-references: - necessary ????
+    # # install_name_tool -change lib/libopencv_core.2.3.dylib @executable_path/../Frameworks/libopencv_core.2.3.dylib \
+    # #     "${build_path}/${target_name}.app/Contents/Frameworks/libopencv_highgui.2.3.dylib"
 
 
     # copy app bundle to deploy dir to prep for dmg creation
