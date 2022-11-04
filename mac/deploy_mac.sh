@@ -81,11 +81,15 @@ cleanup() {
 
 build_app_compile_universal()
 {
-    local posix_mode="${1}"
-    if [[ ${posix_mode} == "posixmac" ]]; then
-        EXTRADEFINES="DEFINES+=POSIXMAC"
+    local app_mode="${1}"
+    # DEFINES+=APPSTORE - for switch in main.cpp
+    # CONFIG+=appstore - for switch in qmake proj - entitlements file
+    if [[ ${app_mode} == "appstore" ]]; then
+        EXTRADEFINES="DEFINES+=APPSTORE"
+        EXTRACONFIGS="CONFIG+=appstore"
     else
         EXTRADEFINES=
+        EXTRACONFIGS=
     fi
 
     # We need this in build environment otherwise defaults to webengine!!?
@@ -108,7 +112,7 @@ build_app_compile_universal()
             make -f "${build_path}/Makefile" -C "${build_path}" distclean
         fi
         qmake "${project_path}" -o "${build_path}/Makefile" \
-            "CONFIG+=release" ${EXTRADEFINES} \
+            "CONFIG+=release" ${EXTRACONFIGS} ${EXTRADEFINES} \
             "QMAKE_APPLE_DEVICE_ARCHS=${target_arch}" "QT_ARCH=${target_arch}" \
             "${@:2}"
         make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
@@ -271,7 +275,7 @@ cleanup
 
 ## Build app for DMG Installer
 # compile code
-build_app_compile_universal notposix
+build_app_compile_universal dmgdist
 # build .app/ structure
 build_app_package 
 # create versioned DMG installer image  
@@ -285,9 +289,9 @@ rm -fr "${deploy_path}/*"
 ##FIXME - only necessary due to SingleApplication / Posix problems 
 ## Now build for App Store:
 # use a special preprocessor DEFINE for build-time flagging - avoid SingleApplication if for App Store!
-#   DEFINES+=POSIXMAC
+#   DEFINES+=APPSTORE
 # rebuild code again
-build_app_compile_universal posixmac
+build_app_compile_universal appstore
 # rebuild .app/ structure
 build_app_package 
 # now build pkg for App store upload
