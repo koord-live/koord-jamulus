@@ -123,19 +123,19 @@ Function Pass-EXE-Artifact-to-Job
     echo "::set-output name=artifact_1::${artifact}"
 }
 
-Function Pass-APPX-Artifact-to-Job
+Function Pass-MSIX-Artifact-to-Job
 {
-    $artifact = "Koord_${JamulusVersion}.appx"
+    $artifact = "Koord_${JamulusVersion}.msix"
 
     echo "Copying artifact to ${artifact}"
     # "deploy" is dir of MakeAppx output
 
     # make special dir for store upload
     New-Item -Path  ".\publish" -ItemType Directory
-    # copy .appx artifact to publish/ dir
-    copy ".\deploy\Koord.appx" ".\publish\${artifact}"
+    # copy .msix artifact to publish/ dir
+    copy ".\deploy\Koord.msix" ".\publish\${artifact}"
 
-    move ".\deploy\Koord.appx" ".\deploy\${artifact}"
+    move ".\deploy\Koord.msix" ".\deploy\${artifact}"
     if ( !$? )
     {
         throw "move failed with exit code $LastExitCode"
@@ -159,7 +159,7 @@ switch ( $Stage )
     "get-artifacts"
     {
         Pass-EXE-Artifact-to-Job
-        Pass-APPX-Artifact-to-Job
+        Pass-MSIX-Artifact-to-Job
     }
     default
     {

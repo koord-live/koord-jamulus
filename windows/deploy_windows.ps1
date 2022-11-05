@@ -415,7 +415,7 @@ Function BuildInstaller
          "/DApplicationVersion=${AppVersion}")
 }
 
-# Build APPX / MSIX Package
+# Build MSIX / MSIX Package
 Function BuildAppXPackage
 {
 
@@ -429,7 +429,14 @@ Function BuildAppXPackage
 
     Invoke-Native-Command -Command "MakeAppx" `
         -Arguments ("pack", "/nv", "/d", "${DeployPath}\x86_64\", `
-        "/p", "${DeployPath}\Koord.appx")
+        "/p", "${DeployPath}\Koord.msix")
+
+    ## Make app package upload
+    # mkdir bundle
+    # cp Koord.msix bundle/
+    # cd bundle
+    # zip * somearchivename.zip
+    # mv somearchivename.zip somearchivename.msixupload
 
 }
 
@@ -439,7 +446,7 @@ Function SignAppx
         -Arguments ("sign", "/a", "/f", "signingCert.pfx", `
         "/p", "passwordhere", `
         "/fd", "SHA256", `
-        "filepath.appx")
+        "filepath.msix")
 }
 
 Function SignExe

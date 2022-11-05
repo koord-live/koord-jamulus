@@ -1,39 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" xmlns:desktop7="http://schemas.microsoft.com/appx/manifest/desktop/windows10/7" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap3 uap10 desktop7 rescap">
+  <!--Package created by MSIX Packaging Tool version: 1.2022.802.0-->
   <Identity Name="Koord.KoordRT" 
-            Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C"
-            Version="4.0.26.0"
+            Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C" 
+            Version="4.0.26.0" 
             ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>Koord</DisplayName>
     <PublisherDisplayName>Koord</PublisherDisplayName>
     <Description>Play live online in real-time with other musicians</Description>
     <Logo>mainicon.png</Logo>
+    <uap10:PackageIntegrity>
+      <uap10:Content Enforcement="on" />
+    </uap10:PackageIntegrity>
   </Properties>
-  <Prerequisites>
-    <OSMinVersion>10.0.17763</OSMinVersion>
-    <OSMaxVersionTested>10.0.17763</OSMaxVersionTested>
-  </Prerequisites>
   <Resources>
     <Resource Language="en-us" />
   </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22000.1" />
+  </Dependencies>
   <Applications>
-    <Application Id="KOORD" Executable="Koord\Koord.exe" EntryPoint="main">
-      <VisualElements BackgroundColor="transparent" DisplayName="Koord" Logo="mainicon.png" 
-                      Description="Koord Cloud Rehearsals" SmallLogo="mainicon_small.png" ForegroundText="dark">
-        <SplashScreen Image="krt_logo.png" />
+    <Application Id="KOORD" Executable="Koord\Koord.exe" EntryPoint="Windows.FullTrustApplication">
+      <VisualElements BackgroundColor="transparent" DisplayName="Koord App" 
+                            Logo="mainicon.png"  SmallLogo="mainicon_small.png"
+                             Description="Koord App">
       </VisualElements>
       <Extensions>
         <Extension Category="windows.protocol">
-          <Protocol Name="koord" />
+          <Protocol Name="koord" Parameters="&quot;%1&quot;">
+            <DisplayName>koord</DisplayName>
+            <Logo>mainicon.png</Logo>
+          </Protocol>
         </Extension>
       </Extensions>
     </Application>
-    <Application Id="KOORDASIOCONTROL" Executable="Koord\KoordASIOControl.exe" EntryPoint="main">
-      <VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Logo="koordasio-small.png"
-                      Description="KoordASIO Control" SmallLogo="koordasio-small.png" ForegroundText="dark">
-        <SplashScreen Image="koordasio-small.png" />
+    <Application Id="KOORDASIOCONTROL" Executable="Koord\KoordASIOControl.exe" EntryPoint="Windows.FullTrustApplication">
+      <VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" 
+                            Logo="koordasio-small.png" SmallLogo="koordasio-small.png"
+                            Description="KoordASIO Control">
       </VisualElements>
     </Application>
   </Applications>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
 </Package>

@@ -228,7 +228,7 @@ jobs:
           #   is_main_build_target:   true
           #   xcode_version:          14.0.1
 
-          - config_name:            Windows 10+ - exe/appx/Store
+          - config_name:            Windows 10+ - exe/msix
             target_os:              windows
             building_on_os:         windows-2022
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
@@ -413,7 +413,7 @@ jobs:
           asset_content_type:       application/octet-stream
 
       ## In general, "Artifact 2" should be for Store upload only - do not put into Release
-      ## ... but for now we need Windows appx as artifact for manual upload to Store :/
+      ## ... but for now we need Windows msix as artifact for manual upload to Store :/
       - name:                       Upload Artifact 2 to Release
         if:                         >-
                                     steps.get-artifacts.outputs.artifact_2 != '' &&
@@ -493,10 +493,10 @@ jobs:
           status:                   completed
 
       ## RELEASE PROCEDURE FOR:
-      ## - Windows Store - appx
+      ## - Windows Store - msix
       ## TEMP DISABLE WHILE WORKING OUT PARTNER / DEV account stuff: 
       ## See: https://github.com/isaacrlevin/windows-store-action#prerequisites
-      # - name:                       Publish appx Windows build to Store
+      # - name:                       Publish msix Windows build to Store
       #   if:                         >-
       #                               needs.create_release.outputs.publish_to_release == 'true' &&
       #                               matrix.config.target_os == 'windows'
