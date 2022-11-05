@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" xmlns:desktop7="http://schemas.microsoft.com/appx/manifest/desktop/windows10/7" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap3 uap10 desktop7 rescap">
   <!--Package created by MSIX Packaging Tool version: 1.2022.802.0-->
-  <Identity Name="Koord.KoordRT" 
-            Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C" 
-            Version="4.0.26.0" 
-            ProcessorArchitecture="x64" />
+  <Identity Name="Koord.KoordRT" Publisher="CN=2796F390-26AF-4354-BBB9-BD8D6E09CB7C" Version="4.0.15.0" ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>Koord</DisplayName>
     <PublisherDisplayName>Koord</PublisherDisplayName>
@@ -22,24 +19,21 @@
   </Dependencies>
   <Applications>
     <Application Id="KOORD" Executable="Koord\Koord.exe" EntryPoint="Windows.FullTrustApplication">
-      <VisualElements BackgroundColor="transparent" DisplayName="Koord App" 
-                            Logo="mainicon.png"  SmallLogo="mainicon_small.png"
+      <uap:VisualElements BackgroundColor="transparent" DisplayName="Koord App" Logo="mainicon.png"  SmallLogo="mainicon_small.png"
                              Description="Koord App">
-      </VisualElements>
+      </uap:VisualElements>
       <Extensions>
-        <Extension Category="windows.protocol">
-          <Protocol Name="koord" Parameters="&quot;%1&quot;">
-            <DisplayName>koord</DisplayName>
-            <Logo>mainicon.png</Logo>
-          </Protocol>
-        </Extension>
+        <uap3:Extension Category="windows.protocol">
+          <uap3:Protocol Name="koord" Parameters="&quot;%1&quot;">
+            <uap:DisplayName>koord</uap:DisplayName>
+            <uap:Logo>mainicon.png</uap:Logo>
+          </uap3:Protocol>
+        </uap3:Extension>
       </Extensions>
     </Application>
     <Application Id="KOORDASIOCONTROL" Executable="Koord\KoordASIOControl.exe" EntryPoint="Windows.FullTrustApplication">
-      <VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" 
-                            Logo="koordasio-small.png" SmallLogo="koordasio-small.png"
-                            Description="KoordASIO Control">
-      </VisualElements>
+      <uap:VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Logo="koordasio-small.png" SmallLogo="koordasio-small.png" Description="KoordASIO Control">
+      </uap:VisualElements>
     </Application>
   </Applications>
   <Capabilities>
