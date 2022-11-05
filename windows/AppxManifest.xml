@@ -11,8 +11,8 @@
     <Logo>mainicon.png</Logo>
   </Properties>
   <Prerequisites>
-    <OSMinVersion>10.0.17763.0</OSMinVersion>
-    <OSMaxVersionTested>10.0.22000.0</OSMaxVersionTested>
+    <OSMinVersion>10.0.17763</OSMinVersion>
+    <OSMaxVersionTested>10.0.22000</OSMaxVersionTested>
   </Prerequisites>
   <Resources>
     <Resource Language="en-us" />
