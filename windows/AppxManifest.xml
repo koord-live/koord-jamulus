@@ -18,7 +18,7 @@
     <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22000.1" />
   </Dependencies>
   <Applications>
-    <Application Id="KOORD" Executable="Koord\Koord.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="KOORD" Executable="Koord.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements BackgroundColor="transparent" DisplayName="Koord App" Square150x150Logo="KOORD-Square150x150Logo.png" Square44x44Logo="KOORD-Square44x44Logo.png"
                              Description="Koord App">
         <uap:DefaultTile Wide310x150Logo="KOORD-Wide310x150Logo.png" Square310x310Logo="KOORD-Square310x310Logo.png" Square71x71Logo="KOORD-Square71x71Logo.png" />
@@ -32,7 +32,7 @@
         </uap3:Extension>
       </Extensions>
     </Application>
-    <Application Id="KOORDASIOCONTROL" Executable="Koord\KoordASIOControl.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="KOORDASIOCONTROL" Executable="KoordASIOControl.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements BackgroundColor="transparent" DisplayName="KoordASIO Control" Square150x150Logo="KOORDASIOCONTROL-Square150x150Logo.png" Square44x44Logo="KOORDASIOCONTROL-Square44x44Logo.png" Description="KoordASIO Control">
         <uap:DefaultTile Wide310x150Logo="KOORDASIOCONTROL-Wide310x150Logo.png" Square310x310Logo="KOORDASIOCONTROL-Square310x310Logo.png" Square71x71Logo="KOORDASIOCONTROL-Square71x71Logo.png" />
       </uap:VisualElements>
