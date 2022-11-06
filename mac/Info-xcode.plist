@@ -30,6 +30,8 @@
 	<string>mac-mainicon.icns</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Koord - Created with QT</string>
+	<key>ITSAppUsesNonExemptEncryption</key>  
+	<false/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSMicrophoneUsageDescription</key>
