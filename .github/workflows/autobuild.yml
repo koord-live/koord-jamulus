@@ -211,14 +211,14 @@ jobs:
           # # #   base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux.sh
           # # #   run_codeql:             false
 
-          # - config_name:            MacOS 10.15 - dmg+AppStore
-          #   target_os:              macos
-          #   building_on_os:         macos-12
-          #   base_command:           QT_VERSION=6.4.0 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
-          #   # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
-          #   run_codeql:             false
-          #   is_main_build_target:   true
-          #   xcode_version:          14.0.1
+          - config_name:            MacOS 10.15 - dmg+AppStore
+            target_os:              macos
+            building_on_os:         macos-12
+            base_command:           QT_VERSION=6.3.2 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
+            # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
+            run_codeql:             false
+            is_main_build_target:   true
+            xcode_version:          14.0.1
 
           # - config_name:            iOS 10.13 - AppStore
           #   target_os:              ios
@@ -228,12 +228,12 @@ jobs:
           #   is_main_build_target:   true
           #   xcode_version:          14.0.1
 
-          - config_name:            Windows 10+ - exe+msix
-            target_os:              windows
-            building_on_os:         windows-2022
-            base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
-            run_codeql:             false
-            is_main_build_target:   true
+          # - config_name:            Windows 10+ - exe+msix
+          #   target_os:              windows
+          #   building_on_os:         windows-2022
+          #   base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
+          #   run_codeql:             false
+          #   is_main_build_target:   true
 
         # This injects the build_all_targets information into each matrix output:
         build_all_targets:
