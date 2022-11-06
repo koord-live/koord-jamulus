@@ -316,6 +316,19 @@ jobs:
           asset_name:               ${{ steps.get-artifacts.outputs.artifact_2 }}
           asset_content_type:       application/octet-stream
 
+      ## RELEASE PROCEDURE FOR: macOS App Store - storesigned pkg
+      - name:                       Validate and Upload macOS Storesign Pkg
+        if:                         >-
+                                    steps.build.outputs.macos_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
+        id:                         macos_validate_upload
+        run:                        ${{ matrix.config.base_command }} validate_and_upload
+        env:
+          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
         uses:                       github/codeql-action/analyze@v1
