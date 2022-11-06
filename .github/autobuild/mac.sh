@@ -94,6 +94,22 @@ pass_artifact_to_job() {
     fi
 }
 
+valid8_n_upload() {
+    echo ">>> Processing validation and upload..."
+    # test the signature of package
+    pkgutil --check-signature "${ARTIFACT_PATH}"
+    # attempt validate and then upload of pkg file, using previously-made keychain item
+    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+
+    ## altool is deprecated - migrate soon to using notarytool eg:
+    # xcrun notarytool submit "${ARTIFACT_PATH}" \
+    #     --keychain-profile "AC_PASSWORD" \
+    #     --wait
+    # #    --webhook "https://example.com/notarization"
+
+}
+
 case "${1:-}" in
     setup)
         setup
