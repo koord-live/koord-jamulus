@@ -133,23 +133,23 @@ pass_artifacts_to_job() {
         local artifact_1="Koord_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
         echo "Moving headless build artifact to deploy/${artifact_1}"
         mv ../koord-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_1}"
-        echo "::set-output name=artifact_1::${artifact_1}"
+        echo "artifact_1=${artifact_1}" >> "$GITHUB_OUTPUT"
 
         local artifact_2="Koord_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
         echo "Moving regular build artifact to deploy/${artifact_2}"
         mv ../koord*_"${TARGET_ARCH}.deb" "./deploy/${artifact_2}"
-        echo "::set-output name=artifact_2::${artifact_2}"
+        echo "artifact_2=${artifact_2}" >> "$GITHUB_OUTPUT"
     else        
         local artifact_1="Koord_${JAMULUS_BUILD_VERSION}.AppImage"
         echo "Moving regular build artifact to deploy/${artifact_1}"
         mv gui_appimage/*appimage "./deploy/${artifact_1}"
-        echo "::set-output name=artifact_1::${artifact_1}"
+        echo "artifact_1=${artifact_1}" >> "$GITHUB_OUTPUT"
 
         if [ -f headless_appimage/*appimage ]; then
             local artifact_2="Koord_headless_${JAMULUS_BUILD_VERSION}.AppImage"
             echo "Moving headless build artifact to deploy/${artifact_2}"
             mv headless_appimage/*appimage "./deploy/${artifact_2}"
-            echo "::set-output name=artifact_2::${artifact_2}"
+            echo "artifact_2=${artifact_2}" >> "$GITHUB_OUTPUT"
         fi
 
     fi

@@ -64,7 +64,7 @@ pass_artifacts_to_job() {
     mv -v ${GITHUB_WORKSPACE}/qt_mac_${QT_VERSION}_posix.tar.gz ${GITHUB_WORKSPACE}/deploy/qt_mac_${QT_VERSION}_posix.tar.gz
 
     echo ">>> Setting output as such: name=artifact_1::qt_mac_${QT_VERSION}_posix.tar.gz"
-    echo "::set-output name=artifact_1::qt_mac_${QT_VERSION}_posix.tar.gz"
+    echo "artifact_1=qt_mac_${QT_VERSION}_posix.tar.gz" >> "$GITHUB_OUTPUT"
 
 }
 

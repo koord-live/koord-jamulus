@@ -189,7 +189,7 @@ pass_artifact_to_job() {
     echo ">>> Moved .aab file to deploy/${artifact}"
     echo ">>> Artifact number is: ${NUM}"
     echo ">>> Setting output as such: name=artifact_${NUM}::${artifact}"
-    echo "::set-output name=artifact_${NUM}::${artifact}"
+    echo "artifact_${NUM}=${artifact}" >> "$GITHUB_OUTPUT"
 }
 
 case "${1:-}" in

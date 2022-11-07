@@ -77,7 +77,8 @@ prepare_signing() {
     # cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
     # Tell Github Workflow that we need to validate and upload
-    echo "::set-output name=ios_signed::true"
+    echo "ios_signed=true" >> "$GITHUB_OUTPUT"
+    
     return 0
 }
 
@@ -102,12 +103,12 @@ pass_artifact_to_job() {
         # echo "Moving build artifact to deploy/${artifact}"
         # mkdir -p deploy
         # mv ./build/Koord.ipa ./deploy/Koord.ipa
-        # echo "::set-output name=artifact_1::Koord.ipa"
+        # echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
     else
         local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_unsigned.ipa"
         echo "Moving build artifact to deploy/${artifact}"
         mv ./deploy/Koord_*.ipa "./deploy/${artifact}"
-        echo "::set-output name=artifact_1::${artifact}"
+        echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
     fi
 
 }

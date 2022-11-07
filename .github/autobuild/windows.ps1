@@ -120,7 +120,7 @@ Function Pass-EXE-Artifact-to-Job
         throw "move failed with exit code $LastExitCode"
     }
     echo "Setting Github step output name=artifact_1::${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    echo "artifact_1=${artifact}" >> "$Env:GITHUB_OUTPUT"
 }
 
 Function Pass-MSIX-Artifact-to-Job
@@ -141,7 +141,7 @@ Function Pass-MSIX-Artifact-to-Job
         throw "move failed with exit code $LastExitCode"
     }
     echo "Setting Github step output name=artifact_2::${artifact}"
-    echo "::set-output name=artifact_2::${artifact}"
+    echo "artifact_2=${artifact}" >> "$Env:GITHUB_OUTPUT"
 }
 
 switch ( $Stage )

@@ -73,9 +73,6 @@ cleanup() {
 #     local job_count
 #     job_count=$(sysctl -n hw.ncpu)
 
-#     # Get Jamulus version
-#     local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
-
 #     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 # }
 
@@ -190,7 +187,7 @@ build_app_package()
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
     # must use -R to preserve symbolic links
-    # cp -R "${build_path}/${target_name}.app" "${deploy_path}"
+    cp -R "${build_path}/${target_name}.app" "${deploy_path}"
 
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
@@ -226,10 +223,10 @@ build_installer_pkg()
     productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
         --component "${build_path}_storesign/${target_name}.app" \
         /Applications \
-        "${build_path}_storesign/Koord_${app_version}.pkg"  
+        "${build_path}_storesign/Koord_${JAMULUS_BUILD_VERSION}.pkg"  
 
     # move created pkg file to prep for download
-    mv "${build_path}_storesign/Koord_${app_version}.pkg" "${deploypkg_path}"
+    mv "${build_path}_storesign/Koord_${JAMULUS_BUILD_VERSION}.pkg" "${deploypkg_path}"
 }
 
 build_disk_image()
@@ -241,10 +238,6 @@ build_disk_image()
     # Download and later install. This is done to make caching possible
     brew_install_pinned "create-dmg" "1.1.0"
 
-    # Get Jamulus version
-    local app_version
-    app_version=$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")
-
     # try and test signature of bundle before build
     echo ">>> Testing signature of bundle ...." 
     codesign -vvv --deep --strict "${build_path}/Koord.app/"
@@ -254,14 +247,14 @@ build_disk_image()
       --volname "${client_target_name} Installer" \
       --background "${resources_path}/MacInstallerBanner.png" \
       --window-pos 200 400 \
-      --window-size 925 345 \
+      --window-size 950 370 \
       --app-drop-link 820 210 \
       --text-size 12 \
       --icon-size 72 \
       --icon "${client_target_name}.app" 630 210 \
       --eula "${root_path}/COPYING" \
-      "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
-      "${build_path}/"
+      "${deploy_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
+      "${deploy_path}/"
 }
 
 brew_install_pinned() {
@@ -307,8 +300,8 @@ build_disk_image "${CLIENT_TARGET_NAME}"
 
 # Cleanup - make clean
 make -f "${build_path}/Makefile" -C "${build_path}" distclean
-# Clean deploy dir
-rm -fr "${deploy_path}/*"
+# Clean deploy dir of app bundle dir - leave dmg build
+rm -fr "${deploy_path}/*.app"
 
 ##FIXME - only necessary due to SingleApplication / Posix problems 
 ## Now build for App Store:

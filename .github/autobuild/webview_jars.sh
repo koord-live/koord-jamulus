@@ -102,15 +102,14 @@ pass_artifacts_to_job() {
     mv -v $HOME/qt6_x86/jar/QtAndroidWebView.jar ${GITHUB_WORKSPACE}/deploy/QtAndroidWebView_x86.jar
     mv -v $HOME/qt6_x86_64/jar/QtAndroidWebView.jar ${GITHUB_WORKSPACE}/deploy/QtAndroidWebView_x86_64.jar
 
-
     echo ">>> Setting output as such: name=artifact_1::QtAndroidWebView_armeabi-v7a.jar"
-    echo "::set-output name=artifact_1::QtAndroidWebView_armeabi-v7a.jar"
+    echo "artifact_1=QtAndroidWebView_armeabi-v7a.jar" >> "$GITHUB_OUTPUT"
     echo ">>> Setting output as such: name=artifact_2::QtAndroidWebView_arm64-v8a.jar"
-    echo "::set-output name=artifact_2::QtAndroidWebView_arm64-v8a.jar"
+    echo "artifact_2=QtAndroidWebView_arm64-v8a.jar" >> "$GITHUB_OUTPUT"
     echo ">>> Setting output as such: name=artifact_3::QtAndroidWebView_x86.jar"
-    echo "::set-output name=artifact_3::QtAndroidWebView_x86.jar"
+    echo "artifact_3=QtAndroidWebView_x86.jar" >> "$GITHUB_OUTPUT"
     echo ">>> Setting output as such: name=artifact_4::QtAndroidWebView_x86_64.jar"
-    echo "::set-output name=artifact_4::QtAndroidWebView_x86_64.jar"
+    echo "artifact_4=QtAndroidWebView_x86_64.jar" >> "$GITHUB_OUTPUT"
 }
 
 case "${1:-}" in

@@ -124,7 +124,7 @@ prepare_signing() {
     #            --password "${KEYCHAIN_PASSWORD}"
 
     # Tell Github Workflow that we need notarization & stapling:
-    echo "::set-output name=macos_signed::true"
+    echo "macos_signed=true" >> "$GITHUB_OUTPUT"
     return 0
 }
 
@@ -148,13 +148,13 @@ pass_artifact_to_job() {
     artifact="Koord_${JAMULUS_BUILD_VERSION}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Koord-*installer-mac.dmg "./deploy/${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
     artifact2="Koord_${JAMULUS_BUILD_VERSION}_mac_storesign.pkg"
     if [ -f ./deploypkg/Koord*.pkg ]; then
         echo "Moving build artifact2 to deploy/${artifact2}"
         mv ./deploypkg/Koord*.pkg "./deploy/${artifact2}"
-        echo "::set-output name=artifact_2::${artifact2}"
+        echo "artifact_2=${artifact2}" >> "$GITHUB_OUTPUT"
     fi
 }
 
