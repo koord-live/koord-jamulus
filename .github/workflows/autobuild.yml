@@ -266,7 +266,6 @@ jobs:
           retention-days:           31
           if-no-files-found:        error
 
-      #NOTE: not doing auto notarize/staple for now
       - name:                       Notarize macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&

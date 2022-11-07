@@ -68,9 +68,6 @@ build_app()
     local job_count
     job_count=$(sysctl -n hw.ncpu)
 
-    # Get Jamulus version
-    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
-
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
     # Add Qt deployment dependencies
@@ -91,10 +88,10 @@ build_app()
         macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
         
         # Create pkg installer and sign for App Store submission
-        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${app_version}.pkg"        
+        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg"        
     
         # move created pkg file to prep for download
-        mv "${build_path}/Jamulus_${app_version}.pkg" "${deploy_path}"
+        mv "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg" "${deploy_path}"
     fi
 
     # move app bundle to prep for dmg creation
@@ -126,10 +123,6 @@ build_installer_image()
     # Download and later install. This is done to make caching possible
     brew_install_pinned "create-dmg" "1.0.9"
 
-    # Get Jamulus version
-    local app_version
-    app_version=$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")
-
     # Build installer image
 
     create-dmg \
@@ -143,7 +136,7 @@ build_installer_image()
       --icon "${client_target_name}.app" 630 210 \
       --icon "${server_target_name}.app" 530 210 \
       --eula "${root_path}/COPYING" \
-      "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
+      "${deploy_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
       "${deploy_path}/"
 }
 
