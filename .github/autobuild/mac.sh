@@ -147,7 +147,7 @@ build_app_and_packages() {
 pass_artifact_to_job() {
     artifact="Koord_${JAMULUS_BUILD_VERSION}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
-    mv ./deploy/Koord-*installer-mac.dmg "./deploy/${artifact}"
+    mv ./deploypkg/Koord-*installer-mac.dmg "./deploy/${artifact}"
     echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
     artifact2="Koord_${JAMULUS_BUILD_VERSION}_mac_storesign.pkg"

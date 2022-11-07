@@ -187,7 +187,7 @@ build_app_package()
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
     # must use -R to preserve symbolic links
-    cp -R "${build_path}/${target_name}.app" "${deploy_path}"
+    cp -R ${build_path}/${target_name}.app/ ${deploy_path}/
 
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
@@ -253,7 +253,7 @@ build_disk_image()
       --icon-size 72 \
       --icon "${client_target_name}.app" 630 210 \
       --eula "${root_path}/COPYING" \
-      "${deploy_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
+      "${deploypkg_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
       "${deploy_path}/"
 }
 
@@ -299,9 +299,12 @@ build_app_package
 build_disk_image "${CLIENT_TARGET_NAME}"
 
 # Cleanup - make clean
+echo ">>> DOING distclean ..."
 make -f "${build_path}/Makefile" -C "${build_path}" distclean
 # Clean deploy dir of app bundle dir - leave dmg build
-rm -fr "${deploy_path}/*.app"
+echo ">>> DELETING ${deploy_path}/*"
+ls -al  "${deploy_path}/"
+rm -fr "${deploy_path}/*"
 
 ##FIXME - only necessary due to SingleApplication / Posix problems 
 ## Now build for App Store:
