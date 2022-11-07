@@ -84,13 +84,13 @@ pass_artifact_to_job() {
     artifact="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
     artifact2="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
     if [ -f ./deploy/Jamulus_*.pkg ]; then
         echo "Moving build artifact2 to deploy/${artifact2}"
         mv ./deploy/Jamulus_*.pkg "./deploy/${artifact2}"
-        echo "::set-output name=artifact_2::${artifact2}"
+        echo "artifact_2=${artifact2}" >> "$GITHUB_OUTPUT"
     fi
 }
 
