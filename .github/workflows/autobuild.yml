@@ -341,6 +341,7 @@ jobs:
           NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
+          APPLE_TEAM_ID:                  "TXZ4FR95HG"
 
       - name:                       Post-Build for ${{ matrix.config.config_name }}
         id:                         get-artifacts

@@ -171,8 +171,8 @@ valid8_n_upload() {
     #     --keychain-profile "AC_PASSWORD" \
     #     --wait
     xcrun notarytool submit "${ARTIFACT_PATH}" \
-        --apple-id "contact@koord.live" \
-        --team-id "TXZ4FR95HG" \
+        --apple-id $NOTARIZATION_USERNAME \
+        --team-id $APPLE_TEAM_ID \
         --password $NOTARIZATION_PASSWORD \
         --wait
     #    --webhook "https://example.com/notarization"
