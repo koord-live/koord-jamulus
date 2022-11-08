@@ -140,15 +140,15 @@ build_app_package()
     # local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
 
     # copy in provisioning profile - BEFORE codesigning with macdeployqt
-    echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
-    cp ~/embedded.provisionprofile_adhoc ${build_path}/${target_name}.app/Contents/embedded.provisionprofile
+    echo ">>> Adding embedded.provisionprofile to ${build_path}/${client_target_name}.app/Contents/"
+    cp ~/embedded.provisionprofile_adhoc ${build_path}/${client_target_name}.app/Contents/embedded.provisionprofile
 
     # Add Qt deployment dependencies
     # we do this here for signed / notarized dmg
     echo ">>> Doing macdeployqt for notarization ..."
     # Note: "-appstore-compliant" does NOT do any sandbox-enforcing or anything
     # it just skips certain plugins/modules - useful not to include all of WebEngine!
-    macdeployqt "${build_path}/${target_name}.app" \
+    macdeployqt "${build_path}/${client_target_name}.app" \
         -verbose=2 \
         -always-overwrite \
         -appstore-compliant \
@@ -156,44 +156,41 @@ build_app_package()
         -qmldir="${root_path}/src"
     
     # debug:
-    echo ">>> BUILD FINISHED. Listing of ${build_path}/${target_name}.app/ :"
-    ls -al ${build_path}/${target_name}.app/
+    echo ">>> BUILD FINISHED. Listing of ${build_path}/${client_target_name}.app/ :"
+    ls -al ${build_path}/${client_target_name}.app/
 
     # ## Copy in OpenSSL 1.x libs and add to Framework eg http://www.dafscollaborative.org/opencv-deploy.html
-    # mkdir -p ${build_path}/${target_name}.app/Contents/Frameworks/
+    # mkdir -p ${build_path}/${client_target_name}.app/Contents/Frameworks/
     # # Copy in SSL libs - from Homebrew installation 
-    # cp /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib ${build_path}/${target_name}.app/Contents/Frameworks/
-    # cp /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib ${build_path}/${target_name}.app/Contents/Frameworks/
+    # cp /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib ${build_path}/${client_target_name}.app/Contents/Frameworks/
+    # cp /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib ${build_path}/${client_target_name}.app/Contents/Frameworks/
 
-    # # Update Framework registration stuff
+    # # Update Framework registration stuff - to fix libcrypto/libssl errors - not working yet
     # # Firstly updating IDs:
     # install_name_tool -id @executable_path/../Frameworks/libssl.1.1.dylib \
-    #     "${build_path}/${target_name}.app/Contents/Frameworks/libssl.1.1.dylib"
+    #     "${build_path}/${client_target_name}.app/Contents/Frameworks/libssl.1.1.dylib"
     # install_name_tool -id @executable_path/../Frameworks/libcrypto.1.1.dylib \
-    #     "${build_path}/${target_name}.app/Contents/Frameworks/libcrypto.1.1.dylib"
+    #     "${build_path}/${client_target_name}.app/Contents/Frameworks/libcrypto.1.1.dylib"
 
     # # Changing libraries references:
     # install_name_tool -change lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib \
-    #     "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
+    #     "${build_path}/${client_target_name}.app/Contents/MacOS/${client_target_name}"
     # install_name_tool -change lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib \
-    #     "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
+    #     "${build_path}/${client_target_name}.app/Contents/MacOS/${client_target_name}"
 
     # # # Changing internal libraries cross-references: - necessary ????
     # # install_name_tool -change lib/libopencv_core.2.3.dylib @executable_path/../Frameworks/libopencv_core.2.3.dylib \
-    # #     "${build_path}/${target_name}.app/Contents/Frameworks/libopencv_highgui.2.3.dylib"
-
+    # #     "${build_path}/${client_target_name}.app/Contents/Frameworks/libopencv_highgui.2.3.dylib"
 
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
     # must use -R to preserve symbolic links
-    cp -R ${build_path}/${target_name}.app ${deploy_path}
-    echo ">>> COPY TO DEPLOY_DIR FINISHED. Listing of ${deploy_path}/${target_name}.app :"
-    ls -al ${deploy_path}/${target_name}.app
+    cp -R ${build_path}/${client_target_name}.app ${deploy_path}
+    echo ">>> COPY TO DEPLOY_DIR FINISHED. Listing of ${deploy_path}/${client_target_name}.app :"
+    ls -al ${deploy_path}/${client_target_name}.app
 
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
-
-    # CLIENT_TARGET_NAME="${target_name}"
 }
 
 build_installer_pkg() 
@@ -305,7 +302,7 @@ build_disk_image
 echo ">>> DOING distclean ..."
 make -f "${build_path}/Makefile" -C "${build_path}" distclean
 # Clean deploy dir of app bundle dir - leave dmg build
-echo ">>> DELETING ${deploy_path}/*"
+echo ">>> DELETING ${deploy_path}/${client_target_name}.app/"
 ls -al  "${deploy_path}/"
 rm -fr "${deploy_path}/${client_target_name}.app"
 
