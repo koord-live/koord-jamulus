@@ -187,9 +187,9 @@ build_app_package()
     # copy app bundle to deploy dir to prep for dmg creation
     # leave original in place for pkg signing if necessary 
     # must use -R to preserve symbolic links
-    cp -R ${build_path}/${target_name}.app/ ${deploy_path}/
-    echo ">>> COPY TO DEPLOY_DIR FINISHED. Listing of ${deploy_path}/${target_name}.app/ :"
-    ls -al ${deploy_path}/${target_name}.app/
+    cp -R ${build_path}/${target_name}.app ${deploy_path}
+    echo ">>> COPY TO DEPLOY_DIR FINISHED. Listing of ${deploy_path}/${target_name}.app :"
+    ls -al ${deploy_path}/${target_name}.app
 
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
@@ -253,7 +253,7 @@ build_disk_image()
       --app-drop-link 820 210 \
       --text-size 12 \
       --icon-size 72 \
-      --icon "${deploy_path}/${client_target_name}.app" 630 210 \
+      --icon "${client_target_name}.app" 630 210 \
       --eula "${root_path}/COPYING" \
       "${deploypkg_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
       "${deploy_path}/"
