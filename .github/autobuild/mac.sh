@@ -96,10 +96,6 @@ prepare_signing() {
     # adhoc pp corresponds to mac_adhoc_cert for dmg installer adhoc distribution
     echo -n "${MAC_PROV_PROF_ADHOC}" | base64 --decode > ~/embedded.provisionprofile_adhoc
 
-    # ## apply provisioning profile - yes or no?
-    # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-    # cp ~/embedded.prov*  ~/Library/MobileDevice/Provisioning\ Profiles
-
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
@@ -110,18 +106,9 @@ prepare_signing() {
     security import macadhoc_certificate.p12 -k build.keychain -P "${MAC_ADHOC_CERT_PWD}" -A -T /usr/bin/codesign 
     security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERT_PWD}" -A -T /usr/bin/codesign
     security import macinst_certificate.p12 -k build.keychain -P "${MACAPP_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
-    # # add notarization/validation/upload password to keychain
-    # xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+
     # allow the default keychain access to cli utilities
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
-    # set lock timeout on keychain to 6 hours - possibly optional
-    # security set-keychain-settings -lut 21600
-
-    # # Store PW for notarization
-    # xcrun notarytool store-credentials "AC_PASSWORD" \
-    #            --apple-id $NOTARIZATION_USERNAME \
-    #            --team-id TXZ4FR95HG \
-    #            --password "${KEYCHAIN_PASSWORD}"
 
     # Tell Github Workflow that we need notarization & stapling:
     echo "macos_signed=true" >> "$GITHUB_OUTPUT"
@@ -133,7 +120,7 @@ build_app_and_packages() {
     ## For normal Qt:
     export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${PATH}"
     ## For POSIX Qt:
-    # export PATH="${QT_DIR}/bin:${PATH}"
+    # export PATH="${QT_POSIX_DIR}/bin:${PATH}"
 
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
