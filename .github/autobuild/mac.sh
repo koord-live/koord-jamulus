@@ -115,7 +115,7 @@ prepare_signing() {
     # allow the default keychain access to cli utilities
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
     # set lock timeout on keychain to 6 hours - possibly optional
-    security set-keychain-settings -lut 21600
+    # security set-keychain-settings -lut 21600
 
     # # Store PW for notarization
     # xcrun notarytool store-credentials "AC_PASSWORD" \
@@ -163,14 +163,19 @@ valid8_n_upload() {
     # test the signature of package
     pkgutil --check-signature "${ARTIFACT_PATH}"
     # attempt validate and then upload of pkg file, using previously-made keychain item
-    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    # xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
+    # xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
 
     # ## Using notarytool:
     # xcrun notarytool submit "${ARTIFACT_PATH}" \
     #     --keychain-profile "AC_PASSWORD" \
     #     --wait
-    # #    --webhook "https://example.com/notarization"
+    xcrun notarytool submit "${ARTIFACT_PATH}" \
+        --apple-id "contact@koord.live" \
+        --team-id "TXZ4FR95HG" \
+        --password $NOTARIZATION_PASSWORD \
+        --wait
+    #    --webhook "https://example.com/notarization"
 
 }
 
