@@ -321,12 +321,13 @@ jobs:
                                     steps.build.outputs.macos_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
         id:                         macos_validate_upload
-        run:                        ${{ matrix.config.base_command }} validate_and_upload
+        run:                        ${{ matrix.config.base_command }} appstore-submit
         env:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
           NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          APPLE_TEAM_ID:            XXXXXXXXXXX
 
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql

@@ -59,8 +59,6 @@ prepare_signing() {
     security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
     security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
-    # set lock timeout on keychain to 6 hours - possibly optional
-    security set-keychain-settings -lut 21600
 
     # Tell Github Workflow that we need notarization & stapling:
     echo "::set-output name=macos_signed::true"
@@ -94,20 +92,16 @@ pass_artifact_to_job() {
     fi
 }
 
-valid8_n_upload() {
-    echo ">>> Processing validation and upload..."
+appstore_submit() {
+    echo "Submitting package to AppStore Connect..."
     # test the signature of package
     pkgutil --check-signature "${ARTIFACT_PATH}"
-    # attempt validate and then upload of pkg file, using previously-made keychain item
-    xcrun altool --validate-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-    xcrun altool --upload-app -f "${ARTIFACT_PATH}" -t macos -u $NOTARIZATION_USERNAME -p $NOTARIZATION_PASSWORD
-
-    ## altool is deprecated - migrate soon to using notarytool eg:
-    # xcrun notarytool submit "${ARTIFACT_PATH}" \
-    #     --keychain-profile "AC_PASSWORD" \
-    #     --wait
-    # #    --webhook "https://example.com/notarization"
-
+    
+    xcrun notarytool submit "${ARTIFACT_PATH}" \
+        --apple-id $NOTARIZATION_USERNAME \
+        --team-id $APPLE_TEAM_ID \
+        --password $NOTARIZATION_PASSWORD \
+        --wait
 }
 
 case "${1:-}" in
@@ -119,6 +113,9 @@ case "${1:-}" in
         ;;
     get-artifacts)
         pass_artifact_to_job
+        ;;
+    appstore-submit)
+        appstore_submit
         ;;
     *)
         echo "Unknown stage '${1:-}'"
