@@ -244,7 +244,7 @@ build_disk_image()
       --volname "${client_target_name} Installer" \
       --background "${resources_path}/MacInstallerBanner.png" \
       --window-pos 200 400 \
-      --window-size 950 370 \
+      --window-size 935 390 \
       --app-drop-link 820 210 \
       --text-size 12 \
       --icon-size 72 \
