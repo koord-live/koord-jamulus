@@ -2,6 +2,7 @@
 set -eu -o pipefail
 
 root_path=$(pwd)
+client_target_name="Koord" # default
 project_path="${root_path}/Koord.pro"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
@@ -66,9 +67,6 @@ cleanup() {
 #         BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
 #     fi
 #     qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${BUILD_ARGS[@]}" "${@:2}"
-
-#     local target_name
-#     target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
     
 #     local job_count
 #     job_count=$(sysctl -n hw.ncpu)
@@ -99,6 +97,7 @@ build_app_compile_universal()
 
     # Build Jamulus for all requested architectures, defaulting to x86_64 if none provided:
     local target_name
+    # target_name=${client_target_name} # ??
     local target_arch
     local target_archs_array
     IFS=' ' read -ra target_archs_array <<< "${TARGET_ARCHS:-x86_64}"
@@ -138,7 +137,7 @@ build_app_compile_universal()
 
 build_app_package() 
 {
-    local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+    # local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
 
     # copy in provisioning profile - BEFORE codesigning with macdeployqt
     echo ">>> Adding embedded.provisionprofile to ${build_path}/${target_name}.app/Contents/"
@@ -194,14 +193,13 @@ build_app_package()
     # # Cleanup
     # make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
-    CLIENT_TARGET_NAME="${target_name}"
+    # CLIENT_TARGET_NAME="${target_name}"
 }
 
 build_installer_pkg() 
 {
-    # Get Jamulus version
-    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
-    local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+    # local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+    local target_name=${client_target_name}
 
     ## Build installer pkg file - for submission to App Store
     echo ">>> build_installer_pkg: building with storesign certs...."
@@ -233,7 +231,7 @@ build_installer_pkg()
 
 build_disk_image()
 {
-    local client_target_name="${1}"
+    # local client_target_name="${1}"
     # local server_target_name="${2}"
 
     # Install create-dmg via brew. brew needs to be installed first.
@@ -292,13 +290,16 @@ fi
 # Cleanup previous deployments
 cleanup
 
+## optionally set client_target_name like this
+# client_target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+
 ## Build app for DMG Installer
 # compile code
 build_app_compile_universal dmgdist
 # build .app/ structure
 build_app_package 
 # create versioned DMG installer image  
-build_disk_image "${CLIENT_TARGET_NAME}"
+build_disk_image
 
 # Cleanup - make clean
 echo ">>> DOING distclean ..."
@@ -306,7 +307,7 @@ make -f "${build_path}/Makefile" -C "${build_path}" distclean
 # Clean deploy dir of app bundle dir - leave dmg build
 echo ">>> DELETING ${deploy_path}/*"
 ls -al  "${deploy_path}/"
-rm -fr "${deploy_path}/*"
+rm -fr "${deploy_path}/${client_target_name}.app"
 
 ##FIXME - only necessary due to SingleApplication / Posix problems 
 ## Now build for App Store:
