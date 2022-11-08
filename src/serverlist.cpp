@@ -23,6 +23,34 @@
 \******************************************************************************/
 
 #include "serverlist.h"
+/* *\
+
+--port           sets the port the server listens to locally
+--serverbindip   sets the IP   the server listens to locally
+--serverpublicip sets the public IP where server and directory are on the same LAN
+
+Manual port forwarding is not supported: the internal port must be open to external requests.
+Where a router modem does automatic port forwarding, directory pings MAY open the server to requests
+from clients not on the same LAN as the directory.
+
+*
+ PROTMESSID_CLM_SERVER_LIST
+ - SERVER internal to DIRECTORY (list entry external IP     same LAN)
+   - CLIENT internal to DIRECTORY (CLM msg     same LAN): use "external" fields (local LAN address)
+   - CLIENT external to DIRECTORY (CLM msg not same LAN): use "internal" fields (registered server public IP)
+ - SERVER external to DIRECTORY (list entry external IP not same LAN)
+   - CLIENT internal to SERVER (CLM     same IP as list entry external IP): use "internal" fields (local LAN address)
+   - CLIENT external to SERVER (CLM not same IP as list entry external IP): use "external" fields (public IP address from protocol)
+---
+*
+ PROTMESSID_CLM_REGISTER_SERVER
+ - As SERVER create CLM message using "internal" fields (IP layer is the "external" fields):
+   - DIRECTORY not on my LAN: self-determined  IP address and --port value
+   - DIRECTORY     on my LAN: --serverpublicip IP address and --port value
+ - As DIRECTORY store received CLM message as is (IP layer address is used to access the server list)
+*
+
+\* */
 
 /* Implementation *************************************************************/
 
@@ -69,9 +97,9 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
 
     return CServerListEntry ( haServerHostAddr,
                               haServerLocalAddr,
-                              CServerCoreInfo ( FromBase64ToString ( sName.trimmed().left ( MAX_LEN_SERVER_NAME ) ),
+                              CServerCoreInfo ( FromBase64ToString ( sName.trimmed() ).left ( MAX_LEN_SERVER_NAME ),
                                                 lcCountry,
-                                                FromBase64ToString ( sCity.trimmed().left ( MAX_LEN_SERVER_CITY ) ),
+                                                FromBase64ToString ( sCity.trimmed() ).left ( MAX_LEN_SERVER_CITY ),
                                                 iNumClients,
                                                 isPermanent ) );
 }
@@ -112,13 +140,15 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     iSvrRegRetries ( 0 )
 {
 
+    CHostAddress haServerAddr ( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
+
     // set the server internal address, including internal port number
     QHostAddress qhaServerPublicIP;
 
     if ( strServerPublicIP == "" )
     {
         // No user-supplied override via --serverpublicip -> use auto-detection
-        qhaServerPublicIP = NetworkUtil::GetLocalAddress().InetAddr;
+        qhaServerPublicIP = haServerAddr.InetAddr;
     }
     else
     {
@@ -151,11 +181,15 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         iServInfoNumSplitItems = slServInfoSeparateParams.count();
     }
 
-    // Init server list entry (server info for this server) with defaults. Per
-    // definition the client substitutes the IP address of the directory server
-    // itself for his server list. If we are a directory server, we assume that
-    // we are a permanent server.
-    CServerListEntry ThisServerListEntry ( CHostAddress(), ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectoryServer );
+    /*
+     * Init server list entry (server info for this server) with defaults.
+     *
+     * The client will use the built in or custom address when retrieving the server list from a directory.
+     * The values supplied here only apply when using the server as a server, not as a directory.
+     *
+     * If we are a directory, we assume that we are a permanent server.
+     */
+    CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectoryServer );
 
     // parse the server info string according to definition:
     // [this server name];[this server city];[this server country as QLocale ID] (; ... ignored)
@@ -171,10 +205,36 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         // [this server country as QLocale ID]
         bool      ok;
         const int iCountry = slServInfoSeparateParams[2].toInt ( &ok );
-        if ( ok && iCountry >= 0 && iCountry <= QLocale::LastCountry )
+        if ( ok )
         {
-            ThisServerListEntry.eCountry = static_cast<QLocale::Country> ( iCountry );
+            if ( iCountry >= 0 && CLocale::IsCountryCodeSupported ( iCountry ) )
+            {
+                // Convert from externally-supplied format ("wire format", Qt5 codes) to
+                // native format. On Qt5 builds, this is a noop, on Qt6 builds, a conversion
+                // takes place.
+                // We try to do such conversions at the outer-most interface which is capable of doing it.
+                // Although the value comes from src/main -> src/server, this very place is
+                // the first where we have access to the parsed country code:
+                ThisServerListEntry.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iCountry );
+            }
         }
+        else
+        {
+            QLocale::Country qlCountry = CLocale::GetCountryCodeByTwoLetterCode ( slServInfoSeparateParams[2] );
+            if ( qlCountry != QLocale::AnyCountry )
+            {
+                ThisServerListEntry.eCountry = qlCountry;
+            }
+        }
+        qInfo() << qUtf8Printable ( QString ( "Using server info: name = \"%1\", city = \"%2\", country/region = \"%3\" (%4)" )
+                                        .arg ( ThisServerListEntry.strName )
+                                        .arg ( ThisServerListEntry.strCity )
+                                        .arg ( slServInfoSeparateParams[2] )
+                                        .arg ( QLocale::countryToString ( ThisServerListEntry.eCountry ) ) );
+    }
+    else
+    {
+        qWarning() << "Ignoring invalid serverinfo, please verify the parameter syntax.";
     }
 
     // per definition, the very first entry is this server and this entry will
@@ -205,7 +265,23 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
             {
                 vWhiteList << CurWhiteListAddress;
-                qInfo() << qUtf8Printable ( QString ( "Whitelist entry added: %1" ).arg ( CurWhiteListAddress.toString() ) );
+            }
+        }
+    }
+
+    // assume directoryType will get set to AT_CUSTOM
+    if ( !strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strDirectoryAddress.compare ( "127.0.0.1" ) )
+    {
+        if ( !strMinServerVersion.isEmpty() )
+        {
+            qInfo() << "Registering servers must be version" << strMinServerVersion << "or later.";
+        }
+        if ( !vWhiteList.isEmpty() )
+        {
+            qInfo() << "Directory registration white list active.  Only the following addresses can register:";
+            foreach ( QHostAddress hostAddress, vWhiteList )
+            {
+                qInfo() << "  -" << hostAddress.toString();
             }
         }
     }
@@ -339,7 +415,7 @@ void CServerListManager::SetIsDirectoryServer()
 
     if ( bIsDirectoryServer )
     {
-        qInfo() << "Now a directory server";
+        qInfo() << "Now a directory";
         // Load any persistent server list (create it if it is not there)
         (void) Load();
     }
@@ -485,10 +561,14 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
 {
     if ( bIsDirectoryServer )
     {
-        qInfo() << qUtf8Printable ( QString ( "Requested to register entry for %1 (%2): %3" )
+        // if the client IP address is a private one, it's on the same LAN as the directory
+        bool serverIsExternal = !NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
+
+        qInfo() << qUtf8Printable ( QString ( "Requested to register entry for %1 (%2): %3 (%4)" )
                                         .arg ( InetAddr.toString() )
                                         .arg ( LInetAddr.toString() )
-                                        .arg ( ServerInfo.strName ) );
+                                        .arg ( ServerInfo.strName )
+                                        .arg ( serverIsExternal ? "external" : "local" ) );
 
         // check for minimum server version
         if ( !strMinServerVersion.isEmpty() )
@@ -573,59 +653,72 @@ void CServerListManager::Remove ( const CHostAddress& InetAddr )
     }
 }
 
+/*
+ PROTMESSID_CLM_SERVER_LIST
+ - SERVER internal to DIRECTORY (list entry external IP same LAN)
+   - CLIENT internal to DIRECTORY (CLM msg     same LAN): use "external" fields (local LAN address)
+   - CLIENT external to DIRECTORY (CLM msg not same LAN): use "internal" fields (registered server public IP)
+ - SERVER external to DIRECTORY (list entry external IP same LAN)
+   - CLIENT internal to SERVER (CLM     same IP as list entry external IP): use "internal" fields (local LAN address)
+   - CLIENT external to SERVER (CLM not same IP as list entry external IP): use "external" fields (public IP address from protocol)
+
+ Finally, when retrieving the entry for the directory itself life is more complicated still.  It's easiest just to return "0"
+ and allow the client connect dialogue instead to use the IP and Port from which the list was received.
+
+ */
 void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
 {
     QMutexLocker locker ( &Mutex );
 
     if ( bIsDirectoryServer )
     {
-        const int iCurServerListSize = ServerList.size();
+        // if the client IP address is a private one, it's on the same LAN as the directory
+        bool clientIsInternal = NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
+
+        CHostAddress clientPublicAddr = InetAddr;
+        if ( clientIsInternal && CHostAddress().InetAddr != ServerList[0].LHostAddr.InetAddr &&
+             !NetworkUtil::IsPrivateNetworkIP ( ServerList[0].LHostAddr.InetAddr ) )
+        {
+            // client and directory on same LAN, directory has public IP set, that should be suitable for the
+            // client, too (i.e. same router with same public IP will be used for both), so use it for client public IP
+            clientPublicAddr.InetAddr = ServerList[0].LHostAddr.InetAddr;
+        }
+
+        const ushort iCurServerListSize = static_cast<ushort> ( ServerList.size() );
 
         // allocate memory for the entire list
         CVector<CServerInfo> vecServerInfo ( iCurServerListSize );
 
-        // copy the list (we have to copy it since the message requires
-        // a vector but the list is actually stored in a QList object and
-        // not in a vector object
-        for ( int iIdx = 0; iIdx < iCurServerListSize; iIdx++ )
+        // copy list item for the directory and just let the protocol sort out the actual details
+        vecServerInfo[0]          = ServerList[0];
+        vecServerInfo[0].HostAddr = CHostAddress();
+
+        // copy the list (we have to copy it since the message requires a vector but the list is actually stored in a QList object
+        // and not in a vector object)
+        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
             // copy list item
-            vecServerInfo[iIdx] = ServerList[iIdx];
+            CServerInfo& siCurListEntry = vecServerInfo[iIdx] = ServerList[iIdx];
 
-            if ( iIdx > 0 )
+            bool serverIsInternal = NetworkUtil::IsPrivateNetworkIP ( siCurListEntry.HostAddr.InetAddr );
+
+            bool wantHostAddr = clientIsInternal /* HostAddr is local IP if local server else external IP, so do not replace */ ||
+                                ( !serverIsInternal &&
+                                  InetAddr.InetAddr != siCurListEntry.HostAddr.InetAddr /* external server and client have different public IPs */ );
+
+            if ( !wantHostAddr )
             {
-                // check if the address of the client which is requesting the
-                // list is the same address as one server in the list -> in this
-                // case he has to connect to the local host address and port
-                // to allow for NAT.
-                if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
-                {
-                    vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
-                }
-                else if ( !NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr ) &&
-                          NetworkUtil::IsPrivateNetworkIP ( vecServerInfo[iIdx].HostAddr.InetAddr ) &&
-                          !NetworkUtil::IsPrivateNetworkIP ( ServerList[iIdx].LHostAddr.InetAddr ) )
-                {
-                    // We've got a request from a public client, the server
-                    // list's entry's primary address is a private address,
-                    // but it supplied an additional public address using
-                    // --serverpublicip.
-                    // In this case, use the latter.
-                    // This is common when running a directory with registered
-                    // servers behind a NAT and dealing with external, public
-                    // clients. In this case, sending a ping would not open
-                    // a NAT port.
-                    vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
-                }
-                else
-                {
-                    // create "send empty message" for all registered servers
-                    // (except of the very first list entry since this is this
-                    // server (directory server) per definition) and also it is
-                    // not required to send this message, if the server is on
-                    // the same computer
-                    pConnLessProtocol->CreateCLSendEmptyMesMes ( vecServerInfo[iIdx].HostAddr, InetAddr );
-                }
+                vecServerInfo[iIdx].HostAddr = siCurListEntry.LHostAddr;
+            }
+
+            // do not send a "ping" to a server local to the directory (no need)
+            if ( !serverIsInternal )
+            {
+                // create "send empty message" for all other registered servers
+                // this causes the server (vecServerInfo[iIdx].HostAddr)
+                // to send a "reply" to the client (InetAddr or best guess public IP address if internal to directory)
+                // - with the intent of opening the server firewall for the client
+                pConnLessProtocol->CreateCLSendEmptyMesMes ( siCurListEntry.HostAddr, clientPublicAddr );
             }
         }
 
@@ -688,8 +781,9 @@ bool CServerListManager::Load()
     if ( !file.open ( QIODevice::ReadWrite | QIODevice::Text ) )
     {
         qWarning() << qUtf8Printable (
-            QString ( "Could not open '%1' for read/write.  Please check that Jamulus has permission (and that there is free space)." )
-                .arg ( ServerListFileName ) );
+            QString ( "Could not open '%1' for read/write.  Please check that %2 has permission (and that there is free space)." )
+                .arg ( ServerListFileName )
+                .arg ( APP_NAME ) );
         ServerListFileName.clear();
         return false;
     }
@@ -848,6 +942,17 @@ void CServerListManager::OnTimerCLRegisterServerResp()
     }
 }
 
+void CServerListManager::OnAboutToQuit()
+{
+    {
+        QMutexLocker locker ( &Mutex );
+        Save();
+    }
+
+    // Sets the lock - also needs to come after Save()
+    Unregister();
+}
+
 void CServerListManager::SetRegistered ( const bool bIsRegister )
 {
     // we need the lock since the user might change the server properties at
@@ -885,7 +990,7 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
             // For a registered server, the server properties are stored in the
             // very first item in the server list (which is actually no server list
             // but just one item long for the registered server).
-            pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP, ServerList[0] );
+            pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerList[0].LHostAddr, ServerList[0] );
         }
         else
         {

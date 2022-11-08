@@ -2,7 +2,11 @@
 set -eu
 
 QT_DIR=/usr/local/opt/qt
-AQTINSTALL_VERSION=2.1.0
+# The following version pinnings are semi-automatically checked for
+# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
+AQTINSTALL_VERSION=3.0.1
+
+TARGET_ARCHS="${TARGET_ARCHS:-}"
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -19,7 +23,14 @@ setup() {
     else
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations
+        local qtmultimedia=()
+        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+            # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+            # as an archive anymore.
+            qtmultimedia=("--modules")
+        fi
+        qtmultimedia+=("qtmultimedia")
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations "${qtmultimedia[@]}"
     fi
 }
 
@@ -54,6 +65,8 @@ prepare_signing() {
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
+    # Remove default re-lock timeout to avoid codesign hangs:
+    security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
     security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
@@ -75,7 +88,7 @@ build_app_as_dmg_installer() {
     if prepare_signing; then
         BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
-    ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
+    TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
 
 pass_artifact_to_job() {
@@ -120,4 +133,5 @@ case "${1:-}" in
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
+        ;;
 esac

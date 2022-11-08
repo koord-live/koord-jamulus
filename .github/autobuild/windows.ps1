@@ -16,10 +16,12 @@ $ErrorActionPreference = "Stop"
 
 $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
+# The following version pinnings are semi-automatically checked for
+# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
 $Qt32Version = "5.15.2"
 $Qt64Version = "5.15.2"
-$AqtinstallVersion = "2.1.0"
-$JackVersion = "1.9.17"
+$AqtinstallVersion = "3.0.1"
+$JackVersion = "1.9.21.20220626"
 $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
@@ -44,6 +46,13 @@ Function Install-Qt
         "$QtArch",
         "--archives", "qtbase", "qttools", "qttranslations"
     )
+    if ( $QtVersion -notmatch '^5\.' )
+    {
+        # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+        # as an archive anymore.
+        $Args += ("--modules")
+    }
+    $Args += ("qtmultimedia")
     aqt install-qt @Args
     if ( !$? )
     {

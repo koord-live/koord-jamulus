@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QActionGroup>
+#include <QSoundEffect>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
@@ -101,9 +102,9 @@ protected:
     CClient*         pClient;
     CClientSettings* pSettings;
 
+    int            iClients;
     bool           bConnected;
     bool           bConnectDlgWasShown;
-    bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
     bool           bEnableIPv6;
     ERecorderState eLastRecorderState;
