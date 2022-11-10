@@ -67,8 +67,8 @@ jobs:
       upload_url:                   ${{ steps.create-release.outputs.upload_url }}
       build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
       build_all_targets:            ${{ steps.decide-build-targets.outputs.build_all_targets }}
-    env:
-      release_changelog_path:       ./.github_release_changelog.md
+    # env:
+    #   release_changelog_path:       ./.github_release_changelog.md
 
     steps:
       - name:                       Checkout code
@@ -78,9 +78,9 @@ jobs:
         run:                        ./.github/autobuild/get_build_vars.py
         id:                         get-build-vars
 
-      - name:                       Extract Changelog for the Github release body
-        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
-        run:                        ./.github/autobuild/extractVersionChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.KOORD_PRO_VERSION }} > ${{ env.release_changelog_path }}
+      # - name:                       Extract Changelog for the Github release body
+      #   if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
+      #   run:                        ./.github/autobuild/extractVersionChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.KOORD_PRO_VERSION }} > ${{ env.release_changelog_path }}
 
       - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
@@ -101,7 +101,7 @@ jobs:
         with:
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
           release_name:             ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
-          body_path:                ${{ env.release_changelog_path }}
+          # body_path:                ${{ env.release_changelog_path }}
           prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
           draft:                    false
 
