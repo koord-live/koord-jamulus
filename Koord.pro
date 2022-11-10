@@ -94,7 +94,7 @@ win32 {
     QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
 
     !exists(windows/ASIOSDK2) {
-        error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
+        error("Error: ASIOSDK2 must be placed in reporoot windows/ folder.")
 
     }
 
@@ -306,14 +306,9 @@ win32 {
         HEADERS += src/sound/jack/sound.h
         SOURCES += src/sound/jack/sound.cpp
 
-        contains(CONFIG, "raspijamulus") {
-            message(Using JACK Audio in raspijamulus.sh mode.)
-            LIBS += -ljack
-        } else {
-            CONFIG += link_pkgconfig
-            PKGCONFIG += jack
-        }
-
+        CONFIG += link_pkgconfig
+        PKGCONFIG += jack
+  
         DEFINES += WITH_JACK
     }
 

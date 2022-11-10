@@ -80,7 +80,7 @@ jobs:
 
       - name:                       Extract Changelog for the Github release body
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
-        run:                        ./.github/autobuild/extractVersionChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > ${{ env.release_changelog_path }}
+        run:                        ./.github/autobuild/extractVersionChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.KOORD_PRO_VERSION }} > ${{ env.release_changelog_path }}
 
       - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
@@ -191,8 +191,6 @@ jobs:
             base_command:           ./.github/autobuild/android.sh
             run_codeql:             false
             is_main_build_target:   true
-            # Jamulus.pro needs to count git history length for android versioning:
-            checkout_fetch_depth:   '0'
 
           # Qt6 requires Ubuntu 20.04+ for build, but apt packages only in 22.04+ 
           # Can install Qt using aqtinstall on 20.04 - thus needs glibc>=2.31 
@@ -267,7 +265,7 @@ jobs:
         with:
           path: |
             /usr/local/opt/qt
-            ~/Library/Cache/jamulus-homebrew-bottles
+            ~/Library/Cache/koord-homebrew-bottles
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Windows dependencies
@@ -293,7 +291,7 @@ jobs:
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         run:                        ${{ matrix.config.base_command }} setup
         env:
-          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          KOORD_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql
@@ -320,7 +318,7 @@ jobs:
         id:                         build
         run:                        ${{ matrix.config.base_command }} build
         env:
-          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          KOORD_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
           MAC_ADHOC_CERT:           ${{ secrets.MAC_ADHOC_CERT}}
           MAC_ADHOC_CERT_PWD:       ${{ secrets.MAC_ADHOC_CERT_PWD }}
           MAC_ADHOC_CERT_ID:        ${{ secrets.MAC_ADHOC_CERT_ID }}
@@ -346,7 +344,7 @@ jobs:
         id:                         get-artifacts
         run:                        ${{ matrix.config.base_command }} get-artifacts
         env:
-          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          KOORD_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Upload Artifact 1 to Job
         # builds such as iOS with signing produce no artifact to upload
@@ -441,7 +439,7 @@ jobs:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
           NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
-          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          KOORD_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
           APPLE_TEAM_ID:            "TXZ4FR95HG"
 
       ## RELEASE PROCEDURE FOR:
@@ -472,7 +470,7 @@ jobs:
           ARTIFACT_PATH:            build/Koord.ipa
           NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
-          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          KOORD_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       ## RELEASE PROCEDURE FOR:
       ## - Android Play Store - aab

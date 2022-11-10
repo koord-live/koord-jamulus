@@ -61,7 +61,7 @@ cleanup() {
 #     # Note: not sure if this is useful here or only in Run env
 #     export QT_WEBVIEW_PLUGIN="native"
 
-#     # Build Jamulus
+#     # Build Koord
 #     declare -a BUILD_ARGS=("_UNUSED_DUMMY=''")  # old bash fails otherwise
 #     if [[ "${TARGET_ARCH:-}" ]]; then
 #         BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
@@ -95,7 +95,7 @@ build_app_compile_universal()
     local job_count
     job_count=$(sysctl -n hw.ncpu)
 
-    # Build Jamulus for all requested architectures, defaulting to x86_64 if none provided:
+    # Build Koord for all requested architectures, defaulting to x86_64 if none provided:
     local target_name
     # target_name=${client_target_name} # ??
     local target_arch
@@ -220,10 +220,10 @@ build_installer_pkg()
     productbuild --sign "${macinst_cert_name}" --keychain build.keychain \
         --component "${build_path}_storesign/${target_name}.app" \
         /Applications \
-        "${build_path}_storesign/Koord_${JAMULUS_BUILD_VERSION}.pkg"  
+        "${build_path}_storesign/Koord_${KOORD_BUILD_VERSION}.pkg"  
 
     # move created pkg file to prep for download
-    mv "${build_path}_storesign/Koord_${JAMULUS_BUILD_VERSION}.pkg" "${deploypkg_path}"
+    mv "${build_path}_storesign/Koord_${KOORD_BUILD_VERSION}.pkg" "${deploypkg_path}"
 }
 
 build_disk_image()
@@ -250,7 +250,7 @@ build_disk_image()
       --icon-size 72 \
       --icon "${client_target_name}.app" 630 210 \
       --eula "${root_path}/COPYING" \
-      "${deploypkg_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
+      "${deploypkg_path}/${client_target_name}-${KOORD_BUILD_VERSION}-installer-mac.dmg" \
       "${deploy_path}/"
 }
 
@@ -258,7 +258,7 @@ brew_install_pinned() {
     local pkg="$1"
     local version="$2"
     local pkg_version="${pkg}@${version}"
-    local brew_bottle_dir="${HOME}/Library/Cache/jamulus-homebrew-bottles"
+    local brew_bottle_dir="${HOME}/Library/Cache/koord-homebrew-bottles"
     local formula="/usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask/Formula/${pkg_version}.rb"
     echo "Installing ${pkg_version}"
     mkdir -p "${brew_bottle_dir}"

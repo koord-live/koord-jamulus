@@ -33,7 +33,7 @@ jobs:
       with:
         clangFormatVersion: 10
         # When updating the extension list, remember to update
-        # Jamulus.pro's CLANG_SOURCES as well and the paths: in 'on:' list above.
+        # Koord.pro's CLANG_SOURCES as well and the paths: in 'on:' list above.
         extensions: 'cpp,h,mm'
     # shellcheck is already pre-installed on ubuntu-latest
     - name: Check .sh with shellcheck

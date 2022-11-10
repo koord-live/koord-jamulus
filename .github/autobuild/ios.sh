@@ -10,8 +10,8 @@ if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
     exit 1
 fi
-if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
+if [[ ! ${KOORD_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    echo "Environment variable KOORD_BUILD_VERSION has to be set to a valid version string"
     exit 1
 fi
 
@@ -99,13 +99,13 @@ pass_artifact_to_job() {
     local SIGN_TEST=$(ls deploy/Koord_*.ipa | grep -i unsigned)
     if [ "${SIGN_TEST}" == "" ]; then
         echo "Signed, No artifact to pass..."
-        # local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_signed.ipa"
+        # local artifact="Koord_${KOORD_BUILD_VERSION}_iOS_signed.ipa"
         # echo "Moving build artifact to deploy/${artifact}"
         # mkdir -p deploy
         # mv ./build/Koord.ipa ./deploy/Koord.ipa
         # echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
     else
-        local artifact="Koord_${JAMULUS_BUILD_VERSION}_iOS_unsigned.ipa"
+        local artifact="Koord_${KOORD_BUILD_VERSION}_iOS_unsigned.ipa"
         echo "Moving build artifact to deploy/${artifact}"
         mv ./deploy/Koord_*.ipa "./deploy/${artifact}"
         echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"

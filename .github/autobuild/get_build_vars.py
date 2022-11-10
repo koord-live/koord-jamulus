@@ -12,7 +12,7 @@ import subprocess
 REPO_PATH = os.path.join(os.path.dirname(__file__), '..', '..')
 
 
-def get_version_from_jamulus_pro():
+def get_version_from_koord_pro():
     with open(REPO_PATH + '/Koord.pro', 'r') as f:
         pro_content = f.read()
     m = re.search(r'^VERSION\s*=\s*(\S+)$', pro_content, re.MULTILINE)
@@ -32,12 +32,12 @@ def get_git_hash():
     ]).decode('ascii').strip()
 
 
-def get_build_version(jamulus_pro_version):
-    if "dev" in jamulus_pro_version:
-        version = "{}-{}".format(jamulus_pro_version, get_git_hash())
+def get_build_version(koord_pro_version):
+    if "dev" in koord_pro_version:
+        version = "{}-{}".format(koord_pro_version, get_git_hash())
         return 'intermediate', version
 
-    version = jamulus_pro_version
+    version = koord_pro_version
     return 'release', version
 
 
@@ -48,9 +48,9 @@ def set_github_variable(varname, varval):
         ghout.write(f"{varname}={varval}\n")
 
 
-jamulus_pro_version = get_version_from_jamulus_pro()
-set_github_variable("JAMULUS_PRO_VERSION", jamulus_pro_version)
-build_type, build_version = get_build_version(jamulus_pro_version)
+koord_pro_version = get_version_from_koord_pro()
+set_github_variable("KOORD_PRO_VERSION", koord_pro_version)
+build_type, build_version = get_build_version(koord_pro_version)
 print(f'building a version of type "{build_type}": {build_version}')
 
 fullref = os.environ['GITHUB_REF']

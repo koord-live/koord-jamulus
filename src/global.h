@@ -113,11 +113,6 @@ LED bar:      lbr
 #define UPDATECHECK1_ADDRESS "updatecheck1.jamulus.io"
 #define UPDATECHECK2_ADDRESS "updatecheck2.jamulus.io"
 
-// getting started and software manual URL
-#define CLIENT_GETTING_STARTED_URL "https://jamulus.io/wiki/Getting-Started"
-#define SERVER_GETTING_STARTED_URL "https://jamulus.io/wiki/Running-a-Server"
-#define SOFTWARE_MANUAL_URL        "https://jamulus.io/wiki/Software-Manual"
-
 // app update message
 #define APP_UPGRADE_AVAILABLE_MSG_TEXT \
     QCoreApplication::translate ( \

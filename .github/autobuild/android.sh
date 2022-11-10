@@ -28,8 +28,8 @@ export JAVA_HOME=${JAVA_HOME_11_X64}
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
 
-if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
+if [[ ! ${KOORD_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    echo "Environment variable KOORD_BUILD_VERSION has to be set to a valid version string"
     exit 1
 fi
 
@@ -180,7 +180,7 @@ pass_artifact_to_job() {
     fi
 
     mkdir -p deploy
-    local artifact="Koord_${JAMULUS_BUILD_VERSION}_android_${BUILDNAME}.aab"
+    local artifact="Koord_${KOORD_BUILD_VERSION}_android_${BUILDNAME}.aab"
     # debug to check for filenames
     ls -alR ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/
     ls -al ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab

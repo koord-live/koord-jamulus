@@ -23,10 +23,10 @@ $AqtinstallVersion = "3.0.1"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
 
-$JamulusVersion = $Env:JAMULUS_BUILD_VERSION
-if ( $JamulusVersion -notmatch '^\d+\.\d+\.\d+.*' )
+$KoordVersion = $Env:KOORD_BUILD_VERSION
+if ( $KoordVersion -notmatch '^\d+\.\d+\.\d+.*' )
 {
-    throw "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
+    throw "Environment variable KOORD_BUILD_VERSION has to be set to a valid version string"
 }
 
 Function Install-Qt
@@ -110,7 +110,7 @@ Function Build-App-With-Installer
 
 Function Pass-EXE-Artifact-to-Job
 {
-    $artifact = "Koord_${JamulusVersion}.exe"
+    $artifact = "Koord_${KoordVersion}.exe"
 
     echo "Copying artifact to ${artifact}"
     # "Output" is name of dir for innosetup output
@@ -125,7 +125,7 @@ Function Pass-EXE-Artifact-to-Job
 
 Function Pass-MSIX-Artifact-to-Job
 {
-    $artifact = "Koord_${JamulusVersion}.msix"
+    $artifact = "Koord_${KoordVersion}.msix"
 
     echo "Copying artifact to ${artifact}"
     # "deploy" is dir of MakeAppx output

@@ -14,8 +14,8 @@ if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
     exit 1
 fi
-if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
+if [[ ! ${KOORD_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    echo "Environment variable KOORD_BUILD_VERSION has to be set to a valid version string"
     exit 1
 fi
 
@@ -132,12 +132,12 @@ build_app_and_packages() {
 }
 
 pass_artifact_to_job() {
-    artifact="Koord_${JAMULUS_BUILD_VERSION}.dmg"
+    artifact="Koord_${KOORD_BUILD_VERSION}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploypkg/Koord-*installer-mac.dmg "./deploy/${artifact}"
     echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
-    artifact2="Koord_${JAMULUS_BUILD_VERSION}_mac_storesign.pkg"
+    artifact2="Koord_${KOORD_BUILD_VERSION}_mac_storesign.pkg"
     if [ -f ./deploypkg/Koord*.pkg ]; then
         echo "Moving build artifact2 to deploy/${artifact2}"
         mv ./deploypkg/Koord*.pkg "./deploy/${artifact2}"
