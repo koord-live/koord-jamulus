@@ -381,6 +381,7 @@ HEADERS += src/buffer.h \
     src/settings.h \
     src/socket.h \
     src/util.h \
+    src/stereomixserver.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
@@ -489,6 +490,7 @@ SOURCES += src/buffer.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
     src/util.cpp \
+    src/stereomixserver.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
     src/recorder/cwavestream.cpp

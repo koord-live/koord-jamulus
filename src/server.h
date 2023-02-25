@@ -317,6 +317,8 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+    // for stereomixer
+    void StreamFrame ( const int iServerFrameSizeSamples, const CVector<int16_t>& data );
 
     void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
 

@@ -39,6 +39,7 @@
 #    include "testbench.h"
 #endif
 #include "util.h"
+#include "stereomixserver.h"
 #ifdef ANDROID
 #    include <QtAndroidExtras/QtAndroid>
 #endif
@@ -216,6 +217,15 @@ int main ( int argc, char** argv )
             strJsonRpcBindIP = QString ( strArgument );
             qInfo() << qUtf8Printable ( QString ( "- JSON-RPC will bind to: %1 if enabled" ).arg ( strJsonRpcBindIP ) );
             CommandLineOptions << "--jsonrpcbindip";
+            continue;
+        }
+
+        // Stereo mix port number ----------------------------------------------
+        if ( GetNumericArgument ( argc, argv, i, "--stereomixport", "--stereomixport", 0, 65535, rDbleArgument ) )
+        {
+            iStereoMixPortNumber = static_cast<quint16> ( rDbleArgument );
+            qInfo() << qUtf8Printable ( QString ( "- stereo mix port number: %1" ).arg ( iStereoMixPortNumber ) );
+            CommandLineOptions << "--stereomixport";
             continue;
         }
 
@@ -1134,6 +1144,9 @@ QString UsageArguments ( char** argv )
            "      --norecord        set server not to record by default when recording is configured\n"
            "  -s, --server          start Server\n"
            "      --serverbindip    IP address the Server will bind to (rather than all)\n"
+           "      --stereomixport   enable Stereo Mix server which streams PCM samples\n"
+           "                        at 48000 Hz in s16le stereo format, set TCP port number\n"
+           "                        (only accessible from localhost)\n"           
            "  -T, --multithreading  use multithreading to make better use of\n"
            "                        multi-core CPUs and support more Clients\n"
            "  -u, --numchannels     maximum number of channels\n"
