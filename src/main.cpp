@@ -100,6 +100,7 @@ int main ( int argc, char** argv )
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     int          iJsonRpcPortNumber          = INVALID_PORT;
+    int          iStereoMixPortNumber        = INVALID_PORT;
     QString      strJsonRpcBindIP            = DEFAULT_JSON_RPC_LISTEN_ADDRESS;
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
