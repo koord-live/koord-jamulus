@@ -1029,6 +1029,12 @@ int main ( int argc, char** argv )
             }
 #endif
 
+            if ( iStereoMixPortNumber != INVALID_PORT )
+            {
+                auto pStereoMixServer = new CStereoMixServer ( &Server, iStereoMixPortNumber );
+                pStereoMixServer->Start();
+            }
+
 #ifndef HEADLESS
             if ( bUseGUI )
             {
