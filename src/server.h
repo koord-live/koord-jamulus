@@ -102,6 +102,7 @@ public:
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
               const bool         bDisableRecording,
+              const bool         bStream,
               const bool         bNDelayPan,
               const bool         bNEnableIPv6,
               const ELicenceType eNLicenceType );
@@ -288,6 +289,9 @@ protected:
     // jam recorder
     recorder::CJamController JamController;
     bool                     bDisableRecording;
+
+    // jam streamer
+    bool bStream = false;
 
     // GUI settings
     bool bAutoRunMinimized;

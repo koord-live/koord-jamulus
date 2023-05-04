@@ -42,6 +42,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNUseDoubleSystemFrameSize,
                    const bool         bNUseMultithreading,
                    const bool         bDisableRecording,
+                   const bool         bStream,
                    const bool         bNDelayPan,
                    const bool         bNEnableIPv6,
                    const ELicenceType eNLicenceType ) :
@@ -66,6 +67,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                         &ConnLessProtocol ),
     JamController ( this ),
     bDisableRecording ( bDisableRecording ),
+    bStream ( bStream ),
     bAutoRunMinimized ( false ),
     bDelayPan ( bNDelayPan ),
     bEnableIPv6 ( bNEnableIPv6 ),
@@ -652,6 +654,10 @@ void CServer::OnTimer()
         // calculate levels for all connected clients
         const bool bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients, vecNumAudioChannels, vecvecsData, vecChannelLevels );
 
+        if ( bStream == true ) {
+            MixStream ( iNumClients );
+        }
+
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
             // get actual ID of current channel
@@ -908,6 +914,44 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     }
 
     Q_UNUSED ( iUnused )
+}
+
+/// @brief Mix the audio data from all clients and send the mix to the jamstreamer
+void CServer::MixStream ( const int iNumClients )
+{
+    int               i, j, k;
+    CVector<int16_t>& vecsSendData      = vecvecsSendData[0];            // use reference for faster access
+
+    // init intermediate processing vector with zeros since we mix all channels on that vector
+    vecsSendData.Reset ( 0 );
+
+    // Stereo target channel -----------------------------------------------
+    for ( j = 0; j < iNumClients; j++ )
+    {
+        // get a reference to the audio data of the current client
+        const CVector<int16_t>& vecsData = vecvecsData[j];
+
+        if ( vecNumAudioChannels[j] == 1 )
+                {
+                    // mono: copy same mono data in both out stereo audio channels
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
+                    {
+                        // left/right channel
+                        vecsSendData[k]     += vecsData[i];
+                        vecsSendData[k + 1] += vecsData[i];
+                    }
+                }
+                else
+                {
+                    // stereo
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    {
+                        vecsSendData[i] += vecsData[i];
+                    }
+                }
+    }
+
+    emit StreamFrame ( iServerFrameSizeSamples, vecsSendData );
 }
 
 /// @brief Mix all audio data from all clients together, encode and transmit

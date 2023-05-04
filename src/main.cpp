@@ -92,6 +92,7 @@ int main ( int argc, char** argv )
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
+    bool         bStream                     = false;
     bool         bDelayPan                   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
@@ -224,6 +225,7 @@ int main ( int argc, char** argv )
         // Stereo mix port number ----------------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "--stereomixport", "--stereomixport", 0, 65535, rDbleArgument ) )
         {
+            bStream = true;
             iStereoMixPortNumber = static_cast<quint16> ( rDbleArgument );
             qInfo() << qUtf8Printable ( QString ( "- stereo mix port number: %1" ).arg ( iStereoMixPortNumber ) );
             CommandLineOptions << "--stereomixport";
@@ -1018,6 +1020,7 @@ int main ( int argc, char** argv )
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
+                             bStream,
                              bDelayPan,
                              bEnableIPv6,
                              eLicenceType );
