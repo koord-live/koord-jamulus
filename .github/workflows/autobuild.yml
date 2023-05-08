@@ -449,7 +449,7 @@ jobs:
         if:                         >-
                                     steps.build.outputs.ios_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
-        uses:                       yukiarrr/ios-build-action@v1.5.0
+        uses:                       yukiarrr/ios-build-action@v1.11.0
         with:
           project-path:             Koord.xcodeproj
           p12-base64:               ${{ secrets.IOSDIST_CERT }}
