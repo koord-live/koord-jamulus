@@ -6,7 +6,7 @@
 #     for every push to a branch starting with "autobuild": (can be used during development for tighter supervision of builds)
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix of the github-action-run (not as release), and only retain those files for limited period
-#     for every pull-request to master:
+#     for every pull-request to main:
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix of the github-action-run (not as release), and only retain those files for limited period
 #     for every tag that starts with 'r' and has an arbitrary suffix (e.g. beta1, rc1, etc.)
@@ -29,8 +29,8 @@ on:
       # For developers: Branches starting with autobuild will be built and evaluated on each push.
       - "autobuild**"
       # CodeQL requires every branch from on.pull_request to be part of on.push as well in order to run comparisons.
-      # We also need master here to trigger builds on PR merge to master and manual pushes (e.g. as part of the release process):
-      - "master"
+      # We also need main here to trigger builds on PR merge to main and manual pushes (e.g. as part of the release process):
+      - "main"
     paths-ignore:
       - '**README.md'
       - 'docs/**'
@@ -43,7 +43,7 @@ on:
       - '.github/pull_request_template.md'
   pull_request:
     branches:
-      - master
+      - main
     paths-ignore:
       - '**README.md'
       - 'docs/**'
@@ -56,6 +56,7 @@ on:
       - '.github/pull_request_template.md'
 
 name:                               Auto-Build
+permissions:                        {}
 jobs:
   create_release:
     # Check if we are doing a release or just a normal build.
@@ -69,7 +70,9 @@ jobs:
       build_all_targets:            ${{ steps.decide-build-targets.outputs.build_all_targets }}
     env:
       release_changelog_path:       ./.github_release_changelog.md
-
+    # Set permissions. We need write permissions to content for creating/removing the release
+    permissions:
+        contents:                   write
     steps:
       - name:                       Checkout code
         uses:                       actions/checkout@v3
@@ -85,7 +88,7 @@ jobs:
       - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         continue-on-error:          true
-        uses:                       dev-drprasad/delete-tag-and-release@085c6969f18bad0de1b9f3fe6692a3cd01f64fe5
+        uses:                       dev-drprasad/delete-tag-and-release@0885ecc4123e071dd1a8be04d3a0578f5390581c
         with:
           delete_release:           true
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
@@ -116,7 +119,7 @@ jobs:
         run:                        |
           set -eu
           build_all_targets() {
-            echo "::set-output name=build_all_targets::${1}"
+            echo "build_all_targets=${1}" >> $GITHUB_OUTPUT
             echo "Building for all targets? Result: ${1}"
             exit 0
           }
@@ -179,6 +182,11 @@ jobs:
   release_assets:
     name:                           Build for ${{ matrix.config.config_name }}
     needs:                          create_release
+    # Set permissions to allow uploading artifact, uploading to release and allowing CodeQl to set security events
+    permissions:
+      checks:                       write
+      contents:                     write
+      security-events:              write
     strategy:
       fail-fast:                    false
       matrix:
@@ -219,7 +227,7 @@ jobs:
           - config_name:            MacOS (artifacts)
             target_os:              macos
             building_on_os:         macos-12
-            base_command:           QT_VERSION=6.4.0 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
+            base_command:           QT_VERSION=6.5.1 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
             # Latest Xcode which runs on macos-11:
@@ -229,7 +237,7 @@ jobs:
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
           - config_name:            MacOS Legacy (artifacts+CodeQL)
             target_os:              macos
-            building_on_os:         macos-10.15
+            building_on_os:         macos-12
             base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             true
@@ -238,18 +246,18 @@ jobs:
             # https://developer.apple.com/support/xcode/
             # Xcode 12.1.1 is the most-recent 12.1.x release:
             # https://xcodereleases.com/
-            xcode_version:          12.1.1
+            xcode_version:          14.2.0
             is_main_build_target:   true
 
           - config_name:            iOS (artifacts)
             target_os:              ios
-            building_on_os:         macos-10.15
+            building_on_os:         macos-11
             base_command:           QT_VERSION=5.15.2 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
             run_codeql:             false
-            xcode_version:          12.1.1
+            xcode_version:          12.5.1
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
@@ -321,6 +329,7 @@ jobs:
           path: |
             C:\Qt
             C:\ChocoCache
+            C:\AutobuildCache
             ${{ github.workspace }}\libs\NSIS\NSIS-source
             ${{ github.workspace }}\libs\ASIOSDK2
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
@@ -362,7 +371,7 @@ jobs:
           MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
-
+          MACOS_CA_PUBLICKEY:       ${{ secrets.MACOS_CA_PUBKEY }}
       - name:                       Post-Build for ${{ matrix.config.config_name }}
         id:                         get-artifacts
         run:                        ${{ matrix.config.base_command }} get-artifacts
@@ -391,7 +400,8 @@ jobs:
       - name:                       Notarize macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    steps.build.outputs.macos_notarize == 'true'
         id:                         notarize-macOS-app
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
@@ -403,7 +413,8 @@ jobs:
       - name:                       Staple macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    steps.build.outputs.macos_notarize == 'true'
         id:                         staple-macOS-app
         uses:                       devbotsxyz/xcode-staple@ae68b22ca35d15864b7f7923e1a166533b2944bf
         with:
@@ -454,3 +465,98 @@ jobs:
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
         uses:                       github/codeql-action/analyze@v2
+
+  create_deb_repo:
+    name:                           Create files for .deb repository (if requested)
+    runs-on:                        ubuntu-22.04
+    needs:                          [create_release, release_assets]
+    if:                             needs.create_release.outputs.publish_to_release == 'true'
+    # Set permissions to allow uploading artifact, uploading to release
+    permissions:
+      checks:                       write
+      contents:                     write
+    steps:
+      - name:                       Import GPG key
+        env:
+          GPG_PRIVATE_KEY:          ${{ secrets.GPG_PRIVATE_KEY }}
+        run:                        |
+          set -eu
+
+          [[ "${GPG_PRIVATE_KEY:-}" ]] || {
+              echo "Missing Github secret GPG_PRIVATE_KEY. Please set it on GitHub to enable deb repository releases. Skipping step..."
+              echo "GPG_REPO_KEY_MISSING=true" >> ${GITHUB_ENV}
+              exit 0
+          }
+
+          echo "GPG_REPO_KEY_MISSING=false" >> ${GITHUB_ENV}
+          mkdir -p gpghome
+          chmod 700 gpghome
+          echo "${GPG_PRIVATE_KEY}" | gpg --homedir gpghome --import -
+      # Unfortunately download-artifact action doesn't support wild card downloads. Thus downloading all artifacts
+      - name:                       Download all artifacts
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
+        uses:                       actions/download-artifact@v3
+        with:
+          path:                     releasedl/
+      - name:                       Create Debian repository
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
+        run:                        |
+          set -eu
+
+          # Create and cd into repo directory
+          mkdir repo
+          mv releasedl/*.deb/*.deb repo/
+          pushd repo
+
+          # create repo files
+          apt-ftparchive packages . > Packages
+          apt-ftparchive release . > Release
+          gpg --homedir "../gpghome" --armor --yes --clearsign --output InRelease --detach-sign Release
+          gpg --homedir "../gpghome" --armor --export > "key.asc"
+
+          popd
+
+      - name:                       Upload Packages file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
+        id:                         deb-upload-packagesfile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/Packages
+          asset_name:               Packages
+          asset_content_type:       text/plain
+      - name:                       Upload Release file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
+        id:                         deb-upload-releasefile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/Release
+          asset_name:               Release
+          asset_content_type:       message/rfc822
+      - name:                       Upload InRelease file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
+        id:                         deb-upload-inreleasefile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/InRelease
+          asset_name:               InRelease
+          asset_content_type:       text/PGP
+      - name:                       Upload Key file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
+        id:                         deb-upload-keyascfile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/key.asc
+          asset_name:               key.asc
+          asset_content_type:       application/pgp-keys

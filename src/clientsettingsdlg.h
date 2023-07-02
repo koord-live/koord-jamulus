@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -65,7 +65,7 @@ public:
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
-    void    UpdateDirectoryServerComboBox();
+    void    UpdateDirectoryComboBox();
     void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 

@@ -52,77 +52,77 @@
         <translation>部分音频采样来自</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="689"/>
+        <location filename="../util.cpp" line="690"/>
         <source>For details on the contributions check out the %1</source>
         <translation>关于贡献者的详情请参见 %1</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="690"/>
+        <location filename="../util.cpp" line="691"/>
         <source>Github Contributors list</source>
         <translation>Github 贡献者列表</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="693"/>
+        <location filename="../util.cpp" line="694"/>
         <source>Spanish</source>
         <translation>西班牙语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="697"/>
+        <location filename="../util.cpp" line="698"/>
         <source>French</source>
         <translation>法语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="702"/>
+        <location filename="../util.cpp" line="703"/>
         <source>Portuguese</source>
         <translation>葡萄牙语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="709"/>
+        <location filename="../util.cpp" line="710"/>
         <source>Dutch</source>
         <translation>荷兰语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="714"/>
+        <location filename="../util.cpp" line="715"/>
         <source>Italian</source>
         <translation>意大利语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="718"/>
+        <location filename="../util.cpp" line="719"/>
         <source>German</source>
         <translation>德语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="723"/>
+        <location filename="../util.cpp" line="724"/>
         <source>Polish</source>
         <translation>波兰语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="728"/>
+        <location filename="../util.cpp" line="729"/>
         <source>Swedish</source>
         <translation>瑞典语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="734"/>
+        <location filename="../util.cpp" line="735"/>
         <source>Korean</source>
         <translation>韩语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="739"/>
+        <location filename="../util.cpp" line="740"/>
         <source>Slovak</source>
         <translation>斯洛伐克语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="742"/>
+        <location filename="../util.cpp" line="743"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="745"/>
+        <location filename="../util.cpp" line="746"/>
         <source>Norwegian Bokmål</source>
         <translation>书面挪威语</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="753"/>
+        <location filename="../util.cpp" line="754"/>
         <source>About %1</source>
         <translation>关于 %1</translation>
     </message>
@@ -144,9 +144,13 @@
         <translation>版本文字标签</translation>
     </message>
     <message>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <translation type="vanished">版权所有 (C) 2005-2021 Jamulus 开发团队</translation>
+    </message>
+    <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation>版权所有 (C) 2005-2021 Jamulus 开发团队</translation>
+        <source>Copyright © 2005-2023 The Jamulus Development Team</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -210,12 +214,12 @@
         <translation>尝 试 连 接 中</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1184"/>
+        <location filename="../audiomixerboard.cpp" line="1185"/>
         <source>RECORDING ACTIVE</source>
         <translation>录制已开启</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1194"/>
+        <location filename="../audiomixerboard.cpp" line="1195"/>
         <source>Personal Mix at: %1</source>
         <translation>个人混音室: %1</translation>
     </message>
@@ -1074,8 +1078,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
-        <translation>自动抖动缓冲开关</translation>
+        <source>Auto jitter buffer check box</source>
+        <translation type="unfinished">自动抖动缓冲开关</translation>
     </message>
     <message>
         <source>Sound Card Device</source>
@@ -1133,14 +1137,14 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
+        <source>Small Network Buffers</source>
         <translatorcomment>Small Network Buffers 的作用不确定，暂定译法</translatorcomment>
         <translation>启用小网络缓冲区</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
-        <translation>启用小网络缓冲区勾选框</translation>
+        <source>Small network buffers check box</source>
+        <translation type="unfinished">启用小网络缓冲区勾选框</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1527,12 +1531,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation>音频提示</translation>
+        <translation type="unfinished">音频提示</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>当接收到聊天消息或新客户端加入到会话时启用音频提示。可能需要第二个音频设备以便听到对应的提示音。</translation>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <translation type="unfinished">当接收到聊天消息或新客户端加入到会话时启用音频提示。可能需要第二个音频设备以便听到对应的提示音。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -1600,12 +1604,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>自激保护</translation>
+        <translation type="unfinished">自激保护</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>启用自激保护以检测话筒和麦克风产生正反馈循环（自激）导致的啸叫。</translation>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished">启用自激保护以检测话筒和麦克风产生正反馈循环（自激）导致的啸叫。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1667,7 +1671,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="470"/>
         <location filename="../clientsettingsdlg.cpp" line="609"/>
         <location filename="../clientsettingsdlg.cpp" line="617"/>
-        <location filename="../util.cpp" line="1200"/>
+        <location filename="../util.cpp" line="1271"/>
         <source>None</source>
         <translation>无</translation>
     </message>
@@ -1750,287 +1754,287 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../util.h" line="604"/>
+        <location filename="../util.h" line="609"/>
         <source>Custom</source>
         <translation>自定义</translation>
     </message>
     <message>
-        <location filename="../util.h" line="586"/>
+        <location filename="../util.h" line="591"/>
         <source>Any Genre 2</source>
         <translation>任何流派 2</translation>
     </message>
     <message>
-        <location filename="../util.h" line="589"/>
+        <location filename="../util.h" line="594"/>
         <source>Any Genre 3</source>
         <translation>任何流派 3</translation>
     </message>
     <message>
-        <location filename="../util.h" line="592"/>
+        <location filename="../util.h" line="597"/>
         <source>Genre Rock</source>
         <translation>摇滚流派</translation>
     </message>
     <message>
-        <location filename="../util.h" line="595"/>
+        <location filename="../util.h" line="600"/>
         <source>Genre Jazz</source>
         <translation>爵士流派</translation>
     </message>
     <message>
-        <location filename="../util.h" line="598"/>
+        <location filename="../util.h" line="603"/>
         <source>Genre Classical/Folk</source>
         <translation>古典/民间流派</translation>
     </message>
     <message>
-        <location filename="../util.h" line="601"/>
+        <location filename="../util.h" line="606"/>
         <source>Genre Choral/Barbershop</source>
         <translation>唱诗/合唱流派</translation>
     </message>
     <message>
-        <location filename="../util.h" line="607"/>
+        <location filename="../util.h" line="612"/>
         <source>Any Genre 1</source>
         <translation>任何流派 1</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1203"/>
+        <location filename="../util.cpp" line="1274"/>
         <source>Drum Set</source>
         <translation>组鼓</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1206"/>
+        <location filename="../util.cpp" line="1277"/>
         <source>Djembe</source>
         <translation>非洲鼓</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1209"/>
+        <location filename="../util.cpp" line="1280"/>
         <source>Electric Guitar</source>
         <translation>电吉他</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1212"/>
+        <location filename="../util.cpp" line="1283"/>
         <source>Acoustic Guitar</source>
         <translation>原声吉他</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1215"/>
+        <location filename="../util.cpp" line="1286"/>
         <source>Bass Guitar</source>
         <translation>贝斯</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1218"/>
+        <location filename="../util.cpp" line="1289"/>
         <source>Keyboard</source>
         <translation>键盘手</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1221"/>
+        <location filename="../util.cpp" line="1292"/>
         <source>Synthesizer</source>
         <translation>合成器</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1224"/>
+        <location filename="../util.cpp" line="1295"/>
         <source>Grand Piano</source>
         <translation>大钢琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1227"/>
+        <location filename="../util.cpp" line="1298"/>
         <source>Accordion</source>
         <translation>手风琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1230"/>
+        <location filename="../util.cpp" line="1301"/>
         <source>Vocal</source>
         <translation>歌手</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1233"/>
+        <location filename="../util.cpp" line="1304"/>
         <source>Microphone</source>
         <translation>麦克风</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1236"/>
+        <location filename="../util.cpp" line="1307"/>
         <source>Harmonica</source>
         <translation>口琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1239"/>
+        <location filename="../util.cpp" line="1310"/>
         <source>Trumpet</source>
         <translation>小号</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1242"/>
+        <location filename="../util.cpp" line="1313"/>
         <source>Trombone</source>
         <translation>长号</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1245"/>
+        <location filename="../util.cpp" line="1316"/>
         <source>French Horn</source>
         <translation>圆号</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1248"/>
+        <location filename="../util.cpp" line="1319"/>
         <source>Tuba</source>
         <translation>大号</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1251"/>
+        <location filename="../util.cpp" line="1322"/>
         <source>Saxophone</source>
         <translation>萨克斯</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1254"/>
+        <location filename="../util.cpp" line="1325"/>
         <source>Clarinet</source>
         <translation>单簧管</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1257"/>
+        <location filename="../util.cpp" line="1328"/>
         <source>Flute</source>
         <translation>长笛</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1260"/>
+        <location filename="../util.cpp" line="1331"/>
         <source>Violin</source>
         <translation>小提琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1263"/>
+        <location filename="../util.cpp" line="1334"/>
         <source>Cello</source>
         <translation>大提琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1266"/>
+        <location filename="../util.cpp" line="1337"/>
         <source>Double Bass</source>
         <translation>低音提琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1269"/>
+        <location filename="../util.cpp" line="1340"/>
         <source>Recorder</source>
         <translation>录音员</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1272"/>
+        <location filename="../util.cpp" line="1343"/>
         <source>Streamer</source>
         <translation>直播推流员</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1275"/>
+        <location filename="../util.cpp" line="1346"/>
         <source>Listener</source>
         <translation>听众</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1278"/>
+        <location filename="../util.cpp" line="1349"/>
         <source>Guitar+Vocal</source>
         <translation>吉他弹唱</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1281"/>
+        <location filename="../util.cpp" line="1352"/>
         <source>Keyboard+Vocal</source>
         <translation>键盘手弹唱</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1284"/>
+        <location filename="../util.cpp" line="1355"/>
         <source>Bodhran</source>
         <translation>宝思兰鼓</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1287"/>
+        <location filename="../util.cpp" line="1358"/>
         <source>Bassoon</source>
         <translation>大管</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1290"/>
+        <location filename="../util.cpp" line="1361"/>
         <source>Oboe</source>
         <translation>双簧管</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1293"/>
+        <location filename="../util.cpp" line="1364"/>
         <source>Harp</source>
         <translation>竖琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1296"/>
+        <location filename="../util.cpp" line="1367"/>
         <source>Viola</source>
         <translation>中提琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1299"/>
+        <location filename="../util.cpp" line="1370"/>
         <source>Congas</source>
         <translation>康茄鼓</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1302"/>
+        <location filename="../util.cpp" line="1373"/>
         <source>Bongo</source>
         <translation>邦戈鼓</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1305"/>
+        <location filename="../util.cpp" line="1376"/>
         <source>Vocal Bass</source>
         <translation>男低音</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1308"/>
+        <location filename="../util.cpp" line="1379"/>
         <source>Vocal Tenor</source>
         <translation>男高音</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1311"/>
+        <location filename="../util.cpp" line="1382"/>
         <source>Vocal Alto</source>
         <translation>女低音</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1314"/>
+        <location filename="../util.cpp" line="1385"/>
         <source>Vocal Soprano</source>
         <translation>女高音</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1317"/>
+        <location filename="../util.cpp" line="1388"/>
         <source>Banjo</source>
         <translation>班卓琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1320"/>
+        <location filename="../util.cpp" line="1391"/>
         <source>Mandolin</source>
         <translation>曼陀林</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1323"/>
+        <location filename="../util.cpp" line="1394"/>
         <source>Ukulele</source>
         <translation>尤克里里</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1326"/>
+        <location filename="../util.cpp" line="1397"/>
         <source>Bass Ukulele</source>
         <translation>贝斯尤克里里</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1329"/>
+        <location filename="../util.cpp" line="1400"/>
         <source>Vocal Baritone</source>
         <translation>男中音</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1332"/>
+        <location filename="../util.cpp" line="1403"/>
         <source>Vocal Lead</source>
         <translation>领唱</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1335"/>
+        <location filename="../util.cpp" line="1406"/>
         <source>Mountain Dulcimer</source>
         <translation>扬琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1338"/>
+        <location filename="../util.cpp" line="1409"/>
         <source>Scratching</source>
         <translation>打碟</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1341"/>
+        <location filename="../util.cpp" line="1412"/>
         <source>Rapping</source>
         <translation>饶舌歌手</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1344"/>
+        <location filename="../util.cpp" line="1415"/>
         <source>Vibraphone</source>
         <translation>铁琴</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1347"/>
+        <location filename="../util.cpp" line="1418"/>
         <source>Conductor</source>
         <translation>指挥</translation>
     </message>
@@ -2070,8 +2074,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>启用小网络缓冲区</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">启用小网络缓冲区</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2155,7 +2159,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation>音频提示</translation>
+        <translation type="unfinished">音频提示</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2211,7 +2215,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation>自激保护</translation>
+        <translation type="unfinished">自激保护</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -2487,38 +2491,38 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="795"/>
+        <location filename="../util.cpp" line="796"/>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="802"/>
-        <location filename="../util.cpp" line="807"/>
+        <location filename="../util.cpp" line="803"/>
+        <location filename="../util.cpp" line="808"/>
         <source>Getting &amp;Started...</source>
         <translation>入门(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="803"/>
+        <location filename="../util.cpp" line="804"/>
         <source>Software &amp;Manual...</source>
         <translation>软件说明书(&amp;M)...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="810"/>
+        <location filename="../util.cpp" line="811"/>
         <source>What&apos;s &amp;This</source>
         <translation>这是什么(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="812"/>
+        <location filename="../util.cpp" line="813"/>
         <source>&amp;About Jamulus...</source>
         <translation>关于 Jamulus(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="814"/>
+        <location filename="../util.cpp" line="815"/>
         <source>About &amp;Qt...</source>
         <translation>关于 &amp;Qt...</translation>
     </message>
     <message>
-        <location filename="../util.h" line="430"/>
+        <location filename="../util.h" line="435"/>
         <source>About Qt</source>
         <translation>关于 Qt</translation>
     </message>
@@ -2526,12 +2530,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../util.cpp" line="871"/>
+        <location filename="../util.cpp" line="872"/>
         <source>Restart Required</source>
         <translation>需要重启</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="871"/>
+        <location filename="../util.cpp" line="872"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>请重启应用程序以使语言变更生效.</translation>
     </message>
@@ -2539,22 +2543,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <location filename="../util.cpp" line="771"/>
+        <location filename="../util.cpp" line="772"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>此服务器需要你同意一些条件才可加入。请阅读聊天窗口中的内容。</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="772"/>
+        <location filename="../util.cpp" line="773"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>我已阅读并同意这些条件(&amp;A)。</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="773"/>
+        <location filename="../util.cpp" line="774"/>
         <source>Accept</source>
         <translation>接受</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="774"/>
+        <location filename="../util.cpp" line="775"/>
         <source>Decline</source>
         <translation>拒绝</translation>
     </message>
@@ -2603,7 +2607,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>已连接的客户端列表视图</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="60"/>
+        <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
+        <translation>&lt;b&gt;目录：&lt;/b&gt;选择 &apos;%1&apos; 不在目录中注册你的服务器。&lt;br&gt;或者选择其中一个流派在该目录中注册。&lt;br&gt;或者选择 &apos;%2&apos; 并在选项标签上指定一个自定义目录地址，在一个自定义目录中注册。&lt;br&gt;&lt;br&gt;对于除&apos;%1&apos;以外的任何值，该服务器都会与一个目录注册，这样，当 %3 的用户选择该目录时，可以在客户端连接对话服务器列表中选择该服务器。&lt;br&gt;&lt;br&gt;服务器的注册会定期更新，以确保连接对话服务器列表中的所有服务器都是实际可用的。</translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="226"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>操作系统启动时以最小化状态启动</translation>
     </message>
@@ -2612,12 +2622,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">将我的服务器置为公开</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="79"/>
         <source>Register Server Status</source>
         <translation>登记服务器状态</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="228"/>
+        <location filename="../serverdlg.cpp" line="227"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>如果选中了操作系统启动时以最小化状态启动勾选框，服务器程序将随操作系统启动时自动启动并最小化至系统任务栏。</translation>
     </message>
@@ -2654,68 +2664,66 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">服务器列表下拉框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="86"/>
         <source>Server Name</source>
         <translation>服务器名称</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="88"/>
+        <location filename="../serverdlg.cpp" line="87"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>服务器名称在客户端的连接对话框的服务器列表中对应服务器的显示标识。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="94"/>
+        <location filename="../serverdlg.cpp" line="93"/>
         <source>Server name line edit</source>
         <translation>服务器名称编辑框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Location City</source>
         <translation>所处城市</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="98"/>
+        <location filename="../serverdlg.cpp" line="97"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>设置服务器所处于的城市。如果输入了城市名称，其将被显示在客户端的连接对话框的服务器列表中。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="105"/>
+        <location filename="../serverdlg.cpp" line="104"/>
         <source>City where the server is located line edit</source>
         <translation>服务器所位于的城市的编辑框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="138"/>
         <source>Recording has been switched off by the UI checkbox.</source>
-        <translation>录制已通过界面的勾选框关闭。</translation>
+        <translation type="vanished">录制已通过界面的勾选框关闭。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="140"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
-        <translation>录制已因界面的勾选框或因程序收到 SIGUSR2 信号而关闭。</translation>
+        <translation type="vanished">录制已因界面的勾选框或因程序收到 SIGUSR2 信号而关闭。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Language</source>
         <translation>语言(Lang)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>选择用于用户界面的语言。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="171"/>
+        <location filename="../serverdlg.cpp" line="170"/>
         <source>Language combo box</source>
         <translation>语言选择框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
         <translation>打开可供选择录制存储位置的对话框的按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="181"/>
         <source>Main Recording Directory</source>
         <translation>主要录制目录</translation>
     </message>
@@ -2724,7 +2732,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">点击按钮以打开供选择主要录制目录路径的对话框。所选值必须存在且可写（允许运行 Jamulus 所使用的用户创建子目录）。 </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>主录制路径文本框（只读）</translation>
     </message>
@@ -2733,22 +2741,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">当前录制目录路径的值。所选的值必须存在且可被写入（允许运行 Jamulus 的用户创建子目录）。点击按钮以打开供选择主录制目录路径的对话框。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="188"/>
         <source>Clear the recording directory button</source>
         <translation>清除录制目录按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear Recording Directory</source>
         <translation>清除录制目录</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="191"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>点击按钮以清除当前所选择的录制路径。在设置新的位置之前将不再可以开始新的录制。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>开启或关闭录制的勾选框</translation>
     </message>
@@ -2757,43 +2765,43 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">如果登记服务器勾选框被勾选，这里将展示到目录服务器的登记是否成功。若登记失败，请选择其它服务器列表。</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="119"/>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">启用录音器</translation>
+    </message>
+    <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Enable Recorder</source>
-        <translation>启用录音器</translation>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
+        <translation type="unfinished">录音功能启用时将为勾选状态，否则为未勾选状态。若已配置并开启选项，则录音功能将在会话进行中开启录制。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="121"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation>录音功能启用时将为勾选状态，否则为未勾选状态。若已配置并开启选项，则录音功能将在会话进行中开启录制。</translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="148"/>
+        <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
         <translation>当前会话目录文本框（只读）</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="151"/>
         <source>Current Session Directory</source>
         <translation>当前会话目录</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="153"/>
+        <location filename="../serverdlg.cpp" line="152"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translatorcomment>这句话原文可能有问题</translatorcomment>
         <translation>用于存储录制时当前会话所录制到的位置，录制未进行时且未开启录制功能时此项将不可用。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="130"/>
+        <location filename="../serverdlg.cpp" line="129"/>
         <source>Recorder status label</source>
         <translation>录制状态标签</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder Status</source>
         <translation>录音器状态</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>显示当前录音功能的状态。  可能为下述值：</translation>
     </message>
@@ -2806,17 +2814,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">录制已被关闭</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>There is no one connected to the server to record.</source>
         <translation>没有人连接到服务器以供录制。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="142"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>演奏已被录制到会话所对应的目录中。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>NOTE</source>
         <translation>注意</translation>
     </message>
@@ -2825,17 +2833,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">若录制路径不可用，则问题原因将显示在这里。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="158"/>
         <source>Server welcome message edit box</source>
         <translation>服务器欢迎信息编辑框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="159"/>
         <source>Server Welcome Message</source>
         <translation>服务器欢迎信息</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="161"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>当新的乐手加入服务器时，欢迎信息将会显示在聊天窗口中。若未设置欢迎信息，则服务器欢迎功能将为关闭状态。</translation>
     </message>
@@ -2852,28 +2860,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">自定义目录指用于提供连接对话框中所展示的服务器列表信息的自定义的目录服务器的 IP 地址或 URL。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="201"/>
+        <location filename="../serverdlg.cpp" line="200"/>
         <source>Custom Directory line edit</source>
         <translation>自定义目录编辑框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="245"/>
+        <location filename="../serverdlg.cpp" line="244"/>
         <source>&amp;Hide %1 server</source>
         <translation>隐藏 %1 服务器(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="248"/>
+        <location filename="../serverdlg.cpp" line="247"/>
         <source>&amp;Show %1 server</source>
         <translation>显示 %1 服务器(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="253"/>
+        <location filename="../serverdlg.cpp" line="252"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>%1 服务器</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="337"/>
+        <location filename="../serverdlg.cpp" line="336"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>在此输入消息文字。若未设定消息文字，服务器欢迎信息将为关闭状态。</translation>
     </message>
@@ -2888,17 +2896,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="obsolete">软件更新可用</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="590"/>
+        <location filename="../serverdlg.cpp" line="589"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>录音功能启动失败。请检查可用的磁盘空间和权限然后再试一次。错误信息: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="870"/>
+        <location filename="../serverdlg.cpp" line="867"/>
         <source>ERROR</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="124"/>
         <source>Request new recording button</source>
         <translation>用于创建新的录制的按钮</translation>
     </message>
@@ -2908,144 +2916,148 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>分类目录类型下拉框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation>分类目录</translation>
+        <translation type="vanished">分类目录</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation>选择 &apos;%1&apos; 来避免将你的服务器登记到一个目录中。</translation>
+        <translation type="vanished">选择 &apos;%1&apos; 来避免将你的服务器登记到一个目录中。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation>选择一个流派以登记到对应的目录中。</translation>
+        <translation type="vanished">选择一个流派以登记到对应的目录中。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation>或者选择 &apos;%1&apos; 并在设置选项卡中设置一个自定义目录地址来登记到一个自定义的目录中。</translation>
+        <translation type="vanished">或者选择 &apos;%1&apos; 并在设置选项卡中设置一个自定义目录地址来登记到一个自定义的目录中。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation>对于选择除 &apos;%1&apos; 外的所有情况，此服务器都将登记到一个目录之中，以便 %2 用户可以从客户端的连接对话框中的服务器列表中选择并连接到此服务器。</translation>
+        <translation type="vanished">对于选择除 &apos;%1&apos; 外的所有情况，此服务器都将登记到一个目录之中，以便 %2 用户可以从客户端的连接对话框中的服务器列表中选择并连接到此服务器。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>服务器的登记情况会周期性的刷新，以确保连接对话框中列出的服务器都确实可用。</translation>
+        <translation type="vanished">服务器的登记情况会周期性的刷新，以确保连接对话框中列出的服务器都确实可用。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="81"/>
+        <location filename="../serverdlg.cpp" line="80"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>当一个非“%1”的选项被作为目录选择时，此处将呈现登记情况是否成功的状态。若登记失败，则请选择一个其它的目录。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>Country/Region</source>
         <translation>国家/地区</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="109"/>
+        <location filename="../serverdlg.cpp" line="108"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation>设置当前服务器所位于的国家或地区。客户端将在服务器列表对话框中展示此位置信息。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="116"/>
+        <location filename="../serverdlg.cpp" line="115"/>
         <source>Combo box for location of this server</source>
         <translation>服务器位置的选择框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="125"/>
         <source>New Recording</source>
         <translation>创建新录制</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="127"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>在一次录制会话中，此按钮可供开始新的录制。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="134"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>未设置录音目录或设置的值不可用。请在设置选项卡中检查对应的选项。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="145"/>
+        <location filename="../serverdlg.cpp" line="137"/>
+        <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="139"/>
+        <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation>如果录制目录不可用，问题将会被显示在此位置。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation>点击按钮以打开可供选择录制目录位置的对话框。  所选值必须存在且可写入（允许运行 %1 的用户创建子目录）。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="183"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>当前录制目录路径的值。所选的值必须存在且可被写入（允许运行 %1 的用户创建子目录）。点击按钮以打开供选择主录制目录路径的对话框。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="194"/>
         <source>Custom Directory address</source>
         <translation>自定义目录服务器地址</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="196"/>
+        <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation>自定义目录指用于提供连接对话框中所展示的服务器列表信息的自定义的目录服务器的地址或。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="203"/>
         <source>Server List Filename dialog push button</source>
         <translation>服务器列表文件名对话框按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename</source>
         <translation>服务器列表文件名</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation>点击按钮以打开供选择存储服务器列表文件位置的对话框。运行 %1 的用户需要能够能够创建此文件（若对应的文件已存在则将在保存时覆盖文件内容）。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="211"/>
         <source>Server List Filename text box (read-only)</source>
         <translation>服务器列表文件名编辑框（只读）</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="214"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation>当前持久存储服务器列表的文件名。运行 %1 的用户需要能够能够创建此文件（若对应的文件已存在则将在保存时覆盖文件内容）。点击按钮以打开可供设置持久存储服务器列表的文件名的对话框。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="220"/>
         <source>Clear the server list file name button</source>
         <translation>清除服务器列表文件名的按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear Server List Filename</source>
         <translation>清除服务器列表文件名</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="223"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation>点击按钮来清除当前所选的服务器列表持久化存储的文件名。这将导致服务器列表不再持久存储到本地，直至一个新的文件名被设置。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="241"/>
-        <location filename="../serverdlg.cpp" line="393"/>
+        <location filename="../serverdlg.cpp" line="240"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>E&amp;xit</source>
         <translation>退出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
+        <location filename="../serverdlg.cpp" line="734"/>
         <source>Now a directory</source>
         <translation>现在是目录了</translation>
     </message>
@@ -3066,12 +3078,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished"> 服务器</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="391"/>
+        <location filename="../serverdlg.cpp" line="390"/>
         <source>&amp;Window</source>
         <translation>窗口(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="602"/>
+        <location filename="../serverdlg.cpp" line="601"/>
         <source>Select Main Recording Directory</source>
         <translation>选择录制存储位置</translation>
     </message>
@@ -3100,61 +3112,65 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">未登记</translation>
     </message>
     <message>
-        <location filename="../util.h" line="583"/>
+        <location filename="../util.h" line="588"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../util.h" line="630"/>
+        <location filename="../util.h" line="635"/>
         <source>Not registered</source>
         <translation>未登记</translation>
     </message>
     <message>
-        <location filename="../util.h" line="633"/>
+        <location filename="../util.h" line="638"/>
         <source>Bad address</source>
         <translation>地址不正确</translation>
     </message>
     <message>
-        <location filename="../util.h" line="636"/>
+        <location filename="../util.h" line="641"/>
         <source>Registration requested</source>
         <translation>已请求登记</translation>
     </message>
     <message>
-        <location filename="../util.h" line="639"/>
+        <location filename="../util.h" line="644"/>
         <source>Registration failed</source>
         <translation>登记失败</translation>
     </message>
     <message>
-        <location filename="../util.h" line="642"/>
+        <location filename="../util.h" line="647"/>
         <source>Check server version</source>
         <translation>检查服务器版本</translation>
     </message>
     <message>
-        <location filename="../util.h" line="645"/>
+        <location filename="../util.h" line="650"/>
         <source>Registered</source>
         <translation>已登记</translation>
     </message>
     <message>
-        <location filename="../util.h" line="648"/>
+        <location filename="../util.h" line="653"/>
+        <source>Server list full at directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory server list full</source>
-        <translation>目录服务器列表已满</translation>
+        <translation type="vanished">目录服务器列表已满</translation>
     </message>
     <message>
         <source>Directory Server full</source>
         <translation type="vanished">目录列表已满</translation>
     </message>
     <message>
-        <location filename="../util.h" line="651"/>
+        <location filename="../util.h" line="656"/>
         <source>Your server version is too old</source>
         <translation>您的服务端版本过低</translation>
     </message>
     <message>
-        <location filename="../util.h" line="654"/>
+        <location filename="../util.h" line="659"/>
         <source>Requirements not fulfilled</source>
         <translation>要求未满足</translation>
     </message>
     <message>
-        <location filename="../util.h" line="657"/>
+        <location filename="../util.h" line="662"/>
         <source>Unknown value %1</source>
         <translation>未知的值 %1</translation>
     </message>
@@ -3232,8 +3248,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
-        <translation>启用延迟平衡</translation>
+        <source>Delay panning</source>
+        <translation type="unfinished">启用延迟平衡</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -3261,8 +3277,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>启用合奏录音机</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">启用合奏录音机</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
@@ -3294,9 +3310,34 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="853"/>
+        <location filename="../serverlist.cpp" line="419"/>
+        <source>Now a directory</source>
+        <translation type="unfinished">现在是目录了</translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="425"/>
+        <source>No longer a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="784"/>
+        <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="791"/>
+        <source>Loading persistent server list file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="854"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>不能写入到 &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="865"/>
+        <source>Saving registration for %1 (%2): %3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3500,13 +3541,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">网络合奏软件</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1608"/>
+        <location filename="../util.cpp" line="1679"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1，版本 %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1625"/>
+        <location filename="../util.cpp" line="1696"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>使用 GNU 通用许可证第2版或更高版本发布 (GPLv2)</translation>
     </message>
@@ -3551,7 +3592,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">旗帜图标作者为 Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
         <translation type="vanished">版权所有 (C) 2005-2022 Jamulus 开发团队</translation>
     </message>
     <message>

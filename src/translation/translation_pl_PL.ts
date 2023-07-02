@@ -52,77 +52,77 @@
         <translation>Niektóre próbki dźwiękowe pochodzą z</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="689"/>
+        <location filename="../util.cpp" line="690"/>
         <source>For details on the contributions check out the %1</source>
         <translation>Aby znaleźć szczegółowe informacje o współtwórcach sprawdź %1</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="690"/>
+        <location filename="../util.cpp" line="691"/>
         <source>Github Contributors list</source>
         <translation>Lista współautorów na Github-ie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="693"/>
+        <location filename="../util.cpp" line="694"/>
         <source>Spanish</source>
         <translation>hiszpański</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="697"/>
+        <location filename="../util.cpp" line="698"/>
         <source>French</source>
         <translation>francuski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="702"/>
+        <location filename="../util.cpp" line="703"/>
         <source>Portuguese</source>
         <translation>portugalski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="709"/>
+        <location filename="../util.cpp" line="710"/>
         <source>Dutch</source>
         <translation>holenderski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="714"/>
+        <location filename="../util.cpp" line="715"/>
         <source>Italian</source>
         <translation>włoski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="718"/>
+        <location filename="../util.cpp" line="719"/>
         <source>German</source>
         <translation>niemiecki</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="723"/>
+        <location filename="../util.cpp" line="724"/>
         <source>Polish</source>
         <translation>polski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="728"/>
+        <location filename="../util.cpp" line="729"/>
         <source>Swedish</source>
         <translation>szwedzki</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="734"/>
+        <location filename="../util.cpp" line="735"/>
         <source>Korean</source>
         <translation>koreański</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="739"/>
+        <location filename="../util.cpp" line="740"/>
         <source>Slovak</source>
         <translation>słowacki</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="742"/>
+        <location filename="../util.cpp" line="743"/>
         <source>Simplified Chinese</source>
         <translation>Chiński uproszczony</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="745"/>
+        <location filename="../util.cpp" line="746"/>
         <source>Norwegian Bokmål</source>
         <translation>Norweski Bokmål</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="753"/>
+        <location filename="../util.cpp" line="754"/>
         <source>About %1</source>
         <translation>O programie %1</translation>
     </message>
@@ -144,13 +144,17 @@
         <translation></translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer i inni</translation>
+        <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2023 Volker Fischer i inni</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2023 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2022 Zespół programistów Jamulus-a</translation>
+        <source>Copyright © 2005-2023 The Jamulus Development Team</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -214,12 +218,12 @@
         <translation>P R Ó B U J Ę   S I Ę   P O Ł Ą C Z Y Ć</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1184"/>
+        <location filename="../audiomixerboard.cpp" line="1185"/>
         <source>RECORDING ACTIVE</source>
         <translation>NAGRYWANIE AKTYWNE</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1194"/>
+        <location filename="../audiomixerboard.cpp" line="1195"/>
         <source>Personal Mix at: %1</source>
         <translation>Własny miks na: %1</translation>
     </message>
@@ -1145,8 +1149,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
-        <translation>Przełącznik automatycznego rozmiaru bufora odchyleń</translation>
+        <source>Auto jitter buffer check box</source>
+        <translation type="unfinished">Przełącznik automatycznego rozmiaru bufora odchyleń</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1214,8 +1218,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Używaj małych buforów sieciowych</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Używaj małych buforów sieciowych</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1223,8 +1227,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
-        <translation>Pole wyboru Włącz Małe Bufory Sieciowe</translation>
+        <source>Small network buffers check box</source>
+        <translation type="unfinished">Pole wyboru Włącz Małe Bufory Sieciowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1372,7 +1376,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <location filename="../clientsettingsdlg.cpp" line="470"/>
         <location filename="../clientsettingsdlg.cpp" line="609"/>
         <location filename="../clientsettingsdlg.cpp" line="617"/>
-        <location filename="../util.cpp" line="1200"/>
+        <location filename="../util.cpp" line="1271"/>
         <source>None</source>
         <translation>Brak</translation>
     </message>
@@ -1526,12 +1530,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation>Alarmy dźwiękowe</translation>
+        <translation type="unfinished">Alarmy dźwiękowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>Stosuj sygnały dźwiękowe dla przychodzących wiadomości czatu oraz kiedy dołącza nowy uczestnik sesji. Może być wymagane dodatkowe urządzenie dźwiękowe by je słyszeć.</translation>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <translation type="unfinished">Stosuj sygnały dźwiękowe dla przychodzących wiadomości czatu oraz kiedy dołącza nowy uczestnik sesji. Może być wymagane dodatkowe urządzenie dźwiękowe by je słyszeć.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -1834,12 +1838,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>Ochrona przed sprzęganiem</translation>
+        <translation type="unfinished">Ochrona przed sprzęganiem</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>Wykrywaj sprzężenia akustyczne między miktofonem a głośnikami.</translation>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished">Wykrywaj sprzężenia akustyczne między miktofonem a głośnikami.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1868,7 +1872,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Wysoka</translation>
     </message>
     <message>
-        <location filename="../util.h" line="604"/>
+        <location filename="../util.h" line="609"/>
         <source>Custom</source>
         <translation>Własny</translation>
     </message>
@@ -1877,37 +1881,37 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Wszystkie style</translation>
     </message>
     <message>
-        <location filename="../util.h" line="586"/>
+        <location filename="../util.h" line="591"/>
         <source>Any Genre 2</source>
         <translation>Każdy styl 2</translation>
     </message>
     <message>
-        <location filename="../util.h" line="589"/>
+        <location filename="../util.h" line="594"/>
         <source>Any Genre 3</source>
         <translation>Każdy styl 3</translation>
     </message>
     <message>
-        <location filename="../util.h" line="592"/>
+        <location filename="../util.h" line="597"/>
         <source>Genre Rock</source>
         <translation>Rock</translation>
     </message>
     <message>
-        <location filename="../util.h" line="595"/>
+        <location filename="../util.h" line="600"/>
         <source>Genre Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../util.h" line="598"/>
+        <location filename="../util.h" line="603"/>
         <source>Genre Classical/Folk</source>
         <translation>Klasyka/folk</translation>
     </message>
     <message>
-        <location filename="../util.h" line="601"/>
+        <location filename="../util.h" line="606"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Chór/zespół wokalny</translation>
     </message>
     <message>
-        <location filename="../util.h" line="607"/>
+        <location filename="../util.h" line="612"/>
         <source>Any Genre 1</source>
         <translation>Każdy styl 1</translation>
     </message>
@@ -2004,247 +2008,247 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ok</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1203"/>
+        <location filename="../util.cpp" line="1274"/>
         <source>Drum Set</source>
         <translation>Zestaw perkusyjny</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1206"/>
+        <location filename="../util.cpp" line="1277"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1209"/>
+        <location filename="../util.cpp" line="1280"/>
         <source>Electric Guitar</source>
         <translation>Gitara elektryczna</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1212"/>
+        <location filename="../util.cpp" line="1283"/>
         <source>Acoustic Guitar</source>
         <translation>Gitara akustyczna</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1215"/>
+        <location filename="../util.cpp" line="1286"/>
         <source>Bass Guitar</source>
         <translation>Gitara basowa</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1218"/>
+        <location filename="../util.cpp" line="1289"/>
         <source>Keyboard</source>
         <translation>Klawisze</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1221"/>
+        <location filename="../util.cpp" line="1292"/>
         <source>Synthesizer</source>
         <translation>Syntezator</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1224"/>
+        <location filename="../util.cpp" line="1295"/>
         <source>Grand Piano</source>
         <translation>Fortepian</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1227"/>
+        <location filename="../util.cpp" line="1298"/>
         <source>Accordion</source>
         <translation>Akordeon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1230"/>
+        <location filename="../util.cpp" line="1301"/>
         <source>Vocal</source>
         <translation>Śpiew</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1233"/>
+        <location filename="../util.cpp" line="1304"/>
         <source>Microphone</source>
         <translation>Mikrofon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1236"/>
+        <location filename="../util.cpp" line="1307"/>
         <source>Harmonica</source>
         <translation>Harmonijka ustna</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1239"/>
+        <location filename="../util.cpp" line="1310"/>
         <source>Trumpet</source>
         <translation>Trąbka</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1242"/>
+        <location filename="../util.cpp" line="1313"/>
         <source>Trombone</source>
         <translation>Puzon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1245"/>
+        <location filename="../util.cpp" line="1316"/>
         <source>French Horn</source>
         <translation>Waltornia</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1248"/>
+        <location filename="../util.cpp" line="1319"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1251"/>
+        <location filename="../util.cpp" line="1322"/>
         <source>Saxophone</source>
         <translation>Saksofon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1254"/>
+        <location filename="../util.cpp" line="1325"/>
         <source>Clarinet</source>
         <translation>Klarnet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1257"/>
+        <location filename="../util.cpp" line="1328"/>
         <source>Flute</source>
         <translation>Flet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1260"/>
+        <location filename="../util.cpp" line="1331"/>
         <source>Violin</source>
         <translation>Skrzypce</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1263"/>
+        <location filename="../util.cpp" line="1334"/>
         <source>Cello</source>
         <translation>Wiolonczela</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1266"/>
+        <location filename="../util.cpp" line="1337"/>
         <source>Double Bass</source>
         <translation>Kontrabas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1269"/>
+        <location filename="../util.cpp" line="1340"/>
         <source>Recorder</source>
         <translation>Rejestrator</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1272"/>
+        <location filename="../util.cpp" line="1343"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1275"/>
+        <location filename="../util.cpp" line="1346"/>
         <source>Listener</source>
         <translation>Słuchacz</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1278"/>
+        <location filename="../util.cpp" line="1349"/>
         <source>Guitar+Vocal</source>
         <translation>Gitara+Śpiew</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1281"/>
+        <location filename="../util.cpp" line="1352"/>
         <source>Keyboard+Vocal</source>
         <translation>Keyboard+Śpiew</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1284"/>
+        <location filename="../util.cpp" line="1355"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1287"/>
+        <location filename="../util.cpp" line="1358"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1290"/>
+        <location filename="../util.cpp" line="1361"/>
         <source>Oboe</source>
         <translation>Obój</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1293"/>
+        <location filename="../util.cpp" line="1364"/>
         <source>Harp</source>
         <translation>Harfa</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1296"/>
+        <location filename="../util.cpp" line="1367"/>
         <source>Viola</source>
         <translation>Altówka</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1299"/>
+        <location filename="../util.cpp" line="1370"/>
         <source>Congas</source>
         <translation>Kongi</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1302"/>
+        <location filename="../util.cpp" line="1373"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1305"/>
+        <location filename="../util.cpp" line="1376"/>
         <source>Vocal Bass</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1308"/>
+        <location filename="../util.cpp" line="1379"/>
         <source>Vocal Tenor</source>
         <translation>Tenor</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1311"/>
+        <location filename="../util.cpp" line="1382"/>
         <source>Vocal Alto</source>
         <translation>Alt</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1314"/>
+        <location filename="../util.cpp" line="1385"/>
         <source>Vocal Soprano</source>
         <translation>Sopran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1317"/>
+        <location filename="../util.cpp" line="1388"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1320"/>
+        <location filename="../util.cpp" line="1391"/>
         <source>Mandolin</source>
         <translation>Mandolina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1323"/>
+        <location filename="../util.cpp" line="1394"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1326"/>
+        <location filename="../util.cpp" line="1397"/>
         <source>Bass Ukulele</source>
         <translation>Ukulele basowe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1329"/>
+        <location filename="../util.cpp" line="1400"/>
         <source>Vocal Baritone</source>
         <translation>Baryton</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1332"/>
+        <location filename="../util.cpp" line="1403"/>
         <source>Vocal Lead</source>
         <translation>Wokal prowadzący</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1335"/>
+        <location filename="../util.cpp" line="1406"/>
         <source>Mountain Dulcimer</source>
         <translation>Cymbały górskie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1338"/>
+        <location filename="../util.cpp" line="1409"/>
         <source>Scratching</source>
         <translation>Scratch</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1341"/>
+        <location filename="../util.cpp" line="1412"/>
         <source>Rapping</source>
         <translation>Rapowanie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1344"/>
+        <location filename="../util.cpp" line="1415"/>
         <source>Vibraphone</source>
         <translation>Wibrafon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1347"/>
+        <location filename="../util.cpp" line="1418"/>
         <source>Conductor</source>
         <translation>Dyrygent</translation>
     </message>
@@ -2288,8 +2292,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Zezwalaj na małe bufory sieciowe</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Zezwalaj na małe bufory sieciowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2373,7 +2377,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation>Alarmy dźwiękowe</translation>
+        <translation type="unfinished">Alarmy dźwiękowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2429,7 +2433,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation>Ochrona przed sprzęganiem</translation>
+        <translation type="unfinished">Ochrona przed sprzęganiem</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -2740,33 +2744,33 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="795"/>
+        <location filename="../util.cpp" line="796"/>
         <source>&amp;Help</source>
         <translation>P&amp;omoc</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="802"/>
-        <location filename="../util.cpp" line="807"/>
+        <location filename="../util.cpp" line="803"/>
+        <location filename="../util.cpp" line="808"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Zaczynajmy...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="803"/>
+        <location filename="../util.cpp" line="804"/>
         <source>Software &amp;Manual...</source>
         <translation>&amp;Instrukcja programu...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="810"/>
+        <location filename="../util.cpp" line="811"/>
         <source>What&apos;s &amp;This</source>
         <translation>&amp;Co to jest</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="812"/>
+        <location filename="../util.cpp" line="813"/>
         <source>&amp;About Jamulus...</source>
         <translation>&amp;O programie Jamulus...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="814"/>
+        <location filename="../util.cpp" line="815"/>
         <source>About &amp;Qt...</source>
         <translation>O &amp;Qt...</translation>
     </message>
@@ -2775,7 +2779,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">&amp;O programie...</translation>
     </message>
     <message>
-        <location filename="../util.h" line="430"/>
+        <location filename="../util.h" line="435"/>
         <source>About Qt</source>
         <translation>O Qt</translation>
     </message>
@@ -2783,12 +2787,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../util.cpp" line="871"/>
+        <location filename="../util.cpp" line="872"/>
         <source>Restart Required</source>
         <translation>Wymagany restart</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="871"/>
+        <location filename="../util.cpp" line="872"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Aby wprowadzić zmianę języka, proszę uruchomić program ponownie.</translation>
     </message>
@@ -2796,22 +2800,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <location filename="../util.cpp" line="771"/>
+        <location filename="../util.cpp" line="772"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Zanim dołączysz, ten serwer wymaga akceptacji warunków korzystania. Proszę je przeczytać w oknie czatu.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="772"/>
+        <location filename="../util.cpp" line="773"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Zapoznałem się z zasadami i &amp;akceptuję.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="773"/>
+        <location filename="../util.cpp" line="774"/>
         <source>Accept</source>
         <translation>Zgadzam się</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="774"/>
+        <location filename="../util.cpp" line="775"/>
         <source>Decline</source>
         <translation>Odrzucam</translation>
     </message>
@@ -3120,68 +3124,84 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Widok listy podłączonych użytkowników</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="60"/>
+        <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
+        <translation>&lt;b&gt;Katalog:&lt;/b&gt;Wybierz &apos;%1&apos;, aby nie rejestrować serwera w katalogu.&lt;br&gt;lub wybierz jeden z gatunków, aby zarejestrować się w tym katalogu.&lt;br&gt;lub wybierz &apos;%2&apos; i podaj adres Niestandardowy katalog w zakładce Opcje, aby zarejestrować się w niestandardowym katalogu.&lt;br&gt;&lt;br&gt;Dla każdej wartości oprócz &apos;%1&apos;, ten serwer rejestruje się z katalogiem, aby użytkownik %3 mógł wybrać ten serwer na liście serwerów okna dialogowego client connect, gdy wybiera ten katalog.&lt;br&gt;&lt;br&gt;Rejestracja serwera jest odnawiana okresowo, aby upewnić się, że wszystkie serwery na liście serwerów okna dialogowego connect są rzeczywiście dostępne.</translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="137"/>
+        <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="139"/>
+        <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation>Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego %1.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="183"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>Aktualny głowny katalog nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego %1. Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="194"/>
         <source>Custom Directory address</source>
         <translation>Własny adres serwera zbiorczego</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="196"/>
+        <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation>Własny adres serwera zbiorczego to adres serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="203"/>
         <source>Server List Filename dialog push button</source>
         <translation>Przycisk dla nazwy pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename</source>
         <translation>Nazwa pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation>Otwiera okno dialogowe wyboru nazwy pliku z listą serwerów. Użytkownik uruchamiający %1-a musi mieć prawo do tworzenia plików (gdy plik już istnieje, zostanie nadpisany).</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="211"/>
         <source>Server List Filename text box (read-only)</source>
         <translation>Pole tekstowe z nazwą pliku listy serwerów (tylko do odczytu)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="214"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation>Obecna nazwa pliku z listą serwerów. Użytkownik uruchamiający %1-a musi mieć prawo do tworzenia plików (gdy plik już istnieje, zostanie nadpisany). Naciśnij przycisk aby otwierzyć okno dialogowe wyboru nazwy pliku z listą serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="220"/>
         <source>Clear the server list file name button</source>
         <translation>Przycisk kasowania nazwy pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear Server List Filename</source>
         <translation>Wyczyść nazwę pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="223"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation>Naciśnij aby wyczyść nazwę pliku z listą serwerów. Lista serwerów nie będzie isnieć dopóki nie zostanie podana nowa nazwa.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="226"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>Uruchom w tle przy włączeniu systemu operacyjnego</translation>
     </message>
@@ -3190,7 +3210,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ustaw serwer jako publiczny</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="79"/>
         <source>Register Server Status</source>
         <translation>Zarejetruj status serwera</translation>
     </message>
@@ -3223,27 +3243,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Pole wyboru listy serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="86"/>
         <source>Server Name</source>
         <translation>Nazwa serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="94"/>
+        <location filename="../serverdlg.cpp" line="93"/>
         <source>Server name line edit</source>
         <translation>Pole edycji nazwy serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Location City</source>
         <translation>Lokalizacja serwera - miasto</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="98"/>
+        <location filename="../serverdlg.cpp" line="97"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>W tym okne można ustawić nazwę miasta, w którym znajduje się serwer. Jeżeli nazwa miasta jest wprowadzona, zostanie wyświetlona w oknie dialogowym połączenia, na liście dostępnych serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="105"/>
+        <location filename="../serverdlg.cpp" line="104"/>
         <source>City where the server is located line edit</source>
         <translation>Pole wyboru miasta, w którym zlokalizowany jest serwer</translation>
     </message>
@@ -3260,13 +3280,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Pole wyboru kraju, w którym zlokalizowany jest serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
         <translation>Wyświetla okno wyboru katalogu nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="181"/>
         <source>Main Recording Directory</source>
         <translation>Główny katalog nagrywania</translation>
     </message>
@@ -3275,7 +3295,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a. </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>Pole tekstowe katalogu nagrywania (tylko do odczytu)</translation>
     </message>
@@ -3284,22 +3304,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Aktualny głowny katalog nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a. Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="188"/>
         <source>Clear the recording directory button</source>
         <translation>Przycisk czyszczenia katalogu nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear Recording Directory</source>
         <translation>Wyczyść katalog nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="191"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>Naciśnij przycisk aby wyczyścić wybraną ścieżkę katalogu. Nagrywanie będzie niemożliwe dopóki nowa ścieżka nie zostanie podana.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Pole wyboru do włączania lub wyłączania nagrywania na serwerze</translation>
     </message>
@@ -3308,32 +3328,32 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli pole wyboru „Rejestruj serwer” jest zaznaczone, wyświetli się komunikat o powowdzeniu rejestracji na serwerze. Gdy rejestracja się nie uda, proszę wybrać inny katalog serwerów.</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="119"/>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Nagrywanie włączone</translation>
+    </message>
+    <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Enable Recorder</source>
-        <translation>Nagrywanie włączone</translation>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
+        <translation type="unfinished">Zaznaczone kiedy nagrywanie jest możliwe. Nagrywanie rozpocznie się razem z sesją, jeżeli jest ustawione prawidłowo i dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="121"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation>Zaznaczone kiedy nagrywanie jest możliwe. Nagrywanie rozpocznie się razem z sesją, jeżeli jest ustawione prawidłowo i dostępne.</translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="148"/>
+        <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Pole tekstowe aktualnego katalogu sesji (tylko do odczytu)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="151"/>
         <source>Current Session Directory</source>
         <translation>Katalog sesji bieżących</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="153"/>
+        <location filename="../serverdlg.cpp" line="152"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Dostępne podczas nagrywania, przechowuje ścieżkę do aktualnego katalogu nagrywania. Wyłączone po nagraniu lub gdy rejestrator nie jest włączony.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="130"/>
+        <location filename="../serverdlg.cpp" line="129"/>
         <source>Recorder status label</source>
         <translation>Etykieta statusu nagrywania</translation>
     </message>
@@ -3343,82 +3363,74 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Lista wyboru typu serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation>Serwer</translation>
+        <translation type="vanished">Serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation>Zaznacz „%1” żeby nie rejestrować twojego serwera w katalogu zbiorczym.</translation>
+        <translation type="vanished">Zaznacz „%1” żeby nie rejestrować twojego serwera w katalogu zbiorczym.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation>Wybierz który ze stylów zostanie zajejstrowany z tym serwerem.</translation>
+        <translation type="vanished">Wybierz który ze stylów zostanie zajejstrowany z tym serwerem.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation>Lub zaznacz „%1” i podaj adres własnego serwera zbiorczego na karcie Opcje żeby zarejstrować razem z nim.</translation>
+        <translation type="vanished">Lub zaznacz „%1” i podaj adres własnego serwera zbiorczego na karcie Opcje żeby zarejstrować razem z nim.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation>Ten serwer zostanie zarejstrowany w katalogu zbiorczym dla każdego wpisu oprócz „%1”, więc użytkonik %2-a będzie mógł go zaznaczyć w oknie połączenia kiedy wybierze ten katalog zbiorczy.</translation>
+        <translation type="vanished">Ten serwer zostanie zarejstrowany w katalogu zbiorczym dla każdego wpisu oprócz „%1”, więc użytkonik %2-a będzie mógł go zaznaczyć w oknie połączenia kiedy wybierze ten katalog zbiorczy.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>Rejestracja serwerów jest odnawiana okresowo żeby mieć pweność, że wszystkie serwery na liście są dostępne.</translation>
+        <translation type="vanished">Rejestracja serwerów jest odnawiana okresowo żeby mieć pweność, że wszystkie serwery na liście są dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="81"/>
+        <location filename="../serverdlg.cpp" line="80"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>Kiedy podana nazwa jest różna niż „%1” zostanie wyświetlone czy rejestracja się powiodła. Gdy się nie powiedzie, proszę wybrać inny katalog serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder Status</source>
         <translation>Status nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="134"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>Nie wybrano katalogu nagrywania lub nie da się go używać. Proszę sprawdzić na karcie Opcje.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="138"/>
         <source>Recording has been switched off by the UI checkbox.</source>
-        <translation>Nagrywanie zostało wyłączone przez użytkownika.</translation>
+        <translation type="vanished">Nagrywanie zostało wyłączone przez użytkownika.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="140"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
-        <translation>Nagrywanie zostało wyłączone przez użytkownika lub otrzymano komunikat SIGUSR2.</translation>
+        <translation type="vanished">Nagrywanie zostało wyłączone przez użytkownika lub otrzymano komunikat SIGUSR2.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="145"/>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation>Gdy nie da się używać katalogu nagrywania, zostanie to wyświetlone w miejscu katalogu sesji.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Language</source>
         <translation>Język</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>Wybierz język interfejsu użytkownika.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="171"/>
+        <location filename="../serverdlg.cpp" line="170"/>
         <source>Language combo box</source>
         <translation>Lista wyboru języka</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
+        <location filename="../serverdlg.cpp" line="734"/>
         <source>Now a directory</source>
         <translation>Bieżący serwer</translation>
     </message>
@@ -3435,22 +3447,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Niestandardowy adres serwera zbiorczego to adres IP lub adres URL serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="201"/>
+        <location filename="../serverdlg.cpp" line="200"/>
         <source>Custom Directory line edit</source>
         <translation>Pole edycji własnych serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="245"/>
+        <location filename="../serverdlg.cpp" line="244"/>
         <source>&amp;Hide %1 server</source>
         <translation>&amp;Ukryj serwer %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="248"/>
+        <location filename="../serverdlg.cpp" line="247"/>
         <source>&amp;Show %1 server</source>
         <translation>&amp;Pokaż serwer %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="253"/>
+        <location filename="../serverdlg.cpp" line="252"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>serwer %1-a</translation>
@@ -3462,38 +3474,38 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Serwer %1-a</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="590"/>
+        <location filename="../serverdlg.cpp" line="589"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>Nie dało się nagrywać. Sprawdź dostępne miejsce na dysku i prawa dostępu i spróbuj ponownie. Błąd: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="602"/>
+        <location filename="../serverdlg.cpp" line="601"/>
         <source>Select Main Recording Directory</source>
         <translation>Wybierz katalog nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="870"/>
+        <location filename="../serverdlg.cpp" line="867"/>
         <source>ERROR</source>
         <translation>BŁĄD</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="124"/>
         <source>Request new recording button</source>
         <translation>Nowy przycisk nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="125"/>
         <source>New Recording</source>
         <translation>Nowe nagranie</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="127"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Podczas sesji nagraniowej można użyć przycisku w celu rozpoczęcia nowego nagrania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="241"/>
-        <location filename="../serverdlg.cpp" line="393"/>
+        <location filename="../serverdlg.cpp" line="240"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>E&amp;xit</source>
         <translation>&amp;Wyjdź</translation>
     </message>
@@ -3534,7 +3546,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished"> Serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="228"/>
+        <location filename="../serverdlg.cpp" line="227"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>Jeśli pole wyboru start zminimalizowany na starcie systemu operacyjnego jest zaznaczone, serwer zostanie uruchomiony po uruchomieniu systemu operacyjnego i zostanie automatycznie zminimalizowany do ikony paska zadań systemowych.</translation>
     </message>
@@ -3543,27 +3555,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeśli pole wyboru „Ustaw serwer jako publiczny” jest zaznaczone, serwer ten rejestruje się na serwerze zbiorczym, tak aby wszyscy użytkownicy aplikacji mogli zobaczyć go na liście i połączyć się z nim. Rejestracja serwera jest okresowo odnawiana, aby upewnić się, że wszystkie serwery na liście są rzeczywiście dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="88"/>
+        <location filename="../serverdlg.cpp" line="87"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>Nazwa serwera identyfikuje twój serwer w oknie dialogowym połączenia na liście dostępnych serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>Country/Region</source>
         <translation>Kraj/Region</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="109"/>
+        <location filename="../serverdlg.cpp" line="108"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation>Ustaw kraj lub region gdzie znajduje się serwer. Inni będą widzieć tą nazwę lokalizacji w oknie z listą serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="116"/>
+        <location filename="../serverdlg.cpp" line="115"/>
         <source>Combo box for location of this server</source>
         <translation>Lista rozwijana położenia tego serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>Wyświetla aktualny stan nagrywania. Możliwe są następujące wartości:</translation>
     </message>
@@ -3584,17 +3596,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">, albo przez pole wyboru lub sygnał SIGUSR2</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>There is no one connected to the server to record.</source>
         <translation>Nikt nie jest podłączony do serwera żeby nagrywać.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="142"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>Wykonawcy są nagrywani do wybranego katalogu.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>NOTE</source>
         <translation>UWAGA</translation>
     </message>
@@ -3603,22 +3615,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli nie da się korzystać z katalogu nagrywania, problem będzie wyświetlony zamiast ściżki.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="158"/>
         <source>Server welcome message edit box</source>
         <translation>Pole edycji tekstu powitania na serwerze</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="159"/>
         <source>Server Welcome Message</source>
         <translation>Tekst powitania na serwerze</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="161"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>Tekst powitania pojawi się w oknie czatu kidy muzyk połaczy sie z serwerem. Jeżli tekst nie jest podany okno czatu nie zostanie wyświetlone po połączeniu.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="337"/>
+        <location filename="../serverdlg.cpp" line="336"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Wpisz tutaj tekst. Jeżli tekst nie jest podany okno czatu nie zostanie wyświetlone po połączeniu.</translation>
     </message>
@@ -3627,7 +3639,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">dostępna aktualizacja oprogramowania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="391"/>
+        <location filename="../serverdlg.cpp" line="390"/>
         <source>&amp;Window</source>
         <translation>&amp;Okno</translation>
     </message>
@@ -3636,61 +3648,65 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Niezarejstrowany</translation>
     </message>
     <message>
-        <location filename="../util.h" line="583"/>
+        <location filename="../util.h" line="588"/>
         <source>None</source>
         <translation>Brak</translation>
     </message>
     <message>
-        <location filename="../util.h" line="630"/>
+        <location filename="../util.h" line="635"/>
         <source>Not registered</source>
         <translation>Nie zarejstrowany</translation>
     </message>
     <message>
-        <location filename="../util.h" line="633"/>
+        <location filename="../util.h" line="638"/>
         <source>Bad address</source>
         <translation>Błędny adres</translation>
     </message>
     <message>
-        <location filename="../util.h" line="636"/>
+        <location filename="../util.h" line="641"/>
         <source>Registration requested</source>
         <translation>Wymagana rejestracja</translation>
     </message>
     <message>
-        <location filename="../util.h" line="639"/>
+        <location filename="../util.h" line="644"/>
         <source>Registration failed</source>
         <translation>Rejestraca nie powiodła się</translation>
     </message>
     <message>
-        <location filename="../util.h" line="642"/>
+        <location filename="../util.h" line="647"/>
         <source>Check server version</source>
         <translation>Sprawdź wersję serwera</translation>
     </message>
     <message>
-        <location filename="../util.h" line="645"/>
+        <location filename="../util.h" line="650"/>
         <source>Registered</source>
         <translation>Zarejestrowany</translation>
     </message>
     <message>
-        <location filename="../util.h" line="648"/>
+        <location filename="../util.h" line="653"/>
+        <source>Server list full at directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory server list full</source>
-        <translation>Serwer zbiorczy jest zapełniony</translation>
+        <translation type="vanished">Serwer zbiorczy jest zapełniony</translation>
     </message>
     <message>
         <source>Directory Server full</source>
         <translation type="vanished">Serwer zbiorczy zapełniony</translation>
     </message>
     <message>
-        <location filename="../util.h" line="651"/>
+        <location filename="../util.h" line="656"/>
         <source>Your server version is too old</source>
         <translation>Wersja twojego serwera jest przestarzała</translation>
     </message>
     <message>
-        <location filename="../util.h" line="654"/>
+        <location filename="../util.h" line="659"/>
         <source>Requirements not fulfilled</source>
         <translation>Niespełniono wymagań</translation>
     </message>
     <message>
-        <location filename="../util.h" line="657"/>
+        <location filename="../util.h" line="662"/>
         <source>Unknown value %1</source>
         <translation>Nieznana wartość %1</translation>
     </message>
@@ -3738,8 +3754,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>Zezwalaj na nagrywanie sesji</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Zezwalaj na nagrywanie sesji</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -3789,8 +3805,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
-        <translation>Opóźnienie panoramy</translation>
+        <source>Delay panning</source>
+        <translation type="unfinished">Opóźnienie panoramy</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -3838,9 +3854,34 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="853"/>
+        <location filename="../serverlist.cpp" line="419"/>
+        <source>Now a directory</source>
+        <translation type="unfinished">Bieżący serwer</translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="425"/>
+        <source>No longer a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="784"/>
+        <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="791"/>
+        <source>Loading persistent server list file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="854"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Nie da się zapisywać do „%1”</translation>
+    </message>
+    <message>
+        <location filename="../serverlist.cpp" line="865"/>
+        <source>Saving registration for %1 (%2): %3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4188,13 +4229,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Program do sesji dźwiękowych przez internet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1608"/>
+        <location filename="../util.cpp" line="1679"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Wersja %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1625"/>
+        <location filename="../util.cpp" line="1696"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Wydane na zasadach licencji GNU General Public License wersja 2 lub następne (GPLv2)</translation>
     </message>
@@ -4239,8 +4280,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ikony flag: Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2022 Zespół programistów Jamulus-a</translation>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2023 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

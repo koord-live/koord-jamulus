@@ -1,9 +1,10 @@
 name: Update copyright notices
 
+permissions: {}
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     types:
       - closed
@@ -14,6 +15,9 @@ jobs:
       github.repository_owner == 'jamulussoftware' &&
       github.event_name == 'push'
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - run: ./tools/update-copyright-notices.sh
@@ -34,7 +38,7 @@ jobs:
             body=$'This automated Pull Request updates the copyright notices throughout the source.\n\n'
             body="${body}This PR is the result of a tools/update-copyright-notices.sh run."$'\n\n'
             body="${body}CHANGELOG: SKIP"
-            gh pr create --base master --head "${pr_branch}" --title "Update copyright notice(s) for $(date +%Y)" --body "${body}"
+            gh pr create --base main --head "${pr_branch}" --title "Update copyright notice(s) for $(date +%Y)" --body "${body}"
           fi
 
   delete-old-pr-branch:
@@ -43,6 +47,9 @@ jobs:
       github.event_name == 'pull_request' &&
       startsWith(github.event.pull_request.head.label, 'jamulussoftware:updateCopyrightNotices')
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - env:

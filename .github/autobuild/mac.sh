@@ -4,7 +4,7 @@ set -eu
 QT_DIR=/usr/local/opt/qt
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.0.1
+AQTINSTALL_VERSION=3.1.6
 
 TARGET_ARCHS="${TARGET_ARCHS:-}"
 
@@ -24,7 +24,7 @@ setup() {
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         local qtmultimedia=()
-        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+        if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
             # From Qt6 onwards, qtmultimedia is a module and cannot be installed
             # as an archive anymore.
             qtmultimedia=("--modules")
@@ -55,6 +55,15 @@ prepare_signing() {
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
+    # Check for notarization (not wanted on self signed build)
+    if [[ -z "${NOTARIZATION_PASSWORD}" ]]; then
+        echo "Notarization password not found or empty. This suggests we might run a self signed build."
+        if [[ -z "${MACOS_CA_PUBLICKEY}" ]]; then
+            echo "Warning: The CA public key wasn't set or is empty. Skipping signing."
+            return 1
+        fi
+    fi
+
     echo "Signing was requested and all dependencies are satisfied"
 
     ## Put the certs to files
@@ -62,6 +71,11 @@ prepare_signing() {
     echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
     echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
     
+    # If set, put the CA public key into a file
+    if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
+        echo "${MACOS_CA_PUBLICKEY}" | base64 --decode > CA.cer
+    fi
+
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
@@ -73,8 +87,24 @@ prepare_signing() {
     security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
-    # Tell Github Workflow that we need notarization & stapling:
-    echo "::set-output name=macos_signed::true"
+    # Tell Github Workflow that we want signing
+    echo "macos_signed=true" >> "$GITHUB_OUTPUT"
+
+    # If set, import CA key to allow self signed key
+    if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
+        # bypass any GUI related trusting prompt (https://developer.apple.com/forums/thread/671582)
+        echo "Importing development only CA"
+        # shellcheck disable=SC2024
+        sudo security authorizationdb read com.apple.trust-settings.admin > rights
+        sudo security authorizationdb write com.apple.trust-settings.admin allow
+        sudo security add-trusted-cert -d -r trustRoot -k "build.keychain" CA.cer
+        # shellcheck disable=SC2024
+        sudo security authorizationdb write com.apple.trust-settings.admin < rights
+    else
+        # Tell Github Workflow that we need notarization & stapling (non self signed build)
+        echo "macos_notarize=true" >> "$GITHUB_OUTPUT"
+    fi
+
     return 0
 }
 

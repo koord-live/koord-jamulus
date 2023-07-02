@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -162,7 +162,7 @@ public:
     int              iNumMixerPanelRows;
     CVector<QString> vstrDirectoryAddress;
     EDirectoryType   eDirectoryType;
-    int              iCustomDirectoryIndex; // index of selected custom directory server
+    int              iCustomDirectoryIndex; // index of selected custom directory
     bool             bEnableFeedbackDetection;
     bool             bEnableAudioAlerts;
     bool             bCleanUpLegacyFaderSettings;

@@ -68,6 +68,10 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/silk/fixed \
     libs/opus
 
+# As JACK is used in multiple OS, we declare it globally
+HEADERS_JACK = src/sound/jack/sound.h
+SOURCES_JACK = src/sound/jack/sound.cpp
+
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
@@ -81,6 +85,7 @@ win32 {
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     RC_FILE = src/res/win-mainicon.rc
     mingw* {
+        DEFINES += _WIN32_WINNT=0x0600 # solves missing inet_pton in CSocket::SendPacket
         LIBS += -lole32 \
             -luser32 \
             -ladvapi32 \
@@ -124,11 +129,11 @@ win32 {
                 libjackname = "libjack64.lib"
             }
             !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
+                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32 Bit vs. 64 Bit).")
             }
 
-            HEADERS += src/sound/jack/sound.h
-            SOURCES += src/sound/jack/sound.cpp
+            HEADERS += $$HEADERS_JACK
+            SOURCES += $$SOURCES_JACK
             DEFINES += WITH_JACK
             DEFINES += JACK_ON_WINDOWS
             DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
@@ -177,6 +182,7 @@ win32 {
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
 
     macx-xcode {
+        # As of 2023-04-15 the macOS build with Xcode only fails. This is tracked in #1841
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
         XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
         XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements
@@ -207,8 +213,8 @@ win32 {
                  error("Error: jack.h was not found at the usual place, maybe JACK is not installed")
             }
         }
-        HEADERS += src/sound/jack/sound.h
-        SOURCES += src/sound/jack/sound.cpp
+        HEADERS += $$HEADERS_JACK
+        SOURCES += $$SOURCES_JACK
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
@@ -295,8 +301,8 @@ win32 {
     } else {
         message(JACK Audio Interface Enabled.)
 
-        HEADERS += src/sound/jack/sound.h
-        SOURCES += src/sound/jack/sound.cpp
+        HEADERS += $$HEADERS_JACK
+        SOURCES += $$SOURCES_JACK
 
         contains(CONFIG, "raspijamulus") {
             message(Using JACK Audio in raspijamulus.sh mode.)
@@ -681,11 +687,22 @@ contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
 DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
 
 DISTFILES += ChangeLog \
+    COMPILING.md \
     COPYING \
     CONTRIBUTING.md \
     README.md \
+    SECURITY.md \
+    docs/JAMULUS_PROTOCOL.md \
+    docs/JSON-RPC.md \
+    docs/README.md \
+    docs/TRANSLATING.md \
     linux/jamulus.desktop.in \
     linux/jamulus-server.desktop.in \
+    mac/Info-make-legacy.plist \
+    mac/Info-make.plist \
+    mac/Info-xcode.plist \
+    mac/Jamulus.entitlements \
+    mac/deploy_mac.sh \
     src/res/io.jamulus.jamulus.png \
     src/res/io.jamulus.jamulus.svg \
     src/res/io.jamulus.jamulusserver.svg \
@@ -1042,7 +1059,17 @@ DISTFILES += ChangeLog \
     src/res/flags/yt.png \
     src/res/flags/za.png \
     src/res/flags/zm.png \
-    src/res/flags/zw.png
+    src/res/flags/zw.png \
+    tools/changelog-helper.sh \
+    tools/check-wininstaller-translations.sh \
+    tools/checkkeys.pl \
+    tools/create-translation-issues.sh \
+    tools/generate_json_rpc_docs.py \
+    tools/get_release_contributors.py \
+    tools/qt5_to_qt6_country_code_table.py \
+    tools/update-copyright-notices.sh \
+    windows/deploy_windows.ps1 \
+    windows/installer.nsi
 
 DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/ChangeLog \
@@ -1101,10 +1128,15 @@ contains(CONFIG, "opus_shared_lib") {
     DISTFILES += $$DISTFILES_OPUS
 
     contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        msvc {
+        msvc | macx-xcode {
             # According to opus/win32/config.h, "no special compiler
             # flags necessary" when using msvc.  It always supports
             # SSE intrinsics, but does not auto-vectorize.
+            # The macOS Xcode build would fail with these specific compiler flags.
+            # Thus, we omit them for macx-xcode too. This was discovered by
+            # plain testing by the Jamulus team and might mean that the
+            # optimizations are not used on macx-xcode. (See #1841, #3076)
+
             SOURCES += $$SOURCES_OPUS_ARCH
         } else {
             # Arch-specific files need special compiler flags, but we
