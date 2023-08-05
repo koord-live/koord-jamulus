@@ -134,7 +134,7 @@ pass_artifact_to_job() {
     echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
     artifact2="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
-    for file in "./deploy/Jamulus_*.pkg"
+    for file in ./deploy/Jamulus_*.pkg
     do
         if [ -f "${file}" ]; then
             echo "Moving build artifact2 to deploy/${artifact2}"
