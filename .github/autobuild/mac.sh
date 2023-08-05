@@ -88,9 +88,9 @@ prepare_signing() {
     # Remove default re-lock timeout to avoid codesign hangs:
     security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign 
+    security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
     security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
-    security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild 
+    security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
     # Tell Github Workflow that we want signing
@@ -134,8 +134,7 @@ pass_artifact_to_job() {
     echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
     artifact2="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
-    for file in ./deploy/Jamulus_*.pkg
-    do
+    for file in ./deploy/Jamulus_*.pkg; do
         if [ -f "${file}" ]; then
             echo "Moving build artifact2 to deploy/${artifact2}"
             mv "${file}" "./deploy/${artifact2}"

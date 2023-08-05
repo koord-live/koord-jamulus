@@ -114,10 +114,10 @@ build_app() {
 
         # Add Qt deployment deps and codesign the app for App Store submission
         macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
-        
+
         # Create pkg installer and sign for App Store submission
-        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg"        
-    
+        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg"
+
         # move created pkg file to prep for download
         mv "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg" "${deploy_path}"
     fi
@@ -154,18 +154,18 @@ build_installer_image() {
     # Build installer image
 
     create-dmg \
-      --volname "${client_target_name} Installer" \
-      --background "${resources_path}/installerbackground.png" \
-      --window-pos 200 400 \
-      --window-size 900 320 \
-      --app-drop-link 820 210 \
-      --text-size 12 \
-      --icon-size 72 \
-      --icon "${client_target_name}.app" 630 210 \
-      --icon "${server_target_name}.app" 530 210 \
-      --eula "${root_path}/COPYING" \
-      "${deploy_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
-      "${deploy_path}/"
+        --volname "${client_target_name} Installer" \
+        --background "${resources_path}/installerbackground.png" \
+        --window-pos 200 400 \
+        --window-size 900 320 \
+        --app-drop-link 820 210 \
+        --text-size 12 \
+        --icon-size 72 \
+        --icon "${client_target_name}.app" 630 210 \
+        --icon "${server_target_name}.app" 530 210 \
+        --eula "${root_path}/COPYING" \
+        "${deploy_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
+        "${deploy_path}/"
 }
 
 brew_install_pinned() {
