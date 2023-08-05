@@ -68,7 +68,7 @@ prepare_signing() {
 
     ## Put the certs to files
     echo "${MACOS_CERTIFICATE}" | base64 --decode > macos_certificate.p12
-    
+
     # If distribution cert is present, set for store signing + submission
     if [[ -n "${MAC_STORE_APP_CERT}" ]]; then
         echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
@@ -147,7 +147,7 @@ appstore_submit() {
     echo "Submitting package to AppStore Connect..."
     # test the signature of package
     pkgutil --check-signature "${ARTIFACT_PATH}"
-    
+
     xcrun notarytool submit "${ARTIFACT_PATH}" \
         --apple-id "${NOTARIZATION_USERNAME}" \
         --team-id "${APPLE_TEAM_ID}" \
