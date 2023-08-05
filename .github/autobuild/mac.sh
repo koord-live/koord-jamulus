@@ -150,9 +150,9 @@ appstore_submit() {
     pkgutil --check-signature "${ARTIFACT_PATH}"
     
     xcrun notarytool submit "${ARTIFACT_PATH}" \
-        --apple-id $NOTARIZATION_USERNAME \
-        --team-id $APPLE_TEAM_ID \
-        --password $NOTARIZATION_PASSWORD \
+        --apple-id "${NOTARIZATION_USERNAME}" \
+        --team-id "${APPLE_TEAM_ID}" \
+        --password "${NOTARIZATION_PASSWORD}" \
         --wait
 }
 

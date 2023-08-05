@@ -110,7 +110,7 @@ build_app() {
         echo "No cert to sign for App Store, bypassing..."
     else
         # Clone the build directory to leave the adhoc signed app untouched
-        cp -a ${build_path} "${build_path}_storesign"
+        cp -a "${build_path}" "${build_path}_storesign"
 
         # Add Qt deployment deps and codesign the app for App Store submission
         macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
