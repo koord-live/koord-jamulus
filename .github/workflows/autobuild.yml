@@ -451,7 +451,7 @@ jobs:
       ## RELEASE PROCEDURE FOR: macOS App Store - storesigned pkg
       - name:                       Validate and Upload macOS Storesign Pkg
         if:                         >-
-                                    steps.build.outputs.macos_signed == 'true' &&
+                                    steps.build.outputs.macos_store == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
         id:                         macos_validate_upload
         run:                        ${{ matrix.config.base_command }} appstore-submit

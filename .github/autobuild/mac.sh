@@ -68,9 +68,15 @@ prepare_signing() {
 
     ## Put the certs to files
     echo "${MACOS_CERTIFICATE}" | base64 --decode > macos_certificate.p12
-    echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
-    echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
     
+    # If distribution cert is present, set for store signing + submission
+    if [[ -n "${MAC_STORE_APP_CERT}" ]]; then
+        echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
+        echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
+        # Tell Github Workflow that we are building for store submission
+        echo "macos_store=true" >> "$GITHUB_OUTPUT"
+    fi
+
     # If set, put the CA public key into a file
     if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
         echo "${MACOS_CA_PUBLICKEY}" | base64 --decode > CA.cer
@@ -128,11 +134,14 @@ pass_artifact_to_job() {
     echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
     artifact2="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
-    if [ -f ./deploy/Jamulus_*.pkg ]; then
-        echo "Moving build artifact2 to deploy/${artifact2}"
-        mv ./deploy/Jamulus_*.pkg "./deploy/${artifact2}"
-        echo "artifact_2=${artifact2}" >> "$GITHUB_OUTPUT"
-    fi
+    for file in "./deploy/Jamulus_*.pkg"
+    do
+        if [ -f "${file}" ]; then
+            echo "Moving build artifact2 to deploy/${artifact2}"
+            mv "${file}" "./deploy/${artifact2}"
+            echo "artifact_2=${artifact2}" >> "$GITHUB_OUTPUT"
+        fi
+    done
 }
 
 appstore_submit() {
