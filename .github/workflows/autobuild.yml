@@ -365,15 +365,15 @@ jobs:
         run:                        ${{ matrix.config.base_command }} build
         env:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
-          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
-          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
-          MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT}}
-          MAC_STORE_APP_CERT_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
-          MAC_STORE_APP_CERT_ID:    ${{ secrets.MACAPP_CERT_ID }}
-          MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT}}
-          MAC_STORE_INST_CERT_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
-          MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
+          MAC_ADHOC_CERT:           ${{ secrets.MAC_ADHOC_CERT}}
+          MAC_ADHOC_CERT_PWD:       ${{ secrets.MAC_ADHOC_CERT_PWD }}
+          MAC_ADHOC_CERT_ID:        ${{ secrets.MAC_ADHOC_CERT_ID }}
+          MACAPP_CERT:              ${{ secrets.MACAPP_CERT}}
+          MACAPP_CERT_PWD:          ${{ secrets.MACAPP_CERT_PWD }}
+          MACAPP_CERT_ID:           ${{ secrets.MACAPP_CERT_ID }}
+          MAC_STORE_INST_CERT:      ${{ secrets.MAC_STORE_INST_CERT}}
+          MAC_STORE_INST_CERT_PWD:  ${{ secrets.MAC_STORE_INST_CERT_PWD }}
+          MAC_STORE_INST_CERT_ID:   ${{ secrets.MAC_STORE_INST_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
           MACOS_CA_PUBLICKEY:       ${{ secrets.MACOS_CA_PUBKEY }}

@@ -72,22 +72,16 @@ setup() {
 
 prepare_signing() {
     ##  Certificate types in use:
-    # - MACOS_CERTIFICATE - Developer ID Application - for codesigning for adhoc release
-    # - MAC_STORE_APP_CERT - Mac App Distribution - codesigning for App Store submission
+    # - MAC_ADHOC_CERT - Developer ID Application - for codesigning for adhoc release
+    # - MACAPP_CERT - Mac App Distribution - codesigning for App Store submission
     # - MAC_STORE_INST_CERT - Mac Installer Distribution - for signing installer pkg file for App Store submission
 
     [[ "${SIGN_IF_POSSIBLE:-0}" == "1" ]] || return 1
 
     # Signing was requested, now check all prerequisites:
-    [[ -n "${MACOS_CERTIFICATE:-}" ]] || return 1
-    [[ -n "${MACOS_CERTIFICATE_ID:-}" ]] || return 1
-    [[ -n "${MACOS_CERTIFICATE_PWD:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT_ID:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT_PWD:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
+    [[ -n "${MAC_ADHOC_CERT:-}" ]] || return 1
+    [[ -n "${MAC_ADHOC_CERT_ID:-}" ]] || return 1
+    [[ -n "${MAC_ADHOC_CERT_PWD:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
@@ -103,15 +97,7 @@ prepare_signing() {
     echo "Signing was requested and all dependencies are satisfied"
 
     ## Put the certs to files
-    echo "${MACOS_CERTIFICATE}" | base64 --decode > macos_certificate.p12
-
-    # If distribution cert is present, set for store signing + submission
-    if [[ -n "${MAC_STORE_APP_CERT}" ]]; then
-        echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
-        echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
-        # Tell Github Workflow that we are building for store submission
-        echo "macos_store=true" >> "$GITHUB_OUTPUT"
-    fi
+    echo "${MAC_ADHOC_CERT}" | base64 --decode > mac_adhoc_cert.p12
 
     # If set, put the CA public key into a file
     if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
@@ -121,12 +107,10 @@ prepare_signing() {
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
-    # Remove default re-lock timeout to avoid codesign hangs:
+    # # Remove default re-lock timeout to avoid codesign hangs:
     security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
-    security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
-    security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild
+    security import mac_adhoc_cert.p12 -k build.keychain -P "${MAC_ADHOC_CERT_PWD}" -A -T /usr/bin/codesign
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
     # Tell Github Workflow that we want signing
@@ -147,6 +131,34 @@ prepare_signing() {
         echo "macos_notarize=true" >> "$GITHUB_OUTPUT"
     fi
 
+    # If distribution cert is present, set for store signing + submission
+    if [[ -n "${MACAPP_CERT}" ]]; then
+
+        # Check all Github secrets are in place
+        # MACAPP_CERT already checked
+        [[ -n "${MACAPP_CERT_ID:-}" ]] || return 1
+        [[ -n "${MACAPP_CERT_PWD:-}" ]] || return 1
+        [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
+        [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
+        [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
+
+        # Put the certs to files
+        echo "${MACAPP_CERT}" | base64 --decode > macapp_certificate.p12
+        echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
+
+        echo "App Store distribution dependencies are satisfied, proceeding..."
+
+        # Add additional certs to the keychain
+        security set-keychain-settings build.keychain
+        security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
+        security import macapp_certificate.p12 -k build.keychain -P "${MACAPP_CERT_PWD}" -A -T /usr/bin/codesign
+        security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild
+        security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+
+        # Tell Github Workflow that we are building for store submission
+        echo "macos_store=true" >> "$GITHUB_OUTPUT"
+    fi
+
     return 0
 }
 
@@ -158,7 +170,7 @@ build_app_as_dmg_installer() {
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
-        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
+        BUILD_ARGS=("-s" "${MAC_ADHOC_CERT_ID}" "-a" "${MACAPP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
     TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
