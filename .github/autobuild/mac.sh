@@ -1,10 +1,35 @@
 #!/bin/bash
+##############################################################################
+# Copyright (c) 2022-2024
+#
+# Author(s):
+#  Christian Hoffmann
+#  The Jamulus Development Team
+#
+##############################################################################
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+#
+##############################################################################
+
 set -eu
 
-QT_DIR=/usr/local/opt/qt
+QT_DIR=/opt/qt
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.1.6
+AQTINSTALL_VERSION=3.1.16
 
 TARGET_ARCHS="${TARGET_ARCHS:-}"
 
@@ -22,7 +47,15 @@ setup() {
         echo "Using Qt installation from previous run (actions/cache)"
     else
         echo "Installing Qt..."
-        python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        # We may need to create the Qt installation directory and chown it to the runner user to fix permissions
+        sudo mkdir -p "${QT_DIR}"
+        sudo chown "$(whoami)" "${QT_DIR}"
+        # Create and enter virtual environment
+        python3 -m venv venv
+        # Must hide directory as it just gets created during execution of the previous command and cannot be found by shellcheck
+        # shellcheck source=/dev/null
+        source venv/bin/activate
+        pip install "aqtinstall==${AQTINSTALL_VERSION}"
         local qtmultimedia=()
         if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
             # From Qt6 onwards, qtmultimedia is a module and cannot be installed
@@ -31,6 +64,9 @@ setup() {
         fi
         qtmultimedia+=("qtmultimedia")
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations "${qtmultimedia[@]}"
+        # deactivate and remove venv as aqt is no longer needed from here on
+        deactivate
+        rm -rf venv
     fi
 }
 
@@ -46,12 +82,6 @@ prepare_signing() {
     [[ -n "${MACOS_CERTIFICATE:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_ID:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_PWD:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT_ID:-}" ]] || return 1
-    [[ -n "${MAC_STORE_APP_CERT_PWD:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
-    [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
     [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
@@ -69,14 +99,6 @@ prepare_signing() {
     ## Put the certs to files
     echo "${MACOS_CERTIFICATE}" | base64 --decode > macos_certificate.p12
 
-    # If distribution cert is present, set for store signing + submission
-    if [[ -n "${MAC_STORE_APP_CERT}" ]]; then
-        echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
-        echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
-        # Tell Github Workflow that we are building for store submission
-        echo "macos_store=true" >> "$GITHUB_OUTPUT"
-    fi
-
     # If set, put the CA public key into a file
     if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
         echo "${MACOS_CA_PUBLICKEY}" | base64 --decode > CA.cer
@@ -85,12 +107,10 @@ prepare_signing() {
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
-    # Remove default re-lock timeout to avoid codesign hangs:
+    # # Remove default re-lock timeout to avoid codesign hangs:
     security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
-    security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
-    security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
     # Tell Github Workflow that we want signing
@@ -109,6 +129,34 @@ prepare_signing() {
     else
         # Tell Github Workflow that we need notarization & stapling (non self signed build)
         echo "macos_notarize=true" >> "$GITHUB_OUTPUT"
+    fi
+
+    # If distribution cert is present, set for store signing + submission
+    if [[ -n "${MAC_STORE_APP_CERT}" ]]; then
+
+        # Check all Github secrets are in place
+        # MAC_STORE_APP_CERT already checked
+        [[ -n "${MAC_STORE_APP_CERT_ID:-}" ]] || return 1
+        [[ -n "${MAC_STORE_APP_CERT_PWD:-}" ]] || return 1
+        [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
+        [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
+        [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
+
+        # Put the certs to files
+        echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
+        echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
+
+        echo "App Store distribution dependencies are satisfied, proceeding..."
+
+        # Add additional certs to the keychain
+        security set-keychain-settings build.keychain
+        security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
+        security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
+        security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild
+        security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+
+        # Tell Github Workflow that we are building for store submission
+        echo "macos_store=true" >> "$GITHUB_OUTPUT"
     fi
 
     return 0
