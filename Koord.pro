@@ -1,15 +1,9 @@
-VERSION = 3.10.24
-
-# Using lrelease and embed_translations only works for Qt 5.12 or later.
-# See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
-lessThan(QT_MAJOR_VERSION, 5) | equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 12) {
-    error(Jamulus requires at least Qt5.12. See https://github.com/jamulussoftware/jamulus/pull/3288)
-}
+VERSION = 4.0.38
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
-    message(The target name is jamulus instead of Jamulus.)
-    TARGET = jamulus
+    message(The target name is koord instead of Koord.)
+    TARGET = koord
 }
 
 # allow detailed version info for intermediate builds (#475)
@@ -28,43 +22,25 @@ contains(VERSION, .*dev.*) {
 
 CONFIG += qt \
     thread \
-    lrelease \
-    embed_translations \
-    debug_and_release
+    lrelease
 
 QT += network \
     xml \
-    concurrent
-
-contains(CONFIG, "nosound") {
-    CONFIG -= "nosound"
-    CONFIG += "serveronly"
-    warning("\"nosound\" is deprecated: please use \"serveronly\" for a server-only build.")
-}
+    concurrent \
+    svg
 
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
 } else {
-    QT += widgets
-    QT += multimedia
+    QT += widgets \
+        quickwidgets \
+        webview
 }
 
-# Do not set LRELEASE_DIR explicitly when using embed_translations.
-# It doesn't work with multiple targets or architectures.
-TRANSLATIONS = src/translation/translation_de_DE.ts \
-    src/translation/translation_fr_FR.ts \
-    src/translation/translation_ko_KR.ts \
-    src/translation/translation_pt_PT.ts \
-    src/translation/translation_pt_BR.ts \
-    src/translation/translation_es_ES.ts \
-    src/translation/translation_nb_NO.ts \
-    src/translation/translation_nl_NL.ts \
-    src/translation/translation_pl_PL.ts \
-    src/translation/translation_sk_SK.ts \
-    src/translation/translation_it_IT.ts \
-    src/translation/translation_sv_SE.ts \
-    src/translation/translation_zh_CN.ts
+# add SingleApplication support
+include(singleapplication/singleapplication.pri)
+DEFINES += QAPPLICATION_CLASS=QApplication
 
 INCLUDEPATH += src
 
@@ -75,10 +51,6 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/silk/fixed \
     libs/opus
 
-# As JACK is used in multiple OS, we declare it globally
-HEADERS_JACK = src/sound/jack/sound.h
-SOURCES_JACK = src/sound/jack/sound.cpp
-
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
@@ -88,117 +60,75 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 win32 {
+    # Windows desktop does not have native web runtime, need to package
+    QT += quick \
+        webenginecore
+
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
+    DEFINES += _WINSOCKAPI_ # try fix winsock / winsock2 redefinition problems
     RC_FILE = src/res/win-mainicon.rc
-    mingw* {
-        DEFINES += _WIN32_WINNT=0x0600 # solves missing inet_pton in CSocket::SendPacket
-        LIBS += -lole32 \
-            -luser32 \
-            -ladvapi32 \
-            -lwinmm \
-            -lws2_32
-    } else {
-        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/jamulussoftware/jamulus/issues/93
-        LIBS += ole32.lib \
-            user32.lib \
-            advapi32.lib \
-            winmm.lib \
-            ws2_32.lib
-        greaterThan(QT_MAJOR_VERSION, 5) {
-            # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
-            # the platform-agnostic main().
-            # Qt6 is still supposed to have that lib under the new name QtEntryPoint. As it does not seem
-            # to be effective when building with qmake, we are rather instructing MSVC to use the platform-agnostic
-            # main() entrypoint directly:
-            QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
-        }
+
+    LIBS += ole32.lib \
+        user32.lib \
+        advapi32.lib \
+        winmm.lib \
+        ws2_32.lib
+    # also add KoordASIO lib, 64bit only
+    # Full path in build will be:
+    # D:\a\koord-rt\koord-rt\KoordASIO\src\out\build\x64-Release\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
+    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
+    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+
+    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/bin/ -lportaudio
+    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/lib/ -lportaudio
+    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
+    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
+
+    # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
+    # the platform-agnostic main().
+    # Qt6 is still supposed to have that lib under the new name QtEntryPoint. As it does not seem
+    # to be effective when building with qmake, we are rather instructing MSVC to use the platform-agnostic
+    # main() entrypoint directly:
+    QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
+
+    !exists(windows/ASIOSDK2) {
+        error("Error: ASIOSDK2 must be placed in reporoot windows/ folder.")
+
     }
 
-    contains(CONFIG, "serveronly") {
-        message(Restricting build to server-only due to CONFIG+=serveronly.)
-        DEFINES += SERVER_ONLY
-    } else {
-        contains(CONFIG, "jackonwindows") {
-            message(Using JACK.)
-            contains(QT_ARCH, "i386") {
-                exists("C:/Program Files (x86)") {
-                    message("Cross compilation build")
-                    programfilesdir = "C:/Program Files (x86)"
-                } else {
-                    message("Native i386 build")
-                    programfilesdir = "C:/Program Files"
-                }
-                libjackname = "libjack.lib"
-            } else {
-                message("Native x86_64 build")
-                programfilesdir = "C:/Program Files"
-                libjackname = "libjack64.lib"
-            }
-            !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32 Bit vs. 64 Bit).")
-            }
-
-            HEADERS += $$HEADERS_JACK
-            SOURCES += $$SOURCES_JACK
-            DEFINES += WITH_JACK
-            DEFINES += JACK_ON_WINDOWS
-            DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-            INCLUDEPATH += "$${programfilesdir}/JACK2/include"
-            LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
-        } else {
-            message(Using ASIO.)
-            message(Please review the ASIO SDK licence.)
-
-            !exists(libs/ASIOSDK2/common) {
-                error("Error: ASIOSDK2 must be placed in Jamulus \\libs folder such that e.g. \\libs\ASIOSDK2\common exists.")
-            }
-            # Important: Keep those ASIO includes local to this build target in
-            # order to avoid poisoning other builds license-wise.
-            HEADERS += src/sound/asio/sound.h
-            SOURCES += src/sound/asio/sound.cpp \
-                libs/ASIOSDK2/common/asio.cpp \
-                libs/ASIOSDK2/host/asiodrivers.cpp \
-                libs/ASIOSDK2/host/pc/asiolist.cpp
-            INCLUDEPATH += libs/ASIOSDK2/common \
-                libs/ASIOSDK2/host \
-                libs/ASIOSDK2/host/pc
-        }
-    }
+    # Important: Keep those ASIO includes local to this build target in
+    # order to avoid poisoning other builds license-wise.
+    HEADERS += src/sound/asio/sound.h
+    SOURCES += src/sound/asio/sound.cpp \
+        windows/ASIOSDK2/common/asio.cpp \
+        windows/ASIOSDK2/host/asiodrivers.cpp \
+        windows/ASIOSDK2/host/pc/asiolist.cpp
+    INCLUDEPATH += windows/ASIOSDK2/common \
+        windows/ASIOSDK2/host \
+        windows/ASIOSDK2/host/pc
 
 } else:macx {
-    contains(CONFIG, "server_bundle") {
-        message(The generated application bundle will run a server instance.)
-
-        DEFINES += SERVER_BUNDLE
-        TARGET = $${TARGET}Server
-        MACOSX_BUNDLE_ICON.files = src/res/mac-jamulus-server.icns
-        RC_FILE = src/res/mac-jamulus-server.icns
-    } else {
-        MACOSX_BUNDLE_ICON.files = src/res/mac-mainicon.icns
-        RC_FILE = src/res/mac-mainicon.icns
-    }
+    MACOSX_BUNDLE_ICON.files = mac/mac-mainicon.icns
 
     HEADERS += src/mac/activity.h src/mac/badgelabel.h
     OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = live.koord
+    # QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
-    OSX_ENTITLEMENTS.files = mac/Jamulus.entitlements
+    QMAKE_INFO_PLIST = mac/Info-xcode.plist
+
+    OSX_ENTITLEMENTS.files = mac/Koord.entitlements
     OSX_ENTITLEMENTS.path = Contents/Resources
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
+    XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+    XCODE_ENTITLEMENTS.value = mac/Koord.entitlements
+    QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
 
-    macx-xcode {
-        # As of 2023-04-15 the macOS build with Xcode only fails. This is tracked in #1841
-        QMAKE_INFO_PLIST = mac/Info-xcode.plist
-        XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-        XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements
-        QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
-        MACOSX_BUNDLE_ICON.path = Contents/Resources
-        QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
-    } else {
-        QMAKE_INFO_PLIST = mac/Info-make.plist
-    }
+    MACOSX_BUNDLE_ICON.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -209,47 +139,98 @@ win32 {
         -framework Foundation \
         -framework AppKit
 
-    contains(CONFIG, "jackonmac") {
-        message(Using JACK.)
-        !exists(/usr/include/jack/jack.h) {
-            !exists(/usr/local/include/jack/jack.h) {
-                 error("Error: jack.h was not found at the usual place, maybe JACK is not installed")
-            }
-        }
-        HEADERS += $$HEADERS_JACK
-        SOURCES += $$SOURCES_JACK
-        DEFINES += WITH_JACK
-        DEFINES += JACK_REPLACES_COREAUDIO
-        INCLUDEPATH += /usr/local/include
-        LIBS += /usr/local/lib/libjack.dylib
-    } else {
-        message(Using CoreAudio.)
-        HEADERS += src/sound/coreaudio-mac/sound.h
-        SOURCES += src/sound/coreaudio-mac/sound.cpp
-    }
+    # avoid macOS error: qt.tlsbackend.ossl: Failed to load libssl/libcrypto.
+    LIBS += -L/usr/local/opt/openssl@1.1/lib
+#    LIBS    += -lssl
+#    LIBS    += -lcrypto
+
+    # defo use CoreAudio and not Jack
+    message(Using CoreAudio.)
+    #HEADERS += mac/sound.h
+    #SOURCES += mac/sound.cpp
+    HEADERS += src/sound/coreaudio-mac/sound.h
+    SOURCES += src/sound/coreaudio-mac/sound.cpp
 
 } else:ios {
-    QMAKE_INFO_PLIST = ios/Info.plist
-    OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
-    HEADERS += src/ios/ios_app_delegate.h
+    # reset TARGET for iOS only since rename
+    TARGET = Koord
+    QMAKE_INFO_PLIST = ios/Info-xcode.plist
+    # needed to fix "Error: You are creating QApplication before calling UIApplicationMain."
+    QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
+
+    QMAKE_ASSET_CATALOGS += ios/Images.xcassets
+    QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
+    ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+
+#    SOURCES += src/unsafearea.cpp
+#    HEADERS += src/unsafearea.h
+#    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
+#    HEADERS += ios/ios_app_delegate.h
+#    HEADERS += ios/sound.h
+#    OBJECTIVE_SOURCES += ios/sound.mm
     HEADERS += src/sound/coreaudio-ios/sound.h
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
+
+    # PRODUCT_BUNDLE_IDENTIFIER is set like
+    #  ${PRODUCT_BUNDLE_IDENTIFIER} = QMAKE_TARGET_BUNDLE_PREFIX.QMAKE_BUNDLE
+    QMAKE_TARGET_BUNDLE_PREFIX = live.koord
+    QMAKE_BUNDLE = Koord-RT
+    
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
+
 } else:android {
-    ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    # Build all targets, as per: https://developer.android.com/topic/arc/device-support
+
+    # get ANDROID_ABIS from environment - passed directly to qmake
+    ANDROID_ABIS = $$getenv(ANDROID_ABIS)
+
+    # if ANDROID_ABIS is passed as env var to qmake, will override this
+    # !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
+
+    # by default is 23 apparently = Android 6 !
+    # BUT: crashes on Android 9, sdk=28
+    ANDROID_MIN_SDK_VERSION = 29
+    ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
-    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+
+    ## FOR LOCAL DEV USE:
+    equals(QMAKE_HOST.os, Windows) {
+        ANDROID_ABIS = x86_64
+        ANDROID_VERSION_CODE = 1234 # dummy int value
+    } else {
+        # date-based unique integer value for Play Store submission
+        !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
+    }
+
+    # make separate version codes for each abi build otherwise Play Store rejects
+    contains (ANDROID_ABIS, armeabi-v7a) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
+        message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 2)
+        message("Setting for x86: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86_64) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 3)
+        message("Setting for x86_64: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
-    QT += androidextras
+    # Need for eg device recording permissions
+    QT += core-private
+    # prob unnecesssary:
+    QT += gui quick widgets quickwidgets
 
     # enabled only for debugging on android devices
-    DEFINES += ANDROIDDEBUG
+    #DEFINES += ANDROIDDEBUG
 
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
@@ -280,9 +261,17 @@ win32 {
     HEADERS += $$OBOE_HEADERS
     SOURCES += $$OBOE_SOURCES
     DISTFILES += $$DISTFILES_OBOE
+
+    # add for OpenSSL 1 support
+    include(android_openssl/openssl.pri)
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11
+
+    # Linux desktop does not have native web runtime, need to package
+    QT += webenginecore
+    # ??
+    #QT += webenginequick
 
     # --as-needed avoids linking the final binary against unnecessary runtime
     # libs. Most g++ versions already do that by default.
@@ -304,17 +293,12 @@ win32 {
     } else {
         message(JACK Audio Interface Enabled.)
 
-        HEADERS += $$HEADERS_JACK
-        SOURCES += $$SOURCES_JACK
+        HEADERS += src/sound/jack/sound.h
+        SOURCES += src/sound/jack/sound.cpp
 
-        contains(CONFIG, "raspijamulus") {
-            message(Using JACK Audio in raspijamulus.sh mode.)
-            LIBS += -ljack
-        } else {
-            CONFIG += link_pkgconfig
-            PKGCONFIG += jack
-        }
-
+        CONFIG += link_pkgconfig
+        PKGCONFIG += jack
+  
         DEFINES += WITH_JACK
     }
 
@@ -328,59 +312,22 @@ win32 {
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
     target.path = $$BINDIR
 
-    contains(CONFIG, "headless") {
-        INSTALLS += target
-    } else {
-        isEmpty(APPSDIR) {
-            APPSDIR = share/applications
-        }
-        APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
-        desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += linux/jamulus.desktop.in linux/jamulus-server.desktop.in
-        desktop.files = linux/jamulus.desktop linux/jamulus-server.desktop
-
-        isEmpty(ICONSDIR) {
-            ICONSDIR = share/icons/hicolor/512x512/apps
-        }
-        ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
-        icons.path = $$ICONSDIR
-        icons.files = src/res/io.jamulus.jamulus.png
-
-        isEmpty(ICONSDIR_SVG) {
-            ICONSDIR_SVG = share/icons/hicolor/scalable/apps/
-        }
-        ICONSDIR_SVG = $$absolute_path($$ICONSDIR_SVG, $$PREFIX)
-        icons_svg.path = $$ICONSDIR_SVG
-        icons_svg.files = src/res/io.jamulus.jamulus.svg src/res/io.jamulus.jamulusserver.svg
-
-        isEmpty(MANDIR) {
-            MANDIR = share/man/man1
-        }
-        MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
-        man.path = $$MANDIR
-        man.files = linux/Jamulus.1
-
-        INSTALLS += target desktop icons icons_svg man
-    }
+    INSTALLS += target
 }
 
-# Do not set RCC_DIR explicitly when using embed_translations.
-# It doesn't work with multiple targets or architectures.
+RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS_GUI = src/aboutdlgbase.ui \
-    src/serverdlgbase.ui
+#FORMS_GUI = src/serverdlgbase.ui
 
 !contains(CONFIG, "serveronly") {
-    FORMS_GUI += src/clientdlgbase.ui \
-        src/clientsettingsdlgbase.ui \
-        src/chatdlgbase.ui \
-        src/connectdlgbase.ui
+    FORMS_GUI += src/clientdlgbase.ui
 }
 
 HEADERS += src/buffer.h \
     src/channel.h \
     src/global.h \
+    src/kdsingleapplication.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
     src/threadpool.h \
@@ -393,7 +340,10 @@ HEADERS += src/buffer.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/signalhandler.h
+    src/signalhandler.h \
+    src/kdapplication.h \
+    src/urlhandler.h \
+    src/messagereceiver.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
@@ -401,13 +351,10 @@ HEADERS += src/buffer.h \
         src/testbench.h
 }
 
-HEADERS_GUI = src/serverdlg.h
+#HEADERS_GUI = src/serverdlg.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS_GUI += src/audiomixerboard.h \
-        src/chatdlg.h \
-        src/clientsettingsdlg.h \
-        src/connectdlg.h \
         src/clientdlg.h \
         src/levelmeter.h \
         src/analyzerconsole.h \
@@ -488,6 +435,8 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
 
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
+    src/kdapplication.cpp \
+    src/kdsingleapplication.cpp \
     src/main.cpp \
     src/protocol.cpp \
     src/recorder/jamcontroller.cpp \
@@ -500,20 +449,19 @@ SOURCES += src/buffer.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
-    src/recorder/cwavestream.cpp
+    src/recorder/cwavestream.cpp \
+    src/urlhandler.cpp \
+    src/messagereceiver.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
         src/sound/soundbase.cpp \
 }
 
-SOURCES_GUI = src/serverdlg.cpp
+#SOURCES_GUI = src/serverdlg.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES_GUI += src/audiomixerboard.cpp \
-        src/chatdlg.cpp \
-        src/clientsettingsdlg.cpp \
-        src/connectdlg.cpp \
         src/clientdlg.cpp \
         src/multicolorled.cpp \
         src/levelmeter.cpp \
@@ -690,26 +638,10 @@ contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
 }
 DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
 
-DISTFILES += ChangeLog \
-    COMPILING.md \
-    COPYING \
-    CONTRIBUTING.md \
-    README.md \
-    SECURITY.md \
-    docs/JAMULUS_PROTOCOL.md \
-    docs/JSON-RPC.md \
-    docs/README.md \
-    docs/TRANSLATING.md \
-    linux/jamulus.desktop.in \
-    linux/jamulus-server.desktop.in \
-    mac/Info-make-legacy.plist \
-    mac/Info-make.plist \
-    mac/Info-xcode.plist \
-    mac/Jamulus.entitlements \
-    mac/deploy_mac.sh \
-    src/res/io.jamulus.jamulus.png \
-    src/res/io.jamulus.jamulus.svg \
-    src/res/io.jamulus.jamulusserver.svg \
+DISTFILES += README.md \
+    distributions/koordrt.desktop.in \
+    distributions/koordrt.png \
+    distributions/koordrt.svg \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -745,322 +677,10 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
     src/res/fronticonserver.png \
-    src/res/mixerboardbackground.png \
     src/res/transparent1x1.png \
     src/res/mutediconorange.png \
     src/res/servertrayiconactive.png \
-    src/res/servertrayiconinactive.png \
-    src/res/instruments/accordeon.png \
-    src/res/instruments/aguitar.png \
-    src/res/instruments/bassguitar.png \
-    src/res/instruments/cello.png \
-    src/res/instruments/clarinet.png \
-    src/res/instruments/conductor.png \
-    src/res/instruments/djembe.png \
-    src/res/instruments/doublebass.png \
-    src/res/instruments/drumset.png \
-    src/res/instruments/eguitar.png \
-    src/res/instruments/flute.png \
-    src/res/instruments/frenchhorn.png \
-    src/res/instruments/grandpiano.png \
-    src/res/instruments/harmonica.png \
-    src/res/instruments/keyboard.png \
-    src/res/instruments/listener.png \
-    src/res/instruments/microphone.png \
-    src/res/instruments/mountaindulcimer.png \
-    src/res/instruments/none.png \
-    src/res/instruments/rapping.png \
-    src/res/instruments/recorder.png \
-    src/res/instruments/saxophone.png \
-    src/res/instruments/scratching.png \
-    src/res/instruments/streamer.png \
-    src/res/instruments/synthesizer.png \
-    src/res/instruments/trombone.png \
-    src/res/instruments/trumpet.png \
-    src/res/instruments/tuba.png \
-    src/res/instruments/vibraphone.png \
-    src/res/instruments/violin.png \
-    src/res/instruments/vocal.png \
-    src/res/instruments/guitarvocal.png \
-    src/res/instruments/keyboardvocal.png \
-    src/res/instruments/bodhran.svg \
-    src/res/instruments/bodhran.png \
-    src/res/instruments/bassoon.svg \
-    src/res/instruments/bassoon.png \
-    src/res/instruments/oboe.svg \
-    src/res/instruments/oboe.png \
-    src/res/instruments/harp.svg \
-    src/res/instruments/harp.png \
-    src/res/instruments/viola.png \
-    src/res/instruments/congas.svg \
-    src/res/instruments/congas.png \
-    src/res/instruments/bongo.svg \
-    src/res/instruments/bongo.png \
-    src/res/instruments/ukulele.svg \
-    src/res/instruments/ukulele.png \
-    src/res/instruments/bassukulele.svg \
-    src/res/instruments/bassukulele.png \
-    src/res/instruments/vocalbass.png \
-    src/res/instruments/vocaltenor.png \
-    src/res/instruments/vocalalto.png \
-    src/res/instruments/vocalsoprano.png \
-    src/res/instruments/vocalbaritone.png \
-    src/res/instruments/vocallead.png \
-    src/res/instruments/banjo.png \
-    src/res/instruments/mandolin.png \
-    src/res/flags/flagnone.png \
-    src/res/flags/ad.png \
-    src/res/flags/ae.png \
-    src/res/flags/af.png \
-    src/res/flags/ag.png \
-    src/res/flags/ai.png \
-    src/res/flags/al.png \
-    src/res/flags/am.png \
-    src/res/flags/an.png \
-    src/res/flags/ao.png \
-    src/res/flags/ar.png \
-    src/res/flags/as.png \
-    src/res/flags/at.png \
-    src/res/flags/au.png \
-    src/res/flags/aw.png \
-    src/res/flags/ax.png \
-    src/res/flags/az.png \
-    src/res/flags/ba.png \
-    src/res/flags/bb.png \
-    src/res/flags/bd.png \
-    src/res/flags/be.png \
-    src/res/flags/bf.png \
-    src/res/flags/bg.png \
-    src/res/flags/bh.png \
-    src/res/flags/bi.png \
-    src/res/flags/bj.png \
-    src/res/flags/bm.png \
-    src/res/flags/bn.png \
-    src/res/flags/bo.png \
-    src/res/flags/br.png \
-    src/res/flags/bs.png \
-    src/res/flags/bt.png \
-    src/res/flags/bv.png \
-    src/res/flags/bw.png \
-    src/res/flags/by.png \
-    src/res/flags/bz.png \
-    src/res/flags/ca.png \
-    src/res/flags/cc.png \
-    src/res/flags/cd.png \
-    src/res/flags/cf.png \
-    src/res/flags/cg.png \
-    src/res/flags/ch.png \
-    src/res/flags/ci.png \
-    src/res/flags/ck.png \
-    src/res/flags/cl.png \
-    src/res/flags/cm.png \
-    src/res/flags/cn.png \
-    src/res/flags/co.png \
-    src/res/flags/cr.png \
-    src/res/flags/cs.png \
-    src/res/flags/cu.png \
-    src/res/flags/cv.png \
-    src/res/flags/cx.png \
-    src/res/flags/cy.png \
-    src/res/flags/cz.png \
-    src/res/flags/de.png \
-    src/res/flags/dj.png \
-    src/res/flags/dk.png \
-    src/res/flags/dm.png \
-    src/res/flags/do.png \
-    src/res/flags/dz.png \
-    src/res/flags/ec.png \
-    src/res/flags/ee.png \
-    src/res/flags/eg.png \
-    src/res/flags/eh.png \
-    src/res/flags/er.png \
-    src/res/flags/es.png \
-    src/res/flags/et.png \
-    src/res/flags/fam.png \
-    src/res/flags/fi.png \
-    src/res/flags/fj.png \
-    src/res/flags/fk.png \
-    src/res/flags/fm.png \
-    src/res/flags/fo.png \
-    src/res/flags/fr.png \
-    src/res/flags/ga.png \
-    src/res/flags/gb.png \
-    src/res/flags/gd.png \
-    src/res/flags/ge.png \
-    src/res/flags/gf.png \
-    src/res/flags/gh.png \
-    src/res/flags/gi.png \
-    src/res/flags/gl.png \
-    src/res/flags/gm.png \
-    src/res/flags/gn.png \
-    src/res/flags/gp.png \
-    src/res/flags/gq.png \
-    src/res/flags/gr.png \
-    src/res/flags/gs.png \
-    src/res/flags/gt.png \
-    src/res/flags/gu.png \
-    src/res/flags/gw.png \
-    src/res/flags/gy.png \
-    src/res/flags/hk.png \
-    src/res/flags/hm.png \
-    src/res/flags/hn.png \
-    src/res/flags/hr.png \
-    src/res/flags/ht.png \
-    src/res/flags/hu.png \
-    src/res/flags/id.png \
-    src/res/flags/ie.png \
-    src/res/flags/il.png \
-    src/res/flags/in.png \
-    src/res/flags/io.png \
-    src/res/flags/iq.png \
-    src/res/flags/ir.png \
-    src/res/flags/is.png \
-    src/res/flags/it.png \
-    src/res/flags/jm.png \
-    src/res/flags/jo.png \
-    src/res/flags/jp.png \
-    src/res/flags/ke.png \
-    src/res/flags/kg.png \
-    src/res/flags/kh.png \
-    src/res/flags/ki.png \
-    src/res/flags/km.png \
-    src/res/flags/kn.png \
-    src/res/flags/kp.png \
-    src/res/flags/kr.png \
-    src/res/flags/kw.png \
-    src/res/flags/ky.png \
-    src/res/flags/kz.png \
-    src/res/flags/la.png \
-    src/res/flags/lb.png \
-    src/res/flags/lc.png \
-    src/res/flags/li.png \
-    src/res/flags/lk.png \
-    src/res/flags/lr.png \
-    src/res/flags/ls.png \
-    src/res/flags/lt.png \
-    src/res/flags/lu.png \
-    src/res/flags/lv.png \
-    src/res/flags/ly.png \
-    src/res/flags/ma.png \
-    src/res/flags/mc.png \
-    src/res/flags/md.png \
-    src/res/flags/me.png \
-    src/res/flags/mg.png \
-    src/res/flags/mh.png \
-    src/res/flags/mk.png \
-    src/res/flags/ml.png \
-    src/res/flags/mm.png \
-    src/res/flags/mn.png \
-    src/res/flags/mo.png \
-    src/res/flags/mp.png \
-    src/res/flags/mq.png \
-    src/res/flags/mr.png \
-    src/res/flags/ms.png \
-    src/res/flags/mt.png \
-    src/res/flags/mu.png \
-    src/res/flags/mv.png \
-    src/res/flags/mw.png \
-    src/res/flags/mx.png \
-    src/res/flags/my.png \
-    src/res/flags/mz.png \
-    src/res/flags/na.png \
-    src/res/flags/nc.png \
-    src/res/flags/ne.png \
-    src/res/flags/nf.png \
-    src/res/flags/ng.png \
-    src/res/flags/ni.png \
-    src/res/flags/nl.png \
-    src/res/flags/no.png \
-    src/res/flags/np.png \
-    src/res/flags/nr.png \
-    src/res/flags/nu.png \
-    src/res/flags/nz.png \
-    src/res/flags/om.png \
-    src/res/flags/pa.png \
-    src/res/flags/pe.png \
-    src/res/flags/pf.png \
-    src/res/flags/pg.png \
-    src/res/flags/ph.png \
-    src/res/flags/pk.png \
-    src/res/flags/pl.png \
-    src/res/flags/pm.png \
-    src/res/flags/pn.png \
-    src/res/flags/pr.png \
-    src/res/flags/ps.png \
-    src/res/flags/pt.png \
-    src/res/flags/pw.png \
-    src/res/flags/py.png \
-    src/res/flags/qa.png \
-    src/res/flags/re.png \
-    src/res/flags/ro.png \
-    src/res/flags/rs.png \
-    src/res/flags/ru.png \
-    src/res/flags/rw.png \
-    src/res/flags/sa.png \
-    src/res/flags/sb.png \
-    src/res/flags/sc.png \
-    src/res/flags/sd.png \
-    src/res/flags/se.png \
-    src/res/flags/sg.png \
-    src/res/flags/sh.png \
-    src/res/flags/si.png \
-    src/res/flags/sj.png \
-    src/res/flags/sk.png \
-    src/res/flags/sl.png \
-    src/res/flags/sm.png \
-    src/res/flags/sn.png \
-    src/res/flags/so.png \
-    src/res/flags/sr.png \
-    src/res/flags/st.png \
-    src/res/flags/sv.png \
-    src/res/flags/sy.png \
-    src/res/flags/sz.png \
-    src/res/flags/tc.png \
-    src/res/flags/td.png \
-    src/res/flags/tf.png \
-    src/res/flags/tg.png \
-    src/res/flags/th.png \
-    src/res/flags/tj.png \
-    src/res/flags/tk.png \
-    src/res/flags/tl.png \
-    src/res/flags/tm.png \
-    src/res/flags/tn.png \
-    src/res/flags/to.png \
-    src/res/flags/tr.png \
-    src/res/flags/tt.png \
-    src/res/flags/tv.png \
-    src/res/flags/tw.png \
-    src/res/flags/tz.png \
-    src/res/flags/ua.png \
-    src/res/flags/ug.png \
-    src/res/flags/um.png \
-    src/res/flags/us.png \
-    src/res/flags/uy.png \
-    src/res/flags/uz.png \
-    src/res/flags/va.png \
-    src/res/flags/vc.png \
-    src/res/flags/ve.png \
-    src/res/flags/vg.png \
-    src/res/flags/vi.png \
-    src/res/flags/vn.png \
-    src/res/flags/vu.png \
-    src/res/flags/wf.png \
-    src/res/flags/ws.png \
-    src/res/flags/ye.png \
-    src/res/flags/yt.png \
-    src/res/flags/za.png \
-    src/res/flags/zm.png \
-    src/res/flags/zw.png \
-    tools/changelog-helper.sh \
-    tools/check-wininstaller-translations.sh \
-    tools/checkkeys.pl \
-    tools/create-translation-issues.sh \
-    tools/generate_json_rpc_docs.py \
-    tools/get_release_contributors.py \
-    tools/qt5_to_qt6_country_code_table.py \
-    tools/update-copyright-notices.sh \
-    windows/deploy_windows.ps1 \
-    windows/installer.nsi
+    src/res/servertrayiconinactive.png
 
 DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/ChangeLog \
@@ -1119,15 +739,10 @@ contains(CONFIG, "opus_shared_lib") {
     DISTFILES += $$DISTFILES_OPUS
 
     contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        msvc | macx-xcode {
+        msvc {
             # According to opus/win32/config.h, "no special compiler
             # flags necessary" when using msvc.  It always supports
             # SSE intrinsics, but does not auto-vectorize.
-            # The macOS Xcode build would fail with these specific compiler flags.
-            # Thus, we omit them for macx-xcode too. This was discovered by
-            # plain testing by the Jamulus team and might mean that the
-            # optimizations are not used on macx-xcode. (See #1841, #3076)
-
             SOURCES += $$SOURCES_OPUS_ARCH
         } else {
             # Arch-specific files need special compiler flags, but we
@@ -1138,19 +753,19 @@ contains(CONFIG, "opus_shared_lib") {
             sse_cc.name = sse_cc
             sse_cc.input = SOURCES_OPUS_X86_SSE
             sse_cc.dependency_type = TYPE_C
-            sse_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse_cc.output = ${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
             sse_cc.commands = ${CC} -msse $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
             sse_cc.variable_out = OBJECTS
             sse2_cc.name = sse2_cc
             sse2_cc.input = SOURCES_OPUS_X86_SSE2
             sse2_cc.dependency_type = TYPE_C
-            sse2_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse2_cc.output = ${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
             sse2_cc.commands = ${CC} -msse2 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
             sse2_cc.variable_out = OBJECTS
             sse4_cc.name = sse4_cc
             sse4_cc.input = SOURCES_OPUS_X86_SSE4
             sse4_cc.dependency_type = TYPE_C
-            sse4_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse4_cc.output = ${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
             sse4_cc.commands = ${CC} -msse4 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
             sse4_cc.variable_out = OBJECTS
             QMAKE_EXTRA_COMPILERS += sse_cc sse2_cc sse4_cc
