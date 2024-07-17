@@ -237,7 +237,9 @@ build_disk_image()
 
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
-    brew_install_pinned "create-dmg" "1.2.2"
+    # brew_install_pinned "create-dmg" "1.2.2"
+
+    brew install create-dmg
 
     # try and test signature of bundle before build
     echo ">>> Testing signature of bundle ...." 
