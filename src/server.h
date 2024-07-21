@@ -102,6 +102,7 @@ public:
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
               const bool         bDisableRecording,
+              const bool         bStream,
               const bool         bNDelayPan,
               const bool         bNEnableIPv6,
               const ELicenceType eNLicenceType );
@@ -204,6 +205,8 @@ protected:
 
     void MixEncodeTransmitData ( const int iChanCnt, const int iNumClients );
 
+    void MixStream ( const int iNumClients );
+
     virtual void customEvent ( QEvent* pEvent );
 
     void CreateAndSendRecorderStateForAllConChannels();
@@ -290,6 +293,9 @@ protected:
     recorder::CJamController JamController;
     bool                     bDisableRecording;
 
+    // jam streamer
+    bool bStream = false;
+
     // GUI settings
     bool bAutoRunMinimized;
 
@@ -318,6 +324,8 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+    // for stereomixer
+    void StreamFrame ( const int iServerFrameSizeSamples, const CVector<int16_t>& data );
 
     void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
 

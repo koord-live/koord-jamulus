@@ -45,7 +45,7 @@
 #if defined (Q_OS_ANDROID)
 //#    include <QtAndroidExtras/QtAndroid>
 #    include <QtCore/private/qandroidextras_p.h>
-#endif
+#include "stereomixserver.h"
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
@@ -103,6 +103,7 @@ int main ( int argc, char** argv )
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
+    bool         bStream                     = false;
     bool         bDelayPan                   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
@@ -111,6 +112,7 @@ int main ( int argc, char** argv )
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     int          iJsonRpcPortNumber          = INVALID_PORT;
+    int          iStereoMixPortNumber        = INVALID_PORT;
     QString      strJsonRpcBindIP            = DEFAULT_JSON_RPC_LISTEN_ADDRESS;
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
@@ -246,6 +248,16 @@ int main ( int argc, char** argv )
             strJsonRpcBindIP = QString ( strArgument );
             qInfo() << qUtf8Printable ( QString ( "- JSON-RPC will bind to: %1 if enabled" ).arg ( strJsonRpcBindIP ) );
             CommandLineOptions << "--jsonrpcbindip";
+            continue;
+        }
+
+        // Stereo mix port number ----------------------------------------------
+        if ( GetNumericArgument ( argc, argv, i, "--stereomixport", "--stereomixport", 0, 65535, rDbleArgument ) )
+        {
+            bStream = true;
+            iStereoMixPortNumber = static_cast<quint16> ( rDbleArgument );
+            qInfo() << qUtf8Printable ( QString ( "- stereo mix port number: %1" ).arg ( iStereoMixPortNumber ) );
+            CommandLineOptions << "--stereomixport";
             continue;
         }
 
@@ -1133,6 +1145,7 @@ int main ( int argc, char** argv )
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
+                             bStream,
                              bDelayPan,
                              bEnableIPv6,
                              eLicenceType );
@@ -1143,7 +1156,12 @@ int main ( int argc, char** argv )
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
 
-#endif
+            if ( iStereoMixPortNumber != INVALID_PORT )
+            {
+                auto pStereoMixServer = new CStereoMixServer ( &Server, iStereoMixPortNumber );
+                pStereoMixServer->Start();
+            }
+
 #ifndef HEADLESS
             if ( bUseGUI )
             {
@@ -1239,32 +1257,35 @@ QString UsageArguments ( char** argv )
            "  -6, --enableipv6        enable IPv6 addressing (IPv4 is always enabled)\n"
            "\n"
            "Server only:\n"
-           "  -d, --discononquit      disconnect all Clients on quit\n"
-           "  -e, --directoryaddress  address of the Directory with which to register\n"
-           "                          (or 'localhost' to run as a Directory)\n"
-           "      --directoryfile     File to hold server list across Directory restarts. Directories only.\n"
-           "  -f, --listfilter        Server list whitelist filter. Directories only. Format:\n"
-           "                          [IP address 1];[IP address 2];[IP address 3]; ...\n"
-           "  -F, --fastupdate        use 64 samples frame size mode\n"
-           "  -l, --log               enable logging, set file name\n"
-           "  -L, --licence           show an agreement window before users can connect\n"
-           "  -m, --htmlstatus        enable HTML status file, set file name\n"
-           "  -o, --serverinfo        registration info for this Server.  Format:\n"
-           "                          [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
-           "      --serverpublicip    public IP address for this Server.  Needed when\n"
-           "                          registering with a server list hosted\n"
-           "                          behind the same NAT\n"
-           "  -P, --delaypan          start with delay panning enabled\n"
-           "  -R, --recording         set server recording directory; server will record when a session is active by default\n"
-           "      --norecord          set server not to record by default when recording is configured\n"
-           "  -s, --server            start Server\n"
-           "      --serverbindip      IP address the Server will bind to (rather than all)\n"
-           "  -T, --multithreading    use multithreading to make better use of\n"
-           "                          multi-core CPUs and support more Clients\n"
-           "  -u, --numchannels       maximum number of channels\n"
-           "  -w, --welcomemessage    welcome message to display on connect\n"
-           "                          (string or filename, HTML supported)\n"
-           "  -z, --startminimized    start minimizied\n"
+           "  -d, --discononquit    disconnect all Clients on quit\n"
+           "  -e, --directoryserver address of the directory Server with which to register\n"
+           "                        (or 'localhost' to host a server list on this Server)\n"
+           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
+           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
+           "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
+           "  -F, --fastupdate      use 64 samples frame size mode\n"
+           "  -l, --log             enable logging, set file name\n"
+           "  -L, --licence         show an agreement window before users can connect\n"
+           "  -m, --htmlstatus      enable HTML status file, set file name\n"
+           "  -o, --serverinfo      registration info for this Server.  Format:\n"
+           "                        [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
+           "      --serverpublicip  public IP address for this Server.  Needed when\n"
+           "                        registering with a server list hosted\n"
+           "                        behind the same NAT\n"
+           "  -P, --delaypan        start with delay panning enabled\n"
+           "  -R, --recording       set server recording directory; server will record when a session is active by default\n"
+           "      --norecord        set server not to record by default when recording is configured\n"
+           "  -s, --server          start Server\n"
+           "      --serverbindip    IP address the Server will bind to (rather than all)\n"
+           "      --stereomixport   enable Stereo Mix server which streams PCM samples\n"
+           "                        at 48000 Hz in s16le stereo format, set TCP port number\n"
+           "                        (only accessible from localhost)\n"           
+           "  -T, --multithreading  use multithreading to make better use of\n"
+           "                        multi-core CPUs and support more Clients\n"
+           "  -u, --numchannels     maximum number of channels\n"
+           "  -w, --welcomemessage  welcome message to display on connect\n"
+           "                        (string or filename, HTML supported)\n"
+           "  -z, --startminimized  start minimizied\n"
            "\n"
            "Client only:\n"
            "  -c, --connect           connect to given Server address on startup\n"
