@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2024
  *
  * Author(s):
  *  Volker Fischer
@@ -1151,7 +1151,11 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
 QMap<QString, QString> CLocale::GetAvailableTranslations()
 {
     QMap<QString, QString> TranslMap;
-    QDirIterator           DirIter ( ":/translations" );
+
+    // Since we use "embed_translations" in Jamulus.pro, this resource prefix must
+    // match the default prefix used by qmake when generating the resource file.
+    // That prefix is "i18n" (standard abbreviation for internationalisation).
+    QDirIterator DirIter ( ":/i18n" );
 
     // add english language (default which is in the actual source code)
     TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
@@ -1161,8 +1165,9 @@ QMap<QString, QString> CLocale::GetAvailableTranslations()
         // get alias of translation file
         const QString strCurFileName = DirIter.next();
 
-        // extract only language code (must be at the end, separated with a "_")
-        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
+        // extract only language code "xx_XX" from "translation_xx_XX.qm"
+        const int     lang   = strCurFileName.indexOf ( "_" ) + 1;
+        const QString strLoc = strCurFileName.mid ( lang, strCurFileName.indexOf ( "." ) - lang );
 
         TranslMap[strLoc] = strCurFileName;
     }
@@ -1273,32 +1278,40 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** Foundation; either version 2 of the License, or (at your option) any later version.";
         strVersionText += "\n *** There is NO WARRANTY, to the extent permitted by law.";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Using the following libraries, resources or code snippets:";
+
+        strVersionText += "\n *** " + QCoreApplication::tr ( "This app uses the following libraries, resources or code snippets:" );
         strVersionText += "\n *** ";
-        strVersionText += QString ( "\n *** Qt framework %1" ).arg ( QT_VERSION_STR );
-        strVersionText += "\n *** <https://doc.qt.io/qt-5/lgpl.html>";
+        strVersionText += "\n *** " + QCoreApplication::tr ( "Qt cross-platform application framework" ) + QString ( " %1 " ).arg ( QT_VERSION_STR ) +
+                          QCoreApplication::tr ( "(build)" ) + QString ( ", %1 " ).arg ( qVersion() ) + QCoreApplication::tr ( "(runtime)" );
+        strVersionText += "\n *** <https://www.qt.io>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** Opus Interactive Audio Codec";
         strVersionText += "\n *** <https://www.opus-codec.org>";
         strVersionText += "\n *** ";
-#if defined( _WIN32 ) && !defined( WITH_JACK )
+#ifndef SERVER_ONLY
+#    if defined( _WIN32 ) && !defined( WITH_JACK )
         strVersionText += "\n *** ASIO (Audio Stream I/O) SDK";
         strVersionText += "\n *** <https://www.steinberg.net/developers>";
+        strVersionText += "\n *** ASIO is a trademark and software of Steinberg Media Technologies GmbH";
         strVersionText += "\n *** ";
-#endif
-        strVersionText += "\n *** Audio reverberation code by Perry R. Cook and Gary P. Scavone";
+#    endif
+#    ifndef HEADLESS
+        strVersionText += "\n *** " + QCoreApplication::tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
+                          ", 1995 - 2021, The Synthesis ToolKit in C++ (STK)";
         strVersionText += "\n *** <https://ccrma.stanford.edu/software/stk>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Some pixmaps are from the Open Clip Art Library (OCAL)";
+        strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some pixmaps are from the %1" ) ).arg ( " Open Clip Art Library (OCAL)" );
         strVersionText += "\n *** <https://openclipart.org>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Flag icons by Mark James";
+        strVersionText += "\n *** " + QCoreApplication::tr ( "Flag icons by Mark James" );
         strVersionText += "\n *** <http://www.famfamfam.com>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Some sound samples are from Freesound";
+        strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" );
         strVersionText += "\n *** <https://freesound.org>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Copyright (C) 2005-2022 The Jamulus Development Team";
+#    endif
+#endif
+        strVersionText += "\n *** Copyright © 2005-2024 The Jamulus Development Team";
         strVersionText += "\n";
     }
 

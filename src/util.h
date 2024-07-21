@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2024
  *
  * Author(s):
  *  Volker Fischer
@@ -53,6 +53,9 @@
 #include <QElapsedTimer>
 #include <QTextBoundaryFinder>
 #include <QTimer>
+#ifndef CLIENT_NO_SRV_CONNECT
+#    include <QDnsLookup>
+#endif
 #ifndef _WIN32
 #    include <QThread>
 #endif
@@ -78,8 +81,9 @@ class CClient; // forward declaration of CClient
 #endif
 
 /* Definitions ****************************************************************/
-#define METER_FLY_BACK  2
-#define INVALID_MIDI_CH -1 // invalid MIDI channel definition
+#define METER_FLY_BACK             2
+#define INVALID_MIDI_CH            -1 // invalid MIDI channel definition
+#define DNS_SRV_RESOLVE_TIMEOUT_MS 500
 
 /* Global functions ***********************************************************/
 // converting float to short
@@ -121,7 +125,8 @@ public:
     CVector ( const int iNeSi ) { Init ( iNeSi ); }
     CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
-    CVector ( CVector const& ) = default;
+    CVector ( CVector const& )            = default;
+    CVector& operator= ( CVector const& ) = default;
 
     void Init ( const int iNewSize );
 
@@ -583,7 +588,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
         return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
     case SRS_SERVER_LIST_FULL:
-        return QCoreApplication::translate ( "CServerDlg", "Directory server list full" );
+        return QCoreApplication::translate ( "CServerDlg", "Server list full at directory" );
 
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
@@ -595,7 +600,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value %1" ) ).arg ( eSvrRegStatus );
 }
 
-// Directory server registration outcome ---------------------------------------
+// Directory registration outcome ----------------------------------------------
 enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
@@ -680,7 +685,7 @@ public:
 
     CHostAddress() : InetAddr ( static_cast<quint32> ( 0 ) ), iPort ( 0 ) {}
 
-    CHostAddress ( const QHostAddress NInetAddr, const quint16 iNPort ) : InetAddr ( NInetAddr ), iPort ( iNPort ) {}
+    CHostAddress ( const QHostAddress& NInetAddr, const quint16 iNPort ) : InetAddr ( NInetAddr ), iPort ( iNPort ) {}
 
     CHostAddress ( const CHostAddress& NHAddr ) : InetAddr ( NHAddr.InetAddr ), iPort ( NHAddr.iPort ) {}
 
@@ -767,7 +772,7 @@ public:
     static bool                    IsCountryCodeSupported ( unsigned short iCountryCode );
     static QLocale::Country        GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode );
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
-    // ./tools/qt5-to-qt6-country-code-table.py generates these lists:
+    // ./tools/qt5_to_qt6_country_code_table.py generates these lists:
     constexpr int const static wireFormatToQt6Table[] = {
         0,   1,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
         29,  30,  31,  32,  33,  35,  36,  37,  38,  39,  40,  41,  43,  45,  46,  48,  49,  50,  51,  53,  54,  55,  57,  56,  58,  59,  118,
@@ -976,10 +981,15 @@ public:
 class NetworkUtil
 {
 public:
+    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
+
+#ifndef CLIENT_NO_SRV_CONNECT
+    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+#endif
     static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );
-//    static QString      FixBadWebAddress ( const QString& strAddress );
     static QString      FixJamAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static CHostAddress GetLocalAddress6();

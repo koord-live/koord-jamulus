@@ -1,5 +1,5 @@
 /******************************************************************************\
- * \Copyright (c) 2004-2022
+ * \Copyright (c) 2004-2024
  * \author    Volker Fischer
  *
 
@@ -285,8 +285,8 @@ LED bar:      lbr
 // minimum length of JSON-RPC secret string (main.cpp)
 #define JSON_RPC_MINIMUM_SECRET_LENGTH 16
 
-// JSON-RPC listen address
-#define JSON_RPC_LISTEN_ADDRESS "127.0.0.1"
+// JSON-RPC listen address (Default)
+#define DEFAULT_JSON_RPC_LISTEN_ADDRESS "127.0.0.1"
 
 #define _MAXSHORT     32767
 #define _MINSHORT     ( -32768 )

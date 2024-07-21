@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2024
  *
  * Author(s):
  *  Volker Fischer
@@ -267,7 +267,7 @@ protected:
     bool                    bDisplayPans;
     bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
-    int                     iMyChannelID;
+    int                     iMyChannelID;         // must use int (not size_t) so INVALID_INDEX can be stored
     int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
     int                     iNumMixerPanelRows;
     QString                 strServerName;

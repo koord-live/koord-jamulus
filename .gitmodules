@@ -1,6 +1,3 @@
-[submodule "libs/oboe"]
-	path = libs/oboe
-	url = http://github.com/google/oboe.git
 [submodule "KoordASIO"]
 	path = KoordASIO
 	url = https://github.com/koord-live/KoordASIO.git
