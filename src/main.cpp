@@ -45,6 +45,7 @@
 #if defined (Q_OS_ANDROID)
 //#    include <QtAndroidExtras/QtAndroid>
 #    include <QtCore/private/qandroidextras_p.h>
+#endif
 #include "stereomixserver.h"
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
@@ -61,8 +62,8 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #    endif
 #endif
 #include "kdapplication.h"
-#include "kdsingleapplication.h"
-#include "messagereceiver.h"
+// #include "kdsingleapplication.h"
+// #include "messagereceiver.h"
 //#include <QSplashScreen>
 
 // Implementation **************************************************************
@@ -132,7 +133,7 @@ int main ( int argc, char** argv )
     QString      strClientName               = "";
     QString      strJsonRpcSecretFileName    = "";
     // handle primary / secondary instances
-    MessageReceiver msgReceiver;
+    // MessageReceiver msgReceiver;
 
 #if defined( HEADLESS ) || defined( SERVER_ONLY )
     Q_UNUSED ( bStartMinimized )
@@ -908,30 +909,30 @@ int main ( int argc, char** argv )
     // Make main application object
     // Note: SingleApplication not needed or desired on mobile ie iOS and Android (also ChromeOS)
     // Also: SingleApplication problematic on appstore macOS builds (posix)
-#if defined (Q_OS_IOS) || defined (Q_OS_ANDROID)
+// #if defined (Q_OS_IOS) || defined (Q_OS_ANDROID)
     KdApplication* pApp = new KdApplication ( argc, argv );
-#elif defined (Q_OS_WINDOWS) || defined (Q_OS_LINUX) || defined (Q_OS_MACOS)
-    KdSingleApplication* pApp = new KdSingleApplication (argc, argv);
+// #elif defined (Q_OS_WINDOWS) || defined (Q_OS_LINUX) || defined (Q_OS_MACOS)
+    // KdSingleApplication* pApp = new KdSingleApplication (argc, argv);
 
 //    QPixmap pixmap(":/png/main/res/logo_land.png");
 //    splash.setPixmap(pixmap);
 //    // Show splash screen
 //    splash.show();
 
-    if( pApp->isSecondary() ) {
-        // pApp->sendMessage( pApp->arguments().join(' ').toUtf8() );
-        //FIXME - arguments() list is all args including executable ie "Koord.exe koord://<host>:<port>"
-        // so we take arguments().last() as that SHOULD be the URL in typical circumstances
-        pApp->sendMessage( pApp->arguments().last().toUtf8() );
-        return 0;
-    } else {
-        QObject::connect(
-            pApp,
-            &SingleApplication::receivedMessage,
-            &msgReceiver,
-            &MessageReceiver::receivedMessage
-        );
-    }
+    // if( pApp->isSecondary() ) {
+    //     // pApp->sendMessage( pApp->arguments().join(' ').toUtf8() );
+    //     //FIXME - arguments() list is all args including executable ie "Koord.exe koord://<host>:<port>"
+    //     // so we take arguments().last() as that SHOULD be the URL in typical circumstances
+    //     pApp->sendMessage( pApp->arguments().last().toUtf8() );
+    //     return 0;
+    // } else {
+    //     QObject::connect(
+    //         pApp,
+    //         &SingleApplication::receivedMessage,
+    //         &msgReceiver,
+    //         &MessageReceiver::receivedMessage
+    //     );
+    // }
 #endif
 
     if (bUseGUI == true)
@@ -957,7 +958,7 @@ int main ( int argc, char** argv )
     }
 
 //#    endif
-#endif
+// #endif
 
 #if defined( Q_OS_ANDROID )
     // special Android code needed for record audio permission handling
@@ -1155,7 +1156,7 @@ int main ( int argc, char** argv )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
-
+#endif
             if ( iStereoMixPortNumber != INVALID_PORT )
             {
                 auto pStereoMixServer = new CStereoMixServer ( &Server, iStereoMixPortNumber );

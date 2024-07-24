@@ -38,7 +38,7 @@ contains(CONFIG, "headless") {
 }
 
 # add SingleApplication support
-include(singleapplication/singleapplication.pri)
+# include(singleapplication/singleapplication.pri)
 DEFINES += QAPPLICATION_CLASS=QApplication
 
 INCLUDEPATH += src
@@ -319,7 +319,7 @@ RESOURCES += src/resources.qrc
 HEADERS += src/buffer.h \
     src/channel.h \
     src/global.h \
-    src/kdsingleapplication.h \
+    # src/kdsingleapplication.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
     src/threadpool.h \
@@ -335,8 +335,8 @@ HEADERS += src/buffer.h \
     src/recorder/cwavestream.h \
     src/signalhandler.h \
     src/kdapplication.h \
-    src/urlhandler.h \
-    src/messagereceiver.h
+    src/urlhandler.h
+    # src/messagereceiver.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
@@ -429,7 +429,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
     src/kdapplication.cpp \
-    src/kdsingleapplication.cpp \
+    # src/kdsingleapplication.cpp \
     src/main.cpp \
     src/protocol.cpp \
     src/recorder/jamcontroller.cpp \
@@ -444,8 +444,8 @@ SOURCES += src/buffer.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
     src/recorder/cwavestream.cpp \
-    src/urlhandler.cpp \
-    src/messagereceiver.cpp
+    src/urlhandler.cpp
+    # src/messagereceiver.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
