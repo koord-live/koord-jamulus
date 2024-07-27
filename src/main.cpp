@@ -54,13 +54,13 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #   include <QFileOpenEvent>
 #endif
 #include <memory>
-#ifndef NO_JSON_RPC
-#    include "rpcserver.h"
-#    include "serverrpc.h"
-#    ifndef SERVER_ONLY
-#        include "clientrpc.h"
-#    endif
-#endif
+// #ifndef NO_JSON_RPC
+// #    include "rpcserver.h"
+// #    include "serverrpc.h"
+// #    ifndef SERVER_ONLY
+// #        include "clientrpc.h"
+// #    endif
+// #endif
 #include "kdapplication.h"
 // #include "kdsingleapplication.h"
 // #include "messagereceiver.h"
@@ -865,28 +865,28 @@ int main ( int argc, char** argv )
                 strServerBindIP = "";
             }
         }
-#ifndef NO_JSON_RPC
+// #ifndef NO_JSON_RPC
 
-        // strJsonRpcBind address defaults to loopback and should not be empty, but
-        // in the odd chance that an empty IP is passed, we'll check for it here.
-        if ( strJsonRpcBindIP.trimmed().isEmpty() )
-        {
-            qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but the bind address provided is empty, exiting." ) );
-            exit ( 1 );
-        }
+//         // strJsonRpcBind address defaults to loopback and should not be empty, but
+//         // in the odd chance that an empty IP is passed, we'll check for it here.
+//         if ( strJsonRpcBindIP.trimmed().isEmpty() )
+//         {
+//             qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but the bind address provided is empty, exiting." ) );
+//             exit ( 1 );
+//         }
 
-        // This means of testing the validity of IP addresses is far from perfect but
-        // we do it here as an upfront check.  The downstream network calls will error
-        // out on malformed addresses not caught here.
-        {
-            QHostAddress InetAddr;
-            if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
-            {
-                qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
-                exit ( 1 );
-            }
-        }
-#endif
+//         // This means of testing the validity of IP addresses is far from perfect but
+//         // we do it here as an upfront check.  The downstream network calls will error
+//         // out on malformed addresses not caught here.
+//         {
+//             QHostAddress InetAddr;
+//             if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
+//             {
+//                 qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
+//                 exit ( 1 );
+//             }
+//         }
+// #endif
     }
 
     // Application/GUI setup ---------------------------------------------------
@@ -1017,49 +1017,49 @@ int main ( int argc, char** argv )
     //### TEST: END ###//
 #endif
 
-#ifdef NO_JSON_RPC
+// #ifdef NO_JSON_RPC
     if ( iJsonRpcPortNumber != INVALID_PORT || !strJsonRpcSecretFileName.isEmpty() )
     {
         qWarning() << "No JSON-RPC support in this build.";
     }
-#else
-    CRpcServer*   pRpcServer = nullptr;
+// #else
+//     CRpcServer*   pRpcServer = nullptr;
 
-    if ( iJsonRpcPortNumber != INVALID_PORT )
-    {
-        if ( strJsonRpcSecretFileName.isEmpty() )
-        {
-            qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: --jsonrpcsecretfile is required. Exiting." ) );
-            exit ( 1 );
-        }
+//     if ( iJsonRpcPortNumber != INVALID_PORT )
+//     {
+//         if ( strJsonRpcSecretFileName.isEmpty() )
+//         {
+//             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: --jsonrpcsecretfile is required. Exiting." ) );
+//             exit ( 1 );
+//         }
 
-        QFile qfJsonRpcSecretFile ( strJsonRpcSecretFileName );
-        if ( !qfJsonRpcSecretFile.open ( QFile::OpenModeFlag::ReadOnly ) )
-        {
-            qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Unable to open secret file %1. Exiting." ).arg ( strJsonRpcSecretFileName ) );
-            exit ( 1 );
-        }
-        QTextStream qtsJsonRpcSecretStream ( &qfJsonRpcSecretFile );
-        QString     strJsonRpcSecret = qtsJsonRpcSecretStream.readLine();
-        if ( strJsonRpcSecret.length() < JSON_RPC_MINIMUM_SECRET_LENGTH )
-        {
-            qCritical() << qUtf8Printable ( QString ( "JSON-RPC: Refusing to run with secret of length %1 (required: %2). Exiting." )
-                                                .arg ( strJsonRpcSecret.length() )
-                                                .arg ( JSON_RPC_MINIMUM_SECRET_LENGTH ) );
-            exit ( 1 );
-        }
+//         QFile qfJsonRpcSecretFile ( strJsonRpcSecretFileName );
+//         if ( !qfJsonRpcSecretFile.open ( QFile::OpenModeFlag::ReadOnly ) )
+//         {
+//             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Unable to open secret file %1. Exiting." ).arg ( strJsonRpcSecretFileName ) );
+//             exit ( 1 );
+//         }
+//         QTextStream qtsJsonRpcSecretStream ( &qfJsonRpcSecretFile );
+//         QString     strJsonRpcSecret = qtsJsonRpcSecretStream.readLine();
+//         if ( strJsonRpcSecret.length() < JSON_RPC_MINIMUM_SECRET_LENGTH )
+//         {
+//             qCritical() << qUtf8Printable ( QString ( "JSON-RPC: Refusing to run with secret of length %1 (required: %2). Exiting." )
+//                                                 .arg ( strJsonRpcSecret.length() )
+//                                                 .arg ( JSON_RPC_MINIMUM_SECRET_LENGTH ) );
+//             exit ( 1 );
+//         }
 
-        qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
-                      "(not subject to semantic versioning) during the initial phase.";
+//         qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
+//                       "(not subject to semantic versioning) during the initial phase.";
 
-        pRpcServer = new CRpcServer ( pApp, strJsonRpcBindIP, iJsonRpcPortNumber, strJsonRpcSecret );
-        if ( !pRpcServer->Start() )
-        {
-            qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) );
-            exit ( 1 );
-        }
-    }
-#endif
+//         pRpcServer = new CRpcServer ( pApp, strJsonRpcBindIP, iJsonRpcPortNumber, strJsonRpcSecret );
+//         if ( !pRpcServer->Start() )
+//         {
+//             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) );
+//             exit ( 1 );
+//         }
+//     }
+// #endif
 
     try
     {
@@ -1081,12 +1081,12 @@ int main ( int argc, char** argv )
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
 
-#    ifndef NO_JSON_RPC
-            if ( pRpcServer )
-            {
-                new CClientRpc ( &Client, pRpcServer, pRpcServer );
-            }
-#    endif
+// #    ifndef NO_JSON_RPC
+//             if ( pRpcServer )
+//             {
+//                 new CClientRpc ( &Client, pRpcServer, pRpcServer );
+//             }
+// #    endif
 
 #    ifndef HEADLESS
             if ( bUseGUI )
@@ -1151,12 +1151,12 @@ int main ( int argc, char** argv )
                              bEnableIPv6,
                              eLicenceType );
 
-#ifndef NO_JSON_RPC
-            if ( pRpcServer )
-            {
-                new CServerRpc ( &Server, pRpcServer, pRpcServer );
-            }
-#endif
+// #ifndef NO_JSON_RPC
+//             if ( pRpcServer )
+//             {
+//                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
+//             }
+// #endif
             if ( iStereoMixPortNumber != INVALID_PORT )
             {
                 auto pStereoMixServer = new CStereoMixServer ( &Server, iStereoMixPortNumber );
