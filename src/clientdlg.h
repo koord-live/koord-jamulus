@@ -105,12 +105,12 @@ public:
                  QWidget*         parent = nullptr );
 //    // session chat
 //    void AddChatText ( QString strChatText );
-    // settings
-    void UpdateUploadRate();
-    void UpdateDisplay();
-    void UpdateSettingsDisplay();
-    void UpdateSoundDeviceChannelSelectionFrame();
-    void SetEnableFeedbackDetection ( bool enable );
+    // // settings
+    // void UpdateUploadRate();
+    // void UpdateDisplay();
+    // void UpdateSettingsDisplay();
+    // void UpdateSoundDeviceChannelSelectionFrame();
+    // void SetEnableFeedbackDetection ( bool enable );
 #if defined( Q_OS_WINDOWS )
     void SetupBuiltinASIOBox();
 #endif
@@ -384,41 +384,41 @@ public slots:
 //    // end session chat stuff ========================
 
     // settings stuff ==========================================
-//    void OnTimerStatus() { UpdateDisplay(); }
-    void OnNetBufValueChanged ( int value );
-    void OnNetBufServerValueChanged ( int value );
-    void OnAutoJitBufStateChanged ( int value );
-    void OnEnableOPUS64StateChanged ( int value );
-    void OnFeedbackDetectionChanged ( int value );
-    void OnCustomDirectoriesEditingFinished();
-    void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
-    void OnNewClientLevelChanged();
-    void OnInputBoostChanged();
-    void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
-    void OnSoundcardActivated ( int iSndDevIdx );
-    void OnLInChanActivated ( int iChanIdx );
-    void OnRInChanActivated ( int iChanIdx );
-    void OnLOutChanActivated ( int iChanIdx );
-    void OnROutChanActivated ( int iChanIdx );
-    void OnAudioChannelsActivated ( int iChanIdx );
-    void OnAudioQualityActivated ( int iQualityIdx );
-    void OnGUIDesignActivated ( int iDesignIdx );
-    void OnMeterStyleActivated ( int iMeterStyleIdx );
-    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
-    void OnAliasTextChanged ( const QString& strNewName );
-//    void OnInstrumentActivated ( int iCntryListItem );
-//    void OnCountryActivated ( int iCntryListItem );
-//    void OnCityTextChanged ( const QString& strNewName );
-//    void OnSkillActivated ( int iCntryListItem );
-//    void OnTabChanged();
-//    void OnMakeTabChange ( int iTabIdx );
-    void OnAudioPanValueChanged ( int value );
-#if defined( _WIN32 ) && !defined( WITH_JACK )
-    // Only include this slot for Windows when JACK is NOT used
-    void OnDriverSetupClicked();
-    void OnSoundcardReactivate();
-#endif
-    // end of settings stuff ===================================
+//     void OnTimerStatus() { UpdateDisplay(); }
+//     void OnNetBufValueChanged ( int value );
+//     void OnNetBufServerValueChanged ( int value );
+//     void OnAutoJitBufStateChanged ( int value );
+//     void OnEnableOPUS64StateChanged ( int value );
+//     void OnFeedbackDetectionChanged ( int value );
+//     void OnCustomDirectoriesEditingFinished();
+//     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
+//     void OnNewClientLevelChanged();
+//     void OnInputBoostChanged();
+//     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
+//     void OnSoundcardActivated ( int iSndDevIdx );
+//     void OnLInChanActivated ( int iChanIdx );
+//     void OnRInChanActivated ( int iChanIdx );
+//     void OnLOutChanActivated ( int iChanIdx );
+//     void OnROutChanActivated ( int iChanIdx );
+//     void OnAudioChannelsActivated ( int iChanIdx );
+//     void OnAudioQualityActivated ( int iQualityIdx );
+//     void OnGUIDesignActivated ( int iDesignIdx );
+//     void OnMeterStyleActivated ( int iMeterStyleIdx );
+//     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
+//     void OnAliasTextChanged ( const QString& strNewName );
+// //    void OnInstrumentActivated ( int iCntryListItem );
+// //    void OnCountryActivated ( int iCntryListItem );
+// //    void OnCityTextChanged ( const QString& strNewName );
+// //    void OnSkillActivated ( int iCntryListItem );
+// //    void OnTabChanged();
+// //    void OnMakeTabChange ( int iTabIdx );
+//     void OnAudioPanValueChanged ( int value );
+// #if defined( _WIN32 ) && !defined( WITH_JACK )
+//     // Only include this slot for Windows when JACK is NOT used
+//     void OnDriverSetupClicked();
+//     void OnSoundcardReactivate();
+// #endif
+//     // end of settings stuff ===================================
 
     void accept() { close(); } // introduced by pljones
 
@@ -462,12 +462,12 @@ signals:
     void SendTabChange ( int iTabIdx );
     void NewLocalInputText ( QString strNewText );
 
-    // settings stuff
-    void GUIDesignChanged();
-    void MeterStyleChanged();
-    void AudioChannelsChanged();
-    void CustomDirectoriesChanged();
-    void NumMixerPanelRowsChanged ( int value );
+    // // settings stuff
+    // void GUIDesignChanged();
+    // void MeterStyleChanged();
+    // void AudioChannelsChanged();
+    // void CustomDirectoriesChanged();
+    // void NumMixerPanelRowsChanged ( int value );
 
     // for QML
     void videoUrlChanged();

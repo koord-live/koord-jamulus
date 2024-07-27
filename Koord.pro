@@ -349,6 +349,7 @@ HEADERS += src/buffer.h \
 !contains(CONFIG, "serveronly") {
     HEADERS_GUI += src/audiomixerboard.h \
         src/clientdlg.h \
+        src/clientdlgsettings.h \
         src/levelmeter.h \
         src/analyzerconsole.h \
         src/multicolorled.h
@@ -428,6 +429,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
 
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
+    src/clientsettingsdlg.c \
     src/kdapplication.cpp \
     # src/kdsingleapplication.cpp \
     src/main.cpp \
@@ -457,6 +459,7 @@ SOURCES += src/buffer.cpp \
 !contains(CONFIG, "serveronly") {
     SOURCES_GUI += src/audiomixerboard.cpp \
         src/clientdlg.cpp \
+        src/clientsettingsdlg.cpp \
         src/multicolorled.cpp \
         src/levelmeter.cpp \
         src/analyzerconsole.cpp
