@@ -70,7 +70,7 @@
         <file>webengineview.qml</file>
         <file>nosessionview.qml</file>
         <file>androidwebview.qml</file>
-        <file>settingsView.qml</file>
+        <file>settingview.qml</file>
     </qresource>
     <qresource prefix="/svg/main">
         <file>res/share-via.svg</file>
