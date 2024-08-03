@@ -54,6 +54,7 @@
 #include "settings.h"
 #include "multicolorled.h"
 #include "audiomixerboard.h"
+#include "clientsettingsdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
 #if defined( Q_OS_MACOS )
@@ -69,7 +70,6 @@
 #endif
 #include <QQuickWidget>
 #include <QQuickView>
-//#include "unsafearea.h"
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
@@ -107,7 +107,7 @@ public:
 //    void AddChatText ( QString strChatText );
     // // settings
     // void UpdateUploadRate();
-    // void UpdateDisplay();
+    void UpdateDisplay();
     // void UpdateSettingsDisplay();
     // void UpdateSoundDeviceChannelSelectionFrame();
     // void SetEnableFeedbackDetection ( bool enable );
@@ -152,12 +152,10 @@ protected:
 
     CClient*         pClient;
     CClientSettings* pSettings;
-//    UnsafeArea*    mUnsafeArea;
 
     int            iClients;
     bool           bConnected;
     bool           bConnectDlgWasShown;
-//    bool           bBasicConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
     bool           bEnableIPv6;
@@ -180,7 +178,8 @@ protected:
 #if defined(Q_OS_ANDROID)
     QQuickWidget*   quickWidget;
 #else
-    QQuickView*     quickView;
+    QQuickView*     videoView;
+    QQuickView*     settingsView;
 #endif
     QNetworkAccessManager*   qNam;
     QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> endpoint_reply;

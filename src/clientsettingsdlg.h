@@ -19,16 +19,17 @@
 #include "client.h"
 #include "settings.h"
 #include "multicolorled.h"
-#include "ui_clientsettingsdlgbase.h"
+// #include "ui_clientsettingsdlgbase.h"
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
 #define DISPLAY_UPDATE_TIME 1000 // ms
 
 /* Classes ********************************************************************/
-class CClientSettingsDlg : public CBaseDlg, private Ui_CClientSettingsDlgBase
+class CClientSettingsDlg : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString something READ something WRITE setSomething NOTIFY somethingChanged)
 
 public:
     CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSetP, QWidget* parent = nullptr );
