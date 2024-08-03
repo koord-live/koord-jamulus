@@ -149,7 +149,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // transitional settings view
     settingsView = new QQuickView();
     QWidget *settingsContainer = QWidget::createWindowContainer(settingsView, this);
-    settingsView->setSource(QUrl("qrc:/settingsview.qml"));
+    settingsView->setSource(QUrl("qrc:/settingview.qml"));
     settingsTab->layout()->addWidget(settingsContainer);
     QQmlContext* settingsContext = settingsView->rootContext();
     settingsContext->setContextProperty("_setsref", this);
