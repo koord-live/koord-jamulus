@@ -10,6 +10,18 @@ Item {
         id: profileLayout
         // username
         // <widget class="QLineEdit" name="pedtAlias">
+        TextField {
+            id: inputField
+            width: 200
+            placeholderText: "Enter alias here"
+            text: "Default text"
+
+            onTextChanged: {
+                console.log("Text changed to: " + text)
+            }
+        }
+
+
         // mixer rows
         // <widget class="QSpinBox" name="spnMixerRows">
         SpinBox {
@@ -24,13 +36,54 @@ Item {
 
         // Audio Device
          // <widget class="QComboBox" name="cbxSoundcard">
+        ComboBox {
+            id:                         cbxSoundcard
+            model:                      _settings.slSndCrdDevNames
+            currentIndex:               _settings.slSndCrdDevIndex
+            onCurrentIndexChanged:      _settings.slSndCrdDevIndex = currentIndex
+        }
+
+        Text {
+            text:                       "Selected Name: " + _settings.slSndCrdDevNames[_settings.slSndCrdDevIndex]
+            anchors.top:                cbxSoundcard.bottom
+            anchors.topMargin:          20
+            anchors.horizontalCenter:   cbxSoundcard.horizontalCenter
+        }
 
         // Channel Mappings
         // <widget class="QComboBox" name="cbxLInChan"/>
+        ComboBox {
+            id:                         cbxLInChan
+            model:                      _settings.sndCardNumInputChannels
+            currentIndex:               _settings.sndCardLInChannel
+            onCurrentIndexChanged:      _settings.sndCardLInChannel = currentIndex
+        }
+
+
         // <widget class="QComboBox" name="cbxRInChan"/>
-        // //
+        ComboBox {
+            id:                         cbxRInChan
+            model:                      _settings.sndCardNumInputChannels
+            currentIndex:               _settings.sndCardRInChannel
+            onCurrentIndexChanged:      _settings.sndCardRInChannel = currentIndex
+        }
+
+
         // <widget class="QComboBox" name="cbxLOutChan"/>
+        ComboBox {
+            id:                         cbxLOutChan
+            model:                      _settings.sndCardNumInputChannels
+            currentIndex:               _settings.sndCardLOutChannel
+            onCurrentIndexChanged:      _settings.sndCardLOutChannel = currentIndex
+        }
+
         // <widget class="QComboBox" name="cbxROutChan"/>
+        ComboBox {
+            id:                         cbxROutChan
+            model:                      _settings.sndCardNumInputChannels
+            currentIndex:               _settings.sndCardROutChannel
+            onCurrentIndexChanged:      _settings.sndCardROutChannel = currentIndex
+        }
 
         // Channel Setup box
          // <widget class="QComboBox" name="cbxAudioChannels">
@@ -98,17 +151,17 @@ Item {
         ColumnLayout {
             RadioButton {
                 id: rbtBufferDelayPreferred
-                // text: _settings.GetSndCrdBufferDelayString(FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES)
+                text: _settings.getSndCrdBufferDelayString(FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES)
                 checked: _settings.rbtBufferDelayPreferred
             }
             RadioButton {
                 id: rbtBufferDelayDefault
-                // text: _settings.GetSndCrdBufferDelayString(FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES)
+                text: _settings.getSndCrdBufferDelayString(FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES)
                 checked: _settings.rbtBufferDelayDefault
             }
             RadioButton {
                 id: rbtBufferDelaySafe
-                // text: _settings.GetSndCrdBufferDelayString(FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES)
+                text: _settings.getSndCrdBufferDelayString(FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES)
                 checked: _settings.rbtBufferDelaySafe
             }
         }
@@ -125,6 +178,12 @@ Item {
 
         // Jitter Buffer
         // <widget class="QCheckBox" name="chbAutoJitBuf">
+        CheckBox {
+            id:     chbAutoJitBuf
+            checked: true
+            text:   "Auto"
+        }
+
         // <widget class="QSlider" name="sldNetBuf">
         Slider {
             id:     sldNetBuf
@@ -132,6 +191,7 @@ Item {
             to:     MAX_NET_BUF_SIZE_NUM_BL
             value:  _settings.sldNetBuf
             moved:  _settings.sldNetBuf = value
+            enabled: !chbAutoJitBuf
         }
 
         // <widget class="QSlider" name="sldNetBufServer">
@@ -141,6 +201,7 @@ Item {
             to:     MAX_NET_BUF_SIZE_NUM_BL
             value:  _settings.sldNetBufServer
             moved:  _settings.sldNetBufServer = value
+            enabled: !chbAutoJitBuf
         }
 
         // Small Network Buffers

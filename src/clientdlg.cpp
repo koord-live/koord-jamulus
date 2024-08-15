@@ -1326,10 +1326,10 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
     }
 
     // update the settings
-    UpdateSoundDeviceChannelSelectionFrame();
-#if defined( Q_OS_WINDOWS )
-    SetupBuiltinASIOBox();
-#endif
+    // UpdateSoundDeviceChannelSelectionFrame();
+// #if defined( Q_OS_WINDOWS )
+//     SetupBuiltinASIOBox();
+// #endif
 }
 
 void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients )

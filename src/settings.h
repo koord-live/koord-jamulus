@@ -143,20 +143,29 @@ class CClientSettings : public CSettings
 {
     Q_OBJECT
 
-    Q_PROPERTY(int edtNewClientLevel READ edtNewClientLevel WRITE setEdtNewClientLevel NOTIFY newClientLevelChanged)
+    Q_PROPERTY(int edtNewClientLevel READ edtNewClientLevel WRITE setEdtNewClientLevel NOTIFY edtNewClientLevelChanged)
     Q_PROPERTY(int panDialLevel READ panDialLevel WRITE setPanDialLevel NOTIFY panDialLevelChanged)
-    Q_PROPERTY(int uploadRate READ uploadRate WRITE setUploadRate NOTIFY uploadRateChanged)
+    Q_PROPERTY(int uploadRate READ uploadRate NOTIFY uploadRateChanged)
     Q_PROPERTY(int sldNetBuf READ sldNetBuf WRITE setSldNetBuf NOTIFY sldNetBufChanged)
     Q_PROPERTY(int sldNetBufServer READ sldNetBufServer WRITE setSldNetBufServer NOTIFY sldNetBufServerChanged)
     Q_PROPERTY(int cbxAudioChannels READ cbxAudioChannels WRITE setCbxAudioChannels NOTIFY cbxAudioChannelsChanged)
     Q_PROPERTY(int cbxAudioQuality READ cbxAudioQuality WRITE setCbxAudioQuality NOTIFY cbxAudioQualityChanged)
     Q_PROPERTY(int dialInputBoost READ dialInputBoost WRITE setDialInputBoost NOTIFY dialInputBoostChanged)
+    Q_PROPERTY(QString pedtAlias READ pedtAlias WRITE setPedtAlias NOTIFY pedtAliasChanged)
     Q_PROPERTY(int spnMixerRows READ spnMixerRows WRITE setSpnMixerRows NOTIFY spnMixerRowsChanged)
     Q_PROPERTY(bool chbDetectFeedback READ chbDetectFeedback WRITE setChbDetectFeedback NOTIFY chbDetectFeedbackChanged)
     Q_PROPERTY(bool chbEnableOPUS64 READ chbEnableOPUS64 WRITE setChbEnableOPUS64 NOTIFY chbEnableOPUS64Changed)
-    Q_PROPERTY(bool rbtBufferDelayPreferred READ rbtBufferDelayPreferred WRITE SetRbtBufferDelayPreferred NOTIFY rbtBufferDelayPreferredChanged)
-    Q_PROPERTY(bool rbtBufferDelayDefault READ rbtBufferDelayDefault WRITE SetRbtBufferDelayDefault NOTIFY rbtBufferDelayDefaultChanged)
-    Q_PROPERTY(bool rbtBufferDelaySafe READ rbtBufferDelaySafe WRITE SetRbtBufferDelaySafe NOTIFY rbtBufferDelaySafeChanged)
+    Q_PROPERTY(bool rbtBufferDelayPreferred READ rbtBufferDelayPreferred WRITE setRbtBufferDelayPreferred NOTIFY rbtBufferDelayPreferredChanged)
+    Q_PROPERTY(bool rbtBufferDelayDefault READ rbtBufferDelayDefault WRITE setRbtBufferDelayDefault NOTIFY rbtBufferDelayDefaultChanged)
+    Q_PROPERTY(bool rbtBufferDelaySafe READ rbtBufferDelaySafe WRITE setRbtBufferDelaySafe NOTIFY rbtBufferDelaySafeChanged)
+    Q_PROPERTY(bool chbAutoJitBuf READ chbAutoJitBuf WRITE setChbAutoJitBuf NOTIFY chbAutoJitBufChanged)
+    Q_PROPERTY(QStringList slSndCrdDevNames READ slSndCrdDevNames NOTIFY slSndCrdDevNamesChanged)
+    Q_PROPERTY(QString slSndCrdDev READ slSndCrdDev WRITE setSlSndCrdDev NOTIFY slSndCrdDevChanged)
+    Q_PROPERTY(int sndCardNumInputChannels READ sndCardNumInputChannels NOTIFY sndCardNumInputChannelsChanged)
+    Q_PROPERTY(int sndCardLInChannel READ sndCardLInChannel WRITE setSndCardLInChannel NOTIFY sndCardLInChannelChanged)
+    Q_PROPERTY(int sndCardRInChannel READ sndCardRInChannel WRITE setSndCardRInChannel NOTIFY sndCardRInChannelChanged)
+    Q_PROPERTY(int sndCardLOutChannel READ sndCardLOutChannel WRITE setSndCardLOutChannel NOTIFY sndCardLOutChannelChanged)
+    Q_PROPERTY(int sndCardROutChannel READ sndCardROutChannel WRITE setSndCardROutChannel NOTIFY sndCardROutChannelChanged)
 
 
 public:
@@ -242,6 +251,9 @@ public:
     int dialInputBoost() const;
     void setDialInputBoost( const int inputBoost );
 
+    QString pedtAlias() const;
+    void setPedtAlias( QString strAlias );
+
     int spnMixerRows() const;
     void setSpnMixerRows( const int mixerRows );
 
@@ -260,10 +272,32 @@ public:
     bool rbtBufferDelaySafe();
     void setRbtBufferDelaySafe( bool enableBufDelSafe );
 
+    bool chbAutoJitBuf();
+    void setChbAutoJitBuf( bool autoJit );
+
+    QStringList slSndCrdDevNames();
+    QString slSndCrdDev();
+    void setSlSndCrdDev( QString sndCardDev );
+
+    int sndCardNumInputChannels();
+    int sndCardNumOutputChannels();
+
+    int sndCardLInChannel();
+    void setSndCardLInChannel( int chanIdx );
+
+    int sndCardRInChannel();
+    void setSndCardRInChannel( int chanIdx );
+
+    int sndCardLOutChannel();
+    void setSndCardLOutChannel( int chanIdx );
+
+    int sndCardROutChannel();
+    void setSndCardROutChannel( int chanIdx );
+
 
     void UpdateUploadRate(); // maintained for now
     int uploadRate() const;
-    void setUploadRate();
+    // void setUploadRate();
 
     // void UpdateDisplay(); // don't need this?
 
@@ -274,7 +308,7 @@ public:
     // endof TODO
 
 
-    QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
+    QString genSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
 
     void LoadFaderSettings ( const QString& strCurFileName );
@@ -382,7 +416,7 @@ public slots:
 
 
 signals:
-    void newClientLevelChanged();
+    void edtNewClientLevelChanged();
     void sldNetBufChanged();
     void sldNetBufServerChanged();
     void panDialLevelChanged();
@@ -391,11 +425,19 @@ signals:
     void cbxAudioQualityChanged();
     void dialInputBoostChanged();
     void spnMixerRowsChanged();
+    void pedtAliasChanged();
     void chbDetectFeedbackChanged();
     void chbEnableOPUS64Changed();
     void rbtBufferDelayPreferredChanged();
     void rbtBufferDelayDefaultChanged();
     void rbtBufferDelaySafeChanged();
+    void chbAutoJitBufChanged();
+    void slSndCrdDevChanged();
+    void sndCardNumInputChannelsChanged();
+    void sndCardLInChannelChanged();
+    void sndCardRInChannelChanged();
+    void sndCardLOutChannelChanged();
+    void sndCardROutChannelChanged();
 
     // TODO: convert / pull in from clientsettingdlg.h
     // void GUIDesignChanged();

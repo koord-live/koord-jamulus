@@ -834,32 +834,32 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
     }
 }
 
-void CClientSettings::UpdateJitterBufferFrame()
-{
-    // update slider value and text
-    // const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
-    // sldNetBuf->setValue ( iCurNumNetBuf );
-    // sldNetBuf = iCurNumNetBuf;
-    // lblNetBuf->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBuf ) );
+// void CClientSettings::UpdateJitterBufferFrame()
+// {
+//     // update slider value and text
+//     // const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
+//     // sldNetBuf->setValue ( iCurNumNetBuf );
+//     // sldNetBuf = iCurNumNetBuf;
+//     // lblNetBuf->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBuf ) );
 
-    // const int iCurNumNetBufServer = pClient->GetServerSockBufNumFrames();
-    // sldNetBufServer->setValue ( iCurNumNetBufServer );
-    // lblNetBufServer->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBufServer ) );
+//     // const int iCurNumNetBufServer = pClient->GetServerSockBufNumFrames();
+//     // sldNetBufServer->setValue ( iCurNumNetBufServer );
+//     // lblNetBufServer->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBufServer ) );
 
-    // if autosetting is enabled, disableslider control
-    const bool bIsAutoSockBufSize = pClient->GetDoAutoSockBufSize();
+//     // if autosetting is enabled, disableslider control
+//     const bool bIsAutoSockBufSize = pClient->GetDoAutoSockBufSize();
 
-    chbAutoJitBuf->setChecked ( bIsAutoSockBufSize );
-    sldNetBuf->setEnabled ( !bIsAutoSockBufSize );
-    lblNetBuf->setEnabled ( !bIsAutoSockBufSize );
-    lblNetBufLabel->setEnabled ( !bIsAutoSockBufSize );
-    sldNetBufServer->setEnabled ( !bIsAutoSockBufSize );
-    lblNetBufServer->setEnabled ( !bIsAutoSockBufSize );
-    lblNetBufServerLabel->setEnabled ( !bIsAutoSockBufSize );
-}
+//     chbAutoJitBuf->setChecked ( bIsAutoSockBufSize );
+//     sldNetBuf->setEnabled ( !bIsAutoSockBufSize );
+//     lblNetBuf->setEnabled ( !bIsAutoSockBufSize );
+//     lblNetBufLabel->setEnabled ( !bIsAutoSockBufSize );
+//     sldNetBufServer->setEnabled ( !bIsAutoSockBufSize );
+//     lblNetBufServer->setEnabled ( !bIsAutoSockBufSize );
+//     lblNetBufServerLabel->setEnabled ( !bIsAutoSockBufSize );
+// }
 
 
-QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText )
+QString CClientSettings::genSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText )
 {
     // use two times the buffer delay for the entire delay since
     // we have input and output
@@ -875,7 +875,7 @@ int CClientSettings::edtNewClientLevel() const
 void CClientSettings::setEdtNewClientLevel(const int newClientLevel )
 {
     iNewClientFaderLevel = newClientLevel;
-    emit newClientLevelChanged();
+    emit edtNewClientLevelChanged();
 }
 
 int CClientSettings::panDialLevel() const
@@ -964,6 +964,23 @@ void CClientSettings::setSpnMixerRows( const int mixerRows )
     emit spnMixerRowsChanged();
 }
 
+QString CClientSettings::pedtAlias() const
+{
+    return pClient->ChannelInfo.strName;
+}
+
+void CClientSettings::setPedtAlias( QString strAlias )
+{
+    // truncate string if necessary
+    const QString thisStr = TruncateString ( strAlias, MAX_LEN_FADER_TAG );
+
+    pClient->ChannelInfo.strName = thisStr;
+    pClient->SetRemoteInfo();
+
+    emit pedtAliasChanged();
+
+}
+
 bool CClientSettings::chbDetectFeedback()
 {
     return bEnableFeedbackDetection;
@@ -1044,6 +1061,77 @@ void CClientSettings::setRbtBufferDelaySafe( bool enableBufDelSafe )
     pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE );
 
     emit rbtBufferDelaySafeChanged();
+}
+
+
+bool CClientSettings::chbAutoJitBuf()
+{
+    return pClient->GetDoAutoSockBufSize();
+}
+
+void CClientSettings::setChbAutoJitBuf( bool autoJit )
+{
+    pClient->SetDoAutoSockBufSize ( autoJit );
+    // UpdateJitterBufferFrame();
+    emit chbAutoJitBufChanged();
+}
+
+// soundcard box
+QStringList CClientSettings::slSndCrdDevNames()
+{
+    return pClient->GetSndCrdDevNames();
+}
+
+QString CClientSettings::slSndCrdDev()
+{
+    return pClient->GetSndCrdDev();
+}
+
+void CClientSettings::setSlSndCrdDev( QString sndCardDev )
+{
+    pClient->SetSndCrdDev ( sndCardDev );
+    emit slSndCrdDevChanged();
+}
+
+// channel selectors
+int CClientSettings::sndCardLInChannel()
+{
+    return pClient->GetSndCrdLeftInputChannel();
+}
+void CClientSettings::setSndCardLInChannel( int chanIdx)
+{
+    pClient->SetSndCrdLeftInputChannel ( chanIdx );
+    emit sndCardLInChannelChanged();
+}
+
+int CClientSettings::sndCardRInChannel()
+{
+    return pClient->GetSndCrdRightInputChannel();
+}
+void CClientSettings::setSndCardRInChannel( int chanIdx)
+{
+    pClient->SetSndCrdLeftInputChannel( chanIdx );
+    emit sndCardLInChannelChanged();
+}
+
+int CClientSettings::sndCardLOutChannel()
+{
+    return pClient->GetSndCrdLeftOutputChannel();
+}
+void CClientSettings::setSndCardLOutChannel( int chanIdx)
+{
+    pClient->SetSndCrdLeftOutputChannel( chanIdx );
+    emit sndCardLOutChannelChanged();
+}
+
+int CClientSettings::sndCardROutChannel()
+{
+    return pClient->GetSndCrdRightOutputChannel();
+}
+void CClientSettings::setSndCardROutChannel( int chanIdx)
+{
+    pClient->SetSndCrdRightOutputChannel( chanIdx );
+    emit sndCardROutChannelChanged();
 }
 
 

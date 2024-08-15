@@ -47,7 +47,7 @@ public:
 
     void UpdateUploadRate();
     void UpdateDisplay();
-    void UpdateSoundDeviceChannelSelectionFrame();
+    // void UpdateSoundDeviceChannelSelectionFrame();
 
     void SetEnableFeedbackDetection ( bool enable );
 
