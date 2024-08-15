@@ -19,7 +19,11 @@
 #include "client.h"
 #include "settings.h"
 #include "multicolorled.h"
-// #include "ui_clientsettingsdlgbase.h"
+#include <QQuickView>
+#include "QQmlContext"
+
+
+// #include "ui_clientdlgbase.h"
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
@@ -29,10 +33,17 @@
 class CClientSettingsDlg : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString something READ something WRITE setSomething NOTIFY somethingChanged)
 
 public:
-    CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSetP, QWidget* parent = nullptr );
+    CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSetP );
+
+    QQuickView*     settingsView;
+
+    int getEdtNewClientLevel() const;
+    void setEdtNewClientLevel(const int &edtNewClientLevel );
+
+    int getPanLevel() const;
+    void setPanLevel( const int &panDialLevel );
 
     void UpdateUploadRate();
     void UpdateDisplay();
@@ -62,7 +73,7 @@ public slots:
     void OnEnableOPUS64StateChanged ( int value );
     void OnFeedbackDetectionChanged ( int value );
     void OnCustomDirectoriesEditingFinished();
-    void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
+    void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = getEdtNewClientLevel(); }
     void OnNewClientLevelChanged();
     void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );

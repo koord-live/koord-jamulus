@@ -179,7 +179,7 @@ protected:
     QQuickWidget*   quickWidget;
 #else
     QQuickView*     videoView;
-    QQuickView*     settingsView;
+    // QQuickView*     settingsView;
 #endif
     QNetworkAccessManager*   qNam;
     QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> endpoint_reply;
@@ -192,8 +192,8 @@ protected:
     CAnalyzerConsole   AnalyzerConsole;
 
     // settings stuff
-    void    UpdateJitterBufferFrame();
-    void    UpdateSoundCardFrame();
+    // void    UpdateJitterBufferFrame();
+    // void    UpdateSoundCardFrame();
     void    UpdateDirectoryServerComboBox();
 //    void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
@@ -375,50 +375,6 @@ public slots:
     void OnCheckForUpdate();
     void OnDownloadUpdateClicked();
 
-//    // session chat stuff ========================
-//    void OnSendText();
-//    void OnLocalInputTextTextChanged ( const QString& strNewText );
-//    void OnClearChatHistory();
-//    void OnAnchorClicked ( const QUrl& Url );
-//    // end session chat stuff ========================
-
-    // settings stuff ==========================================
-//     void OnTimerStatus() { UpdateDisplay(); }
-//     void OnNetBufValueChanged ( int value );
-//     void OnNetBufServerValueChanged ( int value );
-//     void OnAutoJitBufStateChanged ( int value );
-//     void OnEnableOPUS64StateChanged ( int value );
-//     void OnFeedbackDetectionChanged ( int value );
-//     void OnCustomDirectoriesEditingFinished();
-//     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
-//     void OnNewClientLevelChanged();
-//     void OnInputBoostChanged();
-//     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
-//     void OnSoundcardActivated ( int iSndDevIdx );
-//     void OnLInChanActivated ( int iChanIdx );
-//     void OnRInChanActivated ( int iChanIdx );
-//     void OnLOutChanActivated ( int iChanIdx );
-//     void OnROutChanActivated ( int iChanIdx );
-//     void OnAudioChannelsActivated ( int iChanIdx );
-//     void OnAudioQualityActivated ( int iQualityIdx );
-//     void OnGUIDesignActivated ( int iDesignIdx );
-//     void OnMeterStyleActivated ( int iMeterStyleIdx );
-//     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
-//     void OnAliasTextChanged ( const QString& strNewName );
-// //    void OnInstrumentActivated ( int iCntryListItem );
-// //    void OnCountryActivated ( int iCntryListItem );
-// //    void OnCityTextChanged ( const QString& strNewName );
-// //    void OnSkillActivated ( int iCntryListItem );
-// //    void OnTabChanged();
-// //    void OnMakeTabChange ( int iTabIdx );
-//     void OnAudioPanValueChanged ( int value );
-// #if defined( _WIN32 ) && !defined( WITH_JACK )
-//     // Only include this slot for Windows when JACK is NOT used
-//     void OnDriverSetupClicked();
-//     void OnSoundcardReactivate();
-// #endif
-//     // end of settings stuff ===================================
-
     void accept() { close(); } // introduced by pljones
 
 
@@ -460,13 +416,6 @@ public slots:
 signals:
     void SendTabChange ( int iTabIdx );
     void NewLocalInputText ( QString strNewText );
-
-    // // settings stuff
-    // void GUIDesignChanged();
-    // void MeterStyleChanged();
-    // void AudioChannelsChanged();
-    // void CustomDirectoriesChanged();
-    // void NumMixerPanelRowsChanged ( int value );
 
     // for QML
     void videoUrlChanged();
