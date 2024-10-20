@@ -834,10 +834,12 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
     }
 }
 
-// void CClientSettings::UpdateJitterBufferFrame()
-// {
-//     // update slider value and text
-//     // const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
+void CClientSettings::UpdateJitterBufferFrame()
+{
+    // update slider value and text
+    const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
+    //FIXME - convert the below widget stuff:
+
 //     // sldNetBuf->setValue ( iCurNumNetBuf );
 //     // sldNetBuf = iCurNumNetBuf;
 //     // lblNetBuf->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBuf ) );
@@ -856,7 +858,7 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
 //     sldNetBufServer->setEnabled ( !bIsAutoSockBufSize );
 //     lblNetBufServer->setEnabled ( !bIsAutoSockBufSize );
 //     lblNetBufServerLabel->setEnabled ( !bIsAutoSockBufSize );
-// }
+}
 
 
 QString CClientSettings::genSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText )
@@ -997,14 +999,15 @@ void CClientSettings::setChbDetectFeedback( bool detectFeedback )
 
 bool CClientSettings::chbEnableOPUS64()
 {
-    return bEnableFeedbackDetection;
+    return pClient->GetEnableOPUS64();
 }
 
 void CClientSettings::setChbEnableOPUS64( bool enableOPUS64 )
 {
+    if ( pClient->GetEnableOPUS64() == enableOPUS64 )
+        return;
 
     pClient->SetEnableOPUS64 ( enableOPUS64 );
-
     emit chbEnableOPUS64Changed();
 }
 
@@ -1094,6 +1097,17 @@ void CClientSettings::setSlSndCrdDev( QString sndCardDev )
 }
 
 // channel selectors
+int CClientSettings::sndCardNumInputChannels()
+{
+    return pClient->GetSndCrdNumInputChannels();
+}
+
+int CClientSettings::sndCardNumOutputChannels()
+{
+    return pClient->GetSndCrdNumOutputChannels();
+}
+
+
 int CClientSettings::sndCardLInChannel()
 {
     return pClient->GetSndCrdLeftInputChannel();

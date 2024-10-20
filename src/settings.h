@@ -199,13 +199,13 @@ public:
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
 
-        // transitional settings view
-        settingsView = new QQuickView();
-        // QWidget *settingsContainer = QWidget::createWindowContainer(settingsView, this);
-        settingsView->setSource(QUrl("qrc:/settingview.qml"));
+        // // transitional settings view
+        // settingsView = new QQuickView();
+        // QQmlContext* settingsContext = settingsView->rootContext();
+        // settingsContext->setContextProperty("_settings", this);
+        // QWidget *settingsContainer = QWidget::createWindowContainer(settingsView);
+        // settingsView->setSource(QUrl("qrc:/settingview.qml"));
         // settingsTab->layout()->addWidget(settingsContainer);
-        QQmlContext* settingsContext = settingsView->rootContext();
-        settingsContext->setContextProperty("_settings", this);
 
         // Do I put signal-slot connections here ???? even necessary?
         // QObject::connect ( edtNewClientLevel(), &QLineEdit::editingFinished, this, &CClientSettings::changeNewClientLevel );
@@ -258,7 +258,7 @@ public:
     void setSpnMixerRows( const int mixerRows );
 
     bool chbDetectFeedback();
-    void setChbDetectFeedback( bool detectFeeback );
+    void setChbDetectFeedback( bool detectFeedback );
 
     bool chbEnableOPUS64();
     void setChbEnableOPUS64( bool enableOPUS64 );
@@ -382,7 +382,7 @@ public slots:
 //     void OnNetBufServerValueChanged ( int value );
 //     void OnAutoJitBufStateChanged ( int value );
 //     void OnEnableOPUS64StateChanged ( int value );
-//     void OnFeedbackDetectionChanged ( int value );
+    // void OnFeedbackDetectionChanged ( int value ) ;
 //     void OnCustomDirectoriesEditingFinished();
     // void onNewClientLevelEditingFinished() { iNewClientFaderLevel = edtNewClientLevel(); }
     // void changeNewClientLevel() { setEdtNewClientLevel( iNewClientFaderLevel ); }
@@ -433,6 +433,7 @@ signals:
     void rbtBufferDelaySafeChanged();
     void chbAutoJitBufChanged();
     void slSndCrdDevChanged();
+    void slSndCrdDevNamesChanged();
     void sndCardNumInputChannelsChanged();
     void sndCardLInChannelChanged();
     void sndCardRInChannelChanged();

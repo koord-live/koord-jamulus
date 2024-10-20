@@ -33,8 +33,8 @@ contains(CONFIG, "headless") {
     QT -= gui
 } else {
     QT += widgets \
-        quickwidgets \
-        webview
+        # quickwidgets \
+        # webview
 }
 
 # add SingleApplication support
@@ -60,11 +60,12 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 win32 {
     # Windows desktop does not have native web runtime, need to package
-    QT += quick webenginequick multimedia
+    # QT += quick webenginequick multimedia
+    QT += quick
 
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error with std::min/max
-    DEFINES += _WINSOCKAPI_ # try fix winsock / winsock2 redefinition problems
+    # DEFINES += _WINSOCKAPI_ # try fix winsock / winsock2 redefinition problems
     RC_FILE = src/res/win-mainicon.rc
 
     LIBS += ole32.lib \
@@ -75,21 +76,21 @@ win32 {
     # also add KoordASIO lib, 64bit only
     # Full path in build will be:
     # D:\a\koord-rt\koord-rt\KoordASIO\src\out\build\x64-Release\FlexASIO-prefix\src\FlexASIO-build\FlexASIO
-    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
-    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
-    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+    # LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO -lKoordASIO
+    # INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
+    # DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/FlexASIO-prefix/src/FlexASIO-build/FlexASIO
 
-    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/bin/ -lportaudio
-    LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/lib/ -lportaudio
-    INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
-    DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
+    # LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/bin/ -lportaudio
+    # LIBS += -L$$PWD/KoordASIO/src/out/build/x64-Release/install/lib/ -lportaudio
+    # INCLUDEPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
+    # DEPENDPATH += $$PWD/KoordASIO/src/out/build/x64-Release/install/bin/
 
     # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
     # the platform-agnostic main().
     # Qt6 is still supposed to have that lib under the new name QtEntryPoint. As it does not seem
     # to be effective when building with qmake, we are rather instructing MSVC to use the platform-agnostic
     # main() entrypoint directly:
-    QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
+    # QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
 
     !exists(windows/ASIOSDK2) {
         error("Error: ASIOSDK2 must be placed in reporoot windows/ folder.")
@@ -349,7 +350,7 @@ HEADERS += src/buffer.h \
 !contains(CONFIG, "serveronly") {
     HEADERS_GUI += src/audiomixerboard.h \
         src/clientdlg.h \
-        src/clientsettingsdlg.h \
+        # src/clientsettingsdlg.h \
         src/levelmeter.h \
         src/analyzerconsole.h \
         src/multicolorled.h
@@ -458,7 +459,7 @@ SOURCES += src/buffer.cpp \
 !contains(CONFIG, "serveronly") {
     SOURCES_GUI += src/audiomixerboard.cpp \
         src/clientdlg.cpp \
-        src/clientsettingsdlg.cpp \
+        # src/clientsettingsdlg.cpp \
         src/multicolorled.cpp \
         src/levelmeter.cpp \
         src/analyzerconsole.cpp
