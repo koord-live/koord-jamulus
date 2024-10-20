@@ -23,7 +23,7 @@
 \******************************************************************************/
 
 #include "clientdlg.h"
-#include <QtQuickWidgets>
+// #include <QtQuickWidgets>
 //#include "unsafearea.h"
 #include <QtConcurrent>
 #include <QDesktopServices>
@@ -52,10 +52,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     AnalyzerConsole ( pNCliP, parent )
 {
     //FIXME cruft to remove later - just remove compiler warnings for now
-    if (bNewShowComplRegConnList == false)
-        ;
-    if (bShowAnalyzerConsole == false)
-        ;
+    // if (bNewShowComplRegConnList == false)
+    //     ;
+    // if (bShowAnalyzerConsole == false)
+    //     ;
     // end cruft
 
     //FIXME - possibly not necessary
@@ -85,9 +85,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     qNam = new QNetworkAccessManager;
     qNam->setRedirectPolicy(QNetworkRequest::ManualRedirectPolicy);
 
-#if defined( Q_OS_WINDOWS )
-    kdasio_setup();
-#endif
+// #if defined( Q_OS_WINDOWS )
+//     kdasio_setup();
+// #endif
 
     // regionChecker stuff
 //    // setup dir servers
@@ -138,21 +138,21 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 //     QQmlContext* context = quickWidget->rootContext();
 // #else
 // // Note: use QuickView to workaround problems with QuickWidget
-    videoView = new QQuickView();
-    QWidget *container = QWidget::createWindowContainer(videoView, this);
-    videoView->setSource(QUrl("qrc:/nosessionview.qml"));
-    videoTab->layout()->addWidget(container);
-    QQmlContext* context = videoView->rootContext();
-// #endif
-    context->setContextProperty("_clientdlg", this);
+//     videoView = new QQuickView();
+//     QWidget *container = QWidget::createWindowContainer(videoView, this);
+//     videoView->setSource(QUrl("qrc:/nosessionview.qml"));
+//     videoTab->layout()->addWidget(container);
+//     QQmlContext* context = videoView->rootContext();
+// // #endif
+//     context->setContextProperty("_clientdlg", this);
 
-    // // transitional settings view
-    // settingsView = new QQuickView();
-    // QWidget *settingsContainer = QWidget::createWindowContainer(settingsView, this);
-    // settingsView->setSource(QUrl("qrc:/settingview.qml"));
-    // settingsTab->layout()->addWidget(settingsContainer);
-    // QQmlContext* settingsContext = settingsView->rootContext();
-    // settingsContext->setContextProperty("_setsref", this);
+    // transitional settings view
+    settingsView = new QQuickView();
+    QQmlContext* settingsContext = settingsView->rootContext();
+    settingsContext->setContextProperty("_settings", pNSetP );
+    QWidget *settingsContainer = QWidget::createWindowContainer(settingsView, this);
+    settingsView->setSource(QUrl("qrc:/settingview.qml"));
+    settingsTab->layout()->addWidget(settingsContainer);
 
     // initialize video_url with blank value to start
     strVideoUrl = "";
@@ -162,15 +162,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Set up touch on all widgets' viewports which inherit from QAbstractScrollArea
     // https://doc.qt.io/qt-6/qtouchevent.html#details
-    scrollArea->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
+    // scrollArea->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     // txvHelp->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
     // txvAbout->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
-    QScroller::grabGesture(scrollArea, QScroller::TouchGesture);
+    // QScroller::grabGesture(scrollArea, QScroller::TouchGesture);
     // QScroller::grabGesture(txvHelp, QScroller::TouchGesture);
     // QScroller::grabGesture(txvAbout, QScroller::TouchGesture);
 
     // set Test Mode
-    devsetting1->setText(pSettings->strTestMode);
+    // devsetting1->setText(pSettings->strTestMode);
 
     // Add help text to controls -----------------------------------------------
     // input level meter
@@ -504,13 +504,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::SoundDeviceChanged, this, &CClientDlg::OnSoundDeviceChanged );
 
     // settings slots .....
-    QObject::connect ( this, &CClientSettingsDlg::GUIDesignChanged, this, &CClientDlg::OnGUIDesignChanged );
+    // QObject::connect ( this, &CClientSettingsDlg::GUIDesignChanged, this, &CClientDlg::OnGUIDesignChanged );
 
-    QObject::connect ( this, &CClientDlg::MeterStyleChanged, this, &CClientDlg::OnMeterStyleChanged );
+    // QObject::connect ( this, &CClientDlg::MeterStyleChanged, this, &CClientDlg::OnMeterStyleChanged );
 
-    QObject::connect ( this, &CClientDlg::AudioChannelsChanged, this, &CClientDlg::OnAudioChannelsChanged );
+    // QObject::connect ( this, &CClientDlg::AudioChannelsChanged, this, &CClientDlg::OnAudioChannelsChanged );
 
-    QObject::connect ( this, &CClientDlg::NumMixerPanelRowsChanged, this, &CClientDlg::OnNumMixerPanelRowsChanged );
+    // QObject::connect ( this, &CClientDlg::NumMixerPanelRowsChanged, this, &CClientDlg::OnNumMixerPanelRowsChanged );
     // end of settings slots --------------------------------
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanGain, this, &CClientDlg::OnChangeChanGain );
@@ -906,10 +906,10 @@ void CClientDlg::OnInviteBoxActivated()
 
     QString subject = tr("Koord.Live - Session Invite");
     QString host_prefix = "";
-    if (devsetting1->text() != "")
-    {
-        host_prefix = devsetting1->text() + ".";
-    }
+    // if (devsetting1->text() != "")
+    // {
+    //     host_prefix = devsetting1->text() + ".";
+    // }
     QString body = tr("You have an invite to play on Koord.Live.\n\n") +
                     tr("Click the Session Link to join your session.\n") +
                     tr("Session Link: https://%1koord.live/kd/?ks=%2 \n\n").arg(host_prefix, strSessionHash) +
@@ -920,8 +920,8 @@ void CClientDlg::OnInviteBoxActivated()
     {
         inviteComboBox->setCurrentIndex(0);
         QClipboard *clipboard = QGuiApplication::clipboard();
-        clipboard->setText(tr("https://%1koord.live/kd/?ks=%2 \n\n").arg(host_prefix, strSessionHash));
-        QToolTip::showText( inviteComboBox->mapToGlobal( QPoint( 0, 0 ) ), "Link Copied!" );
+        // clipboard->setText(tr("https://%1koord.live/kd/?ks=%2 \n\n").arg(host_prefix, strSessionHash));
+        // QToolTip::showText( inviteComboBox->mapToGlobal( QPoint( 0, 0 ) ), "Link Copied!" );
     }
     else if ( text.contains( "Share via Email" ) )
     {
@@ -1213,7 +1213,7 @@ void CClientDlg::OnTimerSigMet()
         msgbox.setDefaultButton ( QMessageBox::Ok );
         msgbox.setCheckBox ( chb );
 
-        QObject::connect ( chb, &QCheckBox::stateChanged, this, &CClientDlg::OnFeedbackDetectionChanged );
+        // QObject::connect ( chb, &QCheckBox::stateChanged, this, &CClientDlg::OnFeedbackDetectionChanged );
 
         msgbox.exec();
     }
@@ -1272,8 +1272,8 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     // FIXME - change to if settings TAB is visible
 
     if ( settingsTab->isVisible())
-        UpdateUploadRate(); // set ping time result to settings tab
-        //FIX: emit uploadRateChanged
+        // UpdateUploadRate(); // set ping time result to settings tab
+        //FIXME: emit uploadRateChanged
         // emit CClientSettings::uploadRateChanged();
 
     SetPingTime ( iPingTime, iOverallDelayMs, eOverallDelayLEDColor );
@@ -1435,10 +1435,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         // do video_url lookup here ...
         QUrl url("https://koord.live/sess/sessionvideourl/");
         //FIXME - for test only
-        if (devsetting1->text() != "")
-        {
-            url.setUrl(QString("https://%1.koord.live/sess/sessionvideourl/").arg(devsetting1->text()));
-        }
+        // if (devsetting1->text() != "")
+        // {
+        //     url.setUrl(QString("https://%1.koord.live/sess/sessionvideourl/").arg(devsetting1->text()));
+        // }
         QNetworkRequest request(url);
         //FIXME - for test only
 //        if (devsetting1->text() != "")
@@ -1480,19 +1480,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
                 strSessionHash = jsonObject.value("session_hash").toString();
 
                 // set the video url and update QML side
-#if defined(Q_OS_MACOS) || defined(Q_OS_IOS)
-// revert to WebEngineView for
-#if defined(MAC_LEGACY)
-                videoView->setSource(QUrl("qrc:/webengineview.qml"));
-#else
-                videoView->setSource(QUrl("qrc:/webview.qml"));
-#endif
 
-#elif defined(Q_OS_ANDROID)
-//                quickWidget->setSource(QUrl("qrc:/androidwebview.qml"));
-#else
-                videoView->setSource(QUrl("qrc:/webengineview.qml"));
-#endif
                 // redirect causes empty return vals first time round - wait until values are non-empty
                 if ( !strVideoHost.isEmpty() )
                 {
@@ -1548,14 +1536,14 @@ void CClientDlg::Disconnect()
 
     // Reset video view to No Session
 //FIXME - we do special stuff for Android, because calling setSource() again causes webview to go FULL SCREEN
-#if defined(Q_OS_ANDROID)
-    strVideoUrl = "https://koord.live/about";
-    emit videoUrlChanged();
-    strVideoUrl = "";
-    emit videoUrlChanged();
-#else
-    videoView->setSource(QUrl("qrc:/nosessionview.qml"));
-#endif
+// #if defined(Q_OS_ANDROID)
+//     strVideoUrl = "https://koord.live/about";
+//     emit videoUrlChanged();
+//     strVideoUrl = "";
+//     emit videoUrlChanged();
+// #else
+//     videoView->setSource(QUrl("qrc:/nosessionview.qml"));
+// #endif
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();
@@ -1621,7 +1609,7 @@ void CClientDlg::OnCheckForUpdate()
             QString contents = QString::fromUtf8(reply->readAll());
             if ( reply->error() != QNetworkReply::NoError)
             {
-                QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Network Error!" );
+                // QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Network Error!" );
                 return;
             }
             //qInfo() << ">>> CONNECT: " << reply->error();
@@ -1645,7 +1633,7 @@ void CClientDlg::OnCheckForUpdate()
                             if ( APP_VERSION == latestVersion )
                             {
                                 qInfo() << "WE HAVE A MATCH - no update necessary";
-                                QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Up to date!" );
+                                // QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Up to date!" );
                             }
                             else
                             {
@@ -2684,314 +2672,314 @@ void CClientDlg::UpdateDirectoryServerComboBox()
     }
 }
 
-#if defined ( Q_OS_WINDOWS )
-// for kdasio_builtin stuff
-void CClientDlg::kdasio_setup() {
-    // init mmcpl proc
-    mmcplProc = nullptr;
-    // init our singleton QMediaDevices object
-    m_devices = new QMediaDevices();
+// #if defined ( Q_OS_WINDOWS )
+// // for kdasio_builtin stuff
+// void CClientDlg::kdasio_setup() {
+//     // init mmcpl proc
+//     mmcplProc = nullptr;
+//     // init our singleton QMediaDevices object
+//     m_devices = new QMediaDevices();
 
-    // set up signals
-    connect(sharedPushButton, &QPushButton::clicked, this, &CClientDlg::sharedModeSet);
-    connect(exclusivePushButton, &QPushButton::clicked, this, &CClientDlg::exclusiveModeSet);
-    connect(inputDeviceBox, QOverload<int>::of(&QComboBox::activated), this, &CClientDlg::inputDeviceChanged);
-    connect(outputDeviceBox, QOverload<int>::of(&QComboBox::activated), this, &CClientDlg::outputDeviceChanged);
-//    connect(inputAudioSettButton, &QPushButton::pressed, this, &CClientDlg::inputAudioSettClicked);
-//    connect(outputAudioSettButton, &QPushButton::pressed, this, &CClientDlg::outputAudioSettClicked);
-    connect(bufferSizeSlider, &QSlider::valueChanged, this, &CClientDlg::bufferSizeChanged);
-    connect(bufferSizeSlider, &QSlider::valueChanged, this, &CClientDlg::bufferSizeDisplayChange);
-    // for device refresh
-    connect(m_devices, &QMediaDevices::audioInputsChanged, this, &CClientDlg::updateInputsList);
-    connect(m_devices, &QMediaDevices::audioOutputsChanged, this, &CClientDlg::updateOutputsList);
-    // for win ctrl panel
-    connect(winCtrlPanelButton, &QPushButton::clicked, this, &CClientDlg::openWinCtrlPanel);
+//     // set up signals
+//     connect(sharedPushButton, &QPushButton::clicked, this, &CClientDlg::sharedModeSet);
+//     connect(exclusivePushButton, &QPushButton::clicked, this, &CClientDlg::exclusiveModeSet);
+//     connect(inputDeviceBox, QOverload<int>::of(&QComboBox::activated), this, &CClientDlg::inputDeviceChanged);
+//     connect(outputDeviceBox, QOverload<int>::of(&QComboBox::activated), this, &CClientDlg::outputDeviceChanged);
+// //    connect(inputAudioSettButton, &QPushButton::pressed, this, &CClientDlg::inputAudioSettClicked);
+// //    connect(outputAudioSettButton, &QPushButton::pressed, this, &CClientDlg::outputAudioSettClicked);
+//     connect(bufferSizeSlider, &QSlider::valueChanged, this, &CClientDlg::bufferSizeChanged);
+//     connect(bufferSizeSlider, &QSlider::valueChanged, this, &CClientDlg::bufferSizeDisplayChange);
+//     // for device refresh
+//     connect(m_devices, &QMediaDevices::audioInputsChanged, this, &CClientDlg::updateInputsList);
+//     connect(m_devices, &QMediaDevices::audioOutputsChanged, this, &CClientDlg::updateOutputsList);
+//     // for win ctrl panel
+//     connect(winCtrlPanelButton, &QPushButton::clicked, this, &CClientDlg::openWinCtrlPanel);
 
-    // populate input device choices
-    inputDeviceBox->clear();
-    const auto input_devices = m_devices->audioInputs();
-    for (auto &deviceInfo: input_devices)
-        inputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
+//     // populate input device choices
+//     inputDeviceBox->clear();
+//     const auto input_devices = m_devices->audioInputs();
+//     for (auto &deviceInfo: input_devices)
+//         inputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
 
-    // populate output device choices
-    outputDeviceBox->clear();
-    const auto output_devices = m_devices->audioOutputs();
-    for (auto &deviceInfo: output_devices)
-        outputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
-
-
-    // parse .kdasio_builtin.toml
-    // parse .KoordASIO.toml
-    // FIXME - doesn't actually test that the selected devices are correct with current device list
-    std::ifstream ifs;
-    ifs.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
-    try {
-        ifs.open(kdasio_config_path.toStdString(), std::ifstream::in);
-        toml::ParseResult pr = toml::parse(ifs);
-        qDebug("Attempted to parse toml file...");
-        ifs.close();
-        if (!pr.valid()) {
-            setKdasio_builtinDefaults();
-        } else {
-            setValuesFromToml(&ifs, &pr);
-        }
-    }
-    catch (std::ifstream::failure e) {
-        qDebug("Failed to open file ...");
-        setKdasio_builtinDefaults();
-    }
-
-}
-
-void CClientDlg::updateInputsList() {
-    inputDeviceBox->clear();
-    const auto input_devices = m_devices->audioInputs();
-    for (auto &deviceInfo: input_devices)
-        inputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
-    // write the new resultant config
-    inputDeviceName = inputDeviceBox->currentText();
-    writeTomlFile();
-//    OnSoundcardReactivate();
-}
-
-void CClientDlg::updateOutputsList() {
-    // populate output device choices
-    outputDeviceBox->clear();
-    const auto output_devices = m_devices->audioOutputs();
-    for (auto &deviceInfo: output_devices)
-        outputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
-    qInfo() << "Updating Outputs ...";
-    // write the new resultant config
-    outputDeviceName = outputDeviceBox->currentText();
-    writeTomlFile();
-//    OnSoundcardReactivate();
-}
-
-void CClientDlg::setValuesFromToml(std::ifstream *ifs, toml::ParseResult *pr)
-{
-    qInfo("Parsed a valid TOML file.");
-    // only recognise our accepted INPUT values - the others are hardcoded
-    const toml::Value& v = pr->value;
-    // get bufferSize
-    const toml::Value* bss = v.find("bufferSizeSamples");
-    if (bss && bss->is<int>()) {
-        if (bss->as<int>() == 32||64||128||256||512||1024||2048) {
-            bufferSize = bss->as<int>();
-        } else {
-            bufferSize = 64;
-        }
-        // update UI
-        bufferSizeSlider->setValue(bufferSizes.indexOf(bufferSize));
-        bufferSizeDisplay->display(bufferSize);
-        // update conf
-        bufferSizeChanged(bufferSizes.indexOf(bufferSize));
-    }
-    // get input stream stuff
-    const toml::Value* input_dev = v.find("input.device");
-    if (input_dev && input_dev->is<std::string>()) {
-        // if setCurrentText fails some sensible choice is made
-        inputDeviceBox->setCurrentText(QString::fromStdString(input_dev->as<std::string>()));
-        inputDeviceChanged(inputDeviceBox->currentIndex());
-    } else {
-        inputDeviceBox->setCurrentText("Default Input Device");
-        inputDeviceChanged(inputDeviceBox->currentIndex());
-    }
-    const toml::Value* input_excl = v.find("input.wasapiExclusiveMode");
-    if (input_excl && input_excl->is<bool>()) {
-        exclusive_mode = input_excl->as<bool>();
-    } else {
-        exclusive_mode = false;
-    }
-    // get output stream stuff
-    const toml::Value* output_dev = v.find("output.device");
-    if (output_dev && output_dev->is<std::string>()) {
-        // if setCurrentText fails some sensible choice is made
-        outputDeviceBox->setCurrentText(QString::fromStdString(output_dev->as<std::string>()));
-        outputDeviceChanged(outputDeviceBox->currentIndex());
-    } else {
-        outputDeviceBox->setCurrentText("Default Output Device");
-        outputDeviceChanged(outputDeviceBox->currentIndex());
-    }
-    const toml::Value* output_excl = v.find("output.wasapiExclusiveMode");
-    if (output_excl && output_excl->is<bool>()) {
-        exclusive_mode = output_excl->as<bool>();
-    } else {
-        exclusive_mode = false;
-    }
-    setOperationMode();
-
-}
-
-void CClientDlg::setKdasio_builtinDefaults()
-{
-    // set defaults
-    qInfo("Setting KdASIO defaults");
-    bufferSize = 32;
-    exclusive_mode = true;
-    // find system audio device defaults
-    QAudioDevice inputInfo(QMediaDevices::defaultAudioInput());
-    inputDeviceName = inputInfo.description();
-    QAudioDevice outputInfo(QMediaDevices::defaultAudioOutput());
-    outputDeviceName = outputInfo.description();
-    // set stuff - up to 4 file updates in quick succession - FIXME
-    bufferSizeSlider->setValue(bufferSizes.indexOf(bufferSize));
-    bufferSizeDisplay->display(bufferSize);
-    bufferSizeChanged(bufferSizes.indexOf(bufferSize));
-    inputDeviceBox->setCurrentText(inputDeviceName);
-    inputDeviceChanged(inputDeviceBox->currentIndex());
-    outputDeviceBox->setCurrentText(outputDeviceName);
-    outputDeviceChanged(outputDeviceBox->currentIndex());
-    setOperationMode();
-}
+//     // populate output device choices
+//     outputDeviceBox->clear();
+//     const auto output_devices = m_devices->audioOutputs();
+//     for (auto &deviceInfo: output_devices)
+//         outputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
 
 
-void CClientDlg::writeTomlFile()
-{
-    // REF: https://github.com/dechamps/FlexASIO/blob/master/CONFIGURATION.md
-    // Write MINIMAL config to .kdasio_builtin.toml, like this:
-    /*
-        backend = "Windows WASAPI"
-        bufferSizeSamples = bufferSize
+//     // parse .kdasio_builtin.toml
+//     // parse .KoordASIO.toml
+//     // FIXME - doesn't actually test that the selected devices are correct with current device list
+//     std::ifstream ifs;
+//     ifs.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
+//     try {
+//         ifs.open(kdasio_config_path.toStdString(), std::ifstream::in);
+//         toml::ParseResult pr = toml::parse(ifs);
+//         qDebug("Attempted to parse toml file...");
+//         ifs.close();
+//         if (!pr.valid()) {
+//             setKdasio_builtinDefaults();
+//         } else {
+//             setValuesFromToml(&ifs, &pr);
+//         }
+//     }
+//     catch (std::ifstream::failure e) {
+//         qDebug("Failed to open file ...");
+//         setKdasio_builtinDefaults();
+//     }
 
-        [input]
-        device=inputDevice
-        suggestedLatencySeconds = 0.0
-        wasapiExclusiveMode = inputExclusiveMode
+// }
 
-        [output]
-        device=outputDevice
-        suggestedLatencySeconds = 0.0
-        wasapiExclusiveMode = outputExclusiveMode
-    */
-    qInfo() << "writeTomlFile(): Opening file for writing: " << kdasio_config_path;
-    qInfo() << "writeTomlFile(): input device: " << inputDeviceName;
-    qInfo() << "writeTomlFile(): output device: " << outputDeviceName;
-    QFile file(kdasio_config_path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-    QTextStream out(&file);
-    // need to explicitly set UTF-8 for non-ASCII character support
-    out.setEncoding(QStringConverter::Utf8);
-    // out.setCodec("UTF-8");
+// void CClientDlg::updateInputsList() {
+//     inputDeviceBox->clear();
+//     const auto input_devices = m_devices->audioInputs();
+//     for (auto &deviceInfo: input_devices)
+//         inputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
+//     // write the new resultant config
+//     inputDeviceName = inputDeviceBox->currentText();
+//     writeTomlFile();
+// //    OnSoundcardReactivate();
+// }
 
-    //FIXME should really write to intermediate buffer, THEN to file - to make single write on file
-    // is this a single write action ???
-    out << "backend = \"Windows WASAPI\"" << "\n"
-        << "bufferSizeSamples = " << bufferSize << "\n"
-        << "\n"
-        << "[input]" << "\n"
-        << "device = \"" << inputDeviceName << "\"\n"
-        << "suggestedLatencySeconds = 0.0" << "\n"
-        << "wasapiExclusiveMode = " << (exclusive_mode ? "true" : "false") << "\n"
-        << "\n"
-        << "[output]" << "\n"
-        << "device = \"" << outputDeviceName << "\"\n"
-        << "suggestedLatencySeconds = 0.0" << "\n"
-        << "wasapiExclusiveMode = " << (exclusive_mode ? "true" : "false") << "\n";
-    qInfo("Just wrote toml file...");
+// void CClientDlg::updateOutputsList() {
+//     // populate output device choices
+//     outputDeviceBox->clear();
+//     const auto output_devices = m_devices->audioOutputs();
+//     for (auto &deviceInfo: output_devices)
+//         outputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
+//     qInfo() << "Updating Outputs ...";
+//     // write the new resultant config
+//     outputDeviceName = outputDeviceBox->currentText();
+//     writeTomlFile();
+// //    OnSoundcardReactivate();
+// }
 
-    // force driver settings refresh
-//    OnSoundcardReactivate();
-}
+// void CClientDlg::setValuesFromToml(std::ifstream *ifs, toml::ParseResult *pr)
+// {
+//     qInfo("Parsed a valid TOML file.");
+//     // only recognise our accepted INPUT values - the others are hardcoded
+//     const toml::Value& v = pr->value;
+//     // get bufferSize
+//     const toml::Value* bss = v.find("bufferSizeSamples");
+//     if (bss && bss->is<int>()) {
+//         if (bss->as<int>() == 32||64||128||256||512||1024||2048) {
+//             bufferSize = bss->as<int>();
+//         } else {
+//             bufferSize = 64;
+//         }
+//         // update UI
+//         bufferSizeSlider->setValue(bufferSizes.indexOf(bufferSize));
+//         bufferSizeDisplay->display(bufferSize);
+//         // update conf
+//         bufferSizeChanged(bufferSizes.indexOf(bufferSize));
+//     }
+//     // get input stream stuff
+//     const toml::Value* input_dev = v.find("input.device");
+//     if (input_dev && input_dev->is<std::string>()) {
+//         // if setCurrentText fails some sensible choice is made
+//         inputDeviceBox->setCurrentText(QString::fromStdString(input_dev->as<std::string>()));
+//         inputDeviceChanged(inputDeviceBox->currentIndex());
+//     } else {
+//         inputDeviceBox->setCurrentText("Default Input Device");
+//         inputDeviceChanged(inputDeviceBox->currentIndex());
+//     }
+//     const toml::Value* input_excl = v.find("input.wasapiExclusiveMode");
+//     if (input_excl && input_excl->is<bool>()) {
+//         exclusive_mode = input_excl->as<bool>();
+//     } else {
+//         exclusive_mode = false;
+//     }
+//     // get output stream stuff
+//     const toml::Value* output_dev = v.find("output.device");
+//     if (output_dev && output_dev->is<std::string>()) {
+//         // if setCurrentText fails some sensible choice is made
+//         outputDeviceBox->setCurrentText(QString::fromStdString(output_dev->as<std::string>()));
+//         outputDeviceChanged(outputDeviceBox->currentIndex());
+//     } else {
+//         outputDeviceBox->setCurrentText("Default Output Device");
+//         outputDeviceChanged(outputDeviceBox->currentIndex());
+//     }
+//     const toml::Value* output_excl = v.find("output.wasapiExclusiveMode");
+//     if (output_excl && output_excl->is<bool>()) {
+//         exclusive_mode = output_excl->as<bool>();
+//     } else {
+//         exclusive_mode = false;
+//     }
+//     setOperationMode();
 
-void CClientDlg::bufferSizeChanged(int idx)
-{
-    qInfo() << "bufferSizeChanged()";
-    // select from 32 , 64, 128, 256, 512, 1024, 2048
-    // This a) gives a nice easy UI rather than choosing your own integer
-    // AND b) makes it easier to do a live-refresh of the toml file,
-    // THUS avoiding lots of spurious intermediate updates on buffer changes
-    bufferSize = bufferSizes[idx];
-    bufferSizeSlider->setValue(idx);
-    // Don't do any latency calculation for now, it is misleading as doesn't account for much of the whole audio chain
-//    latencyLabel->setText(QString::number(double(bufferSize) / 48, 'f', 2));
-    writeTomlFile();
-    OnSoundcardReactivate();
-}
+// }
 
-void CClientDlg::bufferSizeDisplayChange(int idx)
-{
-    qInfo() << "bufferSizeDisplayChange()";
-    bufferSize = bufferSizes[idx];
-    bufferSizeDisplay->display(bufferSize);
-}
+// void CClientDlg::setKdasio_builtinDefaults()
+// {
+//     // set defaults
+//     qInfo("Setting KdASIO defaults");
+//     bufferSize = 32;
+//     exclusive_mode = true;
+//     // find system audio device defaults
+//     QAudioDevice inputInfo(QMediaDevices::defaultAudioInput());
+//     inputDeviceName = inputInfo.description();
+//     QAudioDevice outputInfo(QMediaDevices::defaultAudioOutput());
+//     outputDeviceName = outputInfo.description();
+//     // set stuff - up to 4 file updates in quick succession - FIXME
+//     bufferSizeSlider->setValue(bufferSizes.indexOf(bufferSize));
+//     bufferSizeDisplay->display(bufferSize);
+//     bufferSizeChanged(bufferSizes.indexOf(bufferSize));
+//     inputDeviceBox->setCurrentText(inputDeviceName);
+//     inputDeviceChanged(inputDeviceBox->currentIndex());
+//     outputDeviceBox->setCurrentText(outputDeviceName);
+//     outputDeviceChanged(outputDeviceBox->currentIndex());
+//     setOperationMode();
+// }
 
-void CClientDlg::setOperationMode()
-{
-    if (exclusive_mode) {
-        exclusiveModeSet();
-    }
-    else {
-        sharedModeSet();
-    }
-}
 
-void CClientDlg::sharedModeSet()
-{
-    sharedPushButton->setChecked(true);
-    exclusive_mode = false;
-    writeTomlFile();
-    OnSoundcardReactivate();
-}
+// void CClientDlg::writeTomlFile()
+// {
+//     // REF: https://github.com/dechamps/FlexASIO/blob/master/CONFIGURATION.md
+//     // Write MINIMAL config to .kdasio_builtin.toml, like this:
+//     /*
+//         backend = "Windows WASAPI"
+//         bufferSizeSamples = bufferSize
 
-void CClientDlg::exclusiveModeSet()
-{
-    exclusivePushButton->setChecked(true);
-    exclusive_mode = true;
-    writeTomlFile();
-    OnSoundcardReactivate();
-}
+//         [input]
+//         device=inputDevice
+//         suggestedLatencySeconds = 0.0
+//         wasapiExclusiveMode = inputExclusiveMode
 
-void CClientDlg::inputDeviceChanged(int idx)
-{
-    qInfo() << "inputDeviceChanged()";
-    if (inputDeviceBox->count() == 0)
-        return;
-    // device has changed
-    m_inputDeviceInfo = inputDeviceBox->itemData(idx).value<QAudioDevice>();
-    inputDeviceName = m_inputDeviceInfo.description();
-    writeTomlFile();
-    OnSoundcardReactivate();
-}
+//         [output]
+//         device=outputDevice
+//         suggestedLatencySeconds = 0.0
+//         wasapiExclusiveMode = outputExclusiveMode
+//     */
+//     qInfo() << "writeTomlFile(): Opening file for writing: " << kdasio_config_path;
+//     qInfo() << "writeTomlFile(): input device: " << inputDeviceName;
+//     qInfo() << "writeTomlFile(): output device: " << outputDeviceName;
+//     QFile file(kdasio_config_path);
+//     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+//         return;
+//     QTextStream out(&file);
+//     // need to explicitly set UTF-8 for non-ASCII character support
+//     out.setEncoding(QStringConverter::Utf8);
+//     // out.setCodec("UTF-8");
 
-void CClientDlg::outputDeviceChanged(int idx)
-{
-    qInfo() << "outputDeviceChanged()";
-    if (outputDeviceBox->count() == 0)
-        return;
-    // device has changed
-    m_outputDeviceInfo = outputDeviceBox->itemData(idx).value<QAudioDevice>();
-    outputDeviceName = m_outputDeviceInfo.description();
-    writeTomlFile();
-    OnSoundcardReactivate();
-}
+//     //FIXME should really write to intermediate buffer, THEN to file - to make single write on file
+//     // is this a single write action ???
+//     out << "backend = \"Windows WASAPI\"" << "\n"
+//         << "bufferSizeSamples = " << bufferSize << "\n"
+//         << "\n"
+//         << "[input]" << "\n"
+//         << "device = \"" << inputDeviceName << "\"\n"
+//         << "suggestedLatencySeconds = 0.0" << "\n"
+//         << "wasapiExclusiveMode = " << (exclusive_mode ? "true" : "false") << "\n"
+//         << "\n"
+//         << "[output]" << "\n"
+//         << "device = \"" << outputDeviceName << "\"\n"
+//         << "suggestedLatencySeconds = 0.0" << "\n"
+//         << "wasapiExclusiveMode = " << (exclusive_mode ? "true" : "false") << "\n";
+//     qInfo("Just wrote toml file...");
 
-//void CClientDlg::inputAudioSettClicked()
-//{
-//    // open Windows audio input settings control panel
-//    //FIXME - this process control does NOT work as Windows forks+kills the started process immediately? or something
-//    if (mmcplProc != nullptr) {
-//        mmcplProc->kill();
-//    }
-//    mmcplProc = new QProcess(this);
-//    mmcplProc->start("control", QStringList() << inputAudioSettPath);
-//}
+//     // force driver settings refresh
+// //    OnSoundcardReactivate();
+// }
 
-//void CClientDlg::outputAudioSettClicked()
-//{
-//    // open Windows audio output settings control panel
-//    //FIXME - this process control does NOT work as Windows forks+kills the started process immediately? or something
-//    if (mmcplProc != nullptr) {
-//        mmcplProc->kill();
-//    }
-//    mmcplProc = new QProcess(this);
-//    mmcplProc->start("control", QStringList() << outputAudioSettPath);
-//}
+// void CClientDlg::bufferSizeChanged(int idx)
+// {
+//     qInfo() << "bufferSizeChanged()";
+//     // select from 32 , 64, 128, 256, 512, 1024, 2048
+//     // This a) gives a nice easy UI rather than choosing your own integer
+//     // AND b) makes it easier to do a live-refresh of the toml file,
+//     // THUS avoiding lots of spurious intermediate updates on buffer changes
+//     bufferSize = bufferSizes[idx];
+//     bufferSizeSlider->setValue(idx);
+//     // Don't do any latency calculation for now, it is misleading as doesn't account for much of the whole audio chain
+// //    latencyLabel->setText(QString::number(double(bufferSize) / 48, 'f', 2));
+//     writeTomlFile();
+//     OnSoundcardReactivate();
+// }
 
-void CClientDlg::openWinCtrlPanel()
-{
-    QDesktopServices::openUrl(QUrl("ms-settings:sound-devices", QUrl::TolerantMode));
-}
-#endif
-// end Windows-only built-in asio config stuff
+// void CClientDlg::bufferSizeDisplayChange(int idx)
+// {
+//     qInfo() << "bufferSizeDisplayChange()";
+//     bufferSize = bufferSizes[idx];
+//     bufferSizeDisplay->display(bufferSize);
+// }
+
+// void CClientDlg::setOperationMode()
+// {
+//     if (exclusive_mode) {
+//         exclusiveModeSet();
+//     }
+//     else {
+//         sharedModeSet();
+//     }
+// }
+
+// void CClientDlg::sharedModeSet()
+// {
+//     sharedPushButton->setChecked(true);
+//     exclusive_mode = false;
+//     writeTomlFile();
+//     OnSoundcardReactivate();
+// }
+
+// void CClientDlg::exclusiveModeSet()
+// {
+//     exclusivePushButton->setChecked(true);
+//     exclusive_mode = true;
+//     writeTomlFile();
+//     OnSoundcardReactivate();
+// }
+
+// void CClientDlg::inputDeviceChanged(int idx)
+// {
+//     qInfo() << "inputDeviceChanged()";
+//     if (inputDeviceBox->count() == 0)
+//         return;
+//     // device has changed
+//     m_inputDeviceInfo = inputDeviceBox->itemData(idx).value<QAudioDevice>();
+//     inputDeviceName = m_inputDeviceInfo.description();
+//     writeTomlFile();
+//     OnSoundcardReactivate();
+// }
+
+// void CClientDlg::outputDeviceChanged(int idx)
+// {
+//     qInfo() << "outputDeviceChanged()";
+//     if (outputDeviceBox->count() == 0)
+//         return;
+//     // device has changed
+//     m_outputDeviceInfo = outputDeviceBox->itemData(idx).value<QAudioDevice>();
+//     outputDeviceName = m_outputDeviceInfo.description();
+//     writeTomlFile();
+//     OnSoundcardReactivate();
+// }
+
+// //void CClientDlg::inputAudioSettClicked()
+// //{
+// //    // open Windows audio input settings control panel
+// //    //FIXME - this process control does NOT work as Windows forks+kills the started process immediately? or something
+// //    if (mmcplProc != nullptr) {
+// //        mmcplProc->kill();
+// //    }
+// //    mmcplProc = new QProcess(this);
+// //    mmcplProc->start("control", QStringList() << inputAudioSettPath);
+// //}
+
+// //void CClientDlg::outputAudioSettClicked()
+// //{
+// //    // open Windows audio output settings control panel
+// //    //FIXME - this process control does NOT work as Windows forks+kills the started process immediately? or something
+// //    if (mmcplProc != nullptr) {
+// //        mmcplProc->kill();
+// //    }
+// //    mmcplProc = new QProcess(this);
+// //    mmcplProc->start("control", QStringList() << outputAudioSettPath);
+// //}
+
+// void CClientDlg::openWinCtrlPanel()
+// {
+//     QDesktopServices::openUrl(QUrl("ms-settings:sound-devices", QUrl::TolerantMode));
+// }
+// #endif
+// // end Windows-only built-in asio config stuff
 

@@ -29,7 +29,7 @@
 #include "global.h"
 #ifndef HEADLESS
 #    include <QApplication>
-#    include <QtWebView>
+// #    include <QtWebView>
 #    include <QQuickWindow>
 #    include <QMessageBox>
 //#    include "serverdlg.h"
@@ -904,7 +904,7 @@ int main ( int argc, char** argv )
 
     // need this before new QApplication created
     // AND before QPlatformOpenGLContext is created - https://doc.qt.io/qt-6/qtwebview-index.html#prerequisites
-    QtWebView::initialize();
+    // QtWebView::initialize();
 
     // Make main application object
     // Note: SingleApplication not needed or desired on mobile ie iOS and Android (also ChromeOS)
@@ -1167,14 +1167,14 @@ int main ( int argc, char** argv )
             if ( bUseGUI )
             {
                 // load settings from init-file (command line options override)
-                CServerSettings Settings ( &Server, strIniFileName );
-                Settings.Load ( CommandLineOptions );
+                // CServerSettings Settings ( &Server, strIniFileName );
+                // Settings.Load ( CommandLineOptions );
 
                 // load translation
-                if ( bUseTranslation )
-                {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                }
+                // if ( bUseTranslation )
+                // {
+                //     CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                // }
 
                 // GUI object for the server
 //                CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );

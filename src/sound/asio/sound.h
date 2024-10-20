@@ -83,16 +83,12 @@ public:
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool bOpenDriverSetup );
-    bool            resetKdASIOConfig();
     virtual void    UnloadCurrentDriver();
     int             GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString         CheckDeviceCapabilities();
     bool            CheckSampleTypeSupported ( const ASIOSampleType SamType );
     bool            CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType );
     void            ResetChannelMapping();
-
-    // for asio lib loading
-    bool flexASIOInited = false;
 
     int iASIOBufferSizeMono;
     int iASIOBufferSizeStereo;

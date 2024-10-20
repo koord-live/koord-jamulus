@@ -111,7 +111,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     UpdateSoundCardFrame();
 #if defined ( Q_OS_WINDOWS )
-    SetupBuiltinASIOBox();
+    // SetupBuiltinASIOBox();
 #endif
 
 

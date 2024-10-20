@@ -60,16 +60,16 @@
 #if defined( Q_OS_MACOS )
 #    include "mac/badgelabel.h"
 #endif
-#if defined( _WIN32 )
-#include <QAudioDevice>
-#include <QMediaDevices>
-#include <QStringConverter>
-#include <QDir>
-#include <QProcess>
-#include "toml.h"
-#endif
-#include <QQuickWidget>
-#include <QQuickView>
+// #if defined( _WIN32 )
+// #include <QAudioDevice>
+// #include <QMediaDevices>
+// #include <QStringConverter>
+// #include <QDir>
+// #include <QProcess>
+// #include "toml.h"
+// #endif
+// #include <QQuickWidget>
+// #include <QQuickView>
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
@@ -111,9 +111,9 @@ public:
     // void UpdateSettingsDisplay();
     // void UpdateSoundDeviceChannelSelectionFrame();
     // void SetEnableFeedbackDetection ( bool enable );
-#if defined( Q_OS_WINDOWS )
-    void SetupBuiltinASIOBox();
-#endif
+// #if defined( Q_OS_WINDOWS )
+//     void SetupBuiltinASIOBox();
+// #endif
     // for QML
     QString getVideoUrl() const {
         qInfo() << ">>> Calling getVideoUrl and returning value: " << strVideoUrl;
@@ -175,12 +175,12 @@ protected:
     QString        strCurrBestRegion;
     // declare this here?? initialize? or in globals.h?
     QRegularExpression matchState = QRegularExpression(" [A-Z][A-Z]$" );
-#if defined(Q_OS_ANDROID)
-    QQuickWidget*   quickWidget;
-#else
-    QQuickView*     videoView;
-    // QQuickView*     settingsView;
-#endif
+// #if defined(Q_OS_ANDROID)
+//     QQuickWidget*   quickWidget;
+// #else
+//     QQuickView*     videoView;
+    QQuickView*     settingsView;
+// #endif
     QNetworkAccessManager*   qNam;
     QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> endpoint_reply;
 
@@ -197,7 +197,7 @@ protected:
     void    UpdateDirectoryServerComboBox();
 //    void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
-    virtual void showEvent ( QShowEvent* );
+    // virtual void showEvent ( QShowEvent* );
 //    CClient*         pClient;
 //    CClientSettings* pSettings;
 //    QTimer           TimerStatus;
@@ -228,24 +228,24 @@ protected:
     bool         bShowAllMusicians;
 //    bool         bEnableIPv6;
 
-// for Windows builtin kdasio stuff
-#if defined( Q_OS_WINDOWS )
-    QAudioDevice m_inputDeviceInfo;
-    QAudioDevice m_outputDeviceInfo;
-    QAudioDevice::Mode input_mode = QAudioDevice::Input;
-    QAudioDevice::Mode output_mode = QAudioDevice::Output;
-    QMediaDevices *m_devices = nullptr;
-    QAudioFormat m_settings;
-    int bufferSize;
-    bool exclusive_mode;
-    QString outputDeviceName;
-    QString inputDeviceName;
-    QString kdasio_config_path = QDir::homePath() + "/.kdasio_builtin.toml";
-    QString inputAudioSettPath = "mmsys.cpl,,1";
-    QString outputAudioSettPath = "mmsys.cpl";
-    QList<int> bufferSizes = { 32, 64, 128, 256, 512, 1024, 2048 };
-    QProcess *mmcplProc;
-#endif
+// // for Windows builtin kdasio stuff
+// #if defined( Q_OS_WINDOWS )
+//     QAudioDevice m_inputDeviceInfo;
+//     QAudioDevice m_outputDeviceInfo;
+//     QAudioDevice::Mode input_mode = QAudioDevice::Input;
+//     QAudioDevice::Mode output_mode = QAudioDevice::Output;
+//     QMediaDevices *m_devices = nullptr;
+//     QAudioFormat m_settings;
+//     int bufferSize;
+//     bool exclusive_mode;
+//     QString outputDeviceName;
+//     QString inputDeviceName;
+//     QString kdasio_config_path = QDir::homePath() + "/.kdasio_builtin.toml";
+//     QString inputAudioSettPath = "mmsys.cpl,,1";
+//     QString outputAudioSettPath = "mmsys.cpl";
+//     QList<int> bufferSizes = { 32, 64, 128, 256, 512, 1024, 2048 };
+//     QProcess *mmcplProc;
+// #endif
 
 public slots:
     void OnConnectDisconBut();
@@ -392,26 +392,26 @@ public slots:
     void OnConnectFromURLHandler(const QString& connect_url);
 //    void setDefaultSingleUserMode(const QString& value);
 
-#if defined( Q_OS_WINDOWS )
-    // for built-in ASIO
-    void kdasio_setup();
-    void setKdasio_builtinDefaults();
-        //FIXME make these private slots ??
-    void bufferSizeChanged(int idx);
-    void bufferSizeDisplayChange(int idx);
-    void setOperationMode();
-    void sharedModeSet();
-    void exclusiveModeSet();
-    void writeTomlFile();
-    void inputDeviceChanged(int idx);
-    void outputDeviceChanged(int idx);
-    void setValuesFromToml(std::ifstream *ifs, toml::ParseResult *pr);
-//    void inputAudioSettClicked();
-//    void outputAudioSettClicked();
-    void openWinCtrlPanel();
-    void updateInputsList();
-    void updateOutputsList();
-#endif
+// #if defined( Q_OS_WINDOWS )
+//     // for built-in ASIO
+//     void kdasio_setup();
+//     void setKdasio_builtinDefaults();
+//         //FIXME make these private slots ??
+//     void bufferSizeChanged(int idx);
+//     void bufferSizeDisplayChange(int idx);
+//     void setOperationMode();
+//     void sharedModeSet();
+//     void exclusiveModeSet();
+//     void writeTomlFile();
+//     void inputDeviceChanged(int idx);
+//     void outputDeviceChanged(int idx);
+//     void setValuesFromToml(std::ifstream *ifs, toml::ParseResult *pr);
+// //    void inputAudioSettClicked();
+// //    void outputAudioSettClicked();
+//     void openWinCtrlPanel();
+//     void updateInputsList();
+//     void updateOutputsList();
+// #endif
 
 signals:
     void SendTabChange ( int iTabIdx );
