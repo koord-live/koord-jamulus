@@ -1090,8 +1090,17 @@ QString CClientSettings::slSndCrdDev()
     return pClient->GetSndCrdDev();
 }
 
-void CClientSettings::setSlSndCrdDev( QString sndCardDev )
+void CClientSettings::setSlSndCrdDev( const QString& sndCardDev )
 {
+    qInfo() << "Passed sndCardDev value: " << sndCardDev;
+    qInfo() << "Current sndCardDev value: " << pClient->GetSndCrdDev();
+    if ( pClient->GetSndCrdDev() == sndCardDev )
+    {
+        qInfo() << "NOT SETTING ANYTHING";
+        return;
+    }
+
+    qInfo() << "CHANGING sndcarddev to " << sndCardDev ; // on console
     pClient->SetSndCrdDev ( sndCardDev );
     emit slSndCrdDevChanged();
 }

@@ -60,13 +60,13 @@ Item {
                 ComboBox {
                     id:                         cbxSoundcard
                     model:                      _settings.slSndCrdDevNames
-                    // currentIndex:               _settings.slSndCrdDevIndex
-                    // onCurrentIndexChanged:      _settings.setSlSndCrdDevIndex(currentIndex)
+                    displayText:                "" //FIXME - this doesn't update if device selection fails
+                    onCurrentTextChanged:       _settings.slSndCrdDev = currentText;
                 }
             }
 
             Text {
-                text:                       "Selected Name: " + _settings.slSndCrdDevNames[_settings.slSndCrdDevIndex]
+                text:                       "Selected Name: " + _settings.slSndCrdDev
                 // anchors.top:                cbxSoundcard.bottom
                 // anchors.topMargin:          20
                 // anchors.horizontalCenter:   cbxSoundcard.horizontalCenter
@@ -82,7 +82,8 @@ Item {
                     id:                         cbxLInChan
                     model:                      _settings.sndCardNumInputChannels
                     currentIndex:               _settings.sndCardLInChannel
-                    onCurrentIndexChanged:      _settings.setSndCardLInChannel
+                    // displayText:                _settings.sndCardLInChannel + 1
+                    onCurrentIndexChanged:      _settings.sndCardLInChannel = currentIndex
                 }
             }
 
@@ -95,7 +96,8 @@ Item {
                     id:                         cbxRInChan
                     model:                      _settings.sndCardNumInputChannels
                     currentIndex:               _settings.sndCardRInChannel
-                    // onCurrentIndexChanged:      _settings.sndCardRInChannel = currentIndex
+                    // displayText:                _settings.sndCardRInChannel + 1
+                    onCurrentIndexChanged:      _settings.sndCardRInChannel = currentIndex
                 }
             }
 
@@ -109,7 +111,7 @@ Item {
                     id:                         cbxLOutChan
                     model:                      _settings.sndCardNumOutputChannels
                     currentIndex:               _settings.sndCardLOutChannel
-                    // onCurrentIndexChanged:      _settings.sndCardLOutChannel = currentIndex
+                    onCurrentIndexChanged:      _settings.sndCardLOutChannel = currentIndex
                 }
             }
 
@@ -122,7 +124,7 @@ Item {
                     id:                         cbxROutChan
                     model:                      _settings.sndCardNumOutputChannels
                     currentIndex:               _settings.sndCardROutChannel
-                    // onCurrentIndexChanged:      _settings.sndCardROutChannel = currentIndex
+                    onCurrentIndexChanged:      _settings.sndCardROutChannel = currentIndex
                 }
             }
 

@@ -162,6 +162,7 @@ class CClientSettings : public CSettings
     Q_PROPERTY(QStringList slSndCrdDevNames READ slSndCrdDevNames NOTIFY slSndCrdDevNamesChanged)
     Q_PROPERTY(QString slSndCrdDev READ slSndCrdDev WRITE setSlSndCrdDev NOTIFY slSndCrdDevChanged)
     Q_PROPERTY(int sndCardNumInputChannels READ sndCardNumInputChannels NOTIFY sndCardNumInputChannelsChanged)
+    Q_PROPERTY(int sndCardNumOutputChannels READ sndCardNumOutputChannels NOTIFY sndCardNumOutputChannelsChanged)
     Q_PROPERTY(int sndCardLInChannel READ sndCardLInChannel WRITE setSndCardLInChannel NOTIFY sndCardLInChannelChanged)
     Q_PROPERTY(int sndCardRInChannel READ sndCardRInChannel WRITE setSndCardRInChannel NOTIFY sndCardRInChannelChanged)
     Q_PROPERTY(int sndCardLOutChannel READ sndCardLOutChannel WRITE setSndCardLOutChannel NOTIFY sndCardLOutChannelChanged)
@@ -276,8 +277,9 @@ public:
     void setChbAutoJitBuf( bool autoJit );
 
     QStringList slSndCrdDevNames();
+
     QString slSndCrdDev();
-    void setSlSndCrdDev( QString sndCardDev );
+    void setSlSndCrdDev( const QString& sndCardDev );
 
     int sndCardNumInputChannels();
     int sndCardNumOutputChannels();
@@ -435,6 +437,7 @@ signals:
     void slSndCrdDevChanged();
     void slSndCrdDevNamesChanged();
     void sndCardNumInputChannelsChanged();
+    void sndCardNumOutputChannelsChanged();
     void sndCardLInChannelChanged();
     void sndCardRInChannelChanged();
     void sndCardLOutChannelChanged();

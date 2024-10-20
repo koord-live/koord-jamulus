@@ -78,11 +78,7 @@ QStringList CSoundBase::GetDevNames()
     QStringList slDevNames;
 
     // put all device names in the string list
-#ifdef WIN32
-    for ( int iDev = 0; iDev < lNumDevs+1; iDev++ ) // account for extra ASIO built-in driver
-#else
     for ( int iDev = 0; iDev < lNumDevs; iDev++ )
-#endif
     {
         slDevNames << strDriverNames[iDev];
     }
@@ -92,7 +88,6 @@ QStringList CSoundBase::GetDevNames()
 
 QString CSoundBase::SetDev ( const QString strDevName )
 {
-    qInfo() << "SetDev()";
     QMutexLocker locker ( &MutexDevProperties );
 
     // init return parameter with "no error"
@@ -203,7 +198,6 @@ QString CSoundBase::SetDev ( const QString strDevName )
 
 QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup )
 {
-    qInfo() << "LoadAndInitializeFirstValidDriver()";
     QVector<QString> vsErrorList;
 
     // load and initialize first valid ASIO driver
