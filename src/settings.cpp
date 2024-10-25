@@ -375,6 +375,16 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         // special case: when settings are loaded no GUI is yet created, therefore
         // we have to create a warning message box here directly
         QMessageBox::warning ( nullptr, APP_NAME, strError );
+
+        // // make sure we update GUI
+        // emit slSndCrdDevChanged();
+        // // as the soundcard has changed, we need to update all the dependent stuff too
+        // emit sndCrdInputChannelNamesChanged();
+        // emit sndCardLInChannelChanged();
+        // emit sndCardRInChannelChanged();
+        // emit sndCrdOutputChannelNamesChanged();
+        // emit sndCardLOutChannelChanged();
+        // emit sndCardROutChannelChanged();
 #    endif
     }
 
@@ -922,6 +932,9 @@ int CClientSettings::cbxAudioChannels() const
 
 void CClientSettings::setCbxAudioChannels( const int iChanIdx )
 {
+    if ( pClient->GetAudioChannels() == static_cast<EAudChanConf> ( iChanIdx ) )
+        return;
+
     pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iChanIdx ) );
     emit cbxAudioChannelsChanged();
 
@@ -962,6 +975,9 @@ int CClientSettings::spnMixerRows() const
 
 void CClientSettings::setSpnMixerRows( const int mixerRows )
 {
+    if ( iNumMixerPanelRows == mixerRows )
+        return;
+
     iNumMixerPanelRows = mixerRows;
     emit spnMixerRowsChanged();
 }
@@ -976,10 +992,14 @@ void CClientSettings::setPedtAlias( QString strAlias )
     // truncate string if necessary
     const QString thisStr = TruncateString ( strAlias, MAX_LEN_FADER_TAG );
 
+    if (pClient->ChannelInfo.strName == thisStr)
+        return;
+
     pClient->ChannelInfo.strName = thisStr;
     pClient->SetRemoteInfo();
 
     emit pedtAliasChanged();
+    qDebug() << "pedt alias changed: " << thisStr;
 
 }
 
@@ -1085,6 +1105,26 @@ QStringList CClientSettings::slSndCrdDevNames()
     return pClient->GetSndCrdDevNames();
 }
 
+QStringList CClientSettings::sndCrdInputChannelNames()
+{
+    QStringList inputChannelNames;
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ ) {
+        QString inputChannelName = pClient->GetSndCrdInputChannelName ( iSndChanIdx );
+        inputChannelNames.append(inputChannelName);
+    }
+    return inputChannelNames;
+}
+
+QStringList CClientSettings::sndCrdOutputChannelNames()
+{
+    QStringList outputChannelNames;
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ ) {
+        QString inputChannelName = pClient->GetSndCrdOutputChannelName ( iSndChanIdx );
+        outputChannelNames.append(inputChannelName);
+    }
+    return outputChannelNames;
+}
+
 QString CClientSettings::slSndCrdDev()
 {
     return pClient->GetSndCrdDev();
@@ -1103,6 +1143,15 @@ void CClientSettings::setSlSndCrdDev( const QString& sndCardDev )
     qInfo() << "CHANGING sndcarddev to " << sndCardDev ; // on console
     pClient->SetSndCrdDev ( sndCardDev );
     emit slSndCrdDevChanged();
+
+    // as the soundcard has changed, we need to update all the dependent stuff too
+    emit sndCrdInputChannelNamesChanged();
+    emit sndCardLInChannelChanged();
+    emit sndCardRInChannelChanged();
+
+    emit sndCrdOutputChannelNamesChanged();
+    emit sndCardLOutChannelChanged();
+    emit sndCardROutChannelChanged();
 }
 
 // channel selectors
@@ -1117,43 +1166,89 @@ int CClientSettings::sndCardNumOutputChannels()
 }
 
 
-int CClientSettings::sndCardLInChannel()
+// int CClientSettings::sndCardLInChannel()
+// {
+//     return pClient->GetSndCrdLeftInputChannel();
+
+// }
+
+QString CClientSettings::sndCardLInChannel()
 {
-    return pClient->GetSndCrdLeftInputChannel();
+    return pClient->GetSndCrdInputChannelName( pClient->GetSndCrdLeftInputChannel() );
 }
-void CClientSettings::setSndCardLInChannel( int chanIdx)
+
+void CClientSettings::setSndCardLInChannel( QString chanName )
 {
-    pClient->SetSndCrdLeftInputChannel ( chanIdx );
+    if ( sndCardLInChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdInputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdLeftInputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
     emit sndCardLInChannelChanged();
 }
 
-int CClientSettings::sndCardRInChannel()
+QString CClientSettings::sndCardRInChannel()
 {
-    return pClient->GetSndCrdRightInputChannel();
-}
-void CClientSettings::setSndCardRInChannel( int chanIdx)
-{
-    pClient->SetSndCrdLeftInputChannel( chanIdx );
-    emit sndCardLInChannelChanged();
+    return pClient->GetSndCrdInputChannelName( pClient->GetSndCrdRightInputChannel() );
 }
 
-int CClientSettings::sndCardLOutChannel()
+void CClientSettings::setSndCardRInChannel( QString chanName )
 {
-    return pClient->GetSndCrdLeftOutputChannel();
+    if ( sndCardRInChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdInputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdRightInputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
+    emit sndCardRInChannelChanged();
 }
-void CClientSettings::setSndCardLOutChannel( int chanIdx)
+
+QString CClientSettings::sndCardLOutChannel()
 {
-    pClient->SetSndCrdLeftOutputChannel( chanIdx );
+    return  pClient->GetSndCrdOutputChannelName( pClient->GetSndCrdLeftOutputChannel() );
+}
+
+void CClientSettings::setSndCardLOutChannel( QString chanName )
+{
+    if ( sndCardLOutChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdOutputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdLeftOutputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
     emit sndCardLOutChannelChanged();
 }
 
-int CClientSettings::sndCardROutChannel()
+QString CClientSettings::sndCardROutChannel()
 {
-    return pClient->GetSndCrdRightOutputChannel();
+    return pClient->GetSndCrdOutputChannelName( pClient->GetSndCrdRightOutputChannel() );
 }
-void CClientSettings::setSndCardROutChannel( int chanIdx)
+
+void CClientSettings::setSndCardROutChannel( QString chanName )
 {
-    pClient->SetSndCrdRightOutputChannel( chanIdx );
+    if ( sndCardROutChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdOutputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdRightOutputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
     emit sndCardROutChannelChanged();
 }
 

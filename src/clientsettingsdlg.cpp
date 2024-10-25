@@ -333,7 +333,7 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 //     QStringList slSndCrdDevNames = pClient->GetSndCrdDevNames();
 //     cbxSoundcard->clear();
 
-//     foreach ( QString strDevName, slSndCrdDevNames )
+//     foreach ( QString strDevName, slSndCrdDevNames ) 
 //     {
 //         cbxSoundcard->addItem ( strDevName );
 //     }

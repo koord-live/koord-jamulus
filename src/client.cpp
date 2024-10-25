@@ -630,6 +630,18 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
     if ( !strError.isEmpty() )
     {
         emit SoundDeviceChanged ( strError );
+
+        // FIXME: need pSettings pointer here
+        // emit slSndCrdDevChanged();
+
+        //        // as the soundcard has changed, we need to update all the dependent stuff too
+        // emit sndCrdInputChannelNamesChanged();
+        // emit sndCardLInChannelChanged();
+        // emit sndCardRInChannelChanged();
+
+        // emit sndCrdOutputChannelNamesChanged();
+        // emit sndCardLOutChannelChanged();
+        // emit sndCardROutChannelChanged();
     }
 
     return strError;

@@ -160,13 +160,15 @@ class CClientSettings : public CSettings
     Q_PROPERTY(bool rbtBufferDelaySafe READ rbtBufferDelaySafe WRITE setRbtBufferDelaySafe NOTIFY rbtBufferDelaySafeChanged)
     Q_PROPERTY(bool chbAutoJitBuf READ chbAutoJitBuf WRITE setChbAutoJitBuf NOTIFY chbAutoJitBufChanged)
     Q_PROPERTY(QStringList slSndCrdDevNames READ slSndCrdDevNames NOTIFY slSndCrdDevNamesChanged)
+    Q_PROPERTY(QStringList sndCrdInputChannelNames READ sndCrdInputChannelNames NOTIFY sndCrdInputChannelNamesChanged)
+    Q_PROPERTY(QStringList sndCrdOutputChannelNames READ sndCrdOutputChannelNames NOTIFY sndCrdOutputChannelNamesChanged)
     Q_PROPERTY(QString slSndCrdDev READ slSndCrdDev WRITE setSlSndCrdDev NOTIFY slSndCrdDevChanged)
     Q_PROPERTY(int sndCardNumInputChannels READ sndCardNumInputChannels NOTIFY sndCardNumInputChannelsChanged)
     Q_PROPERTY(int sndCardNumOutputChannels READ sndCardNumOutputChannels NOTIFY sndCardNumOutputChannelsChanged)
-    Q_PROPERTY(int sndCardLInChannel READ sndCardLInChannel WRITE setSndCardLInChannel NOTIFY sndCardLInChannelChanged)
-    Q_PROPERTY(int sndCardRInChannel READ sndCardRInChannel WRITE setSndCardRInChannel NOTIFY sndCardRInChannelChanged)
-    Q_PROPERTY(int sndCardLOutChannel READ sndCardLOutChannel WRITE setSndCardLOutChannel NOTIFY sndCardLOutChannelChanged)
-    Q_PROPERTY(int sndCardROutChannel READ sndCardROutChannel WRITE setSndCardROutChannel NOTIFY sndCardROutChannelChanged)
+    Q_PROPERTY(QString sndCardLInChannel READ sndCardLInChannel WRITE setSndCardLInChannel NOTIFY sndCardLInChannelChanged)
+    Q_PROPERTY(QString sndCardRInChannel READ sndCardRInChannel WRITE setSndCardRInChannel NOTIFY sndCardRInChannelChanged)
+    Q_PROPERTY(QString sndCardLOutChannel READ sndCardLOutChannel WRITE setSndCardLOutChannel NOTIFY sndCardLOutChannelChanged)
+    Q_PROPERTY(QString sndCardROutChannel READ sndCardROutChannel WRITE setSndCardROutChannel NOTIFY sndCardROutChannelChanged)
 
 
 public:
@@ -220,6 +222,9 @@ public:
 
         setCbxAudioChannels(pClient->GetAudioChannels());
 
+        // FIXME - hardcoded defaults (high-quality, stereo)
+        setCbxAudioQuality(2);
+        setCbxAudioChannels(2);
 
         setSpnMixerRows(iNumMixerPanelRows);
 
@@ -277,6 +282,8 @@ public:
     void setChbAutoJitBuf( bool autoJit );
 
     QStringList slSndCrdDevNames();
+    QStringList sndCrdInputChannelNames ();
+    QStringList sndCrdOutputChannelNames ();
 
     QString slSndCrdDev();
     void setSlSndCrdDev( const QString& sndCardDev );
@@ -284,18 +291,17 @@ public:
     int sndCardNumInputChannels();
     int sndCardNumOutputChannels();
 
-    int sndCardLInChannel();
-    void setSndCardLInChannel( int chanIdx );
+    QString sndCardLInChannel();
+    void setSndCardLInChannel( QString chanName );
 
-    int sndCardRInChannel();
-    void setSndCardRInChannel( int chanIdx );
+    QString sndCardRInChannel();
+    void setSndCardRInChannel( QString chanName );
 
-    int sndCardLOutChannel();
-    void setSndCardLOutChannel( int chanIdx );
+    QString sndCardLOutChannel();
+    void setSndCardLOutChannel( QString chanName );
 
-    int sndCardROutChannel();
-    void setSndCardROutChannel( int chanIdx );
-
+    QString sndCardROutChannel();
+    void setSndCardROutChannel( QString chanName );
 
     void UpdateUploadRate(); // maintained for now
     int uploadRate() const;
@@ -442,6 +448,8 @@ signals:
     void sndCardRInChannelChanged();
     void sndCardLOutChannelChanged();
     void sndCardROutChannelChanged();
+    void sndCrdInputChannelNamesChanged();
+    void sndCrdOutputChannelNamesChanged();
 
     // TODO: convert / pull in from clientsettingdlg.h
     // void GUIDesignChanged();

@@ -66,10 +66,7 @@
         <file>res/winaudioctrl.png</file>
     </qresource>
     <qresource prefix="/">
-        <file>webview.qml</file>
-        <file>webengineview.qml</file>
         <file>nosessionview.qml</file>
-        <file>androidwebview.qml</file>
         <file>settingview.qml</file>
     </qresource>
     <qresource prefix="/svg/main">

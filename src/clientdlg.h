@@ -27,7 +27,6 @@
 #include "qnetworkaccessmanager.h"
 #include "qnetworkreply.h"
 #include "qtreewidget.h"
-//#include "urlhandler.h"
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>
@@ -44,32 +43,17 @@
 #include <QFileDialog>
 #include <QActionGroup>
 #include <QMainWindow>
-//#include <QSoundEffect>
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
-#    include <QVersionNumber>
-#endif
-//#include "global.h"
+#include <QVersionNumber>
 #include "util.h"
 #include "client.h"
 #include "settings.h"
 #include "multicolorled.h"
 #include "audiomixerboard.h"
-#include "clientsettingsdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
 #if defined( Q_OS_MACOS )
 #    include "mac/badgelabel.h"
 #endif
-// #if defined( _WIN32 )
-// #include <QAudioDevice>
-// #include <QMediaDevices>
-// #include <QStringConverter>
-// #include <QDir>
-// #include <QProcess>
-// #include "toml.h"
-// #endif
-// #include <QQuickWidget>
-// #include <QQuickView>
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
@@ -92,7 +76,6 @@ class CClientDlg : public QMainWindow, private Ui_CClientDlgBase
     Q_OBJECT
     Q_PROPERTY( QString video_url READ getVideoUrl NOTIFY videoUrlChanged )
 
-
 public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
@@ -105,38 +88,26 @@ public:
                  QWidget*         parent = nullptr );
 //    // session chat
 //    void AddChatText ( QString strChatText );
-    // // settings
+
+    // settings
     // void UpdateUploadRate();
-    void UpdateDisplay();
+    // void UpdateDisplay();
     // void UpdateSettingsDisplay();
     // void UpdateSoundDeviceChannelSelectionFrame();
     // void SetEnableFeedbackDetection ( bool enable );
-// #if defined( Q_OS_WINDOWS )
-//     void SetupBuiltinASIOBox();
-// #endif
+
     // for QML
     QString getVideoUrl() const {
         qInfo() << ">>> Calling getVideoUrl and returning value: " << strVideoUrl;
         return strVideoUrl;
     };
 
-    // region checker stuff
-    void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
-    bool GetShowAllMusicians() { return bShowAllMusicians; }
-    void SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList = false );
-    void SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
-    void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
-    bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
-    QString GetSelectedAddress() const { return strSelectedAddress; }
-    QString GetSelectedServerName() const { return strSelectedServerName; }
     void SetSelectedAddress( const QString nu_addr ) { strSelectedAddress = nu_addr; }
 
 protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void SetMyWindowTitle ( const int iNumClients );
-//    void ShowConnectionSetupDialog();
-//    void ShowBasicConnectionSetupDialog();
     void ShowJoinWidget();
     void HideJoinWidget();
     void ShowGeneralSettings ( int iTab );
@@ -175,15 +146,10 @@ protected:
     QString        strCurrBestRegion;
     // declare this here?? initialize? or in globals.h?
     QRegularExpression matchState = QRegularExpression(" [A-Z][A-Z]$" );
-// #if defined(Q_OS_ANDROID)
-//     QQuickWidget*   quickWidget;
-// #else
-//     QQuickView*     videoView;
+
     QQuickView*     settingsView;
-// #endif
     QNetworkAccessManager*   qNam;
     QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> endpoint_reply;
-
 
     virtual void closeEvent ( QCloseEvent* Event );
     virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
@@ -204,8 +170,6 @@ protected:
     QButtonGroup     SndCrdBufferDelayButtonGroup;
 
     // regionchecker stuff
-//    virtual void showEvent ( QShowEvent* );
-//    virtual void hideEvent ( QHideEvent* );
     QTreeWidgetItem* FindListViewItem ( const CHostAddress& InetAddr );
     QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
@@ -228,25 +192,6 @@ protected:
     bool         bShowAllMusicians;
 //    bool         bEnableIPv6;
 
-// // for Windows builtin kdasio stuff
-// #if defined( Q_OS_WINDOWS )
-//     QAudioDevice m_inputDeviceInfo;
-//     QAudioDevice m_outputDeviceInfo;
-//     QAudioDevice::Mode input_mode = QAudioDevice::Input;
-//     QAudioDevice::Mode output_mode = QAudioDevice::Output;
-//     QMediaDevices *m_devices = nullptr;
-//     QAudioFormat m_settings;
-//     int bufferSize;
-//     bool exclusive_mode;
-//     QString outputDeviceName;
-//     QString inputDeviceName;
-//     QString kdasio_config_path = QDir::homePath() + "/.kdasio_builtin.toml";
-//     QString inputAudioSettPath = "mmsys.cpl,,1";
-//     QString outputAudioSettPath = "mmsys.cpl";
-//     QList<int> bufferSizes = { 32, 64, 128, 256, 512, 1024, 2048 };
-//     QProcess *mmcplProc;
-// #endif
-
 public slots:
     void OnConnectDisconBut();
     void OnInviteBoxActivated();
@@ -258,11 +203,11 @@ public slots:
 
     void replyFinished(QNetworkReply *rep);
 
-    void OnTimerStatus() { UpdateDisplay(); }
+    // void OnTimerStatus(); //  { UpdateDisplay(); }
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
-    void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
+    // void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
 
     void OnControllerInFaderLevel ( const int iChannelIdx, const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx, iValue ); }
 
@@ -333,21 +278,6 @@ public slots:
 
     void OnCreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListReqConnClientsListMes ( InetAddr ); }
 
-     void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
-     {
-         SetServerList ( InetAddr, vecServerInfo );
-     }
-
-     void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
-     {
-         SetServerList ( InetAddr, vecServerInfo, true );
-     }
-
-     void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
-     {
-         SetConnClientsList ( InetAddr, vecChanInfo );
-     }
-
     void OnClientIDReceived ( int iChanID ) { MainMixerBoard->SetMyChannelID ( iChanID ); }
 
     void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted ) { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
@@ -361,8 +291,6 @@ public slots:
     void OnEventJoinConnectClicked ( const QString& url );
     void OnJoinConnectClicked();
     void GetKoordAddress();
-    //    void OnBasicConnectDlgAccepted();
-//    void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
     void OnMeterStyleChanged();
@@ -377,17 +305,16 @@ public slots:
 
     void accept() { close(); } // introduced by pljones
 
-
     // regionchecker stuff
 //    void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    void OnServerAddrEditTextChanged ( const QString& );
-    void OnDirectoryServerChanged ( int iTypeIdx );
+    // void OnServerAddrEditTextChanged ( const QString& );
+    // void OnDirectoryServerChanged ( int iTypeIdx );
 //    void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
 //    void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
-    void OnCustomDirectoriesChanged();
+    // void OnCustomDirectoriesChanged();
 //    void OnConnectClicked();
-    void OnRegionTimerPing();
-    void OnTimerReRequestServList();
+    // void OnRegionTimerPing();
+    // void OnTimerReRequestServList();
 
     void OnConnectFromURLHandler(const QString& connect_url);
 //    void setDefaultSingleUserMode(const QString& value);
@@ -414,8 +341,8 @@ public slots:
 // #endif
 
 signals:
-    void SendTabChange ( int iTabIdx );
-    void NewLocalInputText ( QString strNewText );
+    // void SendTabChange ( int iTabIdx );
+    // void NewLocalInputText ( QString strNewText );
 
     // for QML
     void videoUrlChanged();

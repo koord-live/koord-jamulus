@@ -310,7 +310,7 @@
        <enum>QTabWidget::TabShape::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -477,7 +477,7 @@
                          </property>
                         </widget>
                        </item>
-                       <item alignment="">
+                       <item>
                         <widget class="QGroupBox" name="inputMeterBox">
                          <property name="maximumSize">
                           <size>
@@ -1579,161 +1579,6 @@ QCheckBox::indicator {
                 <property name="rightMargin">
                  <number>11</number>
                 </property>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_13">
-                  <item>
-                   <spacer name="horizontalSpacer_17">
-                    <property name="orientation">
-                     <enum>Qt::Orientation::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                     <enum>QSizePolicy::Policy::Preferred</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>5</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_26">
-                    <item>
-                     <spacer name="verticalSpacerRchkTop">
-                      <property name="orientation">
-                       <enum>Qt::Orientation::Vertical</enum>
-                      </property>
-                      <property name="sizeType">
-                       <enum>QSizePolicy::Policy::Maximum</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>20</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="Line" name="line_5">
-                      <property name="orientation">
-                       <enum>Qt::Orientation::Horizontal</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="regChkrLabel">
-                      <property name="font">
-                       <font>
-                        <family>Rubik</family>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">color: rgb(255, 155, 18)</string>
-                      </property>
-                      <property name="text">
-                       <string>Check which Koord region has the lowest network delay --&gt;</string>
-                      </property>
-                      <property name="scaledContents">
-                       <bool>true</bool>
-                      </property>
-                      <property name="wordWrap">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QTreeWidget" name="lvwServers">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>200</width>
-                        <height>50</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>400</width>
-                        <height>1000</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>Rubik</family>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="selectionMode">
-                       <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
-                      </property>
-                      <property name="sortingEnabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="columnCount">
-                       <number>3</number>
-                      </property>
-                      <attribute name="headerShowSortIndicator" stdset="0">
-                       <bool>false</bool>
-                      </attribute>
-                      <column>
-                       <property name="text">
-                        <string notr="true">REGION</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string notr="true">DELAY (ms)</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>JOY LEVEL</string>
-                       </property>
-                      </column>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="verticalSpacerRchkBott">
-                      <property name="orientation">
-                       <enum>Qt::Orientation::Vertical</enum>
-                      </property>
-                      <property name="sizeType">
-                       <enum>QSizePolicy::Policy::Maximum</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>20</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer_16">
-                    <property name="orientation">
-                     <enum>Qt::Orientation::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                     <enum>QSizePolicy::Policy::Preferred</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>5</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
                </layout>
               </widget>
              </item>
@@ -2791,7 +2636,4 @@ QCheckBox::indicator {
   <include location="resources.qrc"/>
  </resources>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>

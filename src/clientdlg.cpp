@@ -23,8 +23,6 @@
 \******************************************************************************/
 
 #include "clientdlg.h"
-// #include <QtQuickWidgets>
-//#include "unsafearea.h"
 #include <QtConcurrent>
 #include <QDesktopServices>
 #include "urlhandler.h"
@@ -51,13 +49,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     strSelectedAddress (""),
     AnalyzerConsole ( pNCliP, parent )
 {
-    //FIXME cruft to remove later - just remove compiler warnings for now
-    // if (bNewShowComplRegConnList == false)
-    //     ;
-    // if (bShowAnalyzerConsole == false)
-    //     ;
-    // end cruft
-
     //FIXME - possibly not necessary
 #if defined(Q_OS_ANDROID)
     setCentralWidget(backgroundFrame);
@@ -66,85 +57,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // setup main UI
     setupUi ( this );
 
-//    // if on iPhone / iPad (notches prob only on iPhone)
-//#if defined(Q_OS_IOS)
-//    QSize size = qApp->screens()[0]->size();
-//    int _height = size.height();
-//    int _width = size.width();
-//    QScreen* screen = QGuiApplication::primaryScreen();
-//    int _dpi = screen->devicePixelRatio();
-//    mUnsafeArea->configureDevice(_height, _width, _dpi);
-//    mUnsafeArea->orientationChanged(2); // force landscape left for now
-//    int safeWidth = _width - mUnsafeArea->unsafeLeftMargin()- mUnsafeArea->unsafeRightMargin();
-////            - (isTabletInLandscape? drawerWidth : 0)
-//    int safeHeight = _height - mUnsafeArea->unsafeTopMargin() - mUnsafeArea->unsafeBottomMargin();
-//    this->setFixedSize(QSize(safeWidth, safeHeight));
-//#endif
-
     // set up net manager for https requests
     qNam = new QNetworkAccessManager;
     qNam->setRedirectPolicy(QNetworkRequest::ManualRedirectPolicy);
 
-// #if defined( Q_OS_WINDOWS )
-//     kdasio_setup();
-// #endif
-
-    // regionChecker stuff
-//    // setup dir servers
-//    // set up list view for connected clients (note that the last column size
-//    // must not be specified since this column takes all the remaining space)
-//#if defined(Q_OS_ANDROID)
-//    // for Android we need larger numbers because of the default font size
-//    lvwServers->setColumnWidth ( 0, 200 );
-//    lvwServers->setColumnWidth ( 1, 130 );
-//    lvwServers->setColumnWidth ( 2, 100 );
-//#else
-    lvwServers->setColumnWidth ( 0, 150 );
-    lvwServers->setColumnWidth ( 1, 100 );
-    lvwServers->setColumnWidth ( 2, 50 );
-//    lvwServers->setColumnWidth ( 3, 220 );
-//#endif
-    lvwServers->clear();
-
-//    // make sure we do not get a too long horizontal scroll bar
-//    lvwServers->header()->setStretchLastSection ( false );
-
-//    // add invisible columns which are used for sorting the list and storing
-//    // the current/maximum number of clients
-//    // 0: server name
-//    // 1: ping time
-//    // 2: number of musicians (including additional strings like " (full)")
-//    // 3: location
-//    // 4: minimum ping time (invisible)
-//    // 5: maximum number of clients (invisible)
-//    lvwServers->setColumnCount ( 3 );
-//    lvwServers->hideColumn ( 4 );
-//    lvwServers->hideColumn ( 5 );
-
-//    // per default the root shall not be decorated (to save space)
-    lvwServers->setRootIsDecorated ( false );
-
 //    // setup timers
     TimerInitialSort.setSingleShot ( true ); // only once after list request
-
-// // FIXME - exception for Android
-// // - QuickView does NOT work as for other OS - when setSource is changed from "nosession" to webview, view goes full-screen
-// #if defined(Q_OS_ANDROID)
-//     quickWidget = new QQuickWidget;
-//     // need SizeRootObjectToView for QuickWidget, otherwise web content doesn't load ??
-//     quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-//     quickWidget->setSource(QUrl("qrc:/androidwebview.qml"));
-//     videoTab->layout()->addWidget(quickWidget);
-//     QQmlContext* context = quickWidget->rootContext();
-// #else
-// // Note: use QuickView to workaround problems with QuickWidget
-//     videoView = new QQuickView();
-//     QWidget *container = QWidget::createWindowContainer(videoView, this);
-//     videoView->setSource(QUrl("qrc:/nosessionview.qml"));
-//     videoTab->layout()->addWidget(container);
-//     QQmlContext* context = videoView->rootContext();
-// // #endif
-//     context->setContextProperty("_clientdlg", this);
 
     // transitional settings view
     settingsView = new QQuickView();
@@ -156,21 +74,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // initialize video_url with blank value to start
     strVideoUrl = "";
-
-    // set Version in Help tab
-    // lblVersion->setText(QString("VERSION %1").arg(VERSION));
-
-    // Set up touch on all widgets' viewports which inherit from QAbstractScrollArea
-    // https://doc.qt.io/qt-6/qtouchevent.html#details
-    // scrollArea->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
-    // txvHelp->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
-    // txvAbout->viewport()->setAttribute(Qt::WA_AcceptTouchEvents, true);
-    // QScroller::grabGesture(scrollArea, QScroller::TouchGesture);
-    // QScroller::grabGesture(txvHelp, QScroller::TouchGesture);
-    // QScroller::grabGesture(txvAbout, QScroller::TouchGesture);
-
-    // set Test Mode
-    // devsetting1->setText(pSettings->strTestMode);
 
     // Add help text to controls -----------------------------------------------
     // input level meter
@@ -353,7 +256,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     downloadLinkButton->setVisible(false);
 
     // init status label
-    OnTimerStatus();
+    // OnTimerStatus();
 
     // init connection button text
     butConnect->setText ( tr ( "Join" ) );
@@ -445,13 +348,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerBuffersLED, &QTimer::timeout, this, &CClientDlg::OnTimerBuffersLED );
 
-    QObject::connect ( &TimerStatus, &QTimer::timeout, this, &CClientDlg::OnTimerStatus );
+    // QObject::connect ( &TimerStatus, &QTimer::timeout, this, &CClientDlg::OnTimerStatus );
 
     QObject::connect ( &TimerPing, &QTimer::timeout, this, &CClientDlg::OnTimerPing );
 
-    QObject::connect ( &RegionTimerPing, &QTimer::timeout, this, &CClientDlg::OnRegionTimerPing );
+    // QObject::connect ( &RegionTimerPing, &QTimer::timeout, this, &CClientDlg::OnRegionTimerPing );
 
-    QObject::connect ( &TimerReRequestServList, &QTimer::timeout, this, &CClientDlg::OnTimerReRequestServList );
+    // QObject::connect ( &TimerReRequestServList, &QTimer::timeout, this, &CClientDlg::OnTimerReRequestServList );
 
     QObject::connect ( &TimerCheckAudioDeviceOk, &QTimer::timeout, this, &CClientDlg::OnTimerCheckAudioDeviceOk );
 
@@ -477,13 +380,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pClient, &CClient::PingTimeReceived, this, &CClientDlg::OnPingTimeResult );
 
-    QObject::connect ( pClient, &CClient::CLServerListReceived, this, &CClientDlg::OnCLServerListReceived );
+    // QObject::connect ( pClient, &CClient::CLServerListReceived, this, &CClientDlg::OnCLServerListReceived );
 
-    QObject::connect ( pClient, &CClient::CLRedServerListReceived, this, &CClientDlg::OnCLRedServerListReceived );
+    // QObject::connect ( pClient, &CClient::CLRedServerListReceived, this, &CClientDlg::OnCLRedServerListReceived );
 
-    QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived, this, &CClientDlg::OnCLConnClientsListMesReceived );
+    // QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived, this, &CClientDlg::OnCLConnClientsListMesReceived );
 
-    QObject::connect ( pClient, &CClient::CLPingTimeWithNumClientsReceived, this, &CClientDlg::OnCLPingTimeWithNumClientsReceived );
+    // QObject::connect ( pClient, &CClient::CLPingTimeWithNumClientsReceived, this, &CClientDlg::OnCLPingTimeWithNumClientsReceived );
 
     QObject::connect ( pClient, &CClient::ControllerInFaderLevel, this, &CClientDlg::OnControllerInFaderLevel );
 
@@ -536,139 +439,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::CreateCLServerListReqConnClientsListMes,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
-
-
-//     // ==================================================================================================
-//     // SETTINGS SLOTS ========
-//     // ==================================================================================================
-//     // Connections -------------------------------------------------------------
-//     // timers
-//     QObject::connect ( &TimerStatus, &QTimer::timeout, this, &CClientDlg::OnTimerStatus );
-
-//     // slider controls
-//     QObject::connect ( sldNetBuf, &QSlider::valueChanged, this, &CClientDlg::OnNetBufValueChanged );
-
-//     QObject::connect ( sldNetBufServer, &QSlider::valueChanged, this, &CClientDlg::OnNetBufServerValueChanged );
-
-//     // check boxes
-//     QObject::connect ( chbAutoJitBuf, &QCheckBox::stateChanged, this, &CClientDlg::OnAutoJitBufStateChanged );
-
-//     QObject::connect ( chbEnableOPUS64, &QCheckBox::stateChanged, this, &CClientDlg::OnEnableOPUS64StateChanged );
-
-//     QObject::connect ( chbDetectFeedback, &QCheckBox::stateChanged, this, &CClientDlg::OnFeedbackDetectionChanged );
-
-//     QObject::connect ( newInputLevelDial,
-//                        &QSlider::valueChanged,
-//                        this,
-//                        &CClientDlg::OnNewClientLevelChanged );
-
-//     // combo boxes
-//     QObject::connect ( cbxSoundcard,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnSoundcardActivated );
-   
-//     QObject::connect ( cbxLInChan,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnLInChanActivated );
-
-//     QObject::connect ( cbxRInChan,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnRInChanActivated );
-
-//     QObject::connect ( cbxLOutChan,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnLOutChanActivated );
-
-//     QObject::connect ( cbxROutChan,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnROutChanActivated );
-
-//     QObject::connect ( cbxAudioChannels,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnAudioChannelsActivated );
-
-//     QObject::connect ( cbxAudioQuality,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnAudioQualityActivated );
-
-//     QObject::connect ( cbxSkin,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnGUIDesignActivated );
-
-//     QObject::connect ( cbxMeterStyle,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnMeterStyleActivated );
-
-//     QObject::connect ( cbxCustomDirectories->lineEdit(), &QLineEdit::editingFinished, this, &CClientDlg::OnCustomDirectoriesEditingFinished );
-
-//     QObject::connect ( cbxCustomDirectories,
-//                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-//                        this,
-//                        &CClientDlg::OnCustomDirectoriesEditingFinished );
-
-//     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientDlg::OnLanguageChanged );
-
-//     QObject::connect ( dialInputBoost,
-//                        &QSlider::valueChanged,
-//                        this,
-//                        &CClientDlg::OnInputBoostChanged );
-
-//     // buttons
-// #if defined( _WIN32 ) && !defined( WITH_JACK )
-//     // Driver Setup button is only available for Windows when JACK is not used
-//     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientDlg::OnDriverSetupClicked );
-//     // make driver refresh button reload the currently selected sound card
-// //    QObject::connect ( driverRefresh, &QPushButton::clicked, this, &CClientDlg::OnSoundcardReactivate );
-// #endif
-
-//     // misc
-//     // sliders
-//     // panDial
-//     QObject::connect ( panDial, &QSlider::valueChanged, this, &CClientDlg::OnAudioPanValueChanged );
-
-//     QObject::connect ( &SndCrdBufferDelayButtonGroup,
-//                        static_cast<void ( QButtonGroup::* ) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
-//                        this,
-//                        &CClientDlg::OnSndCrdBufferDelayButtonGroupClicked );
-
-//     // spinners
-//     QObject::connect ( spnMixerRows,
-//                        static_cast<void ( QSpinBox::* ) ( int )> ( &QSpinBox::valueChanged ),
-//                        this,
-//                        &CClientDlg::NumMixerPanelRowsChanged );
-
-//     // Musician Profile
-//     QObject::connect ( pedtAlias, &QLineEdit::textChanged, this, &CClientDlg::OnAliasTextChanged );
-
-// //    QObject::connect ( pcbxInstrument,
-// //                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-// //                       this,
-// //                       &CClientDlg::OnInstrumentActivated );
-
-// //    QObject::connect ( pcbxCountry,
-// //                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-// //                       this,
-// //                       &CClientDlg::OnCountryActivated );
-
-// //    QObject::connect ( pedtCity, &QLineEdit::textChanged, this, &CClientDlg::OnCityTextChanged );
-
-// //    QObject::connect ( pcbxSkill, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CClientDlg::OnSkillActivated );
-
-
-//     // Timers ------------------------------------------------------------------
-//     // start timer for status bar
-//     TimerStatus.start ( DISPLAY_UPDATE_TIME );
-
-//     // END OF SETTINGS SLOTS =======================================================================================
 
 
     // Initializations which have to be done after the signals are connected ---
@@ -940,17 +710,17 @@ void CClientDlg::OnNewStartClicked()
     // open website session dashboard with region pre-selected
     // update current best region for start session param
     int idx = 0;
-    if ( lvwServers->topLevelItem ( 0 )->text ( 0 ).contains("Directory") )  {
-        idx = 1;
-    }
-    strCurrBestRegion = lvwServers->topLevelItem ( idx )->text ( 0 )
-                            .replace( matchState, "" )  // remove any state refs eg TX or DC
-                            .replace( " ", "" )            // remove remaining whitespace eg in "New York"
-                            .replace( ",", "" )            // remove commas, prob before
-                            .replace( "Zürich", "Zurich" )      // special case #1
-                            .replace( "SãoPaulo", "SaoPaulo" )  // special case #2
-                            .toLower();
-    // qInfo() << strCurrBestRegion;
+    // if ( lvwServers->topLevelItem ( 0 )->text ( 0 ).contains("Directory") )  {
+    //     idx = 1;
+    // }
+    // strCurrBestRegion = lvwServers->topLevelItem ( idx )->text ( 0 )
+    //                         .replace( matchState, "" )  // remove any state refs eg TX or DC
+    //                         .replace( " ", "" )            // remove remaining whitespace eg in "New York"
+    //                         .replace( ",", "" )            // remove commas, prob before
+    //                         .replace( "Zürich", "Zurich" )      // special case #1
+    //                         .replace( "SãoPaulo", "SaoPaulo" )  // special case #2
+    //                         .toLower();
+    // // qInfo() << strCurrBestRegion;
     QDesktopServices::openUrl(QUrl("https://koord.live/session?region=" + strCurrBestRegion, QUrl::TolerantMode));
 }
 
@@ -1332,11 +1102,11 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
 // #endif
 }
 
-void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients )
-{
-    // update connection dialog server list
-    SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
-}
+// void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients )
+// {
+//     // update connection dialog server list
+//     SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
+// }
 
 void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
 {
@@ -1565,7 +1335,7 @@ void CClientDlg::Disconnect()
     //### TODO: BEGIN ###//
     // is this still required???
     // immediately update status bar
-    OnTimerStatus();
+    // OnTimerStatus();
     //### TODO: END ###//
 
     // reset LEDs
@@ -1686,11 +1456,11 @@ void CClientDlg::OnCheckForUpdate()
 
 }
 
-void CClientDlg::UpdateDisplay()
-{
-    // nothing
-    ;
-}
+// void CClientDlg::UpdateDisplay()
+// {
+//     // nothing
+//     ;
+// }
 
 void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
@@ -1870,90 +1640,90 @@ void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, c
 }
 
 
-// Region Checker stuff
-void CClientDlg::RequestServerList()
-{
-    // reset flags
-    bServerListReceived        = false;
-    bReducedServerListReceived = false;
-    bServerListItemWasChosen   = false;
-    bListFilterWasActive       = false;
+// // Region Checker stuff
+// void CClientDlg::RequestServerList()
+// {
+//     // reset flags
+//     bServerListReceived        = false;
+//     bReducedServerListReceived = false;
+//     bServerListItemWasChosen   = false;
+//     bListFilterWasActive       = false;
 
-    // clear current address and name
-//    strSelectedAddress    = "";
-//    strSelectedServerName = "";
+//     // clear current address and name
+// //    strSelectedAddress    = "";
+// //    strSelectedServerName = "";
 
-    // clear server list view
-    lvwServers->clear();
+//     // clear server list view
+//     // lvwServers->clear();
 
-    // update list combo box (disable events to avoid a signal)
-    cbxDirectoryServer->blockSignals ( true );
-    if ( pSettings->eDirectoryType == AT_CUSTOM )
-    {
-        // iCustomDirectoryIndex is non-zero only if eDirectoryType == AT_CUSTOM
-        // find the combobox item that corresponds to vstrDirectoryAddress[iCustomDirectoryIndex]
-        // (the current selected custom directory)
-        cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
-    }
-    else
-    {
-        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
-    }
-    cbxDirectoryServer->blockSignals ( false );
+//     // update list combo box (disable events to avoid a signal)
+//     cbxDirectoryServer->blockSignals ( true );
+//     if ( pSettings->eDirectoryType == AT_CUSTOM )
+//     {
+//         // iCustomDirectoryIndex is non-zero only if eDirectoryType == AT_CUSTOM
+//         // find the combobox item that corresponds to vstrDirectoryAddress[iCustomDirectoryIndex]
+//         // (the current selected custom directory)
+//         cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
+//     }
+//     else
+//     {
+//         cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
+//     }
+//     cbxDirectoryServer->blockSignals ( false );
 
-    // Get the IP address of the directory server (using the ParseNetworAddress
-    // function) when the connect dialog is opened, this seems to be the correct
-    // time to do it. Note that in case of custom directories we
-    // use iCustomDirectoryIndex as an index into the vector.
+//     // Get the IP address of the directory server (using the ParseNetworAddress
+//     // function) when the connect dialog is opened, this seems to be the correct
+//     // time to do it. Note that in case of custom directories we
+//     // use iCustomDirectoryIndex as an index into the vector.
 
-    // Allow IPv4 only for communicating with Directories
-    if ( NetworkUtil().ParseNetworkAddress (
-             NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
-             haDirectoryAddress,
-             false ) )
-    {
-        // send the request for the server list
-        emit ReqServerListQuery ( haDirectoryAddress );
+//     // Allow IPv4 only for communicating with Directories
+//     if ( NetworkUtil().ParseNetworkAddress (
+//              NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
+//              haDirectoryAddress,
+//              false ) )
+//     {
+//         // send the request for the server list
+//         emit ReqServerListQuery ( haDirectoryAddress );
 
-        // start timer, if this message did not get any respond to retransmit
-        // the server list request message
-        TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
-        TimerInitialSort.start ( SERV_LIST_REQ_UPDATE_TIME_MS ); // reuse the time value
-    }
-}
+//         // start timer, if this message did not get any respond to retransmit
+//         // the server list request message
+//         TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
+//         TimerInitialSort.start ( SERV_LIST_REQ_UPDATE_TIME_MS ); // reuse the time value
+//     }
+// }
 
 
 
-void CClientDlg::OnDirectoryServerChanged ( int iTypeIdx )
-{
-    // store the new directory type and request new list
-    // if iTypeIdx == AT_CUSTOM, then iCustomDirectoryIndex is the index into the vector holding the user's custom directory servers
-    // if iTypeIdx != AT_CUSTOM, then iCustomDirectoryIndex MUST be 0;
-    if ( iTypeIdx >= AT_CUSTOM )
-    {
-        // the value for the index into the vector vstrDirectoryAddress is in the user data of the combobox item
-        pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iTypeIdx ).toInt();
-        iTypeIdx                         = AT_CUSTOM;
-    }
-    else
-    {
-        pSettings->iCustomDirectoryIndex = 0;
-    }
-    pSettings->eDirectoryType = static_cast<EDirectoryType> ( iTypeIdx );
-    RequestServerList();
-}
+// void CClientDlg::OnDirectoryServerChanged ( int iTypeIdx )
+// {
+//     // store the new directory type and request new list
+//     // if iTypeIdx == AT_CUSTOM, then iCustomDirectoryIndex is the index into the vector holding the user's custom directory servers
+//     // if iTypeIdx != AT_CUSTOM, then iCustomDirectoryIndex MUST be 0;
+//     if ( iTypeIdx >= AT_CUSTOM )
+//     {
+//         // the value for the index into the vector vstrDirectoryAddress is in the user data of the combobox item
+//         pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iTypeIdx ).toInt();
+//         iTypeIdx                         = AT_CUSTOM;
+//     }
+//     else
+//     {
+//         pSettings->iCustomDirectoryIndex = 0;
+//     }
+//     pSettings->eDirectoryType = static_cast<EDirectoryType> ( iTypeIdx );
+//     RequestServerList();
+// }
 
-void CClientDlg::OnTimerReRequestServList()
-{
-    // if the server list is not yet received, retransmit the request for the
-    // server list
-    if ( !bServerListReceived )
-    {
-        // note that this is a connection less message which may get lost
-        // and therefore it makes sense to re-transmit it
-        emit ReqServerListQuery ( haDirectoryAddress );
-    }
-}
+// void CClientDlg::OnTimerReRequestServList()
+// {
+//     // if the server list is not yet received, retransmit the request for the
+//     // server list
+//     if ( !bServerListReceived )
+//     {
+//         // note that this is a connection less message which may get lost
+//         // and therefore it makes sense to re-transmit it
+//         emit ReqServerListQuery ( haDirectoryAddress );
+//     }
+// }
 
 void CClientDlg::OnConnectFromURLHandler(const QString& connect_url)
 {
@@ -1973,248 +1743,248 @@ void CClientDlg::OnConnectFromURLHandler(const QString& connect_url)
 //    m_default_single_user_mode = (value.toLower() == "true");
 //}
 
-void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )
-{
-    // If the normal list was received, we do not accept any further list
-    // updates (to avoid the reduced list overwrites the normal list (#657)). Also,
-    // we only accept a server list from the server address we have sent the
-    // request for this to (note that we cannot use the port number since the
-    // receive port and send port might be different at the directory server).
-    if ( bServerListReceived || ( InetAddr.InetAddr != haDirectoryAddress.InetAddr ) )
-    {
-        return;
-    }
+// void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )
+// {
+//     // If the normal list was received, we do not accept any further list
+//     // updates (to avoid the reduced list overwrites the normal list (#657)). Also,
+//     // we only accept a server list from the server address we have sent the
+//     // request for this to (note that we cannot use the port number since the
+//     // receive port and send port might be different at the directory server).
+//     if ( bServerListReceived || ( InetAddr.InetAddr != haDirectoryAddress.InetAddr ) )
+//     {
+//         return;
+//     }
 
-    // special treatment if a reduced server list was received
-    if ( bIsReducedServerList )
-    {
-        // make sure we only apply the reduced version list once
-        if ( bReducedServerListReceived )
-        {
-            // do nothing
-            return;
-        }
-        else
-        {
-            bReducedServerListReceived = true;
-        }
-    }
-    else
-    {
-        // set flag and disable timer for resend server list request if full list
-        // was received (i.e. not the reduced list)
-        bServerListReceived = true;
-        TimerReRequestServList.stop();
-    }
+//     // special treatment if a reduced server list was received
+//     if ( bIsReducedServerList )
+//     {
+//         // make sure we only apply the reduced version list once
+//         if ( bReducedServerListReceived )
+//         {
+//             // do nothing
+//             return;
+//         }
+//         else
+//         {
+//             bReducedServerListReceived = true;
+//         }
+//     }
+//     else
+//     {
+//         // set flag and disable timer for resend server list request if full list
+//         // was received (i.e. not the reduced list)
+//         bServerListReceived = true;
+//         TimerReRequestServList.stop();
+//     }
 
-    // first clear list
-    lvwServers->clear();
+//     // first clear list
+//     // lvwServers->clear();
 
-    // add list item for each server in the server list
-    const int iServerInfoLen = vecServerInfo.Size();
+//     // add list item for each server in the server list
+//     const int iServerInfoLen = vecServerInfo.Size();
 
-    for ( int iIdx = 0; iIdx < iServerInfoLen; iIdx++ )
-    {
-        // get the host address, note that for the very first entry which is
-        // the directory server, we have to use the receive host address
-        // instead
-        CHostAddress CurHostAddress;
+//     for ( int iIdx = 0; iIdx < iServerInfoLen; iIdx++ )
+//     {
+//         // get the host address, note that for the very first entry which is
+//         // the directory server, we have to use the receive host address
+//         // instead
+//         CHostAddress CurHostAddress;
 
-        if ( iIdx > 0 )
-        {
-            CurHostAddress = vecServerInfo[iIdx].HostAddr;
-        }
-        else
-        {
-            // substitute the receive host address for directory server
-            CurHostAddress = InetAddr;
-        }
+//         if ( iIdx > 0 )
+//         {
+//             CurHostAddress = vecServerInfo[iIdx].HostAddr;
+//         }
+//         else
+//         {
+//             // substitute the receive host address for directory server
+//             CurHostAddress = InetAddr;
+//         }
 
-        // create new list view item
-        QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwServers );
+//         // create new list view item
+//         // QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwServers );
 
-        // make the entry invisible (will be set to visible on successful ping
-        // result) if the complete list of registered servers shall not be shown
-        if ( !bShowCompleteRegList )
-        {
-            pNewListViewItem->setHidden ( true );
-        }
-        // if this is Directory Server, don't show it
-        if ( iIdx == 0 )
-        {
-            pNewListViewItem->setHidden( true );
-        }
+//         // make the entry invisible (will be set to visible on successful ping
+//         // result) if the complete list of registered servers shall not be shown
+//         if ( !bShowCompleteRegList )
+//         {
+//             pNewListViewItem->setHidden ( true );
+//         }
+//         // if this is Directory Server, don't show it
+//         if ( iIdx == 0 )
+//         {
+//             pNewListViewItem->setHidden( true );
+//         }
 
-        // server name (if empty, show host address instead)
-        if ( !vecServerInfo[iIdx].strName.isEmpty() )
-        {
-            pNewListViewItem->setText ( 0, vecServerInfo[iIdx].strName );
-        }
-        else
-        {
-            // IP address and port (use IP number without last byte)
-            // Definition: If the port number is the default port number, we do
-            // not show it.
-            if ( vecServerInfo[iIdx].HostAddr.iPort == DEFAULT_PORT_NUMBER )
-            {
-                // only show IP number, no port number
-                pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );
-            }
-            else
-            {
-                // show IP number and port
-                pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE_PORT ) );
-            }
-        }
+//         // server name (if empty, show host address instead)
+//         if ( !vecServerInfo[iIdx].strName.isEmpty() )
+//         {
+//             pNewListViewItem->setText ( 0, vecServerInfo[iIdx].strName );
+//         }
+//         else
+//         {
+//             // IP address and port (use IP number without last byte)
+//             // Definition: If the port number is the default port number, we do
+//             // not show it.
+//             if ( vecServerInfo[iIdx].HostAddr.iPort == DEFAULT_PORT_NUMBER )
+//             {
+//                 // only show IP number, no port number
+//                 pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );
+//             }
+//             else
+//             {
+//                 // show IP number and port
+//                 pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE_PORT ) );
+//             }
+//         }
 
-        // in case of all servers shown, add the registration number at the beginning
-//        if ( bShowCompleteRegList )
-//        {
-//            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( 1 + iIdx, 3 ) + pNewListViewItem->text ( 0 ) );
-//        }
+//         // in case of all servers shown, add the registration number at the beginning
+// //        if ( bShowCompleteRegList )
+// //        {
+// //            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( 1 + iIdx, 3 ) + pNewListViewItem->text ( 0 ) );
+// //        }
 
-        // show server name in bold font if it is a permanent server
-//        QFont CurServerNameFont = pNewListViewItem->font ( 0 );
-//        CurServerNameFont.setBold ( vecServerInfo[iIdx].bPermanentOnline );
-//        pNewListViewItem->setFont ( 0, CurServerNameFont );
+//         // show server name in bold font if it is a permanent server
+// //        QFont CurServerNameFont = pNewListViewItem->font ( 0 );
+// //        CurServerNameFont.setBold ( vecServerInfo[iIdx].bPermanentOnline );
+// //        pNewListViewItem->setFont ( 0, CurServerNameFont );
 
-        // the ping time shall be shown in bold font
-        QFont CurPingTimeFont = pNewListViewItem->font ( 1 );
-        CurPingTimeFont.setBold ( true );
-        pNewListViewItem->setFont ( 1, CurPingTimeFont );
+//         // the ping time shall be shown in bold font
+//         QFont CurPingTimeFont = pNewListViewItem->font ( 1 );
+//         CurPingTimeFont.setBold ( true );
+//         pNewListViewItem->setFont ( 1, CurPingTimeFont );
 
-        // happiness level in emoji font
-        pNewListViewItem->setFont ( 2, QFont("Segoe UI Emoji") );
+//         // happiness level in emoji font
+//         pNewListViewItem->setFont ( 2, QFont("Segoe UI Emoji") );
 
-        // server location (city and country)
-        QString strLocation = vecServerInfo[iIdx].strCity;
+//         // server location (city and country)
+//         QString strLocation = vecServerInfo[iIdx].strCity;
 
-        if ( ( !strLocation.isEmpty() ) && ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry ) )
-        {
-            strLocation += ", ";
-        }
+//         if ( ( !strLocation.isEmpty() ) && ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry ) )
+//         {
+//             strLocation += ", ";
+//         }
 
-        if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
-        {
-            QString strCountryToString = QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
+//         if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
+//         {
+//             QString strCountryToString = QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
 
-            // Qt countryToString does not use spaces in between country name
-            // parts but they use upper case letters which we can detect and
-            // insert spaces as a post processing
-            if ( !strCountryToString.contains ( " " ) )
-            {
-                QRegularExpressionMatchIterator reMatchIt = QRegularExpression ( "[A-Z][^A-Z]*" ).globalMatch ( strCountryToString );
-                QStringList                     slNames;
-                while ( reMatchIt.hasNext() )
-                {
-                    slNames << reMatchIt.next().capturedTexts();
-                }
-                strCountryToString = slNames.join ( " " );
-            }
-            strLocation += strCountryToString;
-        }
+//             // Qt countryToString does not use spaces in between country name
+//             // parts but they use upper case letters which we can detect and
+//             // insert spaces as a post processing
+//             if ( !strCountryToString.contains ( " " ) )
+//             {
+//                 QRegularExpressionMatchIterator reMatchIt = QRegularExpression ( "[A-Z][^A-Z]*" ).globalMatch ( strCountryToString );
+//                 QStringList                     slNames;
+//                 while ( reMatchIt.hasNext() )
+//                 {
+//                     slNames << reMatchIt.next().capturedTexts();
+//                 }
+//                 strCountryToString = slNames.join ( " " );
+//             }
+//             strLocation += strCountryToString;
+//         }
 
-        pNewListViewItem->setText ( 3, strLocation );
+//         pNewListViewItem->setText ( 3, strLocation );
 
-        // init the minimum ping time with a large number (note that this number
-        // must fit in an integer type)
-        pNewListViewItem->setText ( 4, "99999999" );
+//         // init the minimum ping time with a large number (note that this number
+//         // must fit in an integer type)
+//         pNewListViewItem->setText ( 4, "99999999" );
 
-        // store the maximum number of clients
-        pNewListViewItem->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
+//         // store the maximum number of clients
+//         pNewListViewItem->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
 
-        // store host address
-        pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
+//         // store host address
+//         pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
 
-        // per default expand the list item (if not "show all servers")
-        if ( bShowAllMusicians )
-        {
-            lvwServers->expandItem ( pNewListViewItem );
-        }
-    }
+//         // per default expand the list item (if not "show all servers")
+//         // if ( bShowAllMusicians )
+//         // {
+//         //     lvwServers->expandItem ( pNewListViewItem );
+//         // }
+//     }
 
-    // immediately issue the ping measurements and start the ping timer since
-    // the server list is filled now
-    OnRegionTimerPing();
-    RegionTimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
-}
+//     // immediately issue the ping measurements and start the ping timer since
+//     // the server list is filled now
+//     OnRegionTimerPing();
+//     RegionTimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+// }
 
-void CClientDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
-{
-    // find the server with the correct address
-    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+// void CClientDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
+// {
+//     // find the server with the correct address
+//     QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
 
-    if ( pCurListViewItem )
-    {
-        // first remove any existing children
-        DeleteAllListViewItemChilds ( pCurListViewItem );
+//     if ( pCurListViewItem )
+//     {
+//         // first remove any existing children
+//         DeleteAllListViewItemChilds ( pCurListViewItem );
 
-        // get number of connected clients
-        const int iNumConnectedClients = vecChanInfo.Size();
+//         // get number of connected clients
+//         const int iNumConnectedClients = vecChanInfo.Size();
 
-        for ( int i = 0; i < iNumConnectedClients; i++ )
-        {
-            // create new list view item
-            QTreeWidgetItem* pNewChildListViewItem = new QTreeWidgetItem ( pCurListViewItem );
+//         for ( int i = 0; i < iNumConnectedClients; i++ )
+//         {
+//             // create new list view item
+//             QTreeWidgetItem* pNewChildListViewItem = new QTreeWidgetItem ( pCurListViewItem );
 
-            // child items shall use only one column
-            pNewChildListViewItem->setFirstColumnSpanned ( true );
+//             // child items shall use only one column
+//             pNewChildListViewItem->setFirstColumnSpanned ( true );
 
-            // set the clients name
-            QString sClientText = vecChanInfo[i].strName;
+//             // set the clients name
+//             QString sClientText = vecChanInfo[i].strName;
 
-            // set the icon: country flag has priority over instrument
-            bool bCountryFlagIsUsed = false;
+//             // set the icon: country flag has priority over instrument
+//             bool bCountryFlagIsUsed = false;
 
-            if ( vecChanInfo[i].eCountry != QLocale::AnyCountry )
-            {
-                // try to load the country flag icon
-                QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
+//             if ( vecChanInfo[i].eCountry != QLocale::AnyCountry )
+//             {
+//                 // try to load the country flag icon
+//                 QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
 
-                // first check if resource reference was valid
-                if ( !CountryFlagPixmap.isNull() )
-                {
-                    // set correct picture
-                    pNewChildListViewItem->setIcon ( 0, QIcon ( CountryFlagPixmap ) );
+//                 // first check if resource reference was valid
+//                 if ( !CountryFlagPixmap.isNull() )
+//                 {
+//                     // set correct picture
+//                     pNewChildListViewItem->setIcon ( 0, QIcon ( CountryFlagPixmap ) );
 
-                    bCountryFlagIsUsed = true;
-                }
-            }
+//                     bCountryFlagIsUsed = true;
+//                 }
+//             }
 
-            if ( !bCountryFlagIsUsed )
-            {
-                // get the resource reference string for this instrument
-                const QString strCurResourceRef = CInstPictures::GetResourceReference ( vecChanInfo[i].iInstrument );
+//             if ( !bCountryFlagIsUsed )
+//             {
+//                 // get the resource reference string for this instrument
+//                 const QString strCurResourceRef = CInstPictures::GetResourceReference ( vecChanInfo[i].iInstrument );
 
-                // first check if instrument picture is used or not and if it is valid
-                if ( !( CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) || strCurResourceRef.isEmpty() ) )
-                {
-                    // set correct picture
-                    pNewChildListViewItem->setIcon ( 0, QIcon ( QPixmap ( strCurResourceRef ) ) );
-                }
-            }
+//                 // first check if instrument picture is used or not and if it is valid
+//                 if ( !( CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) || strCurResourceRef.isEmpty() ) )
+//                 {
+//                     // set correct picture
+//                     pNewChildListViewItem->setIcon ( 0, QIcon ( QPixmap ( strCurResourceRef ) ) );
+//                 }
+//             }
 
-            // add the instrument information as text
-            if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
-            {
-                sClientText.append ( " (" + CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
-            }
+//             // add the instrument information as text
+//             if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
+//             {
+//                 sClientText.append ( " (" + CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
+//             }
 
-            // apply the client text to the list view item
-            pNewChildListViewItem->setText ( 0, sClientText );
+//             // apply the client text to the list view item
+//             pNewChildListViewItem->setText ( 0, sClientText );
 
-            // add the new child to the corresponding server item
-            pCurListViewItem->addChild ( pNewChildListViewItem );
+//             // add the new child to the corresponding server item
+//             pCurListViewItem->addChild ( pNewChildListViewItem );
 
-            // at least one server has children now, show decoration to be able
-            // to show the children
-            lvwServers->setRootIsDecorated ( true );
-        }
+//             // at least one server has children now, show decoration to be able
+//             // to show the children
+//             lvwServers->setRootIsDecorated ( true );
+//         }
 
-        // the clients list may have changed, update the filter selection
-        UpdateListFilter();
-    }
-}
+//         // the clients list may have changed, update the filter selection
+//         UpdateListFilter();
+//     }
+// }
 
 //void CClientDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int )
 //{
@@ -2226,50 +1996,50 @@ void CClientDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVecto
 //    }
 //}
 
-void CClientDlg::OnServerAddrEditTextChanged ( const QString& )
-{
-    // in the server address combo box, a text was changed, remove selection
-    // in the server list (if any)
-    lvwServers->clearSelection();
-}
+// void CClientDlg::OnServerAddrEditTextChanged ( const QString& )
+// {
+//     // in the server address combo box, a text was changed, remove selection
+//     // in the server list (if any)
+//     lvwServers->clearSelection();
+// }
 
-void CClientDlg::OnCustomDirectoriesChanged()
-{
+// void CClientDlg::OnCustomDirectoriesChanged()
+// {
 
-    QString strPreviousSelection = cbxDirectoryServer->currentText();
-    UpdateDirectoryServerComboBox();
-    // after updating the combobox, we must re-select the previous directory selection
+//     QString strPreviousSelection = cbxDirectoryServer->currentText();
+//     UpdateDirectoryServerComboBox();
+//     // after updating the combobox, we must re-select the previous directory selection
 
-    if ( pSettings->eDirectoryType == AT_CUSTOM )
-    {
-        // check if the currently select custom directory still exists in the now potentially re-ordered vector,
-        // if so, then change to its new index.  (addresses Issue #1899)
-        int iNewIndex = cbxDirectoryServer->findText ( strPreviousSelection, Qt::MatchExactly );
-        if ( iNewIndex == INVALID_INDEX )
-        {
-            // previously selected custom directory has been deleted.  change to default directory
-            pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_DEFAULT );
-            pSettings->iCustomDirectoryIndex = 0;
-            RequestServerList();
-        }
-        else
-        {
-            // find previously selected custom directory in the now potentially re-ordered vector
-            pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_CUSTOM );
-            pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iNewIndex ).toInt();
-            cbxDirectoryServer->blockSignals ( true );
-            cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
-            cbxDirectoryServer->blockSignals ( false );
-        }
-    }
-    else
-    {
-        // selected directory was not a custom directory
-        cbxDirectoryServer->blockSignals ( true );
-        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
-        cbxDirectoryServer->blockSignals ( false );
-    }
-}
+//     if ( pSettings->eDirectoryType == AT_CUSTOM )
+//     {
+//         // check if the currently select custom directory still exists in the now potentially re-ordered vector,
+//         // if so, then change to its new index.  (addresses Issue #1899)
+//         int iNewIndex = cbxDirectoryServer->findText ( strPreviousSelection, Qt::MatchExactly );
+//         if ( iNewIndex == INVALID_INDEX )
+//         {
+//             // previously selected custom directory has been deleted.  change to default directory
+//             pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_DEFAULT );
+//             pSettings->iCustomDirectoryIndex = 0;
+//             RequestServerList();
+//         }
+//         else
+//         {
+//             // find previously selected custom directory in the now potentially re-ordered vector
+//             pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_CUSTOM );
+//             pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iNewIndex ).toInt();
+//             cbxDirectoryServer->blockSignals ( true );
+//             cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
+//             cbxDirectoryServer->blockSignals ( false );
+//         }
+//     }
+//     else
+//     {
+//         // selected directory was not a custom directory
+//         cbxDirectoryServer->blockSignals ( true );
+//         cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
+//         cbxDirectoryServer->blockSignals ( false );
+//     }
+// }
 
 //void CClientDlg::ShowAllMusicians ( const bool bState )
 //{
@@ -2292,100 +2062,100 @@ void CClientDlg::OnCustomDirectoriesChanged()
 //    }
 //}
 
-void CClientDlg::UpdateListFilter()
-{
-//    const QString sFilterText = edtFilter->text();
-    const QString sFilterText = "";
+// void CClientDlg::UpdateListFilter()
+// {
+// //    const QString sFilterText = edtFilter->text();
+//     const QString sFilterText = "";
 
-    if ( !sFilterText.isEmpty() )
-    {
-        bListFilterWasActive     = true;
-        const int iServerListLen = lvwServers->topLevelItemCount();
+//     if ( !sFilterText.isEmpty() )
+//     {
+//         bListFilterWasActive     = true;
+//         const int iServerListLen = lvwServers->topLevelItemCount();
 
-        for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-        {
-            QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
-            bool             bFilterFound     = false;
+//         for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+//         {
+//             QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+//             bool             bFilterFound     = false;
 
-            // DEFINITION: if "#" is set at the beginning of the filter text, we show
-            //             occupied servers (#397)
-            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) )
-            {
-                // special case: filter for occupied servers
-                if ( pCurListViewItem->childCount() > 0 )
-                {
-                    bFilterFound = true;
-                }
-            }
-            else
-            {
-                // search server name
-                if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-                {
-                    bFilterFound = true;
-                }
+//             // DEFINITION: if "#" is set at the beginning of the filter text, we show
+//             //             occupied servers (#397)
+//             if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) )
+//             {
+//                 // special case: filter for occupied servers
+//                 if ( pCurListViewItem->childCount() > 0 )
+//                 {
+//                     bFilterFound = true;
+//                 }
+//             }
+//             else
+//             {
+//                 // search server name
+//                 if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+//                 {
+//                     bFilterFound = true;
+//                 }
 
-                // search location
-                if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-                {
-                    bFilterFound = true;
-                }
+//                 // search location
+//                 if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+//                 {
+//                     bFilterFound = true;
+//                 }
 
-                // search children
-                for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
-                {
-                    if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-                    {
-                        bFilterFound = true;
-                    }
-                }
-            }
+//                 // search children
+//                 for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
+//                 {
+//                     if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+//                     {
+//                         bFilterFound = true;
+//                     }
+//                 }
+//             }
 
-            // only update Hide state if ping time was received
-            if ( !pCurListViewItem->text ( 1 ).isEmpty() || bShowCompleteRegList )
-            {
-                // only update hide and expand status if the hide state has to be changed to
-                // preserve if user clicked on expand icon manually
-                if ( ( pCurListViewItem->isHidden() && bFilterFound ) || ( !pCurListViewItem->isHidden() && !bFilterFound ) )
-                {
-                    pCurListViewItem->setHidden ( !bFilterFound );
-                    pCurListViewItem->setExpanded ( bShowAllMusicians );
-                }
-            }
-        }
-    }
-    else
-    {
-        // if the filter was active but is now disabled, we have to update all list
-        // view items for the "ping received" hide state
-        if ( bListFilterWasActive )
-        {
-            const int iServerListLen = lvwServers->topLevelItemCount();
+//             // only update Hide state if ping time was received
+//             if ( !pCurListViewItem->text ( 1 ).isEmpty() || bShowCompleteRegList )
+//             {
+//                 // only update hide and expand status if the hide state has to be changed to
+//                 // preserve if user clicked on expand icon manually
+//                 if ( ( pCurListViewItem->isHidden() && bFilterFound ) || ( !pCurListViewItem->isHidden() && !bFilterFound ) )
+//                 {
+//                     pCurListViewItem->setHidden ( !bFilterFound );
+//                     pCurListViewItem->setExpanded ( bShowAllMusicians );
+//                 }
+//             }
+//         }
+//     }
+//     else
+//     {
+//         // if the filter was active but is now disabled, we have to update all list
+//         // view items for the "ping received" hide state
+//         if ( bListFilterWasActive )
+//         {
+//             const int iServerListLen = lvwServers->topLevelItemCount();
 
-            for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-            {
-                QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+//             for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+//             {
+//                 QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
 
-                // if ping time is empty, hide item (if not already hidden)
-                if ( pCurListViewItem->text ( 1 ).isEmpty() && !bShowCompleteRegList )
-                {
-                    pCurListViewItem->setHidden ( true );
-                }
-                else
-                {
-                    // in case it was hidden, show it and take care of expand
-                    if ( pCurListViewItem->isHidden() )
-                    {
-                        pCurListViewItem->setHidden ( false );
-                        pCurListViewItem->setExpanded ( bShowAllMusicians );
-                    }
-                }
-            }
+//                 // if ping time is empty, hide item (if not already hidden)
+//                 if ( pCurListViewItem->text ( 1 ).isEmpty() && !bShowCompleteRegList )
+//                 {
+//                     pCurListViewItem->setHidden ( true );
+//                 }
+//                 else
+//                 {
+//                     // in case it was hidden, show it and take care of expand
+//                     if ( pCurListViewItem->isHidden() )
+//                     {
+//                         pCurListViewItem->setHidden ( false );
+//                         pCurListViewItem->setExpanded ( bShowAllMusicians );
+//                     }
+//                 }
+//             }
 
-            bListFilterWasActive = false;
-        }
-    }
-}
+//             bListFilterWasActive = false;
+//         }
+//     }
+// }
 
 //void CClientDlg::OnConnectClicked()
 //{
@@ -2417,260 +2187,260 @@ void CClientDlg::UpdateListFilter()
 //    done ( QDialog::Accepted );
 //}
 
-void CClientDlg::OnRegionTimerPing()
-{
-    // send ping messages to the servers in the list
-    const int iServerListLen = lvwServers->topLevelItemCount();
+// void CClientDlg::OnRegionTimerPing()
+// {
+//     // send ping messages to the servers in the list
+//     const int iServerListLen = lvwServers->topLevelItemCount();
 
-    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-    {
-        CHostAddress haServerAddress;
+//     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+//     {
+//         CHostAddress haServerAddress;
 
-        // try to parse host address string which is stored as user data
-        // in the server list item GUI control element
-        if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(),
-                                                 haServerAddress,
-                                                 bEnableIPv6 ) )
-        {
-//            qDebug() << "lvwServer listing: " + lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString();
-            // if address is valid, send ping message using a new thread
-            QFuture<void> f = QtConcurrent::run ( &CClientDlg::EmitCLServerListPingMes, this, haServerAddress );
-            Q_UNUSED ( f );
-        }
-    }
-}
+//         // try to parse host address string which is stored as user data
+//         // in the server list item GUI control element
+//         if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(),
+//                                                  haServerAddress,
+//                                                  bEnableIPv6 ) )
+//         {
+// //            qDebug() << "lvwServer listing: " + lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString();
+//             // if address is valid, send ping message using a new thread
+//             QFuture<void> f = QtConcurrent::run ( &CClientDlg::EmitCLServerListPingMes, this, haServerAddress );
+//             Q_UNUSED ( f );
+//         }
+//     }
+// }
 
-void CClientDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress )
-{
-    // The ping time messages for all servers should not be sent all in a very
-    // short time since it showed that this leads to errors in the ping time
-    // measurement (#49). We therefore introduce a short delay for each server
-    // (since we are doing this in a separate thread for each server, we do not
-    // block the GUI).
-    QThread::msleep ( 11 );
+// void CClientDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress )
+// {
+//     // The ping time messages for all servers should not be sent all in a very
+//     // short time since it showed that this leads to errors in the ping time
+//     // measurement (#49). We therefore introduce a short delay for each server
+//     // (since we are doing this in a separate thread for each server, we do not
+//     // block the GUI).
+//     QThread::msleep ( 11 );
 
-    emit CreateCLServerListPingMes ( haServerAddress );
-}
+//     emit CreateCLServerListPingMes ( haServerAddress );
+// }
 
-void CClientDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients )
-{
-    // apply the received ping time to the correct server list entry
-    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+// void CClientDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients )
+// {
+//     // apply the received ping time to the correct server list entry
+//     QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
 
-    if ( pCurListViewItem )
-    {
-        // check if this is the first time a ping time is set
-        const bool bIsFirstPing = pCurListViewItem->text ( 1 ).isEmpty();
-        bool       bDoSorting   = false;
+//     if ( pCurListViewItem )
+//     {
+//         // check if this is the first time a ping time is set
+//         const bool bIsFirstPing = pCurListViewItem->text ( 1 ).isEmpty();
+//         bool       bDoSorting   = false;
 
-        // update minimum ping time column (invisible, used for sorting) if
-        // the new value is smaller than the old value
-        int iMinPingTime = pCurListViewItem->text ( 4 ).toInt();
+//         // update minimum ping time column (invisible, used for sorting) if
+//         // the new value is smaller than the old value
+//         int iMinPingTime = pCurListViewItem->text ( 4 ).toInt();
 
-        if ( iMinPingTime > iPingTime )
-        {
-            // update the minimum ping time with the new lowest value
-            iMinPingTime = iPingTime;
+//         if ( iMinPingTime > iPingTime )
+//         {
+//             // update the minimum ping time with the new lowest value
+//             iMinPingTime = iPingTime;
 
-            // we pad to a total of 8 characters with zeros to make sure the
-            // sorting is done correctly
-            pCurListViewItem->setText ( 4, QString ( "%1" ).arg ( iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
+//             // we pad to a total of 8 characters with zeros to make sure the
+//             // sorting is done correctly
+//             pCurListViewItem->setText ( 4, QString ( "%1" ).arg ( iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
 
-            // update the sorting (lowest number on top)
-            bDoSorting = true;
-        }
+//             // update the sorting (lowest number on top)
+//             bDoSorting = true;
+//         }
 
-        // for debugging it is good to see the current ping time in the list
-        // and not the minimum ping time -> overwrite the value for debugging
-        if ( bShowCompleteRegList )
-        {
-            iMinPingTime = iPingTime;
-        }
+//         // for debugging it is good to see the current ping time in the list
+//         // and not the minimum ping time -> overwrite the value for debugging
+//         if ( bShowCompleteRegList )
+//         {
+//             iMinPingTime = iPingTime;
+//         }
 
-        // Only show minimum ping time in the list since this is the important
-        // value. Temporary bad ping measurements are of no interest.
-        // Color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
-        if ( iMinPingTime <= 25 )
-//        if ( iMinPingTime <= 80 )
-        {
-            pCurListViewItem->setForeground ( 1, Qt::green );
-            pCurListViewItem->setText ( 2, "" );
-            pCurListViewItem->setText ( 2, "😃" );
-        }
-        else
-        {
-            if ( iMinPingTime <= 50 )
-//            if ( iMinPingTime <= 100 )
-            {
-                pCurListViewItem->setForeground ( 1, Qt::yellow );
-                pCurListViewItem->setText ( 2, "😑" );
-            }
-            else
-            {
-                pCurListViewItem->setForeground ( 1, Qt::red );
-                pCurListViewItem->setText ( 2, "😡" );
-            }
-        }
+//         // Only show minimum ping time in the list since this is the important
+//         // value. Temporary bad ping measurements are of no interest.
+//         // Color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
+//         if ( iMinPingTime <= 25 )
+// //        if ( iMinPingTime <= 80 )
+//         {
+//             pCurListViewItem->setForeground ( 1, Qt::green );
+//             pCurListViewItem->setText ( 2, "" );
+//             pCurListViewItem->setText ( 2, "😃" );
+//         }
+//         else
+//         {
+//             if ( iMinPingTime <= 50 )
+// //            if ( iMinPingTime <= 100 )
+//             {
+//                 pCurListViewItem->setForeground ( 1, Qt::yellow );
+//                 pCurListViewItem->setText ( 2, "😑" );
+//             }
+//             else
+//             {
+//                 pCurListViewItem->setForeground ( 1, Qt::red );
+//                 pCurListViewItem->setText ( 2, "😡" );
+//             }
+//         }
 
-        // update ping text, take special care if ping time exceeds a
-        // certain value
-        if ( iMinPingTime > 500 )
-        {
-            pCurListViewItem->setText ( 1, ">500" );
-            pCurListViewItem->setText ( 2, "🤬" );
-        }
-        else
-        {
-            // prepend spaces so that we can sort correctly (fieldWidth of
-            // 4 is sufficient since the maximum width is ">500") (#201)
-            pCurListViewItem->setText ( 1, QString ( "%1" ).arg ( iMinPingTime, 4, 10, QLatin1Char ( ' ' ) ) );
-        }
+//         // update ping text, take special care if ping time exceeds a
+//         // certain value
+//         if ( iMinPingTime > 500 )
+//         {
+//             pCurListViewItem->setText ( 1, ">500" );
+//             pCurListViewItem->setText ( 2, "🤬" );
+//         }
+//         else
+//         {
+//             // prepend spaces so that we can sort correctly (fieldWidth of
+//             // 4 is sufficient since the maximum width is ">500") (#201)
+//             pCurListViewItem->setText ( 1, QString ( "%1" ).arg ( iMinPingTime, 4, 10, QLatin1Char ( ' ' ) ) );
+//         }
 
-//        // update number of clients text
-//        if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
-//        {
-//            // special case: reduced server list
-//            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
-//        }
-//        else if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
-//        {
-//            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
-//        }
-//        else
-//        {
-//            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
-//        }
+// //        // update number of clients text
+// //        if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
+// //        {
+// //            // special case: reduced server list
+// //            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
+// //        }
+// //        else if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
+// //        {
+// //            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
+// //        }
+// //        else
+// //        {
+// //            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
+// //        }
 
-        // check if the number of child list items matches the number of
-        // connected clients, if not then request the client names
-        if ( iNumClients != pCurListViewItem->childCount() )
-        {
-            emit CreateCLServerListReqConnClientsListMes ( InetAddr );
-        }
+//         // check if the number of child list items matches the number of
+//         // connected clients, if not then request the client names
+//         if ( iNumClients != pCurListViewItem->childCount() )
+//         {
+//             emit CreateCLServerListReqConnClientsListMes ( InetAddr );
+//         }
 
-        // this is the first time a ping time was received, set item to visible
-        // UNLESS it is Directory Server, in which case keep it hidden
-        if ( bIsFirstPing && !pCurListViewItem->text ( 0 ).contains("Directory"))
-        {
-            pCurListViewItem->setHidden ( false );
-        }
+//         // this is the first time a ping time was received, set item to visible
+//         // UNLESS it is Directory Server, in which case keep it hidden
+//         if ( bIsFirstPing && !pCurListViewItem->text ( 0 ).contains("Directory"))
+//         {
+//             pCurListViewItem->setHidden ( false );
+//         }
 
-        // Update sorting. Note that the sorting must be the last action for the
-        // current item since the topLevelItem(iIdx) is then no longer valid.
-        // To avoid that the list is sorted shortly before a double click (which
-        // could lead to connecting an incorrect server) the sorting is disabled
-        // as long as the mouse is over the list (but it is not disabled for the
-        // initial timer of about 2s, see TimerInitialSort) (#293).
-//        if ( bDoSorting && !bShowCompleteRegList &&
-//             ( TimerInitialSort.isActive() || !lvwServers->underMouse() ) ) // do not sort if "show all servers"
-//        {
-//            lvwServers->sortByColumn ( 2, Qt::AscendingOrder );
-//        }
+//         // Update sorting. Note that the sorting must be the last action for the
+//         // current item since the topLevelItem(iIdx) is then no longer valid.
+//         // To avoid that the list is sorted shortly before a double click (which
+//         // could lead to connecting an incorrect server) the sorting is disabled
+//         // as long as the mouse is over the list (but it is not disabled for the
+//         // initial timer of about 2s, see TimerInitialSort) (#293).
+// //        if ( bDoSorting && !bShowCompleteRegList &&
+// //             ( TimerInitialSort.isActive() || !lvwServers->underMouse() ) ) // do not sort if "show all servers"
+// //        {
+// //            lvwServers->sortByColumn ( 2, Qt::AscendingOrder );
+// //        }
 
-//        if ( bDoSorting && TimerInitialSort.isActive() ) // do not sort if "show all servers"
-//        {
-//            lvwServers->sortByColumn ( 1, Qt::AscendingOrder );
-//        }
-        lvwServers->sortByColumn ( 1, Qt::AscendingOrder );
+// //        if ( bDoSorting && TimerInitialSort.isActive() ) // do not sort if "show all servers"
+// //        {
+// //            lvwServers->sortByColumn ( 1, Qt::AscendingOrder );
+// //        }
+//         lvwServers->sortByColumn ( 1, Qt::AscendingOrder );
 
-    }
+//     }
 
-    // if no server item has children, do not show decoration
-    bool      bAnyListItemHasChilds = false;
-    const int iServerListLen        = lvwServers->topLevelItemCount();
+//     // if no server item has children, do not show decoration
+//     bool      bAnyListItemHasChilds = false;
+//     const int iServerListLen        = lvwServers->topLevelItemCount();
 
-    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-    {
-        // check if the current list item has children
-        if ( lvwServers->topLevelItem ( iIdx )->childCount() > 0 )
-        {
-            bAnyListItemHasChilds = true;
-        }
-    }
+//     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+//     {
+//         // check if the current list item has children
+//         if ( lvwServers->topLevelItem ( iIdx )->childCount() > 0 )
+//         {
+//             bAnyListItemHasChilds = true;
+//         }
+//     }
 
-    if ( !bAnyListItemHasChilds )
-    {
-        lvwServers->setRootIsDecorated ( false );
-    }
+//     if ( !bAnyListItemHasChilds )
+//     {
+//         lvwServers->setRootIsDecorated ( false );
+//     }
 
-    // we may have changed the Hidden state for some items, if a filter was active, we now
-    // have to update it to void lines appear which do not satisfy the filter criteria
-    UpdateListFilter();
-}
+//     // we may have changed the Hidden state for some items, if a filter was active, we now
+//     // have to update it to void lines appear which do not satisfy the filter criteria
+//     UpdateListFilter();
+// }
 
-QTreeWidgetItem* CClientDlg::FindListViewItem ( const CHostAddress& InetAddr )
-{
-    const int iServerListLen = lvwServers->topLevelItemCount();
+// QTreeWidgetItem* CClientDlg::FindListViewItem ( const CHostAddress& InetAddr )
+// {
+//     const int iServerListLen = lvwServers->topLevelItemCount();
 
-    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-    {
-        // compare the received address with the user data string of the
-        // host address by a string compare
-        if ( !lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString().compare ( InetAddr.toString() ) )
-        {
-            return lvwServers->topLevelItem ( iIdx );
-        }
-    }
+//     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+//     {
+//         // compare the received address with the user data string of the
+//         // host address by a string compare
+//         if ( !lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString().compare ( InetAddr.toString() ) )
+//         {
+//             return lvwServers->topLevelItem ( iIdx );
+//         }
+//     }
 
-    return nullptr;
-}
+//     return nullptr;
+// }
 
-QTreeWidgetItem* CClientDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
-{
-    // check if the current item is already the top item, i.e. the parent
-    // query fails and returns null
-    if ( pItem->parent() )
-    {
-        // we only have maximum one level, i.e. if we call the parent function
-        // we are at the top item
-        return pItem->parent();
-    }
-    else
-    {
-        // this item is already the top item
-        return pItem;
-    }
-}
+// QTreeWidgetItem* CClientDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
+// {
+//     // check if the current item is already the top item, i.e. the parent
+//     // query fails and returns null
+//     if ( pItem->parent() )
+//     {
+//         // we only have maximum one level, i.e. if we call the parent function
+//         // we are at the top item
+//         return pItem->parent();
+//     }
+//     else
+//     {
+//         // this item is already the top item
+//         return pItem;
+//     }
+// }
 
-void CClientDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
-{
-    // loop over all children
-    while ( pItem->childCount() > 0 )
-    {
-        // get the first child in the list
-        QTreeWidgetItem* pCurChildItem = pItem->child ( 0 );
+// void CClientDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
+// {
+//     // loop over all children
+//     while ( pItem->childCount() > 0 )
+//     {
+//         // get the first child in the list
+//         QTreeWidgetItem* pCurChildItem = pItem->child ( 0 );
 
-        // remove it from the item (note that the object is not deleted)
-        pItem->removeChild ( pCurChildItem );
+//         // remove it from the item (note that the object is not deleted)
+//         pItem->removeChild ( pCurChildItem );
 
-        // delete the object to avoid a memory leak
-        delete pCurChildItem;
-    }
-}
+//         // delete the object to avoid a memory leak
+//         delete pCurChildItem;
+//     }
+// }
 
-void CClientDlg::UpdateDirectoryServerComboBox()
-{
-    // directory type combo box
-    cbxDirectoryServer->clear();
-    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
-    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
-    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
-    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
-    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
-    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
-    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CHORAL ) );
+// void CClientDlg::UpdateDirectoryServerComboBox()
+// {
+//     // directory type combo box
+//     cbxDirectoryServer->clear();
+//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
+//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
+//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
+//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
+//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
+//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
+//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CHORAL ) );
 
-    // because custom directories are always added to the top of the vector, add the vector
-    // contents to the combobox in reverse order
-    for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
-    {
-        if ( pSettings->vstrDirectoryAddress[i] != "" )
-        {
-            // add vector index (i) to the combobox as user data
-            cbxDirectoryServer->addItem ( pSettings->vstrDirectoryAddress[i], i );
-        }
-    }
-}
+//     // because custom directories are always added to the top of the vector, add the vector
+//     // contents to the combobox in reverse order
+//     for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
+//     {
+//         if ( pSettings->vstrDirectoryAddress[i] != "" )
+//         {
+//             // add vector index (i) to the combobox as user data
+//             cbxDirectoryServer->addItem ( pSettings->vstrDirectoryAddress[i], i );
+//         }
+//     }
+// }
 
 // #if defined ( Q_OS_WINDOWS )
 // // for kdasio_builtin stuff

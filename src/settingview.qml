@@ -9,10 +9,9 @@ Item {
 
         ColumnLayout {
             Layout.fillWidth: true
-            // color: "blue"
             id: profileLayout
+
             // username
-            // <widget class="QLineEdit" name="pedtAlias">
             RowLayout {
                 Text {
                     text: "Username"
@@ -22,15 +21,12 @@ Item {
                     id: inputField
                     width: 200
                     placeholderText: "Enter alias here"
-                    text: "Default text"
-
-                    onTextChanged: {
-                        console.log("Text changed to: " + text)
-                    }
+                    text: "Enter username here"
+                    onTextChanged:       _settings.pedtAlias = text;
                 }
             }
 
-            // mixer rows
+            // mixer row count
             // <widget class="QSpinBox" name="spnMixerRows">
             RowLayout {
                 Text {
@@ -40,6 +36,7 @@ Item {
                 SpinBox {
                     id: spnMixerRows
                     value: _settings.spnMixerRows
+                    onValueChanged: _settings.spnMixerRows = value;
                 }
             }
 
@@ -60,7 +57,7 @@ Item {
                 ComboBox {
                     id:                         cbxSoundcard
                     model:                      _settings.slSndCrdDevNames
-                    displayText:                "" //FIXME - this doesn't update if device selection fails
+                    displayText:                _settings.slSndCardDev //FIXME - update in client.h|cpp - pSettings pointer migrate from clientdlg. reason: this doesn't update if device selection fails
                     onCurrentTextChanged:       _settings.slSndCrdDev = currentText;
                 }
             }
@@ -73,58 +70,51 @@ Item {
             }
 
             // Channel Mappings
-            // <widget class="QComboBox" name="cbxLInChan"/>
             RowLayout {
                 Text {
-                    text: "Input channel - Left"
+                    text: "Input channel - LEFT"
                 }
                 ComboBox {
                     id:                         cbxLInChan
-                    model:                      _settings.sndCardNumInputChannels
-                    currentIndex:               _settings.sndCardLInChannel
-                    // displayText:                _settings.sndCardLInChannel + 1
-                    onCurrentIndexChanged:      _settings.sndCardLInChannel = currentIndex
+                    model:                      _settings.sndCrdInputChannelNames
+                    displayText:                _settings.sndCardLInChannel
+                    onCurrentTextChanged:       _settings.sndCardLInChannel = currentText
                 }
             }
 
-            // <widget class="QComboBox" name="cbxRInChan"/>
             RowLayout {
                 Text {
-                    text: "Input channel - Right"
+                    text: "Input channel - RIGHT"
                 }
                 ComboBox {
                     id:                         cbxRInChan
-                    model:                      _settings.sndCardNumInputChannels
-                    currentIndex:               _settings.sndCardRInChannel
-                    // displayText:                _settings.sndCardRInChannel + 1
-                    onCurrentIndexChanged:      _settings.sndCardRInChannel = currentIndex
+                    model:                      _settings.sndCrdInputChannelNames
+                    displayText:                _settings.sndCardRInChannel
+                    onCurrentTextChanged:       _settings.sndCardRInChannel = currentText
                 }
             }
 
-
-            // <widget class="QComboBox" name="cbxLOutChan"/>
             RowLayout {
                 Text {
                     text: "Output channel - LEFT"
                 }
                 ComboBox {
                     id:                         cbxLOutChan
-                    model:                      _settings.sndCardNumOutputChannels
-                    currentIndex:               _settings.sndCardLOutChannel
-                    onCurrentIndexChanged:      _settings.sndCardLOutChannel = currentIndex
+                    model:                      _settings.sndCrdOutputChannelNames
+                    displayText:                _settings.sndCardLOutChannel
+                    onCurrentTextChanged:       _settings.sndCardLOutChannel = currentText
                 }
             }
 
-            // <widget class="QComboBox" name="cbxROutChan"/>
             RowLayout {
                 Text {
                     text: "Output channel - RIGHT"
                 }
                 ComboBox {
                     id:                         cbxROutChan
-                    model:                      _settings.sndCardNumOutputChannels
-                    currentIndex:               _settings.sndCardROutChannel
-                    onCurrentIndexChanged:      _settings.sndCardROutChannel = currentIndex
+                    model:                      _settings.sndCrdOutputChannelNames
+                    displayText:                _settings.sndCardROutChannel
+                    onCurrentTextChanged:       _settings.sndCardRoutChannel = currentText
                 }
             }
 
@@ -132,7 +122,7 @@ Item {
              // <widget class="QComboBox" name="cbxAudioChannels">
             RowLayout {
                 Text {
-                    text: "mono/stereo mode"
+                    text: "Mono/Stereo mode"
                 }
                 ComboBox {
                     id:     cbxAudioChannels
