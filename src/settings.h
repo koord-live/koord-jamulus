@@ -147,6 +147,8 @@ class CClientSettings : public CSettings
     Q_PROPERTY(int panDialLevel READ panDialLevel WRITE setPanDialLevel NOTIFY panDialLevelChanged)
     Q_PROPERTY(int uploadRate READ uploadRate NOTIFY uploadRateChanged)
     Q_PROPERTY(int sldNetBuf READ sldNetBuf WRITE setSldNetBuf NOTIFY sldNetBufChanged)
+    Q_PROPERTY(int sldNetBufMin READ sldNetBufMin CONSTANT)
+    Q_PROPERTY(int sldNetBufMax READ sldNetBufMax CONSTANT)
     Q_PROPERTY(int sldNetBufServer READ sldNetBufServer WRITE setSldNetBufServer NOTIFY sldNetBufServerChanged)
     Q_PROPERTY(int cbxAudioChannels READ cbxAudioChannels WRITE setCbxAudioChannels NOTIFY cbxAudioChannelsChanged)
     Q_PROPERTY(int cbxAudioQuality READ cbxAudioQuality WRITE setCbxAudioQuality NOTIFY cbxAudioQualityChanged)
@@ -155,6 +157,9 @@ class CClientSettings : public CSettings
     Q_PROPERTY(int spnMixerRows READ spnMixerRows WRITE setSpnMixerRows NOTIFY spnMixerRowsChanged)
     Q_PROPERTY(bool chbDetectFeedback READ chbDetectFeedback WRITE setChbDetectFeedback NOTIFY chbDetectFeedbackChanged)
     Q_PROPERTY(bool chbEnableOPUS64 READ chbEnableOPUS64 WRITE setChbEnableOPUS64 NOTIFY chbEnableOPUS64Changed)
+    Q_PROPERTY(QString sndCrdBufferDelayPreferred READ sndCrdBufferDelayPreferred NOTIFY sndCrdBufferDelayPreferredChanged)
+    Q_PROPERTY(QString sndCrdBufferDelaySafe READ sndCrdBufferDelaySafe NOTIFY sndCrdBufferDelaySafeChanged)
+    Q_PROPERTY(QString sndCrdBufferDelayDefault READ sndCrdBufferDelayDefault NOTIFY sndCrdBufferDelayDefaultChanged)
     Q_PROPERTY(bool rbtBufferDelayPreferred READ rbtBufferDelayPreferred WRITE setRbtBufferDelayPreferred NOTIFY rbtBufferDelayPreferredChanged)
     Q_PROPERTY(bool rbtBufferDelayDefault READ rbtBufferDelayDefault WRITE setRbtBufferDelayDefault NOTIFY rbtBufferDelayDefaultChanged)
     Q_PROPERTY(bool rbtBufferDelaySafe READ rbtBufferDelaySafe WRITE setRbtBufferDelaySafe NOTIFY rbtBufferDelaySafeChanged)
@@ -219,12 +224,9 @@ public:
 
         // UpdateSoundDeviceChannelSelectionFrame();
 
-
-        setCbxAudioChannels(pClient->GetAudioChannels());
-
         // FIXME - hardcoded defaults (high-quality, stereo)
-        setCbxAudioQuality(2);
-        setCbxAudioChannels(2);
+        // setCbxAudioQuality(2); // high quality
+        // setCbxAudioChannels(2); // stereo
 
         setSpnMixerRows(iNumMixerPanelRows);
 
@@ -248,6 +250,9 @@ public:
     int sldNetBufServer() const;
     void setSldNetBufServer( const int setServerBufVal );
 
+    int sldNetBufMin() const { return MIN_NET_BUF_SIZE_NUM_BL; }
+    int sldNetBufMax() const { return MAX_NET_BUF_SIZE_NUM_BL; }
+
     int cbxAudioChannels() const;
     void setCbxAudioChannels( const int chanIdx );
 
@@ -268,6 +273,10 @@ public:
 
     bool chbEnableOPUS64();
     void setChbEnableOPUS64( bool enableOPUS64 );
+
+    QString sndCrdBufferDelayPreferred();
+    QString sndCrdBufferDelaySafe();
+    QString sndCrdBufferDelayDefault();
 
     bool rbtBufferDelayPreferred();
     void setRbtBufferDelayPreferred( bool enableBufDelPref );
@@ -308,6 +317,7 @@ public:
     // void setUploadRate();
 
     // void UpdateDisplay(); // don't need this?
+    void updateSettings();
 
     // DO THIS LATER, A BIT MORE INVOLVED
     // void UpdateSoundDeviceChannelSelectionFrame();
@@ -315,8 +325,9 @@ public:
     // void SetEnableFeedbackDetection ( bool enable );
     // endof TODO
 
+    QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
-    QString genSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
+    // QString genSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
 
     void LoadFaderSettings ( const QString& strCurFileName );
@@ -439,6 +450,9 @@ signals:
     void rbtBufferDelayPreferredChanged();
     void rbtBufferDelayDefaultChanged();
     void rbtBufferDelaySafeChanged();
+    void sndCrdBufferDelayPreferredChanged();
+    void sndCrdBufferDelaySafeChanged();
+    void sndCrdBufferDelayDefaultChanged();
     void chbAutoJitBufChanged();
     void slSndCrdDevChanged();
     void slSndCrdDevNamesChanged();

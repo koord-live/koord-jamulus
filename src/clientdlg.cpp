@@ -236,6 +236,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // MeterStyle init
     SetMeterStyle ( pClient->GetMeterStyle() );
 
+    // set up settings
+    // pSettings->setCbxAudioQuality(2); // high default
+    emit pSettings->updateSettings();
+
     // set the settings pointer to the mixer board (must be done early)
     MainMixerBoard->SetSettingsPointer ( pSettings );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );

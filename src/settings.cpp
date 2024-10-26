@@ -211,6 +211,25 @@ int CClientSettings::uploadRate() const
 
 }
 
+void CClientSettings::updateSettings()
+{
+    emit slSndCrdDevChanged();
+
+    // as the soundcard has changed, we need to update all the dependent stuff too
+    emit sndCrdInputChannelNamesChanged();
+    emit sndCardLInChannelChanged();
+    emit sndCardRInChannelChanged();
+
+    emit sndCrdOutputChannelNamesChanged();
+    emit sndCardLOutChannelChanged();
+    emit sndCardROutChannelChanged();
+
+    //
+    emit cbxAudioQualityChanged();
+    emit cbxAudioChannelsChanged();
+
+}
+
 // void CClientSettings::setUploadRate()
 // {
 //     // // update upstream rate information label
@@ -870,14 +889,13 @@ void CClientSettings::UpdateJitterBufferFrame()
 //     lblNetBufServerLabel->setEnabled ( !bIsAutoSockBufSize );
 }
 
-
-QString CClientSettings::genSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText )
-{
-    // use two times the buffer delay for the entire delay since
-    // we have input and output
-    return QString().setNum ( static_cast<double> ( iFrameSize ) * 2 * 1000 / SYSTEM_SAMPLE_RATE_HZ, 'f', 2 ) + " ms (" +
-           QString().setNum ( iFrameSize ) + strAddText + ")";
-}
+// QString CClientSettings::genSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText )
+// {
+//     // use two times the buffer delay for the entire delay since
+//     // we have input and output
+//     return QString().setNum ( static_cast<double> ( iFrameSize ) * 2 * 1000 / SYSTEM_SAMPLE_RATE_HZ, 'f', 2 ) + " ms (" +
+//            QString().setNum ( iFrameSize ) + strAddText + ")";
+// }
 
 int CClientSettings::edtNewClientLevel() const
 {
@@ -938,6 +956,7 @@ void CClientSettings::setCbxAudioChannels( const int iChanIdx )
     pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iChanIdx ) );
     emit cbxAudioChannelsChanged();
 
+    qInfo() << "Just set setCbxAudioChannels to: " << iChanIdx;
     // emit AudioChannelsChanged();
     // UpdateDisplay(); // upload rate will be changed
 }
@@ -952,6 +971,7 @@ void CClientSettings::setCbxAudioQuality( const int qualityIdx )
     pClient->SetAudioQuality ( static_cast<EAudioQuality> ( qualityIdx ) );
     emit cbxAudioQualityChanged();
 
+    qInfo() << "Just set setCbxAudioQuality to: " << qualityIdx;
     // UpdateDisplay(); // upload rate will be changed
 
 }
@@ -1031,7 +1051,6 @@ void CClientSettings::setChbEnableOPUS64( bool enableOPUS64 )
     emit chbEnableOPUS64Changed();
 }
 
-
 bool CClientSettings::rbtBufferDelayPreferred()
 {
     // get current actual buffer size value
@@ -1048,8 +1067,6 @@ void CClientSettings::setRbtBufferDelayPreferred( bool enableBufDelPref )
 
     emit rbtBufferDelayPreferredChanged();
 }
-
-
 
 bool CClientSettings::rbtBufferDelayDefault()
 {
@@ -1068,7 +1085,6 @@ void CClientSettings::setRbtBufferDelayDefault( bool enableBufDelDef )
     emit rbtBufferDelayDefaultChanged();
 }
 
-
 bool CClientSettings::rbtBufferDelaySafe()
 {
     // get current actual buffer size value
@@ -1086,6 +1102,29 @@ void CClientSettings::setRbtBufferDelaySafe( bool enableBufDelSafe )
     emit rbtBufferDelaySafeChanged();
 }
 
+QString CClientSettings::sndCrdBufferDelayPreferred()
+{
+    return GenSndCrdBufferDelayString( FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES );
+}
+
+QString CClientSettings::sndCrdBufferDelaySafe()
+{
+    return GenSndCrdBufferDelayString( FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES );
+}
+
+QString CClientSettings::sndCrdBufferDelayDefault()
+{
+    return GenSndCrdBufferDelayString( FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES );
+}
+
+QString CClientSettings::GenSndCrdBufferDelayString( const int iFrameSize, const QString strAddText )
+{
+    // use two times the buffer delay for the entire delay since
+    // we have input and output
+    return QString().setNum ( static_cast<double> ( iFrameSize ) * 2 * 1000 / SYSTEM_SAMPLE_RATE_HZ, 'f', 2 ) + " ms (" +
+           QString().setNum ( iFrameSize ) + strAddText + ")";
+
+}
 
 bool CClientSettings::chbAutoJitBuf()
 {
@@ -1096,6 +1135,7 @@ void CClientSettings::setChbAutoJitBuf( bool autoJit )
 {
     pClient->SetDoAutoSockBufSize ( autoJit );
     // UpdateJitterBufferFrame();
+    qInfo() << "jitter buffer auto val changed to: " << autoJit;
     emit chbAutoJitBufChanged();
 }
 
@@ -1255,211 +1295,3 @@ void CClientSettings::setSndCardROutChannel( QString chanName )
 
 
 #endif
-
-// Server settings -------------------------------------------------------------
-// that this gets called means we are not headless
-// void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )
-// {
-//     int  iValue;
-//     bool bValue;
-
-//     // window position of the main window
-//     vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
-
-//     // name/city/country
-//     if ( !CommandLineOptions.contains ( "--serverinfo" ) )
-//     {
-//         // name
-//         pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
-
-//         // city
-//         pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ) );
-
-//         // country
-//         if ( GetNumericIniSet ( IniXMLDocument, "server", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
-//         {
-//             pServer->SetServerCountry ( CLocale::WireFormatCountryCodeToQtCountry ( iValue ) );
-//         }
-//     }
-
-//     // norecord flag
-//     if ( !CommandLineOptions.contains ( "--norecord" ) )
-//     {
-//         if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
-//         {
-//             pServer->SetEnableRecording ( !bValue );
-//         }
-//     }
-
-//     // welcome message
-//     if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
-//     {
-//         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
-//     }
-
-//     // language
-//     strLanguage =
-//         GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
-
-//     // base recording directory
-//     if ( !CommandLineOptions.contains ( "--recording" ) )
-//     {
-//         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
-//     }
-
-//     // to avoid multiple registrations, must do this after collecting serverinfo
-//     if ( !CommandLineOptions.contains ( "--centralserver" ) &&   // for backwards compatibility
-//          !CommandLineOptions.contains ( "--directoryserver" ) && // also for backwards compatibility
-//          !CommandLineOptions.contains ( "--directoryaddress" ) )
-//     {
-//         // custom directory
-//         // CServerListManager defaults to command line argument (or "" if not passed)
-//         // Server GUI defaults to ""
-//         QString directoryAddress = "";
-
-//         //### TODO: BEGIN ###//
-//         // compatibility to old version < 3.8.2
-//         directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", directoryAddress );
-//         //### TODO: END ###//
-
-//         directoryAddress = GetIniSetting ( IniXMLDocument, "server", "directoryaddress", directoryAddress );
-
-//         pServer->SetDirectoryAddress ( directoryAddress );
-//     }
-
-//     // directory type
-//     // CServerListManager defaults to AT_NONE
-//     // Because type could be AT_CUSTOM, it has to be set after the address to avoid multiple registrations
-//     EDirectoryType directoryType = AT_NONE;
-
-//     // if a command line Directory address is set, set the Directory Type (genre) to AT_CUSTOM so it's used
-//     if ( CommandLineOptions.contains ( "--centralserver" ) || CommandLineOptions.contains ( "--directoryserver" ) ||
-//          CommandLineOptions.contains ( "--directoryaddress" ) )
-//     {
-//         directoryType = AT_CUSTOM;
-//     }
-//     else
-//     {
-//         //### TODO: BEGIN ###//
-//         // compatibility to old version < 3.4.7
-//         if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
-//         {
-//             directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
-//         }
-//         else
-//         {
-//             //### TODO: END ###//
-
-//             // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
-
-//             //### TODO: BEGIN ###//
-//             // compatibility to old version < 3.8.2
-//             if ( GetNumericIniSet ( IniXMLDocument,
-//                                     "server",
-//                                     "centservaddrtype",
-//                                     static_cast<int> ( AT_DEFAULT ),
-//                                     static_cast<int> ( AT_CUSTOM ),
-//                                     iValue ) )
-//             {
-//                 directoryType = static_cast<EDirectoryType> ( iValue );
-//             }
-//             //### TODO: END ###//
-
-//             else
-//             {
-//                 if ( GetNumericIniSet ( IniXMLDocument,
-//                                         "server",
-//                                         "directorytype",
-//                                         static_cast<int> ( AT_NONE ),
-//                                         static_cast<int> ( AT_CUSTOM ),
-//                                         iValue ) )
-//                 {
-//                     directoryType = static_cast<EDirectoryType> ( iValue );
-//                 }
-//             }
-//         }
-
-//         //### TODO: BEGIN ###//
-//         // compatibility to old version < 3.9.0
-//         // override type to AT_NONE if servlistenabled exists and is false
-//         if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
-//         {
-//             directoryType = AT_NONE;
-//         }
-//         //### TODO: END ###//
-//     }
-
-//     pServer->SetDirectoryType ( directoryType );
-
-//     // server list persistence file name
-//     if ( !CommandLineOptions.contains ( "--directoryfile" ) )
-//     {
-//         pServer->SetServerListFileName ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "directoryfile_base64" ) ) );
-//     }
-
-//     // start minimized on OS start
-//     if ( !CommandLineOptions.contains ( "--startminimized" ) )
-//     {
-//         if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
-//         {
-//             pServer->SetAutoRunMinimized ( bValue );
-//         }
-//     }
-
-//     // delay panning
-//     if ( !CommandLineOptions.contains ( "--delaypan" ) )
-//     {
-//         if ( GetFlagIniSet ( IniXMLDocument, "server", "delaypan", bValue ) )
-//         {
-//             pServer->SetEnableDelayPanning ( bValue );
-//         }
-//     }
-// }
-
-// void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit )
-// {
-//     // window position of the main window
-//     PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
-
-//     // directory type
-//     SetNumericIniSet ( IniXMLDocument, "server", "directorytype", static_cast<int> ( pServer->GetDirectoryType() ) );
-
-//     // name
-//     PutIniSetting ( IniXMLDocument, "server", "name", pServer->GetServerName() );
-
-//     // city
-//     PutIniSetting ( IniXMLDocument, "server", "city", pServer->GetServerCity() );
-
-//     // country
-//     SetNumericIniSet ( IniXMLDocument, "server", "country", CLocale::QtCountryToWireFormatCountryCode ( pServer->GetServerCountry() ) );
-
-//     // norecord flag
-//     SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
-
-//     // welcome message
-//     PutIniSetting ( IniXMLDocument, "server", "welcome", ToBase64 ( pServer->GetWelcomeMessage() ) );
-
-//     // language
-//     PutIniSetting ( IniXMLDocument, "server", "language", strLanguage );
-
-//     // base recording directory
-//     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64", ToBase64 ( pServer->GetRecordingDir() ) );
-
-//     // custom directory
-//     PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
-
-//     // server list persistence file name
-//     PutIniSetting ( IniXMLDocument, "server", "directoryfile_base64", ToBase64 ( pServer->GetServerListFileName() ) );
-
-//     // start minimized on OS start
-//     SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );
-
-//     // delay panning
-//     SetFlagIniSet ( IniXMLDocument, "server", "delaypan", pServer->IsDelayPanningEnabled() );
-
-//     // we MUST do this after saving the value and Save() is called OnAboutToQuit()
-//     if ( isAboutToQuit )
-//     {
-//         pServer->SetDirectoryType ( AT_NONE );
-//     }
-// }

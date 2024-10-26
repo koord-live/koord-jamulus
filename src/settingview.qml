@@ -132,7 +132,7 @@ Item {
                         ListElement { text: "Mono-in/Stereo-out" }
                         ListElement { text: "Stereo" }
                     }
-                    // value: _settings.cbxAudioChannels
+                    displayText: textAt(_settings.cbxAudioChannels)
                     onCurrentIndexChanged: _settings.cbxAudioChannels = currentIndex
 
                 }
@@ -152,7 +152,8 @@ Item {
                         ListElement { text: "Normal" }
                         ListElement { text: "High" }
                     }
-                    onCurrentIndexChanged: _settings.cbxAudioQuality = currentIndex
+                    displayText: textAt(_settings.cbxAudioQuality) // this ensures correct value shows at startup
+                    onActivated: _settings.cbxAudioQuality = currentIndex
                 }
             }
 
@@ -160,12 +161,13 @@ Item {
             // <widget class="QDial" name="newInputLevelDial">
             RowLayout {
                 Text {
-                    text: "New client level"
+                    text: "New client level: " + _settings.edtNewClientLevel
                 }
                 Dial {
                     id: newInputLevelDial
                     from: 0
                     to: 100
+
                     value: _settings.edtNewClientLevel
                     onMoved: _settings.edtNewClientLevel = value
                     // onValueChanged: _settings.edtNewClientLevel = value
@@ -177,7 +179,7 @@ Item {
                 // to: 100 # AUD_FADER_IN_MAX
             RowLayout {
                 Text {
-                    text: "Pan"
+                    text: "Pan: " + _settings.panDialLevel
                 }
                 Dial {
                     id: panDial
@@ -213,18 +215,21 @@ Item {
                 ColumnLayout {
                     RadioButton {
                         id: rbtBufferDelayPreferred
-                        text:  "2" //  _settings.getSndCrdBufferDelayString(FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES)
+                        text:  _settings.sndCrdBufferDelayPreferred
                         checked: _settings.rbtBufferDelayPreferred
+                        onClicked: _settings.rbtBufferDelayPreferred = true
                     }
                     RadioButton {
                         id: rbtBufferDelayDefault
-                        text:  "20" // _settings.getSndCrdBufferDelayString(FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES)
+                        text:  _settings.sndCrdBufferDelayDefault
                         checked: _settings.rbtBufferDelayDefault
+                        onClicked: _settings.rbtBufferDelayDefault = true
                     }
                     RadioButton {
                         id: rbtBufferDelaySafe
-                        text:  "200" //  _settings.getSndCrdBufferDelayString(FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES)
+                        text:  _settings.sndCrdBufferDelaySafe
                         checked: _settings.rbtBufferDelaySafe
+                        onClicked: _settings.rbtBufferDelaySafe = true
                     }
                 }
             }
@@ -249,7 +254,8 @@ Item {
                 }
                 CheckBox {
                     id:     chbAutoJitBuf
-                    checked: true
+                    checked: _settings.chbAutoJitBuf
+                    onCheckStateChanged: _settings.chbAutoJitBuf = checkState
                     text:   "Auto"
                 }
             }
@@ -261,11 +267,11 @@ Item {
                 }
                 Slider {
                     id:     sldNetBuf
-                    from:   20 // MIN_NET_BUF_SIZE_NUM_BL
-                    to:     100 //MAX_NET_BUF_SIZE_NUM_BL
+                    from:   _settings.sldNetBufMin // 20 // MIN_NET_BUF_SIZE_NUM_BL
+                    to:     _settings.sldNetBufMax // 100 //MAX_NET_BUF_SIZE_NUM_BL
                     value:  _settings.sldNetBuf
                     onMoved:  _settings.sldNetBuf = value
-                    enabled: !chbAutoJitBuf
+                    enabled: !_settings.chbAutoJitBuf
                 }
             }
 
@@ -280,7 +286,7 @@ Item {
                     to:     100 // MAX_NET_BUF_SIZE_NUM_BL
                     value:  _settings.sldNetBufServer
                     onMoved:  _settings.sldNetBufServer = value
-                    enabled: !chbAutoJitBuf
+                    enabled: _settings.chbAutoJitBuf === false
                 }
             }
 
@@ -293,6 +299,7 @@ Item {
                 CheckBox {
                     id: chbEnableOPUS64
                     checked: _settings.chbEnableOPUS64
+                    onCheckStateChanged: _settings.chbEnableOPUS64 = checkState
                 }
             }
 
