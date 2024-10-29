@@ -470,42 +470,42 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetEnableOPUS64 ( bValue );
     }
 
-    // GUI design
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
-    {
-        pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
-    }
+    // // GUI design
+    // if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
+    // {
+    //     pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
+    // }
 
-    // MeterStyle
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_LED_ROUND_BIG */, iValue ) )
-    {
-        pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
-    }
-    else
-    {
-        // if MeterStyle is not found in the ini, set it based on the GUI design
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
-        {
-            switch ( iValue )
-            {
-            case GD_STANDARD:
-                pClient->SetMeterStyle ( MT_BAR_WIDE );
-                break;
+    // // MeterStyle
+    // if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_LED_ROUND_BIG */, iValue ) )
+    // {
+    //     pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
+    // }
+    // else
+    // {
+    //     // if MeterStyle is not found in the ini, set it based on the GUI design
+    //     if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
+    //     {
+    //         switch ( iValue )
+    //         {
+    //         case GD_STANDARD:
+    //             pClient->SetMeterStyle ( MT_BAR_WIDE );
+    //             break;
 
-            case GD_ORIGINAL:
-                pClient->SetMeterStyle ( MT_LED_STRIPE );
-                break;
+    //         case GD_ORIGINAL:
+    //             pClient->SetMeterStyle ( MT_LED_STRIPE );
+    //             break;
 
-            case GD_SLIMFADER:
-                pClient->SetMeterStyle ( MT_BAR_NARROW );
-                break;
+    //         case GD_SLIMFADER:
+    //             pClient->SetMeterStyle ( MT_BAR_NARROW );
+    //             break;
 
-            default:
-                pClient->SetMeterStyle ( MT_LED_STRIPE );
-                break;
-            }
-        }
-    }
+    //         default:
+    //             pClient->SetMeterStyle ( MT_LED_STRIPE );
+    //             break;
+    //         }
+    //     }
+    // }
 
     // audio channels
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iValue ) )
@@ -776,11 +776,11 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // enable OPUS64 setting
     SetFlagIniSet ( IniXMLDocument, "client", "enableopussmall", pClient->GetEnableOPUS64() );
 
-    // GUI design
-    SetNumericIniSet ( IniXMLDocument, "client", "guidesign", static_cast<int> ( pClient->GetGUIDesign() ) );
+    // // GUI design
+    // SetNumericIniSet ( IniXMLDocument, "client", "guidesign", static_cast<int> ( pClient->GetGUIDesign() ) );
 
-    // MeterStyle
-    SetNumericIniSet ( IniXMLDocument, "client", "meterstyle", static_cast<int> ( pClient->GetMeterStyle() ) );
+    // // MeterStyle
+    // SetNumericIniSet ( IniXMLDocument, "client", "meterstyle", static_cast<int> ( pClient->GetMeterStyle() ) );
 
     // audio channels
     SetNumericIniSet ( IniXMLDocument, "client", "audiochannels", static_cast<int> ( pClient->GetAudioChannels() ) );
@@ -913,6 +913,13 @@ int CClientSettings::panDialLevel() const
     return pClient->GetAudioInFader();
 }
 
+void CClientSettings::setPanDialLevel( const int dialLevel)
+{
+    pClient->SetAudioInFader ( dialLevel );
+    // UpdateAudioFaderSlider();
+    emit panDialLevelChanged();
+}
+
 int CClientSettings::sldNetBuf() const
 {
     return pClient->GetSockBufNumFrames();
@@ -936,12 +943,6 @@ void CClientSettings::setSldNetBufServer( const int setServerBufVal )
     emit sldNetBufServerChanged();
 }
 
-void CClientSettings::setPanDialLevel( const int dialLevel)
-{
-    pClient->SetAudioInFader ( dialLevel );
-    // UpdateAudioFaderSlider();
-    emit panDialLevelChanged();
-}
 
 int CClientSettings::cbxAudioChannels() const
 {
@@ -1064,7 +1065,7 @@ bool CClientSettings::rbtBufferDelayPreferred()
 void CClientSettings::setRbtBufferDelayPreferred( bool enableBufDelPref )
 {
     pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED );
-
+    qInfo() << "SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ";
     emit rbtBufferDelayPreferredChanged();
 }
 
@@ -1081,7 +1082,7 @@ bool CClientSettings::rbtBufferDelayDefault()
 void CClientSettings::setRbtBufferDelayDefault( bool enableBufDelDef )
 {
     pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT );
-
+    qInfo() << "SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT )";
     emit rbtBufferDelayDefaultChanged();
 }
 
@@ -1098,7 +1099,7 @@ bool CClientSettings::rbtBufferDelaySafe()
 void CClientSettings::setRbtBufferDelaySafe( bool enableBufDelSafe )
 {
     pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE );
-
+    qInfo() << "SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE )";
     emit rbtBufferDelaySafeChanged();
 }
 
@@ -1133,6 +1134,9 @@ bool CClientSettings::chbAutoJitBuf()
 
 void CClientSettings::setChbAutoJitBuf( bool autoJit )
 {
+    if ( pClient->GetDoAutoSockBufSize() == autoJit )
+        return;
+
     pClient->SetDoAutoSockBufSize ( autoJit );
     // UpdateJitterBufferFrame();
     qInfo() << "jitter buffer auto val changed to: " << autoJit;

@@ -191,6 +191,50 @@ CClient::CClient ( const quint16  iPortNumber,
         SetServerAddr ( strConnOnStartupAddress );
         Start();
     }
+
+    // // NOW we do what WAS done (or equivalent) in clientdlg constructor...
+    // emit pSettings->updateSettings();
+
+    // MainMixerBoard->SetSettingsPointer ( pSettings );
+
+    // MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
+
+    // MainMixerBoard->SetMIDICtrlUsed ( !strMIDISetup.isEmpty() );
+
+    // MainMixerBoard->HideAll();
+
+    // // init input level meter bars
+
+    // // init status LEDs
+
+    // // init input boost
+
+    // // set window title (with no clients connected -> "0")
+
+    // // setup timers
+    // TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
+    // TimerDetectFeedback.setSingleShot ( true );
+
+    // // Connect on startup ------------------------------------------------------
+    // if ( !strConnOnStartupAddress.isEmpty() )
+    // {
+    //     // initiate connection (always show the address in the mixer board
+    //     // (no alias))
+    //     Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+    // }
+
+    // // restoreGeometry - maybe
+
+    // // All Connections
+
+    // // Post Connections init
+    // // start timer for status bar
+    // TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
+
+    // if ( bMuteStream )
+    // {
+    //     chbLocalMute->setCheckState ( Qt::Checked );
+    // }
 }
 
 CClient::~CClient()

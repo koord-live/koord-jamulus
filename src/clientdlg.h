@@ -105,8 +105,8 @@ public:
     void SetSelectedAddress( const QString nu_addr ) { strSelectedAddress = nu_addr; }
 
 protected:
-    void SetGUIDesign ( const EGUIDesign eNewDesign );
-    void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
+    // void SetGUIDesign ( const EGUIDesign eNewDesign );
+    // void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void SetMyWindowTitle ( const int iNumClients );
     void ShowJoinWidget();
     void HideJoinWidget();
@@ -114,7 +114,7 @@ protected:
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
-    void UpdateRevSelection();
+    // void UpdateRevSelection();
     void CompleteConnection();
     void Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel );
     void Disconnect();
@@ -148,6 +148,7 @@ protected:
     QRegularExpression matchState = QRegularExpression(" [A-Z][A-Z]$" );
 
     QQuickView*     settingsView;
+    QQuickView*     mainView;
     QNetworkAccessManager*   qNam;
     QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> endpoint_reply;
 
@@ -165,7 +166,6 @@ protected:
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
     // virtual void showEvent ( QShowEvent* );
 //    CClient*         pClient;
-//    CClientSettings* pSettings;
 //    QTimer           TimerStatus;
     QButtonGroup     SndCrdBufferDelayButtonGroup;
 
@@ -179,9 +179,7 @@ protected:
     void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress );
 //    void             UpdateDirectoryServerComboBox();
 //    CClientSettings* pSettings;
-    QTimer       RegionTimerPing;
     QTimer       TimerReRequestServList;
-    QTimer       TimerInitialSort;
     CHostAddress haDirectoryAddress;
     QString      strSelectedServerName;
     bool         bShowCompleteRegList = true;
@@ -293,10 +291,10 @@ public slots:
     void GetKoordAddress();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
-    void OnMeterStyleChanged();
+    // void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
-    void OnAudioChannelsChanged() { UpdateRevSelection(); }
+    // void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 
     // updates
@@ -305,40 +303,7 @@ public slots:
 
     void accept() { close(); } // introduced by pljones
 
-    // regionchecker stuff
-//    void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    // void OnServerAddrEditTextChanged ( const QString& );
-    // void OnDirectoryServerChanged ( int iTypeIdx );
-//    void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
-//    void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
-    // void OnCustomDirectoriesChanged();
-//    void OnConnectClicked();
-    // void OnRegionTimerPing();
-    // void OnTimerReRequestServList();
-
     void OnConnectFromURLHandler(const QString& connect_url);
-//    void setDefaultSingleUserMode(const QString& value);
-
-// #if defined( Q_OS_WINDOWS )
-//     // for built-in ASIO
-//     void kdasio_setup();
-//     void setKdasio_builtinDefaults();
-//         //FIXME make these private slots ??
-//     void bufferSizeChanged(int idx);
-//     void bufferSizeDisplayChange(int idx);
-//     void setOperationMode();
-//     void sharedModeSet();
-//     void exclusiveModeSet();
-//     void writeTomlFile();
-//     void inputDeviceChanged(int idx);
-//     void outputDeviceChanged(int idx);
-//     void setValuesFromToml(std::ifstream *ifs, toml::ParseResult *pr);
-// //    void inputAudioSettClicked();
-// //    void outputAudioSettClicked();
-//     void openWinCtrlPanel();
-//     void updateInputsList();
-//     void updateOutputsList();
-// #endif
 
 signals:
     // void SendTabChange ( int iTabIdx );

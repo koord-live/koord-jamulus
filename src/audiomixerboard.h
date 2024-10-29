@@ -63,8 +63,8 @@ public:
     bool    IsSolo() { return pcbSolo->isChecked(); }
     bool    IsMute() { return pcbMute->isChecked(); }
     int     GetGroupID() { return iGroupID; }
-    void    SetGUIDesign ( const EGUIDesign eNewDesign );
-    void    SetMeterStyle ( const EMeterStyle eNewMeterStyle );
+    // void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    // void    SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void    SetDisplayChannelLevel ( const bool eNDCL );
     bool    GetDisplayChannelLevel();
     void    SetDisplayPans ( const bool eNDP );
@@ -195,8 +195,8 @@ public:
     void    ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void    SetServerName ( const QString& strNewServerName );
     QString GetServerName() { return strServerName; }
-    void    SetGUIDesign ( const EGUIDesign eNewDesign );
-    void    SetMeterStyle ( const EMeterStyle eNewMeterStyle );
+    // void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    // void    SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void    SetDisplayPans ( const bool eNDP );
     void    SetPanIsSupported();
     void    SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );

@@ -49,20 +49,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     strSelectedAddress (""),
     AnalyzerConsole ( pNCliP, parent )
 {
-    //FIXME - possibly not necessary
-#if defined(Q_OS_ANDROID)
-    setCentralWidget(backgroundFrame);
-#endif
-
     // setup main UI
     setupUi ( this );
 
     // set up net manager for https requests
     qNam = new QNetworkAccessManager;
     qNam->setRedirectPolicy(QNetworkRequest::ManualRedirectPolicy);
-
-//    // setup timers
-    TimerInitialSort.setSingleShot ( true ); // only once after list request
 
     // transitional settings view
     settingsView = new QQuickView();
@@ -72,169 +64,25 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     settingsView->setSource(QUrl("qrc:/settingview.qml"));
     settingsTab->layout()->addWidget(settingsContainer);
 
+    // transitional main view
+    mainView = new QQuickView();
+    QQmlContext* mainContext = mainView->rootContext();
+    mainContext->setContextProperty("_main", pNSetP );
+    QWidget *mainContainer = QWidget::createWindowContainer(mainView, this);
+    mainView->setSource(QUrl("qrc:/mainview.qml"));
+    videoTab->layout()->addWidget(mainContainer);
+
     // initialize video_url with blank value to start
     strVideoUrl = "";
 
-    // Add help text to controls -----------------------------------------------
-    // input level meter
-    QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " +
-                         tr ( "This shows "
-                              "the level of the two stereo channels "
-                              "for your audio input." ) +
-                         "<br>" +
-                         tr ( "Make sure not to clip the input signal to avoid distortions of the "
-                              "audio signal." );
-
-    QString strInpLevHTT = tr ( "Check input activity here." ) +
-                           "<br>" +
-                           tr ( "Mute your own input if need be in the session mixer." ) +
-                           TOOLTIP_COM_END_TEXT;
-
-    QString strInpLevHAccText  = tr ( "Input level meter" );
-    QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
-
-    lblInputLEDMeter->setWhatsThis ( strInpLevH );
-    lblLevelMeterLeft->setWhatsThis ( strInpLevH );
-    lblLevelMeterRight->setWhatsThis ( strInpLevH );
-    lbrInputLevelL->setWhatsThis ( strInpLevH );
-    lbrInputLevelL->setAccessibleName ( strInpLevHAccText );
-    lbrInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
-    lbrInputLevelL->setToolTip ( strInpLevHTT );
-    lbrInputLevelL->setEnabled ( false );
-    lbrInputLevelR->setWhatsThis ( strInpLevH );
-    lbrInputLevelR->setAccessibleName ( strInpLevHAccText );
-    lbrInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
-    lbrInputLevelR->setToolTip ( strInpLevHTT );
-    lbrInputLevelR->setEnabled ( false );
-
-    // connect/disconnect button
-    butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
-                               tr ( "Opens a dialog where you can select a server to connect to. "
-                                    "If you are connected, pressing this button will end the session." ) );
-
-    butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
-
-    // connect/disconnect button
-    butNewStart->setWhatsThis ( "<b>" + tr ( "Start New Session Button" ) + ":</b> " +
-                               tr ( "Opens default browser at Koord.Live to start a new private session." ) );
-
-    butNewStart->setAccessibleName ( tr ( "Start New Private Session button" ) );
-
-    // reverberation level
-    QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
-                           tr ( "Reverb can be applied to one local mono audio channel or to both "
-                                "channels in stereo mode. The mono channel selection and the "
-                                "reverb level can be modified. For example, if "
-                                "a microphone signal is fed in to the right audio channel of the "
-                                "sound card and a reverb effect needs to be applied, set the "
-                                "channel selector to right and move the fader upwards until the "
-                                "desired reverb level is reached." );
-
-   lblAudioReverb->setWhatsThis ( strAudReverb );
-   sldAudioReverb->setWhatsThis ( strAudReverb );
-
-   sldAudioReverb->setAccessibleName ( tr ( "Reverb effect level setting" ) );
-
-    // reverberation channel selection
-    QString strRevChanSel = "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " +
-                            tr ( "With these radio buttons the audio input channel on which the "
-                                 "reverb effect is applied can be chosen. Either the left "
-                                 "or right input channel can be selected." );
-
-   rbtReverbSelL->setWhatsThis ( strRevChanSel );
-   rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
-   rbtReverbSelR->setWhatsThis ( strRevChanSel );
-   rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
-
-    // delay LED
-    QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " + tr ( "Shows the current audio delay status:" ) +
-                          "<ul>"
-                          "<li>"
-                          "<b>" +
-                          tr ( "Green" ) + ":</b> " +
-                          tr ( "The delay is perfect for a jam "
-                               "session." ) +
-                          "</li>"
-                          "<li>"
-                          "<b>" +
-                          tr ( "Yellow" ) + ":</b> " +
-                          tr ( "A session is still possible "
-                               "but it may be harder to play." ) +
-                          "</li>"
-                          "<li>"
-                          "<b>" +
-                          tr ( "Red" ) + ":</b> " +
-                          tr ( "The delay is too large for "
-                               "jamming." ) +
-                          "</li>"
-                          "</ul>";
-
-    lblDelay->setWhatsThis ( strLEDDelay );
-    ledDelay->setWhatsThis ( strLEDDelay );
-    ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                "you will not have much fun using %1." )
-                               .arg ( APP_NAME ) +
-                           TOOLTIP_COM_END_TEXT );
-
-    ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
-
-    // buffers LED
-    QString strLEDBuffers = "<b>" + tr ( "Local Jitter Buffer Status LED" ) + ":</b> " +
-                            tr ( "The local jitter buffer status LED shows the current audio/streaming "
-                                 "status. If the light is red, the audio stream is interrupted. "
-                                 "This is caused by one of the following problems:" ) +
-                            "<ul>"
-                            "<li>" +
-                            tr ( "The network jitter buffer is not large enough for the current "
-                                 "network/audio interface jitter." ) +
-                            "</li>"
-                            "<li>" +
-                            tr ( "The sound card's buffer delay (buffer size) is too small "
-                                 "(see Settings window)." ) +
-                            "</li>"
-                            "<li>" +
-                            tr ( "The upload or download stream rate is too high for your "
-                                 "internet bandwidth." ) +
-                            "</li>"
-                            "<li>" +
-                            tr ( "The CPU of the client or server is at 100%." ) +
-                            "</li>"
-                            "</ul>";
-
-    lblBuffers->setWhatsThis ( strLEDBuffers );
-    ledBuffers->setWhatsThis ( strLEDBuffers );
-    ledBuffers->setToolTip ( tr ( "If this LED indicator turns red, "
-                                  "the audio stream is interrupted." ) +
-                             TOOLTIP_COM_END_TEXT );
-
-    ledBuffers->setAccessibleName ( tr ( "Local Jitter Buffer status LED indicator" ) );
-
-    // current connection status details
-    QString strConnStats = "<b>" + tr ( "Current Connection Status" ) + ":</b> " +
-                           tr ( "The Ping Time is the time required for the audio "
-                                "stream to travel from the client to the server and back again. This "
-                                "delay is introduced by the network and should be about "
-                                "20-30 ms. If this delay is higher than about 50 ms, your distance to "
-                                "the server is too large or your internet connection is not "
-                                "sufficient." ) +
-                           "<br>" +
-                           tr ( "Overall Delay is calculated from the current Ping Time and the "
-                                "delay introduced by the current buffer settings." );
-
-    lblPing->setWhatsThis ( strConnStats );
-    lblPingVal->setWhatsThis ( strConnStats );
-    lblDelay->setWhatsThis ( strConnStats );
-    lblDelayVal->setWhatsThis ( strConnStats );
-    lblPingVal->setText ( "---" );
-    lblPingUnit->setText ( "" );
-    lblDelayVal->setText ( "---" );
-    lblDelayUnit->setText ( "" );
-
     // init GUI design
-    SetGUIDesign ( pClient->GetGUIDesign() );
+    // SetGUIDesign ( pClient->GetGUIDesign() );
 
     // MeterStyle init
-    SetMeterStyle ( pClient->GetMeterStyle() );
+    // SetMeterStyle ( pClient->GetMeterStyle() );
+    // temp to show leds
+    lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+    lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
 
     // set up settings
     // pSettings->setCbxAudioQuality(2); // high default
@@ -274,15 +122,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ledDelay->Reset();
 
     // init audio reverberation
-    sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
-    const int iCurAudReverb = pClient->GetReverbLevel();
-    sldAudioReverb->setValue ( iCurAudReverb );
+    // sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
+    // const int iCurAudReverb = pClient->GetReverbLevel();
+    // sldAudioReverb->setValue ( iCurAudReverb );
 
     // init input boost
     pClient->SetInputBoost ( pSettings->iInputBoost );
 
     // init reverb channel
-    UpdateRevSelection();
+    // UpdateRevSelection();
 
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
@@ -317,8 +165,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     {
         restoreGeometry ( pSettings->vecWindowPosMain );
     }
-
-
 
     // Connections -------------------------------------------------------------
     // push buttons
@@ -356,8 +202,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerPing, &QTimer::timeout, this, &CClientDlg::OnTimerPing );
 
-    // QObject::connect ( &RegionTimerPing, &QTimer::timeout, this, &CClientDlg::OnRegionTimerPing );
-
     // QObject::connect ( &TimerReRequestServList, &QTimer::timeout, this, &CClientDlg::OnTimerReRequestServList );
 
     QObject::connect ( &TimerCheckAudioDeviceOk, &QTimer::timeout, this, &CClientDlg::OnTimerCheckAudioDeviceOk );
@@ -367,9 +211,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( sldAudioReverb, &QDial::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
 
     // radio buttons
-    QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
+    // QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
 
-    QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
+    // QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
 
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
@@ -457,34 +301,34 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         chbLocalMute->setCheckState ( Qt::Checked );
     }
 
-    // query the update server version number needed for update check (note
-    // that the connection less message respond may not make it back but that
-    // is not critical since the next time Jamulus is started we have another
-    // chance and the update check is not time-critical at all)
-    CHostAddress UpdateServerHostAddress;
+    // // query the update server version number needed for update check (note
+    // // that the connection less message respond may not make it back but that
+    // // is not critical since the next time Jamulus is started we have another
+    // // chance and the update check is not time-critical at all)
+    // CHostAddress UpdateServerHostAddress;
 
     // do Koord version check - non-appstore versions only
     // check for existence of INSTALL_DIR/nonstore_donotdelete.txt
 
-    // check for existence of update-checker flagfile - to NOT use in stores (Apple in particular doesn't like)
-//    QString check_file_path = QApplication::applicationDirPath() +  "/nonstore_donotdelete.txt";
-    QFileInfo check_file(QApplication::applicationDirPath() +  "/nonstore_donotdelete.txt");
-    if (check_file.exists() && check_file.isFile()) {
-        OnCheckForUpdate();
-    }
+//     // check for existence of update-checker flagfile - to NOT use in stores (Apple in particular doesn't like)
+// //    QString check_file_path = QApplication::applicationDirPath() +  "/nonstore_donotdelete.txt";
+//     QFileInfo check_file(QApplication::applicationDirPath() +  "/nonstore_donotdelete.txt");
+//     if (check_file.exists() && check_file.isFile()) {
+//         OnCheckForUpdate();
+//     }
 
-    // Send the request to two servers for redundancy if either or both of them
-    // has a higher release version number, the reply will trigger the notification.
+    // // Send the request to two servers for redundancy if either or both of them
+    // // has a higher release version number, the reply will trigger the notification.
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
-    {
-        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
-    }
+    // if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    // {
+    //     pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+    // }
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
-    {
-        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
-    }
+    // if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    // {
+    //     pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+    // }
 }
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )
@@ -538,35 +382,35 @@ void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
     }
 }
 
-void CClientDlg::UpdateRevSelection()
-{
-    if ( pClient->GetAudioChannels() == CC_STEREO )
-    {
-        // for stereo make channel selection invisible since
-        // reverberation effect is always applied to both channels
-       rbtReverbSelL->setVisible ( false );
-       rbtReverbSelR->setVisible ( false );
-    }
-    else
-    {
-        // make radio buttons visible
-       rbtReverbSelL->setVisible ( true );
-       rbtReverbSelR->setVisible ( true );
+// void CClientDlg::UpdateRevSelection()
+// {
+//     if ( pClient->GetAudioChannels() == CC_STEREO )
+//     {
+//         // for stereo make channel selection invisible since
+//         // reverberation effect is always applied to both channels
+//        rbtReverbSelL->setVisible ( false );
+//        rbtReverbSelR->setVisible ( false );
+//     }
+//     else
+//     {
+//         // make radio buttons visible
+//        rbtReverbSelL->setVisible ( true );
+//        rbtReverbSelR->setVisible ( true );
 
-        // update value
-        if ( pClient->IsReverbOnLeftChan() )
-        {
-           rbtReverbSelL->setChecked ( true );
-        }
-        else
-        {
-           rbtReverbSelR->setChecked ( true );
-        }
-    }
+//         // update value
+//         if ( pClient->IsReverbOnLeftChan() )
+//         {
+//            rbtReverbSelL->setChecked ( true );
+//         }
+//         else
+//         {
+//            rbtReverbSelR->setChecked ( true );
+//         }
+//     }
 
-    // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
-    MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
-}
+//     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
+//     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
+// }
 
 void CClientDlg::OnJoinCancelClicked()
 {
@@ -665,7 +509,7 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
-        SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
+        // SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
     }
     else
     {
@@ -1161,8 +1005,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         defaultButtonWidget->setMaximumHeight(30);
         // hide regionchecker
         regionChecker->setVisible(false);
-        // stop region ping timer
-        RegionTimerPing.stop();
+
         TimerReRequestServList.stop();
         //FIXME - UI hacks for mixerboard space
         verticalSpacerGroupTop->changeSize(20,0);
@@ -1289,7 +1132,6 @@ void CClientDlg::Disconnect()
     butConnect->setText ( tr ( "Join" ) );
     // show RegionChecker again
     regionChecker->setVisible(true);
-    RegionTimerPing.start();
     TimerReRequestServList.start();
     //FIXME - UI hacks to make space for mixerboard
     verticalSpacerGroupTop->changeSize(20,40);
@@ -1466,122 +1308,110 @@ void CClientDlg::OnCheckForUpdate()
 //     ;
 // }
 
-void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
-{
-    // remove any styling from the mixer board - reapply after changing skin
-    MainMixerBoard->setStyleSheet ( "" );
+// void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
+// {
+//     // remove any styling from the mixer board - reapply after changing skin
+//     MainMixerBoard->setStyleSheet ( "" );
 
-    // apply GUI design to current window
-    switch ( eNewDesign )
-    {
-    case GD_ORIGINAL:
-        backgroundFrame->setStyleSheet (
-            "QFrame#backgroundFrame { border-image:  url(:/png/main/res/background.png) 0px 0px 0px 0px;"
-            "                         border-top:    0px transparent;"
-            "                         border-bottom: 0px transparent;"
-            "                         border-left:   0px transparent;"
-            "                         border-right:  0px transparent;"
-            "                         padding:       2px;"
-            "                         margin:        2px, 2px, 2px, 2px; }"
-            "QLabel {                 color:          rgb(220, 220, 220);"
-            "                         font:           Rubik; }"
-            "QRadioButton {           color:          rgb(220, 220, 220);"
-            "                         font:           bold; }"
-            "QScrollArea {            background:     transparent; }"
-            ".QWidget {               background:     transparent; }" // note: matches instances of QWidget, but not of its subclasses
-            "QGroupBox {              background:     transparent; }"
-            "QGroupBox::title {       color:          rgb(220, 220, 220); }"
-            "QCheckBox::indicator {   width:          38px;"
-            "                         height:         21px; }"
-            "QCheckBox::indicator:unchecked {"
-            "                         image:          url(:/png/main/res/general_btn_off.png); }"
-            "QCheckBox::indicator:checked {"
-            "                         image:          url(:/png/main/res/general_btn_on.png); }"
-            "QCheckBox {              color:          rgb(220, 220, 220);"
-            "                         font:           bold; }" );
+//     // // apply GUI design to current window
+//     // switch ( eNewDesign )
+//     // {
+//     // case GD_ORIGINAL:
+//     //     backgroundFrame->setStyleSheet (
+//     //         "QFrame#backgroundFrame { border-image:  url(:/png/main/res/background.png) 0px 0px 0px 0px;"
+//     //         "                         border-top:    0px transparent;"
+//     //         "                         border-bottom: 0px transparent;"
+//     //         "                         border-left:   0px transparent;"
+//     //         "                         border-right:  0px transparent;"
+//     //         "                         padding:       2px;"
+//     //         "                         margin:        2px, 2px, 2px, 2px; }"
+//     //         "QLabel {                 color:          rgb(220, 220, 220);"
+//     //         "                         font:           Rubik; }"
+//     //         "QRadioButton {           color:          rgb(220, 220, 220);"
+//     //         "                         font:           bold; }"
+//     //         "QScrollArea {            background:     transparent; }"
+//     //         ".QWidget {               background:     transparent; }" // note: matches instances of QWidget, but not of its subclasses
+//     //         "QGroupBox {              background:     transparent; }"
+//     //         "QGroupBox::title {       color:          rgb(220, 220, 220); }"
+//     //         "QCheckBox::indicator {   width:          38px;"
+//     //         "                         height:         21px; }"
+//     //         "QCheckBox::indicator:unchecked {"
+//     //         "                         image:          url(:/png/main/res/general_btn_off.png); }"
+//     //         "QCheckBox::indicator:checked {"
+//     //         "                         image:          url(:/png/main/res/general_btn_on.png); }"
+//     //         "QCheckBox {              color:          rgb(220, 220, 220);"
+//     //         "                         font:           bold; }" );
 
-#ifdef _WIN32
-       // Workaround QT-Windows problem: This should not be necessary since in the
-       // background frame the style sheet for QRadioButton was already set. But it
-       // seems that it is only applied if the style was set to default and then back
-       // to GD_ORIGINAL. This seems to be a QT related issue...
-       rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                      "font:  bold;" );
-       rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                      "font:  bold;" );
-#endif
 
-        ledBuffers->SetType ( CMultiColorLED::MT_LED );
-        ledDelay->SetType ( CMultiColorLED::MT_LED );
-        break;
+//     //     ledBuffers->SetType ( CMultiColorLED::MT_LED );
+//     //     ledDelay->SetType ( CMultiColorLED::MT_LED );
+//     //     break;
 
-    default:
-        // reset style sheet and set original parameters
-        backgroundFrame->setStyleSheet ( "" );
+//     // default:
+//     //     // reset style sheet and set original parameters
+//     //     backgroundFrame->setStyleSheet ( "" );
 
-#ifdef _WIN32
-       // Workaround QT-Windows problem: See above description
-       rbtReverbSelL->setStyleSheet ( "" );
-       rbtReverbSelR->setStyleSheet ( "" );
-#endif
+//     //     ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );
+//     //     ledDelay->SetType ( CMultiColorLED::MT_INDICATOR );
+//     //     break;
+//     // }
+//     backgroundFrame->setStyleSheet ( "" );
 
-        ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );
-        ledDelay->SetType ( CMultiColorLED::MT_INDICATOR );
-        break;
-    }
+//     ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );
+//     ledDelay->SetType ( CMultiColorLED::MT_INDICATOR );
 
-    // also apply GUI design to child GUI controls
-    MainMixerBoard->SetGUIDesign ( eNewDesign );
-}
+//     // also apply GUI design to child GUI controls
+//     MainMixerBoard->SetGUIDesign ( eNewDesign );
+// }
 
-void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
-{
-    // apply MeterStyle to current window
-    switch ( eNewMeterStyle )
-    {
-    case MT_LED_STRIPE:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-        break;
+// void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
+// {
+//     // apply MeterStyle to current window
+//     switch ( eNewMeterStyle )
+//     {
+//     case MT_LED_STRIPE:
+//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+//         break;
 
-    case MT_LED_ROUND_BIG:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        break;
+//     case MT_LED_ROUND_BIG:
+//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+//         break;
 
-    case MT_BAR_WIDE:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
+//     case MT_BAR_WIDE:
+//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+//         break;
 
-    case MT_BAR_NARROW:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
+//     case MT_BAR_NARROW:
+//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+//         break;
 
-    case MT_LED_ROUND_SMALL:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        break;
-    }
+//     case MT_LED_ROUND_SMALL:
+//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+//         break;
+//     }
 
-    // also apply MeterStyle to child GUI controls
-    MainMixerBoard->SetMeterStyle ( eNewMeterStyle );
-}
+//     // also apply MeterStyle to child GUI controls
+//     MainMixerBoard->SetMeterStyle ( eNewMeterStyle );
+// }
 
 void CClientDlg::OnRecorderStateReceived ( const ERecorderState newRecorderState )
 {
     MainMixerBoard->SetRecorderState ( newRecorderState );
-    SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
+    // SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
 }
 
 void CClientDlg::OnGUIDesignChanged()
 {
-    SetGUIDesign ( pClient->GetGUIDesign() );
-    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
+    // SetGUIDesign ( pClient->GetGUIDesign() );
+    // SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
 }
 
-void CClientDlg::OnMeterStyleChanged() { SetMeterStyle ( pClient->GetMeterStyle() ); }
+// void CClientDlg::OnMeterStyleChanged() { SetMeterStyle ( pClient->GetMeterStyle() ); }
 
 void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign )
 {
@@ -1644,91 +1474,6 @@ void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, c
 }
 
 
-// // Region Checker stuff
-// void CClientDlg::RequestServerList()
-// {
-//     // reset flags
-//     bServerListReceived        = false;
-//     bReducedServerListReceived = false;
-//     bServerListItemWasChosen   = false;
-//     bListFilterWasActive       = false;
-
-//     // clear current address and name
-// //    strSelectedAddress    = "";
-// //    strSelectedServerName = "";
-
-//     // clear server list view
-//     // lvwServers->clear();
-
-//     // update list combo box (disable events to avoid a signal)
-//     cbxDirectoryServer->blockSignals ( true );
-//     if ( pSettings->eDirectoryType == AT_CUSTOM )
-//     {
-//         // iCustomDirectoryIndex is non-zero only if eDirectoryType == AT_CUSTOM
-//         // find the combobox item that corresponds to vstrDirectoryAddress[iCustomDirectoryIndex]
-//         // (the current selected custom directory)
-//         cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
-//     }
-//     else
-//     {
-//         cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
-//     }
-//     cbxDirectoryServer->blockSignals ( false );
-
-//     // Get the IP address of the directory server (using the ParseNetworAddress
-//     // function) when the connect dialog is opened, this seems to be the correct
-//     // time to do it. Note that in case of custom directories we
-//     // use iCustomDirectoryIndex as an index into the vector.
-
-//     // Allow IPv4 only for communicating with Directories
-//     if ( NetworkUtil().ParseNetworkAddress (
-//              NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
-//              haDirectoryAddress,
-//              false ) )
-//     {
-//         // send the request for the server list
-//         emit ReqServerListQuery ( haDirectoryAddress );
-
-//         // start timer, if this message did not get any respond to retransmit
-//         // the server list request message
-//         TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
-//         TimerInitialSort.start ( SERV_LIST_REQ_UPDATE_TIME_MS ); // reuse the time value
-//     }
-// }
-
-
-
-// void CClientDlg::OnDirectoryServerChanged ( int iTypeIdx )
-// {
-//     // store the new directory type and request new list
-//     // if iTypeIdx == AT_CUSTOM, then iCustomDirectoryIndex is the index into the vector holding the user's custom directory servers
-//     // if iTypeIdx != AT_CUSTOM, then iCustomDirectoryIndex MUST be 0;
-//     if ( iTypeIdx >= AT_CUSTOM )
-//     {
-//         // the value for the index into the vector vstrDirectoryAddress is in the user data of the combobox item
-//         pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iTypeIdx ).toInt();
-//         iTypeIdx                         = AT_CUSTOM;
-//     }
-//     else
-//     {
-//         pSettings->iCustomDirectoryIndex = 0;
-//     }
-//     pSettings->eDirectoryType = static_cast<EDirectoryType> ( iTypeIdx );
-//     RequestServerList();
-// }
-
-// void CClientDlg::OnTimerReRequestServList()
-// {
-//     // if the server list is not yet received, retransmit the request for the
-//     // server list
-//     if ( !bServerListReceived )
-//     {
-//         // note that this is a connection less message which may get lost
-//         // and therefore it makes sense to re-transmit it
-//         emit ReqServerListQuery ( haDirectoryAddress );
-//     }
-// }
-
 void CClientDlg::OnConnectFromURLHandler(const QString& connect_url)
 {
     // connect directly to url koord://fqdnfqdn.kv.koord.live:30231
@@ -1740,1020 +1485,4 @@ void CClientDlg::OnConnectFromURLHandler(const QString& connect_url)
     joinFieldEdit->setText(strSelectedAddress);
     emit EventJoinConnectClicked( connect_url );
 }
-
-//void CClientDlg::setDefaultSingleUserMode(const QString& value)
-//{
-//    // Set from URL or command line so string not boolean
-//    m_default_single_user_mode = (value.toLower() == "true");
-//}
-
-// void CClientDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )
-// {
-//     // If the normal list was received, we do not accept any further list
-//     // updates (to avoid the reduced list overwrites the normal list (#657)). Also,
-//     // we only accept a server list from the server address we have sent the
-//     // request for this to (note that we cannot use the port number since the
-//     // receive port and send port might be different at the directory server).
-//     if ( bServerListReceived || ( InetAddr.InetAddr != haDirectoryAddress.InetAddr ) )
-//     {
-//         return;
-//     }
-
-//     // special treatment if a reduced server list was received
-//     if ( bIsReducedServerList )
-//     {
-//         // make sure we only apply the reduced version list once
-//         if ( bReducedServerListReceived )
-//         {
-//             // do nothing
-//             return;
-//         }
-//         else
-//         {
-//             bReducedServerListReceived = true;
-//         }
-//     }
-//     else
-//     {
-//         // set flag and disable timer for resend server list request if full list
-//         // was received (i.e. not the reduced list)
-//         bServerListReceived = true;
-//         TimerReRequestServList.stop();
-//     }
-
-//     // first clear list
-//     // lvwServers->clear();
-
-//     // add list item for each server in the server list
-//     const int iServerInfoLen = vecServerInfo.Size();
-
-//     for ( int iIdx = 0; iIdx < iServerInfoLen; iIdx++ )
-//     {
-//         // get the host address, note that for the very first entry which is
-//         // the directory server, we have to use the receive host address
-//         // instead
-//         CHostAddress CurHostAddress;
-
-//         if ( iIdx > 0 )
-//         {
-//             CurHostAddress = vecServerInfo[iIdx].HostAddr;
-//         }
-//         else
-//         {
-//             // substitute the receive host address for directory server
-//             CurHostAddress = InetAddr;
-//         }
-
-//         // create new list view item
-//         // QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwServers );
-
-//         // make the entry invisible (will be set to visible on successful ping
-//         // result) if the complete list of registered servers shall not be shown
-//         if ( !bShowCompleteRegList )
-//         {
-//             pNewListViewItem->setHidden ( true );
-//         }
-//         // if this is Directory Server, don't show it
-//         if ( iIdx == 0 )
-//         {
-//             pNewListViewItem->setHidden( true );
-//         }
-
-//         // server name (if empty, show host address instead)
-//         if ( !vecServerInfo[iIdx].strName.isEmpty() )
-//         {
-//             pNewListViewItem->setText ( 0, vecServerInfo[iIdx].strName );
-//         }
-//         else
-//         {
-//             // IP address and port (use IP number without last byte)
-//             // Definition: If the port number is the default port number, we do
-//             // not show it.
-//             if ( vecServerInfo[iIdx].HostAddr.iPort == DEFAULT_PORT_NUMBER )
-//             {
-//                 // only show IP number, no port number
-//                 pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );
-//             }
-//             else
-//             {
-//                 // show IP number and port
-//                 pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE_PORT ) );
-//             }
-//         }
-
-//         // in case of all servers shown, add the registration number at the beginning
-// //        if ( bShowCompleteRegList )
-// //        {
-// //            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( 1 + iIdx, 3 ) + pNewListViewItem->text ( 0 ) );
-// //        }
-
-//         // show server name in bold font if it is a permanent server
-// //        QFont CurServerNameFont = pNewListViewItem->font ( 0 );
-// //        CurServerNameFont.setBold ( vecServerInfo[iIdx].bPermanentOnline );
-// //        pNewListViewItem->setFont ( 0, CurServerNameFont );
-
-//         // the ping time shall be shown in bold font
-//         QFont CurPingTimeFont = pNewListViewItem->font ( 1 );
-//         CurPingTimeFont.setBold ( true );
-//         pNewListViewItem->setFont ( 1, CurPingTimeFont );
-
-//         // happiness level in emoji font
-//         pNewListViewItem->setFont ( 2, QFont("Segoe UI Emoji") );
-
-//         // server location (city and country)
-//         QString strLocation = vecServerInfo[iIdx].strCity;
-
-//         if ( ( !strLocation.isEmpty() ) && ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry ) )
-//         {
-//             strLocation += ", ";
-//         }
-
-//         if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
-//         {
-//             QString strCountryToString = QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
-
-//             // Qt countryToString does not use spaces in between country name
-//             // parts but they use upper case letters which we can detect and
-//             // insert spaces as a post processing
-//             if ( !strCountryToString.contains ( " " ) )
-//             {
-//                 QRegularExpressionMatchIterator reMatchIt = QRegularExpression ( "[A-Z][^A-Z]*" ).globalMatch ( strCountryToString );
-//                 QStringList                     slNames;
-//                 while ( reMatchIt.hasNext() )
-//                 {
-//                     slNames << reMatchIt.next().capturedTexts();
-//                 }
-//                 strCountryToString = slNames.join ( " " );
-//             }
-//             strLocation += strCountryToString;
-//         }
-
-//         pNewListViewItem->setText ( 3, strLocation );
-
-//         // init the minimum ping time with a large number (note that this number
-//         // must fit in an integer type)
-//         pNewListViewItem->setText ( 4, "99999999" );
-
-//         // store the maximum number of clients
-//         pNewListViewItem->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
-
-//         // store host address
-//         pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
-
-//         // per default expand the list item (if not "show all servers")
-//         // if ( bShowAllMusicians )
-//         // {
-//         //     lvwServers->expandItem ( pNewListViewItem );
-//         // }
-//     }
-
-//     // immediately issue the ping measurements and start the ping timer since
-//     // the server list is filled now
-//     OnRegionTimerPing();
-//     RegionTimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
-// }
-
-// void CClientDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
-// {
-//     // find the server with the correct address
-//     QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
-
-//     if ( pCurListViewItem )
-//     {
-//         // first remove any existing children
-//         DeleteAllListViewItemChilds ( pCurListViewItem );
-
-//         // get number of connected clients
-//         const int iNumConnectedClients = vecChanInfo.Size();
-
-//         for ( int i = 0; i < iNumConnectedClients; i++ )
-//         {
-//             // create new list view item
-//             QTreeWidgetItem* pNewChildListViewItem = new QTreeWidgetItem ( pCurListViewItem );
-
-//             // child items shall use only one column
-//             pNewChildListViewItem->setFirstColumnSpanned ( true );
-
-//             // set the clients name
-//             QString sClientText = vecChanInfo[i].strName;
-
-//             // set the icon: country flag has priority over instrument
-//             bool bCountryFlagIsUsed = false;
-
-//             if ( vecChanInfo[i].eCountry != QLocale::AnyCountry )
-//             {
-//                 // try to load the country flag icon
-//                 QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
-
-//                 // first check if resource reference was valid
-//                 if ( !CountryFlagPixmap.isNull() )
-//                 {
-//                     // set correct picture
-//                     pNewChildListViewItem->setIcon ( 0, QIcon ( CountryFlagPixmap ) );
-
-//                     bCountryFlagIsUsed = true;
-//                 }
-//             }
-
-//             if ( !bCountryFlagIsUsed )
-//             {
-//                 // get the resource reference string for this instrument
-//                 const QString strCurResourceRef = CInstPictures::GetResourceReference ( vecChanInfo[i].iInstrument );
-
-//                 // first check if instrument picture is used or not and if it is valid
-//                 if ( !( CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) || strCurResourceRef.isEmpty() ) )
-//                 {
-//                     // set correct picture
-//                     pNewChildListViewItem->setIcon ( 0, QIcon ( QPixmap ( strCurResourceRef ) ) );
-//                 }
-//             }
-
-//             // add the instrument information as text
-//             if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
-//             {
-//                 sClientText.append ( " (" + CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
-//             }
-
-//             // apply the client text to the list view item
-//             pNewChildListViewItem->setText ( 0, sClientText );
-
-//             // add the new child to the corresponding server item
-//             pCurListViewItem->addChild ( pNewChildListViewItem );
-
-//             // at least one server has children now, show decoration to be able
-//             // to show the children
-//             lvwServers->setRootIsDecorated ( true );
-//         }
-
-//         // the clients list may have changed, update the filter selection
-//         UpdateListFilter();
-//     }
-// }
-
-//void CClientDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int )
-//{
-//    // if a server list item was double clicked, it is the same as if the
-//    // connect button was clicked
-//    if ( Item != nullptr )
-//    {
-//        OnConnectClicked();
-//    }
-//}
-
-// void CClientDlg::OnServerAddrEditTextChanged ( const QString& )
-// {
-//     // in the server address combo box, a text was changed, remove selection
-//     // in the server list (if any)
-//     lvwServers->clearSelection();
-// }
-
-// void CClientDlg::OnCustomDirectoriesChanged()
-// {
-
-//     QString strPreviousSelection = cbxDirectoryServer->currentText();
-//     UpdateDirectoryServerComboBox();
-//     // after updating the combobox, we must re-select the previous directory selection
-
-//     if ( pSettings->eDirectoryType == AT_CUSTOM )
-//     {
-//         // check if the currently select custom directory still exists in the now potentially re-ordered vector,
-//         // if so, then change to its new index.  (addresses Issue #1899)
-//         int iNewIndex = cbxDirectoryServer->findText ( strPreviousSelection, Qt::MatchExactly );
-//         if ( iNewIndex == INVALID_INDEX )
-//         {
-//             // previously selected custom directory has been deleted.  change to default directory
-//             pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_DEFAULT );
-//             pSettings->iCustomDirectoryIndex = 0;
-//             RequestServerList();
-//         }
-//         else
-//         {
-//             // find previously selected custom directory in the now potentially re-ordered vector
-//             pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_CUSTOM );
-//             pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iNewIndex ).toInt();
-//             cbxDirectoryServer->blockSignals ( true );
-//             cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
-//             cbxDirectoryServer->blockSignals ( false );
-//         }
-//     }
-//     else
-//     {
-//         // selected directory was not a custom directory
-//         cbxDirectoryServer->blockSignals ( true );
-//         cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
-//         cbxDirectoryServer->blockSignals ( false );
-//     }
-// }
-
-//void CClientDlg::ShowAllMusicians ( const bool bState )
-//{
-//    bShowAllMusicians = bState;
-
-//    // update list
-//    if ( bState )
-//    {
-//        lvwServers->expandAll();
-//    }
-//    else
-//    {
-//        lvwServers->collapseAll();
-//    }
-
-//    // update check box if necessary
-//    if ( ( chbExpandAll->checkState() == Qt::Checked && !bShowAllMusicians ) || ( chbExpandAll->checkState() == Qt::Unchecked && bShowAllMusicians ) )
-//    {
-//        chbExpandAll->setCheckState ( bState ? Qt::Checked : Qt::Unchecked );
-//    }
-//}
-
-// void CClientDlg::UpdateListFilter()
-// {
-// //    const QString sFilterText = edtFilter->text();
-//     const QString sFilterText = "";
-
-//     if ( !sFilterText.isEmpty() )
-//     {
-//         bListFilterWasActive     = true;
-//         const int iServerListLen = lvwServers->topLevelItemCount();
-
-//         for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-//         {
-//             QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
-//             bool             bFilterFound     = false;
-
-//             // DEFINITION: if "#" is set at the beginning of the filter text, we show
-//             //             occupied servers (#397)
-//             if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) )
-//             {
-//                 // special case: filter for occupied servers
-//                 if ( pCurListViewItem->childCount() > 0 )
-//                 {
-//                     bFilterFound = true;
-//                 }
-//             }
-//             else
-//             {
-//                 // search server name
-//                 if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-//                 {
-//                     bFilterFound = true;
-//                 }
-
-//                 // search location
-//                 if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-//                 {
-//                     bFilterFound = true;
-//                 }
-
-//                 // search children
-//                 for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
-//                 {
-//                     if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-//                     {
-//                         bFilterFound = true;
-//                     }
-//                 }
-//             }
-
-//             // only update Hide state if ping time was received
-//             if ( !pCurListViewItem->text ( 1 ).isEmpty() || bShowCompleteRegList )
-//             {
-//                 // only update hide and expand status if the hide state has to be changed to
-//                 // preserve if user clicked on expand icon manually
-//                 if ( ( pCurListViewItem->isHidden() && bFilterFound ) || ( !pCurListViewItem->isHidden() && !bFilterFound ) )
-//                 {
-//                     pCurListViewItem->setHidden ( !bFilterFound );
-//                     pCurListViewItem->setExpanded ( bShowAllMusicians );
-//                 }
-//             }
-//         }
-//     }
-//     else
-//     {
-//         // if the filter was active but is now disabled, we have to update all list
-//         // view items for the "ping received" hide state
-//         if ( bListFilterWasActive )
-//         {
-//             const int iServerListLen = lvwServers->topLevelItemCount();
-
-//             for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-//             {
-//                 QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
-
-//                 // if ping time is empty, hide item (if not already hidden)
-//                 if ( pCurListViewItem->text ( 1 ).isEmpty() && !bShowCompleteRegList )
-//                 {
-//                     pCurListViewItem->setHidden ( true );
-//                 }
-//                 else
-//                 {
-//                     // in case it was hidden, show it and take care of expand
-//                     if ( pCurListViewItem->isHidden() )
-//                     {
-//                         pCurListViewItem->setHidden ( false );
-//                         pCurListViewItem->setExpanded ( bShowAllMusicians );
-//                     }
-//                 }
-//             }
-
-//             bListFilterWasActive = false;
-//         }
-//     }
-// }
-
-//void CClientDlg::OnConnectClicked()
-//{
-//    // get the IP address to be used according to the following definitions:
-//    // - if the list has focus and a line is selected, use this line
-//    // - if the list has no focus, use the current combo box text
-//    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
-
-//    if ( CurSelListItemList.count() > 0 )
-//    {
-//        // get the parent list view item
-//        QTreeWidgetItem* pCurSelTopListItem = GetParentListViewItem ( CurSelListItemList[0] );
-
-//        // get host address from selected list view item as a string
-//        strSelectedAddress = pCurSelTopListItem->data ( 0, Qt::UserRole ).toString();
-
-//        // store selected server name
-//        strSelectedServerName = pCurSelTopListItem->text ( 0 );
-
-//        // set flag that a server list item was chosen to connect
-//        bServerListItemWasChosen = true;
-//    }
-//    else
-//    {
-//        strSelectedAddress = NetworkUtil::FixAddress ( cbxServerAddr->currentText() );
-//    }
-
-//    // tell the parent window that the connection shall be initiated
-//    done ( QDialog::Accepted );
-//}
-
-// void CClientDlg::OnRegionTimerPing()
-// {
-//     // send ping messages to the servers in the list
-//     const int iServerListLen = lvwServers->topLevelItemCount();
-
-//     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-//     {
-//         CHostAddress haServerAddress;
-
-//         // try to parse host address string which is stored as user data
-//         // in the server list item GUI control element
-//         if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(),
-//                                                  haServerAddress,
-//                                                  bEnableIPv6 ) )
-//         {
-// //            qDebug() << "lvwServer listing: " + lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString();
-//             // if address is valid, send ping message using a new thread
-//             QFuture<void> f = QtConcurrent::run ( &CClientDlg::EmitCLServerListPingMes, this, haServerAddress );
-//             Q_UNUSED ( f );
-//         }
-//     }
-// }
-
-// void CClientDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress )
-// {
-//     // The ping time messages for all servers should not be sent all in a very
-//     // short time since it showed that this leads to errors in the ping time
-//     // measurement (#49). We therefore introduce a short delay for each server
-//     // (since we are doing this in a separate thread for each server, we do not
-//     // block the GUI).
-//     QThread::msleep ( 11 );
-
-//     emit CreateCLServerListPingMes ( haServerAddress );
-// }
-
-// void CClientDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients )
-// {
-//     // apply the received ping time to the correct server list entry
-//     QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
-
-//     if ( pCurListViewItem )
-//     {
-//         // check if this is the first time a ping time is set
-//         const bool bIsFirstPing = pCurListViewItem->text ( 1 ).isEmpty();
-//         bool       bDoSorting   = false;
-
-//         // update minimum ping time column (invisible, used for sorting) if
-//         // the new value is smaller than the old value
-//         int iMinPingTime = pCurListViewItem->text ( 4 ).toInt();
-
-//         if ( iMinPingTime > iPingTime )
-//         {
-//             // update the minimum ping time with the new lowest value
-//             iMinPingTime = iPingTime;
-
-//             // we pad to a total of 8 characters with zeros to make sure the
-//             // sorting is done correctly
-//             pCurListViewItem->setText ( 4, QString ( "%1" ).arg ( iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
-
-//             // update the sorting (lowest number on top)
-//             bDoSorting = true;
-//         }
-
-//         // for debugging it is good to see the current ping time in the list
-//         // and not the minimum ping time -> overwrite the value for debugging
-//         if ( bShowCompleteRegList )
-//         {
-//             iMinPingTime = iPingTime;
-//         }
-
-//         // Only show minimum ping time in the list since this is the important
-//         // value. Temporary bad ping measurements are of no interest.
-//         // Color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
-//         if ( iMinPingTime <= 25 )
-// //        if ( iMinPingTime <= 80 )
-//         {
-//             pCurListViewItem->setForeground ( 1, Qt::green );
-//             pCurListViewItem->setText ( 2, "" );
-//             pCurListViewItem->setText ( 2, "😃" );
-//         }
-//         else
-//         {
-//             if ( iMinPingTime <= 50 )
-// //            if ( iMinPingTime <= 100 )
-//             {
-//                 pCurListViewItem->setForeground ( 1, Qt::yellow );
-//                 pCurListViewItem->setText ( 2, "😑" );
-//             }
-//             else
-//             {
-//                 pCurListViewItem->setForeground ( 1, Qt::red );
-//                 pCurListViewItem->setText ( 2, "😡" );
-//             }
-//         }
-
-//         // update ping text, take special care if ping time exceeds a
-//         // certain value
-//         if ( iMinPingTime > 500 )
-//         {
-//             pCurListViewItem->setText ( 1, ">500" );
-//             pCurListViewItem->setText ( 2, "🤬" );
-//         }
-//         else
-//         {
-//             // prepend spaces so that we can sort correctly (fieldWidth of
-//             // 4 is sufficient since the maximum width is ">500") (#201)
-//             pCurListViewItem->setText ( 1, QString ( "%1" ).arg ( iMinPingTime, 4, 10, QLatin1Char ( ' ' ) ) );
-//         }
-
-// //        // update number of clients text
-// //        if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
-// //        {
-// //            // special case: reduced server list
-// //            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
-// //        }
-// //        else if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
-// //        {
-// //            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
-// //        }
-// //        else
-// //        {
-// //            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
-// //        }
-
-//         // check if the number of child list items matches the number of
-//         // connected clients, if not then request the client names
-//         if ( iNumClients != pCurListViewItem->childCount() )
-//         {
-//             emit CreateCLServerListReqConnClientsListMes ( InetAddr );
-//         }
-
-//         // this is the first time a ping time was received, set item to visible
-//         // UNLESS it is Directory Server, in which case keep it hidden
-//         if ( bIsFirstPing && !pCurListViewItem->text ( 0 ).contains("Directory"))
-//         {
-//             pCurListViewItem->setHidden ( false );
-//         }
-
-//         // Update sorting. Note that the sorting must be the last action for the
-//         // current item since the topLevelItem(iIdx) is then no longer valid.
-//         // To avoid that the list is sorted shortly before a double click (which
-//         // could lead to connecting an incorrect server) the sorting is disabled
-//         // as long as the mouse is over the list (but it is not disabled for the
-//         // initial timer of about 2s, see TimerInitialSort) (#293).
-// //        if ( bDoSorting && !bShowCompleteRegList &&
-// //             ( TimerInitialSort.isActive() || !lvwServers->underMouse() ) ) // do not sort if "show all servers"
-// //        {
-// //            lvwServers->sortByColumn ( 2, Qt::AscendingOrder );
-// //        }
-
-// //        if ( bDoSorting && TimerInitialSort.isActive() ) // do not sort if "show all servers"
-// //        {
-// //            lvwServers->sortByColumn ( 1, Qt::AscendingOrder );
-// //        }
-//         lvwServers->sortByColumn ( 1, Qt::AscendingOrder );
-
-//     }
-
-//     // if no server item has children, do not show decoration
-//     bool      bAnyListItemHasChilds = false;
-//     const int iServerListLen        = lvwServers->topLevelItemCount();
-
-//     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-//     {
-//         // check if the current list item has children
-//         if ( lvwServers->topLevelItem ( iIdx )->childCount() > 0 )
-//         {
-//             bAnyListItemHasChilds = true;
-//         }
-//     }
-
-//     if ( !bAnyListItemHasChilds )
-//     {
-//         lvwServers->setRootIsDecorated ( false );
-//     }
-
-//     // we may have changed the Hidden state for some items, if a filter was active, we now
-//     // have to update it to void lines appear which do not satisfy the filter criteria
-//     UpdateListFilter();
-// }
-
-// QTreeWidgetItem* CClientDlg::FindListViewItem ( const CHostAddress& InetAddr )
-// {
-//     const int iServerListLen = lvwServers->topLevelItemCount();
-
-//     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
-//     {
-//         // compare the received address with the user data string of the
-//         // host address by a string compare
-//         if ( !lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString().compare ( InetAddr.toString() ) )
-//         {
-//             return lvwServers->topLevelItem ( iIdx );
-//         }
-//     }
-
-//     return nullptr;
-// }
-
-// QTreeWidgetItem* CClientDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
-// {
-//     // check if the current item is already the top item, i.e. the parent
-//     // query fails and returns null
-//     if ( pItem->parent() )
-//     {
-//         // we only have maximum one level, i.e. if we call the parent function
-//         // we are at the top item
-//         return pItem->parent();
-//     }
-//     else
-//     {
-//         // this item is already the top item
-//         return pItem;
-//     }
-// }
-
-// void CClientDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
-// {
-//     // loop over all children
-//     while ( pItem->childCount() > 0 )
-//     {
-//         // get the first child in the list
-//         QTreeWidgetItem* pCurChildItem = pItem->child ( 0 );
-
-//         // remove it from the item (note that the object is not deleted)
-//         pItem->removeChild ( pCurChildItem );
-
-//         // delete the object to avoid a memory leak
-//         delete pCurChildItem;
-//     }
-// }
-
-// void CClientDlg::UpdateDirectoryServerComboBox()
-// {
-//     // directory type combo box
-//     cbxDirectoryServer->clear();
-//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
-//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
-//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
-//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
-//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
-//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
-//     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CHORAL ) );
-
-//     // because custom directories are always added to the top of the vector, add the vector
-//     // contents to the combobox in reverse order
-//     for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
-//     {
-//         if ( pSettings->vstrDirectoryAddress[i] != "" )
-//         {
-//             // add vector index (i) to the combobox as user data
-//             cbxDirectoryServer->addItem ( pSettings->vstrDirectoryAddress[i], i );
-//         }
-//     }
-// }
-
-// #if defined ( Q_OS_WINDOWS )
-// // for kdasio_builtin stuff
-// void CClientDlg::kdasio_setup() {
-//     // init mmcpl proc
-//     mmcplProc = nullptr;
-//     // init our singleton QMediaDevices object
-//     m_devices = new QMediaDevices();
-
-//     // set up signals
-//     connect(sharedPushButton, &QPushButton::clicked, this, &CClientDlg::sharedModeSet);
-//     connect(exclusivePushButton, &QPushButton::clicked, this, &CClientDlg::exclusiveModeSet);
-//     connect(inputDeviceBox, QOverload<int>::of(&QComboBox::activated), this, &CClientDlg::inputDeviceChanged);
-//     connect(outputDeviceBox, QOverload<int>::of(&QComboBox::activated), this, &CClientDlg::outputDeviceChanged);
-// //    connect(inputAudioSettButton, &QPushButton::pressed, this, &CClientDlg::inputAudioSettClicked);
-// //    connect(outputAudioSettButton, &QPushButton::pressed, this, &CClientDlg::outputAudioSettClicked);
-//     connect(bufferSizeSlider, &QSlider::valueChanged, this, &CClientDlg::bufferSizeChanged);
-//     connect(bufferSizeSlider, &QSlider::valueChanged, this, &CClientDlg::bufferSizeDisplayChange);
-//     // for device refresh
-//     connect(m_devices, &QMediaDevices::audioInputsChanged, this, &CClientDlg::updateInputsList);
-//     connect(m_devices, &QMediaDevices::audioOutputsChanged, this, &CClientDlg::updateOutputsList);
-//     // for win ctrl panel
-//     connect(winCtrlPanelButton, &QPushButton::clicked, this, &CClientDlg::openWinCtrlPanel);
-
-//     // populate input device choices
-//     inputDeviceBox->clear();
-//     const auto input_devices = m_devices->audioInputs();
-//     for (auto &deviceInfo: input_devices)
-//         inputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
-
-//     // populate output device choices
-//     outputDeviceBox->clear();
-//     const auto output_devices = m_devices->audioOutputs();
-//     for (auto &deviceInfo: output_devices)
-//         outputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
-
-
-//     // parse .kdasio_builtin.toml
-//     // parse .KoordASIO.toml
-//     // FIXME - doesn't actually test that the selected devices are correct with current device list
-//     std::ifstream ifs;
-//     ifs.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
-//     try {
-//         ifs.open(kdasio_config_path.toStdString(), std::ifstream::in);
-//         toml::ParseResult pr = toml::parse(ifs);
-//         qDebug("Attempted to parse toml file...");
-//         ifs.close();
-//         if (!pr.valid()) {
-//             setKdasio_builtinDefaults();
-//         } else {
-//             setValuesFromToml(&ifs, &pr);
-//         }
-//     }
-//     catch (std::ifstream::failure e) {
-//         qDebug("Failed to open file ...");
-//         setKdasio_builtinDefaults();
-//     }
-
-// }
-
-// void CClientDlg::updateInputsList() {
-//     inputDeviceBox->clear();
-//     const auto input_devices = m_devices->audioInputs();
-//     for (auto &deviceInfo: input_devices)
-//         inputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
-//     // write the new resultant config
-//     inputDeviceName = inputDeviceBox->currentText();
-//     writeTomlFile();
-// //    OnSoundcardReactivate();
-// }
-
-// void CClientDlg::updateOutputsList() {
-//     // populate output device choices
-//     outputDeviceBox->clear();
-//     const auto output_devices = m_devices->audioOutputs();
-//     for (auto &deviceInfo: output_devices)
-//         outputDeviceBox->addItem(deviceInfo.description(), QVariant::fromValue(deviceInfo));
-//     qInfo() << "Updating Outputs ...";
-//     // write the new resultant config
-//     outputDeviceName = outputDeviceBox->currentText();
-//     writeTomlFile();
-// //    OnSoundcardReactivate();
-// }
-
-// void CClientDlg::setValuesFromToml(std::ifstream *ifs, toml::ParseResult *pr)
-// {
-//     qInfo("Parsed a valid TOML file.");
-//     // only recognise our accepted INPUT values - the others are hardcoded
-//     const toml::Value& v = pr->value;
-//     // get bufferSize
-//     const toml::Value* bss = v.find("bufferSizeSamples");
-//     if (bss && bss->is<int>()) {
-//         if (bss->as<int>() == 32||64||128||256||512||1024||2048) {
-//             bufferSize = bss->as<int>();
-//         } else {
-//             bufferSize = 64;
-//         }
-//         // update UI
-//         bufferSizeSlider->setValue(bufferSizes.indexOf(bufferSize));
-//         bufferSizeDisplay->display(bufferSize);
-//         // update conf
-//         bufferSizeChanged(bufferSizes.indexOf(bufferSize));
-//     }
-//     // get input stream stuff
-//     const toml::Value* input_dev = v.find("input.device");
-//     if (input_dev && input_dev->is<std::string>()) {
-//         // if setCurrentText fails some sensible choice is made
-//         inputDeviceBox->setCurrentText(QString::fromStdString(input_dev->as<std::string>()));
-//         inputDeviceChanged(inputDeviceBox->currentIndex());
-//     } else {
-//         inputDeviceBox->setCurrentText("Default Input Device");
-//         inputDeviceChanged(inputDeviceBox->currentIndex());
-//     }
-//     const toml::Value* input_excl = v.find("input.wasapiExclusiveMode");
-//     if (input_excl && input_excl->is<bool>()) {
-//         exclusive_mode = input_excl->as<bool>();
-//     } else {
-//         exclusive_mode = false;
-//     }
-//     // get output stream stuff
-//     const toml::Value* output_dev = v.find("output.device");
-//     if (output_dev && output_dev->is<std::string>()) {
-//         // if setCurrentText fails some sensible choice is made
-//         outputDeviceBox->setCurrentText(QString::fromStdString(output_dev->as<std::string>()));
-//         outputDeviceChanged(outputDeviceBox->currentIndex());
-//     } else {
-//         outputDeviceBox->setCurrentText("Default Output Device");
-//         outputDeviceChanged(outputDeviceBox->currentIndex());
-//     }
-//     const toml::Value* output_excl = v.find("output.wasapiExclusiveMode");
-//     if (output_excl && output_excl->is<bool>()) {
-//         exclusive_mode = output_excl->as<bool>();
-//     } else {
-//         exclusive_mode = false;
-//     }
-//     setOperationMode();
-
-// }
-
-// void CClientDlg::setKdasio_builtinDefaults()
-// {
-//     // set defaults
-//     qInfo("Setting KdASIO defaults");
-//     bufferSize = 32;
-//     exclusive_mode = true;
-//     // find system audio device defaults
-//     QAudioDevice inputInfo(QMediaDevices::defaultAudioInput());
-//     inputDeviceName = inputInfo.description();
-//     QAudioDevice outputInfo(QMediaDevices::defaultAudioOutput());
-//     outputDeviceName = outputInfo.description();
-//     // set stuff - up to 4 file updates in quick succession - FIXME
-//     bufferSizeSlider->setValue(bufferSizes.indexOf(bufferSize));
-//     bufferSizeDisplay->display(bufferSize);
-//     bufferSizeChanged(bufferSizes.indexOf(bufferSize));
-//     inputDeviceBox->setCurrentText(inputDeviceName);
-//     inputDeviceChanged(inputDeviceBox->currentIndex());
-//     outputDeviceBox->setCurrentText(outputDeviceName);
-//     outputDeviceChanged(outputDeviceBox->currentIndex());
-//     setOperationMode();
-// }
-
-
-// void CClientDlg::writeTomlFile()
-// {
-//     // REF: https://github.com/dechamps/FlexASIO/blob/master/CONFIGURATION.md
-//     // Write MINIMAL config to .kdasio_builtin.toml, like this:
-//     /*
-//         backend = "Windows WASAPI"
-//         bufferSizeSamples = bufferSize
-
-//         [input]
-//         device=inputDevice
-//         suggestedLatencySeconds = 0.0
-//         wasapiExclusiveMode = inputExclusiveMode
-
-//         [output]
-//         device=outputDevice
-//         suggestedLatencySeconds = 0.0
-//         wasapiExclusiveMode = outputExclusiveMode
-//     */
-//     qInfo() << "writeTomlFile(): Opening file for writing: " << kdasio_config_path;
-//     qInfo() << "writeTomlFile(): input device: " << inputDeviceName;
-//     qInfo() << "writeTomlFile(): output device: " << outputDeviceName;
-//     QFile file(kdasio_config_path);
-//     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-//         return;
-//     QTextStream out(&file);
-//     // need to explicitly set UTF-8 for non-ASCII character support
-//     out.setEncoding(QStringConverter::Utf8);
-//     // out.setCodec("UTF-8");
-
-//     //FIXME should really write to intermediate buffer, THEN to file - to make single write on file
-//     // is this a single write action ???
-//     out << "backend = \"Windows WASAPI\"" << "\n"
-//         << "bufferSizeSamples = " << bufferSize << "\n"
-//         << "\n"
-//         << "[input]" << "\n"
-//         << "device = \"" << inputDeviceName << "\"\n"
-//         << "suggestedLatencySeconds = 0.0" << "\n"
-//         << "wasapiExclusiveMode = " << (exclusive_mode ? "true" : "false") << "\n"
-//         << "\n"
-//         << "[output]" << "\n"
-//         << "device = \"" << outputDeviceName << "\"\n"
-//         << "suggestedLatencySeconds = 0.0" << "\n"
-//         << "wasapiExclusiveMode = " << (exclusive_mode ? "true" : "false") << "\n";
-//     qInfo("Just wrote toml file...");
-
-//     // force driver settings refresh
-// //    OnSoundcardReactivate();
-// }
-
-// void CClientDlg::bufferSizeChanged(int idx)
-// {
-//     qInfo() << "bufferSizeChanged()";
-//     // select from 32 , 64, 128, 256, 512, 1024, 2048
-//     // This a) gives a nice easy UI rather than choosing your own integer
-//     // AND b) makes it easier to do a live-refresh of the toml file,
-//     // THUS avoiding lots of spurious intermediate updates on buffer changes
-//     bufferSize = bufferSizes[idx];
-//     bufferSizeSlider->setValue(idx);
-//     // Don't do any latency calculation for now, it is misleading as doesn't account for much of the whole audio chain
-// //    latencyLabel->setText(QString::number(double(bufferSize) / 48, 'f', 2));
-//     writeTomlFile();
-//     OnSoundcardReactivate();
-// }
-
-// void CClientDlg::bufferSizeDisplayChange(int idx)
-// {
-//     qInfo() << "bufferSizeDisplayChange()";
-//     bufferSize = bufferSizes[idx];
-//     bufferSizeDisplay->display(bufferSize);
-// }
-
-// void CClientDlg::setOperationMode()
-// {
-//     if (exclusive_mode) {
-//         exclusiveModeSet();
-//     }
-//     else {
-//         sharedModeSet();
-//     }
-// }
-
-// void CClientDlg::sharedModeSet()
-// {
-//     sharedPushButton->setChecked(true);
-//     exclusive_mode = false;
-//     writeTomlFile();
-//     OnSoundcardReactivate();
-// }
-
-// void CClientDlg::exclusiveModeSet()
-// {
-//     exclusivePushButton->setChecked(true);
-//     exclusive_mode = true;
-//     writeTomlFile();
-//     OnSoundcardReactivate();
-// }
-
-// void CClientDlg::inputDeviceChanged(int idx)
-// {
-//     qInfo() << "inputDeviceChanged()";
-//     if (inputDeviceBox->count() == 0)
-//         return;
-//     // device has changed
-//     m_inputDeviceInfo = inputDeviceBox->itemData(idx).value<QAudioDevice>();
-//     inputDeviceName = m_inputDeviceInfo.description();
-//     writeTomlFile();
-//     OnSoundcardReactivate();
-// }
-
-// void CClientDlg::outputDeviceChanged(int idx)
-// {
-//     qInfo() << "outputDeviceChanged()";
-//     if (outputDeviceBox->count() == 0)
-//         return;
-//     // device has changed
-//     m_outputDeviceInfo = outputDeviceBox->itemData(idx).value<QAudioDevice>();
-//     outputDeviceName = m_outputDeviceInfo.description();
-//     writeTomlFile();
-//     OnSoundcardReactivate();
-// }
-
-// //void CClientDlg::inputAudioSettClicked()
-// //{
-// //    // open Windows audio input settings control panel
-// //    //FIXME - this process control does NOT work as Windows forks+kills the started process immediately? or something
-// //    if (mmcplProc != nullptr) {
-// //        mmcplProc->kill();
-// //    }
-// //    mmcplProc = new QProcess(this);
-// //    mmcplProc->start("control", QStringList() << inputAudioSettPath);
-// //}
-
-// //void CClientDlg::outputAudioSettClicked()
-// //{
-// //    // open Windows audio output settings control panel
-// //    //FIXME - this process control does NOT work as Windows forks+kills the started process immediately? or something
-// //    if (mmcplProc != nullptr) {
-// //        mmcplProc->kill();
-// //    }
-// //    mmcplProc = new QProcess(this);
-// //    mmcplProc->start("control", QStringList() << outputAudioSettPath);
-// //}
-
-// void CClientDlg::openWinCtrlPanel()
-// {
-//     QDesktopServices::openUrl(QUrl("ms-settings:sound-devices", QUrl::TolerantMode));
-// }
-// #endif
-// // end Windows-only built-in asio config stuff
 

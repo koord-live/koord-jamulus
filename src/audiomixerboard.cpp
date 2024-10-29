@@ -199,113 +199,113 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     QObject::connect ( pcbGroup, &QCheckBox::stateChanged, this, &CChannelFader::OnGroupStateChanged );
 }
 
-void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
-{
-    eDesign = eNewDesign;
+// void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
+// {
+//     eDesign = eNewDesign;
 
-    switch ( eNewDesign )
-    {
-    case GD_ORIGINAL:
-        pFader->setStyleSheet ( "QSlider { width:         45px;"
-                                "          border-image:  url(:/png/fader/res/faderbackground.png) repeat;"
-                                "          border-top:    10px transparent;"
-                                "          border-bottom: 10px transparent;"
-                                "          border-left:   20px transparent;"
-                                "          border-right:  -20px transparent; }"
-                                "QSlider::groove { image: url(:/png/fader/res/transparent1x1.png);"
-                                "                  padding-left:   -34px;"
-                                "                  padding-left:   -34px;"
-                                "                  padding-top:    -10px;"
-                                "                  padding-bottom: -15px; }"
-                                "QSlider::handle { image: url(:/png/fader/res/faderhandle.png);"
-                                "                  padding-left:   -4px;"
-                                "                  padding-top:    -2px;"
-                                "                  padding-bottom: -0px; }"
-                                );
+//     switch ( eNewDesign )
+//     {
+//     case GD_ORIGINAL:
+//         pFader->setStyleSheet ( "QSlider { width:         45px;"
+//                                 "          border-image:  url(:/png/fader/res/faderbackground.png) repeat;"
+//                                 "          border-top:    10px transparent;"
+//                                 "          border-bottom: 10px transparent;"
+//                                 "          border-left:   20px transparent;"
+//                                 "          border-right:  -20px transparent; }"
+//                                 "QSlider::groove { image: url(:/png/fader/res/transparent1x1.png);"
+//                                 "                  padding-left:   -34px;"
+//                                 "                  padding-left:   -34px;"
+//                                 "                  padding-top:    -10px;"
+//                                 "                  padding-bottom: -15px; }"
+//                                 "QSlider::handle { image: url(:/png/fader/res/faderhandle.png);"
+//                                 "                  padding-left:   -4px;"
+//                                 "                  padding-top:    -2px;"
+//                                 "                  padding-bottom: -0px; }"
+//                                 );
 
-        pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-        pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
-        pPan->setFixedSize ( 50, 50 );
-        pPanLabel->setText ( tr ( "PAN" ) );
-        pcbMute->setText ( tr ( "MUTE" ) );
-        pcbSolo->setText ( tr ( "SOLO" ) );
-        strGroupBaseText  = tr ( "GRP" );
-        iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
-        break;
+//         pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
+//         pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
+//         pPan->setFixedSize ( 50, 50 );
+//         pPanLabel->setText ( tr ( "PAN" ) );
+//         pcbMute->setText ( tr ( "MUTE" ) );
+//         pcbSolo->setText ( tr ( "SOLO" ) );
+//         strGroupBaseText  = tr ( "GRP" );
+//         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
+//         break;
 
-    case GD_SLIMFADER:
-        pLabelPictGrid->addWidget ( plblLabel, 0, Qt::AlignHCenter ); // label below icons
-        pLabelInstBox->setMinimumHeight ( 130 );                      // maximum height of the instrument+flag+label
-        pPan->setFixedSize ( 28, 28 );
-        pFader->setTickPosition ( QSlider::NoTicks );
-        pFader->setStyleSheet ( "" );
-        pPanLabel->setText ( tr ( "Pan" ) );
-        pcbMute->setText ( tr ( "M" ) );
-        pcbSolo->setText ( tr ( "S" ) );
-        strGroupBaseText  = tr ( "G" );
-        iInstrPicMaxWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
-        break;
+//     case GD_SLIMFADER:
+//         pLabelPictGrid->addWidget ( plblLabel, 0, Qt::AlignHCenter ); // label below icons
+//         pLabelInstBox->setMinimumHeight ( 130 );                      // maximum height of the instrument+flag+label
+//         pPan->setFixedSize ( 28, 28 );
+//         pFader->setTickPosition ( QSlider::NoTicks );
+//         pFader->setStyleSheet ( "" );
+//         pPanLabel->setText ( tr ( "Pan" ) );
+//         pcbMute->setText ( tr ( "M" ) );
+//         pcbSolo->setText ( tr ( "S" ) );
+//         strGroupBaseText  = tr ( "G" );
+//         iInstrPicMaxWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
+//         break;
 
-    default:
-        // reset style sheet and set original parameters
-        pFader->setTickPosition ( QSlider::TicksBothSides );
-        pFader->setStyleSheet ( "" );
-        pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-        pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
-        pPan->setFixedSize ( 50, 50 );
-        pPanLabel->setText ( tr ( "Pan" ) );
-        pcbMute->setText ( tr ( "Mute" ) );
-        pcbSolo->setText ( tr ( "Solo" ) );
-        strGroupBaseText  = tr ( "Grp" );
-        iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
-        break;
-    }
+//     default:
+//         // reset style sheet and set original parameters
+//         pFader->setTickPosition ( QSlider::TicksBothSides );
+//         pFader->setStyleSheet ( "" );
+//         pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
+//         pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
+//         pPan->setFixedSize ( 50, 50 );
+//         pPanLabel->setText ( tr ( "Pan" ) );
+//         pcbMute->setText ( tr ( "Mute" ) );
+//         pcbSolo->setText ( tr ( "Solo" ) );
+//         strGroupBaseText  = tr ( "Grp" );
+//         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
+//         break;
+//     }
 
-    // we need to update since we changed the checkbox text
-    UpdateGroupIDDependencies();
+//     // we need to update since we changed the checkbox text
+//     UpdateGroupIDDependencies();
 
-    // the instrument picture might need scaling after a style change
-    SetChannelInfos ( cReceivedChanInfo );
-}
+//     // the instrument picture might need scaling after a style change
+//     SetChannelInfos ( cReceivedChanInfo );
+// }
 
-void CChannelFader::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
-{
-    eMeterStyle = eNewMeterStyle;
+// void CChannelFader::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
+// {
+//     eMeterStyle = eNewMeterStyle;
 
-    switch ( eNewMeterStyle )
-    {
-    case MT_BAR_NARROW:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_NARROW );
-        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight ( 85 );
-        break;
+//     switch ( eNewMeterStyle )
+//     {
+//     case MT_BAR_NARROW:
+//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_NARROW );
+//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+//         pFader->setMinimumHeight ( 85 );
+//         break;
 
-    case MT_BAR_WIDE:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight ( 120 );
-        break;
+//     case MT_BAR_WIDE:
+//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+//         pFader->setMinimumHeight ( 120 );
+//         break;
 
-    case MT_LED_ROUND_SMALL:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_SMALL );
-        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight ( 85 );
-        break;
+//     case MT_LED_ROUND_SMALL:
+//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_SMALL );
+//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+//         pFader->setMinimumHeight ( 85 );
+//         break;
 
-    case MT_LED_ROUND_BIG:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight ( 162 );
-        break;
+//     case MT_LED_ROUND_BIG:
+//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+//         pFader->setMinimumHeight ( 162 );
+//         break;
 
-    default:
-        // reset style sheet and set original parameters
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight ( 120 );
-        break;
-    }
-}
+//     default:
+//         // reset style sheet and set original parameters
+//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+//         pFader->setMinimumHeight ( 120 );
+//         break;
+//     }
+// }
 
 void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL ) { plbrChannelLevel->setHidden ( !eNDCL ); }
 
@@ -997,33 +997,34 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     }
 }
 
-void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
-{
-    // move the channels tighter together in slim fader mode
-    if ( eNewDesign == GD_SLIMFADER )
-    {
-        pMainLayout->setSpacing ( 2 );
-    }
-    else
-    {
-        pMainLayout->setSpacing ( 6 ); // Qt default spacing value
-    }
+// void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
+// {
+//     // // move the channels tighter together in slim fader mode
+//     // if ( eNewDesign == GD_SLIMFADER )
+//     // {
+//     //     pMainLayout->setSpacing ( 2 );
+//     // }
+//     // else
+//     // {
+//     //     pMainLayout->setSpacing ( 6 ); // Qt default spacing value
+//     // }
+//     pMainLayout->setSpacing ( 6 ); // Qt default spacing value
 
-    // apply GUI design to child GUI controls
-    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
-    {
-        vecpChanFader[i]->SetGUIDesign ( eNewDesign );
-    }
-}
+//     // apply GUI design to child GUI controls
+//     for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
+//     {
+//         vecpChanFader[i]->SetGUIDesign ( eNewDesign );
+//     }
+// }
 
-void CAudioMixerBoard::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
-{
-    // apply GUI design to child GUI controls
-    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
-    {
-        vecpChanFader[i]->SetMeterStyle ( eNewMeterStyle );
-    }
-}
+// void CAudioMixerBoard::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
+// {
+//     // apply GUI design to child GUI controls
+//     for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
+//     {
+//         vecpChanFader[i]->SetMeterStyle ( eNewMeterStyle );
+//     }
+// }
 
 void CAudioMixerBoard::SetDisplayPans ( const bool eNDP )
 {
