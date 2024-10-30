@@ -341,31 +341,31 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
 
-    // instrument
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument", 0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
-    {
-        pClient->ChannelInfo.iInstrument = iValue;
-    }
+    // // instrument
+    // if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument", 0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
+    // {
+    //     pClient->ChannelInfo.iInstrument = iValue;
+    // }
 
-    // country
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
-    {
-        pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
-    }
-    else
-    {
-        // if no country is given, use the one from the operating system
-        pClient->ChannelInfo.eCountry = QLocale::system().country();
-    }
+    // // country
+    // if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
+    // {
+    //     pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
+    // }
+    // else
+    // {
+    //     // if no country is given, use the one from the operating system
+    //     pClient->ChannelInfo.eCountry = QLocale::system().country();
+    // }
 
-    // city
-    pClient->ChannelInfo.strCity = FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "city_base64" ) );
+    // // city
+    // pClient->ChannelInfo.strCity = FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "city_base64" ) );
 
-    // skill level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "skill", 0, 3 /* SL_PROFESSIONAL */, iValue ) )
-    {
-        pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( iValue );
-    }
+    // // skill level
+    // if ( GetNumericIniSet ( IniXMLDocument, "client", "skill", 0, 3 /* SL_PROFESSIONAL */, iValue ) )
+    // {
+    //     pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( iValue );
+    // }
 
     // audio fader
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
@@ -373,17 +373,17 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioInFader ( iValue );
     }
 
-    // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
-    {
-        pClient->SetReverbLevel ( iValue );
-    }
+    // // reverberation level
+    // if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
+    // {
+    //     pClient->SetReverbLevel ( iValue );
+    // }
 
-    // reverberation channel assignment
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
-    {
-        pClient->SetReverbOnLeftChan ( bValue );
-    }
+    // // reverberation channel assignment
+    // if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
+    // {
+    //     pClient->SetReverbOnLeftChan ( bValue );
+    // }
 
     // sound card selection
     const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );

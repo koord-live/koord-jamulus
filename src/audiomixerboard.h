@@ -54,9 +54,9 @@ public:
     CChannelFader ( QWidget* pNW );
 
     QString GetReceivedName() { return cReceivedChanInfo.strName; }
-    int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
-    QString GetReceivedCity() { return cReceivedChanInfo.strCity; }
-    void    SetChannelInfos ( const CChannelInfo& cChanInfo );
+    // int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
+    // QString GetReceivedCity() { return cReceivedChanInfo.strCity; }
+    // void    SetChannelInfos ( const CChannelInfo& cChanInfo );
     void    Show() { pFrame->show(); }
     void    Hide() { pFrame->hide(); }
     bool    IsVisible() { return !pFrame->isHidden(); }
@@ -93,7 +93,7 @@ public:
 protected:
     void UpdateGroupIDDependencies();
     void SetMute ( const bool bState );
-    void SetupFaderTag ( const ESkillLevel eSkillLevel );
+    // void SetupFaderTag ( const ESkillLevel eSkillLevel );
     void SendPanValueToServer ( const int iPan );
     void SendFaderLevelToServer ( const double dLevel, const bool bIsGroupUpdate );
 
@@ -116,8 +116,8 @@ protected:
 
     QGroupBox* pLabelInstBox;
     QLabel*    plblLabel;
-    QLabel*    plblInstrument;
-    QLabel*    plblCountryFlag;
+    // QLabel*    plblInstrument;
+    // QLabel*    plblCountryFlag;
 
     CChannelInfo cReceivedChanInfo;
 

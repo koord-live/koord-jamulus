@@ -51,8 +51,8 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
 
     pLabelInstBox   = new QGroupBox ( pFrame );
     plblLabel       = new QLabel ( "", pFrame );
-    plblInstrument  = new QLabel ( pFrame );
-    plblCountryFlag = new QLabel ( pFrame );
+    // plblInstrument  = new QLabel ( pFrame );
+    // plblCountryFlag = new QLabel ( pFrame );
 
     QVBoxLayout* pMainGrid     = new QVBoxLayout ( pFrame );
     QHBoxLayout* pLevelsGrid   = new QHBoxLayout ( pLevelsBox );
@@ -112,8 +112,8 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pLabelGrid->setSpacing ( 2 ); // only minimal space between picture and text
 
     // add user controls to the grids
-    pLabelPictGrid->addWidget ( plblCountryFlag, 0, Qt::AlignHCenter );
-    pLabelPictGrid->addWidget ( plblInstrument, 0, Qt::AlignHCenter );
+    // pLabelPictGrid->addWidget ( plblCountryFlag, 0, Qt::AlignHCenter );
+    // pLabelPictGrid->addWidget ( plblInstrument, 0, Qt::AlignHCenter );
 
     pLabelGrid->addLayout ( pLabelPictGrid );
     pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // note: just initial add, may be changed later
@@ -135,57 +135,57 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     iInstrPicMaxWidth = INVALID_INDEX; // this will most probably overwritten by SetGUIDesign()
     Reset();
 
-    // add help text to controls
-    plbrChannelLevel->setWhatsThis ( "<b>" + tr ( "Channel Level" ) + ":</b> " +
-                                     tr ( "Displays the pre-fader audio level of this channel.  All clients connected to the "
-                                          "server will be assigned an audio level, the same value for every client." ) );
-    plbrChannelLevel->setAccessibleName ( tr ( "Input level of the current audio "
-                                               "channel at the server" ) );
+    // // add help text to controls
+    // plbrChannelLevel->setWhatsThis ( "<b>" + tr ( "Channel Level" ) + ":</b> " +
+    //                                  tr ( "Displays the pre-fader audio level of this channel.  All clients connected to the "
+    //                                       "server will be assigned an audio level, the same value for every client." ) );
+    // plbrChannelLevel->setAccessibleName ( tr ( "Input level of the current audio "
+    //                                            "channel at the server" ) );
 
-    pFader->setWhatsThis ( "<b>" + tr ( "Mixer Fader" ) + ":</b> " +
-                           tr ( "Adjusts the audio level of this channel. All clients connected to the server "
-                                "will be assigned an audio fader, displayed at each client, to adjust the local mix." ) );
-    pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
-                                     "channel at the server" ) );
+    // pFader->setWhatsThis ( "<b>" + tr ( "Mixer Fader" ) + ":</b> " +
+    //                        tr ( "Adjusts the audio level of this channel. All clients connected to the server "
+    //                             "will be assigned an audio fader, displayed at each client, to adjust the local mix." ) );
+    // pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
+    //                                  "channel at the server" ) );
 
-    pInfoLabel->setWhatsThis ( "<b>" + tr ( "Status Indicator" ) + ":</b> " +
-                               tr ( "Shows a status indication about the client which is assigned to this channel. "
-                                    "Supported indicators are:" ) +
-                               "<ul><li>" + tr ( "Speaker with cancellation stroke: Indicates that another client has muted you." ) + "</li></ul>" );
-    pInfoLabel->setAccessibleName ( tr ( "Status indicator label" ) );
+    // pInfoLabel->setWhatsThis ( "<b>" + tr ( "Status Indicator" ) + ":</b> " +
+    //                            tr ( "Shows a status indication about the client which is assigned to this channel. "
+    //                                 "Supported indicators are:" ) +
+    //                            "<ul><li>" + tr ( "Speaker with cancellation stroke: Indicates that another client has muted you." ) + "</li></ul>" );
+    // pInfoLabel->setAccessibleName ( tr ( "Status indicator label" ) );
 
-    pPan->setWhatsThis ( "<b>" + tr ( "Panning" ) + ":</b> " +
-                         tr ( "Sets the pan from Left to Right of the channel. "
-                              "Works only in stereo or preferably mono in/stereo out mode." ) );
-    pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
+    // pPan->setWhatsThis ( "<b>" + tr ( "Panning" ) + ":</b> " +
+    //                      tr ( "Sets the pan from Left to Right of the channel. "
+    //                           "Works only in stereo or preferably mono in/stereo out mode." ) );
+    // pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
 
-    pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr ( "With the Mute checkbox, the audio channel can be muted." ) );
-    pcbMute->setAccessibleName ( tr ( "Mute button" ) );
+    // pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr ( "With the Mute checkbox, the audio channel can be muted." ) );
+    // pcbMute->setAccessibleName ( tr ( "Mute button" ) );
 
-    pcbSolo->setWhatsThis ( "<b>" + tr ( "Solo" ) + ":</b> " +
-                            tr ( "With the Solo checkbox, the "
-                                 "audio channel can be set to solo which means that all other channels "
-                                 "except the soloed channel are muted. It is possible to set more than "
-                                 "one channel to solo." ) );
-    pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
+    // pcbSolo->setWhatsThis ( "<b>" + tr ( "Solo" ) + ":</b> " +
+    //                         tr ( "With the Solo checkbox, the "
+    //                              "audio channel can be set to solo which means that all other channels "
+    //                              "except the soloed channel are muted. It is possible to set more than "
+    //                              "one channel to solo." ) );
+    // pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
-    pcbGroup->setWhatsThis ( "<b>" + tr ( "Group" ) + ":</b> " +
-                             tr ( "With the Grp checkbox, a "
-                                  "group of audio channels can be defined. All channel faders in a group are moved "
-                                  "in proportional synchronization if any one of the group faders are moved." ) );
-    pcbGroup->setAccessibleName ( tr ( "Group button" ) );
+    // pcbGroup->setWhatsThis ( "<b>" + tr ( "Group" ) + ":</b> " +
+    //                          tr ( "With the Grp checkbox, a "
+    //                               "group of audio channels can be defined. All channel faders in a group are moved "
+    //                               "in proportional synchronization if any one of the group faders are moved." ) );
+    // pcbGroup->setAccessibleName ( tr ( "Group button" ) );
 
-    QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " +
-                           tr ( "The fader tag "
-                                "identifies the connected client. The tag name, a picture of your "
-                                "instrument and the flag of your location can be set in the main window." );
+    // QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " +
+    //                        tr ( "The fader tag "
+    //                             "identifies the connected client. The tag name, a picture of your "
+    //                             "instrument and the flag of your location can be set in the main window." );
 
-    plblInstrument->setWhatsThis ( strFaderText );
-    plblInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );
-    plblLabel->setWhatsThis ( strFaderText );
-    plblLabel->setAccessibleName ( tr ( "Mixer channel label (fader tag)" ) );
-    plblCountryFlag->setWhatsThis ( strFaderText );
-    plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country/region flag" ) );
+    // plblInstrument->setWhatsThis ( strFaderText );
+    // plblInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );
+    // plblLabel->setWhatsThis ( strFaderText );
+    // plblLabel->setAccessibleName ( tr ( "Mixer channel label (fader tag)" ) );
+    // plblCountryFlag->setWhatsThis ( strFaderText );
+    // plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country/region flag" ) );
 
     // Connections -------------------------------------------------------------
     QObject::connect ( pFader, &QSlider::valueChanged, this, &CChannelFader::OnLevelValueChanged );
@@ -199,113 +199,6 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     QObject::connect ( pcbGroup, &QCheckBox::stateChanged, this, &CChannelFader::OnGroupStateChanged );
 }
 
-// void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
-// {
-//     eDesign = eNewDesign;
-
-//     switch ( eNewDesign )
-//     {
-//     case GD_ORIGINAL:
-//         pFader->setStyleSheet ( "QSlider { width:         45px;"
-//                                 "          border-image:  url(:/png/fader/res/faderbackground.png) repeat;"
-//                                 "          border-top:    10px transparent;"
-//                                 "          border-bottom: 10px transparent;"
-//                                 "          border-left:   20px transparent;"
-//                                 "          border-right:  -20px transparent; }"
-//                                 "QSlider::groove { image: url(:/png/fader/res/transparent1x1.png);"
-//                                 "                  padding-left:   -34px;"
-//                                 "                  padding-left:   -34px;"
-//                                 "                  padding-top:    -10px;"
-//                                 "                  padding-bottom: -15px; }"
-//                                 "QSlider::handle { image: url(:/png/fader/res/faderhandle.png);"
-//                                 "                  padding-left:   -4px;"
-//                                 "                  padding-top:    -2px;"
-//                                 "                  padding-bottom: -0px; }"
-//                                 );
-
-//         pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-//         pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
-//         pPan->setFixedSize ( 50, 50 );
-//         pPanLabel->setText ( tr ( "PAN" ) );
-//         pcbMute->setText ( tr ( "MUTE" ) );
-//         pcbSolo->setText ( tr ( "SOLO" ) );
-//         strGroupBaseText  = tr ( "GRP" );
-//         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
-//         break;
-
-//     case GD_SLIMFADER:
-//         pLabelPictGrid->addWidget ( plblLabel, 0, Qt::AlignHCenter ); // label below icons
-//         pLabelInstBox->setMinimumHeight ( 130 );                      // maximum height of the instrument+flag+label
-//         pPan->setFixedSize ( 28, 28 );
-//         pFader->setTickPosition ( QSlider::NoTicks );
-//         pFader->setStyleSheet ( "" );
-//         pPanLabel->setText ( tr ( "Pan" ) );
-//         pcbMute->setText ( tr ( "M" ) );
-//         pcbSolo->setText ( tr ( "S" ) );
-//         strGroupBaseText  = tr ( "G" );
-//         iInstrPicMaxWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
-//         break;
-
-//     default:
-//         // reset style sheet and set original parameters
-//         pFader->setTickPosition ( QSlider::TicksBothSides );
-//         pFader->setStyleSheet ( "" );
-//         pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-//         pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
-//         pPan->setFixedSize ( 50, 50 );
-//         pPanLabel->setText ( tr ( "Pan" ) );
-//         pcbMute->setText ( tr ( "Mute" ) );
-//         pcbSolo->setText ( tr ( "Solo" ) );
-//         strGroupBaseText  = tr ( "Grp" );
-//         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
-//         break;
-//     }
-
-//     // we need to update since we changed the checkbox text
-//     UpdateGroupIDDependencies();
-
-//     // the instrument picture might need scaling after a style change
-//     SetChannelInfos ( cReceivedChanInfo );
-// }
-
-// void CChannelFader::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
-// {
-//     eMeterStyle = eNewMeterStyle;
-
-//     switch ( eNewMeterStyle )
-//     {
-//     case MT_BAR_NARROW:
-//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_NARROW );
-//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-//         pFader->setMinimumHeight ( 85 );
-//         break;
-
-//     case MT_BAR_WIDE:
-//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-//         pFader->setMinimumHeight ( 120 );
-//         break;
-
-//     case MT_LED_ROUND_SMALL:
-//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_SMALL );
-//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-//         pFader->setMinimumHeight ( 85 );
-//         break;
-
-//     case MT_LED_ROUND_BIG:
-//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-//         pFader->setMinimumHeight ( 162 );
-//         break;
-
-//     default:
-//         // reset style sheet and set original parameters
-//         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-//         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-//         pFader->setMinimumHeight ( 120 );
-//         break;
-//     }
-// }
 
 void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL ) { plbrChannelLevel->setHidden ( !eNDCL ); }
 
@@ -315,103 +208,6 @@ void CChannelFader::SetDisplayPans ( const bool eNDP )
 {
     pPanLabel->setHidden ( !eNDP );
     pPan->setHidden ( !eNDP );
-}
-
-void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
-{
-    // Should never happen here
-    if ( iGroupID >= MAX_NUM_FADER_GROUPS )
-    {
-        SetGroupID ( INVALID_INDEX );
-    }
-
-    // the group ID defines the border color and style
-    QString strBorderColor = "black";
-    QString strBorderStyle = "solid";
-
-    if ( iGroupID != INVALID_INDEX )
-    {
-        switch ( iGroupID % 4 )
-        {
-        case 0:
-            strBorderColor = "#C43AC5";
-            break;
-
-        case 1:
-            strBorderColor = "#2B93D4";
-            break;
-
-        case 2:
-            strBorderColor = "#3BC53A";
-            break;
-
-        case 3:
-            strBorderColor = "#D46C2B";
-            break;
-
-        default:
-            break;
-        }
-
-        switch ( iGroupID / 4 )
-        {
-        case 0:
-            strBorderStyle = "solid";
-            break;
-
-        case 1:
-            strBorderStyle = "dashed";
-            break;
-
-        case 2:
-            strBorderStyle = "dotted";
-            break;
-
-        case 3:
-            strBorderStyle = "double";
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    // setup group box for label/instrument picture: set a thick black border
-    // with nice round edges
-    QString strStile = "QGroupBox { border:        2px " + strBorderStyle + " " + strBorderColor +
-                       ";"
-                       "            border-radius: 4px;"
-                       "            padding:       3px;";
-
-    // the background color depends on the skill level
-    switch ( eSkillLevel )
-    {
-    case SL_BEGINNER:
-        strStile +=
-            QString ( "background-color: rgb(%1, %2, %3); }" ).arg ( RGBCOL_R_SL_BEGINNER ).arg ( RGBCOL_G_SL_BEGINNER ).arg ( RGBCOL_B_SL_BEGINNER );
-        break;
-
-    case SL_INTERMEDIATE:
-        strStile += QString ( "background-color: rgb(%1, %2, %3); }" )
-                        .arg ( RGBCOL_R_SL_INTERMEDIATE )
-                        .arg ( RGBCOL_G_SL_INTERMEDIATE )
-                        .arg ( RGBCOL_B_SL_INTERMEDIATE );
-        break;
-
-    case SL_PROFESSIONAL:
-        strStile += QString ( "background-color: rgb(%1, %2, %3); }" )
-                        .arg ( RGBCOL_R_SL_SL_PROFESSIONAL )
-                        .arg ( RGBCOL_G_SL_SL_PROFESSIONAL )
-                        .arg ( RGBCOL_B_SL_SL_PROFESSIONAL );
-        break;
-
-    default:
-        strStile +=
-            QString ( "background-color: rgb(%1, %2, %3); }" ).arg ( RGBCOL_R_SL_NOT_SET ).arg ( RGBCOL_G_SL_NOT_SET ).arg ( RGBCOL_B_SL_NOT_SET );
-        break;
-    }
-
-    pLabelInstBox->setStyleSheet ( strStile );
 }
 
 void CChannelFader::Reset()
@@ -433,21 +229,8 @@ void CChannelFader::Reset()
     plbrChannelLevel->SetValue ( 0 );
     plbrChannelLevel->ClipReset();
 
-    // clear instrument picture, country flag, tool tips and label text
-    plblLabel->setText ( "" );
-    plblLabel->setToolTip ( "" );
-    plblInstrument->setVisible ( false );
-    plblInstrument->setToolTip ( "" );
-    plblCountryFlag->setVisible ( false );
-    plblCountryFlag->setToolTip ( "" );
     cReceivedChanInfo = CChannelInfo();
-    SetupFaderTag ( SL_NOT_SET );
-
-    // set a defined tool tip time out
-    const int iToolTipDurMs = 30000;
-    plblLabel->setToolTipDuration ( iToolTipDurMs );
-    plblInstrument->setToolTipDuration ( iToolTipDurMs );
-    plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
+    // SetupFaderTag ( SL_NOT_SET );
 
     bOtherChannelIsSolo  = false;
     bIsMyOwnFader        = false;
@@ -615,7 +398,7 @@ void CChannelFader::UpdateGroupIDDependencies()
     }
 
     // the fader tag border color is set according to the selected group
-    SetupFaderTag ( cReceivedChanInfo.eSkillLevel );
+    // SetupFaderTag ( cReceivedChanInfo.eSkillLevel );
 }
 
 void CChannelFader::OnGroupStateChanged ( int )
@@ -671,216 +454,21 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
 
 void CChannelFader::SetChannelLevel ( const uint16_t iLevel ) { plbrChannelLevel->SetValue ( iLevel ); }
 
-void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
-{
-    // store received channel info
-    cReceivedChanInfo = cChanInfo;
-
-    // init properties for the tool tip
-    int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
-    QLocale::Country eTTCountry    = QLocale::AnyCountry;
-
-    // Label text --------------------------------------------------------------
-
-    QString strModText = cChanInfo.strName;
-
-    // show channel numbers if --ctrlmidich is used (#241, #95)
-    if ( bMIDICtrlUsed )
-    {
-        strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
-    }
-
-    QTextBoundaryFinder tbfName ( QTextBoundaryFinder::Grapheme, cChanInfo.strName );
-    int                 iBreakPos;
-
-    // apply break position and font size depending on the selected design
-    if ( eDesign == GD_SLIMFADER )
-    {
-        // in slim mode use a non-bold font (smaller width font)
-        plblLabel->setStyleSheet ( "QLabel { color: black; }" );
-
-        // break at every 4th character
-        iBreakPos = 4;
-    }
-    else
-    {
-        // in normal mode use bold font
-        plblLabel->setStyleSheet ( "QLabel { color: black; font: bold; }" );
-
-        // break text at predefined position
-        iBreakPos = MAX_LEN_FADER_TAG / 2;
-    }
-
-    int iInsPos     = iBreakPos;
-    int iCount      = 0;
-    int iLineNumber = 0;
-    while ( tbfName.toNextBoundary() != -1 )
-    {
-        ++iCount;
-        if ( iCount == iInsPos && tbfName.position() + iLineNumber < strModText.length() )
-        {
-            strModText.insert ( tbfName.position() + iLineNumber, QString ( "\n" ) );
-            iLineNumber++;
-            iInsPos += iBreakPos;
-        }
-    }
-
-    plblLabel->setText ( strModText );
-
-    // Instrument picture ------------------------------------------------------
-    // get the resource reference string for this instrument
-    const QString strCurResourceRef = CInstPictures::GetResourceReference ( cChanInfo.iInstrument );
-
-    // first check if instrument picture is used or not and if it is valid
-    if ( CInstPictures::IsNotUsedInstrument ( cChanInfo.iInstrument ) || strCurResourceRef.isEmpty() )
-    {
-        // disable instrument picture
-        plblInstrument->setVisible ( false );
-    }
-    else
-    {
-        // set correct picture
-        QPixmap pixInstr ( strCurResourceRef );
-
-        if ( ( iInstrPicMaxWidth != INVALID_INDEX ) && ( pixInstr.width() > iInstrPicMaxWidth ) )
-        {
-            // scale instrument picture on request (scale to the width with correct aspect ratio)
-            plblInstrument->setPixmap ( pixInstr.scaledToWidth ( iInstrPicMaxWidth, Qt::SmoothTransformation ) );
-        }
-        else
-        {
-            plblInstrument->setPixmap ( pixInstr );
-        }
-        iTTInstrument = cChanInfo.iInstrument;
-
-        // enable instrument picture
-        plblInstrument->setVisible ( true );
-    }
-
-    // Country flag icon -------------------------------------------------------
-    if ( cChanInfo.eCountry != QLocale::AnyCountry )
-    {
-        // try to load the country flag icon
-        QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( cChanInfo.eCountry ) );
-
-        // first check if resource reference was valid
-        if ( CountryFlagPixmap.isNull() )
-        {
-            // disable country flag
-            plblCountryFlag->setVisible ( false );
-        }
-        else
-        {
-            // set correct picture
-            plblCountryFlag->setPixmap ( CountryFlagPixmap );
-            eTTCountry = cChanInfo.eCountry;
-
-            // enable country flag
-            plblCountryFlag->setVisible ( true );
-        }
-    }
-    else
-    {
-        // disable country flag
-        plblCountryFlag->setVisible ( false );
-    }
-
-    // Skill level background color --------------------------------------------
-    SetupFaderTag ( cChanInfo.eSkillLevel );
-
-    // Tool tip ----------------------------------------------------------------
-    // complete musician profile in the tool tip
-    QString strToolTip              = "";
-    QString strAliasAccessible      = "";
-    QString strInstrumentAccessible = "";
-    QString strLocationAccessible   = "";
-
-    // alias/name
-    if ( !cChanInfo.strName.isEmpty() )
-    {
-        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
-        strAliasAccessible += cChanInfo.strName;
-    }
-
-    // instrument
-    if ( !CInstPictures::IsNotUsedInstrument ( iTTInstrument ) )
-    {
-        strToolTip += "<h4>" + tr ( "Instrument" ) + "</h4>" + CInstPictures::GetName ( iTTInstrument );
-
-        strInstrumentAccessible += CInstPictures::GetName ( iTTInstrument );
-    }
-
-    // location
-    if ( ( eTTCountry != QLocale::AnyCountry ) || ( !cChanInfo.strCity.isEmpty() ) )
-    {
-        strToolTip += "<h4>" + tr ( "Location" ) + "</h4>";
-
-        if ( !cChanInfo.strCity.isEmpty() )
-        {
-            strToolTip += cChanInfo.strCity;
-            strLocationAccessible += cChanInfo.strCity;
-
-            if ( eTTCountry != QLocale::AnyCountry )
-            {
-                strToolTip += ", ";
-                strLocationAccessible += ", ";
-            }
-        }
-
-        if ( eTTCountry != QLocale::AnyCountry )
-        {
-            strToolTip += QLocale::countryToString ( eTTCountry );
-            strLocationAccessible += QLocale::countryToString ( eTTCountry );
-        }
-    }
-
-    // skill level
-    QString strSkillLevel;
-
-    switch ( cChanInfo.eSkillLevel )
-    {
-    case SL_BEGINNER:
-        strSkillLevel = tr ( "Beginner" );
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
-        strInstrumentAccessible += ", " + strSkillLevel;
-        break;
-
-    case SL_INTERMEDIATE:
-        strSkillLevel = tr ( "Intermediate" );
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
-        strInstrumentAccessible += ", " + strSkillLevel;
-        break;
-
-    case SL_PROFESSIONAL:
-        strSkillLevel = tr ( "Expert" );
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
-        strInstrumentAccessible += ", " + strSkillLevel;
-        break;
-
-    case SL_NOT_SET:
-        // skill level not set, do not add this entry
-        break;
-    }
-
-    // if no information is given, leave the tool tip empty, otherwise add header
-    if ( !strToolTip.isEmpty() )
-    {
-        strToolTip.prepend ( "<h3>" + tr ( "Musician Profile" ) + "</h3>" );
-    }
-
-    plblCountryFlag->setToolTip ( strToolTip );
-    plblCountryFlag->setAccessibleDescription ( strLocationAccessible );
-    plblInstrument->setToolTip ( strToolTip );
-    plblInstrument->setAccessibleDescription ( strInstrumentAccessible );
-    plblLabel->setToolTip ( strToolTip );
-    plblLabel->setAccessibleName ( strAliasAccessible );
-    plblLabel->setAccessibleDescription ( tr ( "Alias" ) );
-    pcbMute->setAccessibleName ( "Mute " + strAliasAccessible + ", " + strInstrumentAccessible );
-    pcbSolo->setAccessibleName ( "Solo " + strAliasAccessible + ", " + strInstrumentAccessible );
-    pcbGroup->setAccessibleName ( "Group " + strAliasAccessible + ", " + strInstrumentAccessible );
-    dynamic_cast<QWidget*> ( plblLabel->parent() )
-        ->setAccessibleName ( strAliasAccessible + ", " + strInstrumentAccessible + ", " + strLocationAccessible );
-}
+// void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
+// {
+//     // store received channel info
+//     cReceivedChanInfo = cChanInfo;
+//
+//     // Label text --------------------------------------------------------------
+//
+//     QString strModText = cChanInfo.strName;
+//
+//     // show channel numbers if --ctrlmidich is used (#241, #95)
+//     if ( bMIDICtrlUsed )
+//     {
+//         strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
+//     }
+// }
 
 /******************************************************************************\
 * CAudioMixerBoard                                                             *
@@ -997,35 +585,6 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     }
 }
 
-// void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
-// {
-//     // // move the channels tighter together in slim fader mode
-//     // if ( eNewDesign == GD_SLIMFADER )
-//     // {
-//     //     pMainLayout->setSpacing ( 2 );
-//     // }
-//     // else
-//     // {
-//     //     pMainLayout->setSpacing ( 6 ); // Qt default spacing value
-//     // }
-//     pMainLayout->setSpacing ( 6 ); // Qt default spacing value
-
-//     // apply GUI design to child GUI controls
-//     for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
-//     {
-//         vecpChanFader[i]->SetGUIDesign ( eNewDesign );
-//     }
-// }
-
-// void CAudioMixerBoard::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
-// {
-//     // apply GUI design to child GUI controls
-//     for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
-//     {
-//         vecpChanFader[i]->SetMeterStyle ( eNewMeterStyle );
-//     }
-// }
-
 void CAudioMixerBoard::SetDisplayPans ( const bool eNDP )
 {
     bDisplayPans = eNDP;
@@ -1107,17 +666,17 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
         {
             PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
         }
-        else if ( eChSortType == ST_BY_CITY )
-        {
-            PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedCity().toLower(), i );
-        }
-        else if ( eChSortType == ST_BY_INSTRUMENT )
-        {
-            // sort first "by instrument" and second "by name" by adding the name after the instrument
-            PairList << QPair<QString, size_t> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
-                                                     vecpChanFader[i]->GetReceivedName().toLower(),
-                                                 i );
-        }
+        // else if ( eChSortType == ST_BY_CITY )
+        // {
+        //     PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedCity().toLower(), i );
+        // }
+        // else if ( eChSortType == ST_BY_INSTRUMENT )
+        // {
+        //     // sort first "by instrument" and second "by name" by adding the name after the instrument
+        //     PairList << QPair<QString, size_t> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
+        //                                              vecpChanFader[i]->GetReceivedName().toLower(),
+        //                                          i );
+        // }
         else if ( eChSortType == ST_BY_GROUPID )
         {
             if ( vecpChanFader[i]->GetGroupID() == INVALID_INDEX )
@@ -1328,7 +887,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
             }
 
             // set the channel infos
-            vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[idxVecpChan] );
+            // vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[idxVecpChan] );
         }
 
         // update the solo states since if any channel was on solo and a new client

@@ -118,7 +118,7 @@ protected:
     void CompleteConnection();
     void Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel );
     void Disconnect();
-    void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
+    // void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
     CClient*         pClient;
@@ -153,8 +153,8 @@ protected:
     QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> endpoint_reply;
 
     virtual void closeEvent ( QCloseEvent* Event );
-    virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
-    virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
+    // virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
+    // virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
 
     CAnalyzerConsole   AnalyzerConsole;
 
@@ -244,16 +244,16 @@ public slots:
     void OnAutoAdjustAllFaderLevels() { MainMixerBoard->AutoAdjustAllFaderLevels(); }
     void OnNumMixerPanelRowsChanged ( int value ) { MainMixerBoard->SetNumMixerPanelRows ( value ); }
 
-    void OnSettingsStateChanged ( int value );
+    // void OnSettingsStateChanged ( int value );
 //    void OnPubConnectStateChanged ( int value );
-    void OnChatStateChanged ( int value );
+    // void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
 
-    void OnAudioReverbValueChanged ( int value ) { pClient->SetReverbLevel ( value ); }
+    // void OnAudioReverbValueChanged ( int value ) { pClient->SetReverbLevel ( value ); }
 
-    void OnReverbSelLClicked() { pClient->SetReverbOnLeftChan ( true ); }
+    // void OnReverbSelLClicked() { pClient->SetReverbOnLeftChan ( true ); }
 
-    void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
+    // void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
 
 //    void OnFeedbackDetectionChanged ( int state ) { SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
@@ -290,16 +290,16 @@ public slots:
     void OnJoinConnectClicked();
     void GetKoordAddress();
     void OnDisconnected() { Disconnect(); }
-    void OnGUIDesignChanged();
+    // void OnGUIDesignChanged();
     // void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
-    void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
+    // void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
     // void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 
     // updates
-    void OnCheckForUpdate();
-    void OnDownloadUpdateClicked();
+    // void OnCheckForUpdate();
+    // void OnDownloadUpdateClicked();
 
     void accept() { close(); } // introduced by pljones
 
@@ -312,11 +312,11 @@ signals:
     // for QML
     void videoUrlChanged();
 
-    //region checker stuff
-    void ReqServerListQuery ( CHostAddress InetAddr );
-    void CreateCLServerListPingMes ( CHostAddress InetAddr );
-    void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
-    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
+    // //region checker stuff
+    // void ReqServerListQuery ( CHostAddress InetAddr );
+    // void CreateCLServerListPingMes ( CHostAddress InetAddr );
+    // void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
+    // void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
 
     // custom macOS url handler stuff
     void EventJoinConnectClicked( const QString &url );

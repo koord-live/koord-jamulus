@@ -170,19 +170,19 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
     QObject::connect ( butNewStart, &QPushButton::clicked, this, &CClientDlg::OnNewStartClicked );
-    QObject::connect ( downloadLinkButton, &QPushButton::clicked, this, &CClientDlg::OnDownloadUpdateClicked );
+    // QObject::connect ( downloadLinkButton, &QPushButton::clicked, this, &CClientDlg::OnDownloadUpdateClicked );
     QObject::connect ( inviteComboBox, &QComboBox::activated, this, &CClientDlg::OnInviteBoxActivated );
-    QObject::connect ( checkUpdateButton, &QPushButton::clicked, this, &CClientDlg::OnCheckForUpdate );
+    // QObject::connect ( checkUpdateButton, &QPushButton::clicked, this, &CClientDlg::OnCheckForUpdate );
 
     // connection for macOS custom url event handler
-    QObject::connect ( this, &CClientDlg::EventJoinConnectClicked, this, &CClientDlg::OnEventJoinConnectClicked );
+    // QObject::connect ( this, &CClientDlg::EventJoinConnectClicked, this, &CClientDlg::OnEventJoinConnectClicked );
 
     // check boxes
-    QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
+    // QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
 
 //    QObject::connect ( chbPubJam, &QCheckBox::stateChanged, this, &CClientDlg::OnPubConnectStateChanged );
 
-    QObject::connect ( chbChat, &QCheckBox::stateChanged, this, &CClientDlg::OnChatStateChanged );
+    // QObject::connect ( chbChat, &QCheckBox::stateChanged, this, &CClientDlg::OnChatStateChanged );
 
     QObject::connect ( chbLocalMute, &QCheckBox::stateChanged, this, &CClientDlg::OnLocalMuteStateChanged );
 
@@ -208,7 +208,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
 
-    QObject::connect ( sldAudioReverb, &QDial::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
+    // QObject::connect ( sldAudioReverb, &QDial::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
 
     // radio buttons
     // QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
@@ -270,7 +270,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::NumClientsChanged, this, &CClientDlg::OnNumClientsChanged );
 
-    QObject::connect ( this, &CClientDlg::ReqServerListQuery, this, &CClientDlg::OnReqServerListQuery );
+    // QObject::connect ( this, &CClientDlg::ReqServerListQuery, this, &CClientDlg::OnReqServerListQuery );
 
     QObject::connect ( sessionCancelButton, &QPushButton::clicked, this, &CClientDlg::OnJoinCancelClicked );
     QObject::connect ( sessionConnectButton, &QPushButton::clicked, this, &CClientDlg::OnJoinConnectClicked );
@@ -279,14 +279,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // times are not accurate and the client list may not be retrieved for all servers listed
     // (it seems the sendto() function needs to be called from different threads to fire the
     // packet immediately and do not collect packets before transmitting)
-    QObject::connect ( this, &CClientDlg::CreateCLServerListPingMes, this, &CClientDlg::OnCreateCLServerListPingMes, Qt::QueuedConnection );
+    // QObject::connect ( this, &CClientDlg::CreateCLServerListPingMes, this, &CClientDlg::OnCreateCLServerListPingMes, Qt::QueuedConnection );
 
-    QObject::connect ( this, &CClientDlg::CreateCLServerListReqVerAndOSMes, this, &CClientDlg::OnCreateCLServerListReqVerAndOSMes );
+    // QObject::connect ( this, &CClientDlg::CreateCLServerListReqVerAndOSMes, this, &CClientDlg::OnCreateCLServerListReqVerAndOSMes );
 
-    QObject::connect ( this,
-                       &CClientDlg::CreateCLServerListReqConnClientsListMes,
-                       this,
-                       &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
+    // QObject::connect ( this,
+    //                    &CClientDlg::CreateCLServerListReqConnClientsListMes,
+    //                    this,
+    //                    &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
 
     // Initializations which have to be done after the signals are connected ---
@@ -354,64 +354,6 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     Event->accept();
 }
 
-void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
-{
-    // we only want to use drag'n'drop with file URLs
-    QListIterator<QUrl> UrlIterator ( Event->mimeData()->urls() );
-
-    while ( UrlIterator.hasNext() )
-    {
-        const QString strFileNameWithPath = UrlIterator.next().toLocalFile();
-
-        // check all given URLs and if any has the correct suffix
-        if ( !strFileNameWithPath.isEmpty() && ( QFileInfo ( strFileNameWithPath ).suffix() == MIX_SETTINGS_FILE_SUFFIX ) )
-        {
-            if ( bCheckAccept )
-            {
-                // only accept drops of supports file types
-                Event->acceptProposedAction();
-            }
-            else
-            {
-                // load the first valid settings file and leave the loop
-                pSettings->LoadFaderSettings ( strFileNameWithPath );
-                MainMixerBoard->LoadAllFaderSettings();
-                break;
-            }
-        }
-    }
-}
-
-// void CClientDlg::UpdateRevSelection()
-// {
-//     if ( pClient->GetAudioChannels() == CC_STEREO )
-//     {
-//         // for stereo make channel selection invisible since
-//         // reverberation effect is always applied to both channels
-//        rbtReverbSelL->setVisible ( false );
-//        rbtReverbSelR->setVisible ( false );
-//     }
-//     else
-//     {
-//         // make radio buttons visible
-//        rbtReverbSelL->setVisible ( true );
-//        rbtReverbSelR->setVisible ( true );
-
-//         // update value
-//         if ( pClient->IsReverbOnLeftChan() )
-//         {
-//            rbtReverbSelL->setChecked ( true );
-//         }
-//         else
-//         {
-//            rbtReverbSelR->setChecked ( true );
-//         }
-//     }
-
-//     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
-//     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
-// }
-
 void CClientDlg::OnJoinCancelClicked()
 {
     HideJoinWidget();
@@ -438,7 +380,6 @@ void CClientDlg::GetKoordAddress()
     SetSelectedAddress( fixedAddress );
     CompleteConnection();
 }
-
 
 void CClientDlg::OnJoinConnectClicked()
 {
@@ -570,12 +511,6 @@ void CClientDlg::OnNewStartClicked()
     //                         .toLower();
     // // qInfo() << strCurrBestRegion;
     QDesktopServices::openUrl(QUrl("https://koord.live/session?region=" + strCurrBestRegion, QUrl::TolerantMode));
-}
-
-void CClientDlg::OnDownloadUpdateClicked()
-{
-    // just open website for now
-    QDesktopServices::openUrl(QUrl("https://koord.live/downloads", QUrl::TolerantMode));
 }
 
 void CClientDlg::OnClearAllStoredSoloMuteSettings()
@@ -756,37 +691,6 @@ void CClientDlg::ShowAnalyzerConsole()
     AnalyzerConsole.activateWindow();
 }
 
-void CClientDlg::OnSettingsStateChanged ( int value )
-{
-    if ( value == Qt::Checked )
-    {
-        ;
-//        ShowGeneralSettings ( SETTING_TAB_AUDIONET );
-    }
-    else
-    {
-        ;
-//        ClientSettingsDlg.hide();
-    }
-}
-
-
-void CClientDlg::OnChatStateChanged ( int value )
-{
-    if ( value == Qt::Checked )
-    {
-        // do nothing right now
-        ;
-//        ShowChatWindow();
-    }
-    else
-    {
-        // do nothing right now
-        ;
-     //   ChatDlg.hide();
-    }
-}
-
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
@@ -949,12 +853,6 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
 //     SetupBuiltinASIOBox();
 // #endif
 }
-
-// void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients )
-// {
-//     // update connection dialog server list
-//     SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
-// }
 
 void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
 {
@@ -1206,249 +1104,10 @@ void CClientDlg::replyFinished(QNetworkReply *rep)
     QMessageBox::information(this,"sal",str,"ok");
 }
 
-void CClientDlg::OnCheckForUpdate()
-{
-    // read from Github API to get latest release ie tag rX_X_X
-    QUrl url("https://api.github.com/repos/koord-live/koord-app/releases");
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    // send request and assign reply pointer
-    QNetworkReply *reply = qNam->get(request);
-
-    // connect reply pointer with callback for finished signal
-    QObject::connect(reply, &QNetworkReply::finished, this, [=]()
-        {
-            // DL installer URL to download if required
-            QString new_download_url;
-            QString err = reply->errorString();
-            QString contents = QString::fromUtf8(reply->readAll());
-            if ( reply->error() != QNetworkReply::NoError)
-            {
-                // QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Network Error!" );
-                return;
-            }
-            //qInfo() << ">>> CONNECT: " << reply->error();
-
-            QJsonDocument jsonResponse = QJsonDocument::fromJson(contents.toUtf8());
-            QJsonArray jsonArray = jsonResponse.array();
-
-            for (int jsIndex = 0; jsIndex < jsonArray.size(); ++jsIndex) {
-                QJsonObject releaseObj = jsonArray[jsIndex].toObject();
-                foreach(const QString& key, releaseObj.keys()) {
-                    if ( key == "tag_name")
-                    {
-                        QJsonValue value = releaseObj.value(key);
-                        qInfo() << "Key = " << key << ", Value = " << value.toString();
-                        QRegularExpression rx_release("^r[0-9]+_[0-9]+_[0-9]+$");
-                        QRegularExpressionMatch rel_match = rx_release.match(value.toString());
-                        if (rel_match.hasMatch()) {
-                            QString latestVersion =  rel_match.captured(0)
-                                                       .replace("r", "")
-                                                       .replace("_", ".");
-                            if ( APP_VERSION == latestVersion )
-                            {
-                                qInfo() << "WE HAVE A MATCH - no update necessary";
-                                // QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "Up to date!" );
-                            }
-                            else
-                            {
-                                qInfo() << "Later version available: " << latestVersion;
-                                // get download URL
-                                QJsonArray DLArray = releaseObj.value("assets").toArray();
-                                qInfo() << DLArray.size();
-                                for (int dlIndex = 0; dlIndex < DLArray.size(); ++dlIndex) {
-                                    QJsonObject dlObject =  DLArray[dlIndex].toObject();
-                                    foreach(const QString& dlkey, dlObject.keys()) {
-                                        if ( dlkey == "browser_download_url") {
-                                            QString dl_url = dlObject.value(dlkey).toString();
-#if defined( Q_OS_MACOS ) && defined ( MAC_LEGACY )
-                                            if (dl_url.endsWith("legacy.dmg")) new_download_url = dl_url;
-#elif defined( Q_OS_MACOS ) && !defined ( MAC_LEGACY )
-                                            if (dl_url.endsWith(".dmg") && !dl_url.contains("legacy")) new_download_url = dl_url;
-#elif defined ( Q_OS_WINDOWS )
-                                            if (dl_url.endsWith(".exe")) new_download_url = dl_url;
-#elif defined ( Q_OS_LINUX )
-                                            if (dl_url.endsWith(".AppImage")) new_download_url = dl_url;
-#endif
-                                        }
-                                    }
-                                }
-                                QMessageBox updateMessage = QMessageBox(this);
-                                updateMessage.setText(QString("There is an update available! Version: %1").arg(latestVersion));
-                                updateMessage.setInformativeText(QString("It's highly recommended to stay up to date "
-                                                                         "with all the fixes and enhancements. Shall we get the update?"));
-                                QPushButton *dlButton = updateMessage.addButton(QString("Download Update"), QMessageBox::AcceptRole);
-                                QPushButton *cancelButton = updateMessage.addButton(QString("Later"), QMessageBox::RejectRole);
-                                updateMessage.setDefaultButton(dlButton);
-                                updateMessage.exec();
-                                if (updateMessage.clickedButton() == dlButton) {
-                                    QDesktopServices::openUrl(QUrl(new_download_url, QUrl::TolerantMode));
-                                } else if (updateMessage.clickedButton() == cancelButton) {
-                                    return;
-                                }
-
-                            };
-                            // IF we have a match, then that is the latest version
-                            // Github returns array with latest releases at start of index
-                            // So return after first successful match
-                            return;
-                        };
-                    }
-                }
-            }
-//            QToolTip::showText( checkUpdateButton->mapToGlobal( QPoint( 0, 0 ) ), "No Update Found" );
-        });
-
-}
-
-// void CClientDlg::UpdateDisplay()
-// {
-//     // nothing
-//     ;
-// }
-
-// void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
-// {
-//     // remove any styling from the mixer board - reapply after changing skin
-//     MainMixerBoard->setStyleSheet ( "" );
-
-//     // // apply GUI design to current window
-//     // switch ( eNewDesign )
-//     // {
-//     // case GD_ORIGINAL:
-//     //     backgroundFrame->setStyleSheet (
-//     //         "QFrame#backgroundFrame { border-image:  url(:/png/main/res/background.png) 0px 0px 0px 0px;"
-//     //         "                         border-top:    0px transparent;"
-//     //         "                         border-bottom: 0px transparent;"
-//     //         "                         border-left:   0px transparent;"
-//     //         "                         border-right:  0px transparent;"
-//     //         "                         padding:       2px;"
-//     //         "                         margin:        2px, 2px, 2px, 2px; }"
-//     //         "QLabel {                 color:          rgb(220, 220, 220);"
-//     //         "                         font:           Rubik; }"
-//     //         "QRadioButton {           color:          rgb(220, 220, 220);"
-//     //         "                         font:           bold; }"
-//     //         "QScrollArea {            background:     transparent; }"
-//     //         ".QWidget {               background:     transparent; }" // note: matches instances of QWidget, but not of its subclasses
-//     //         "QGroupBox {              background:     transparent; }"
-//     //         "QGroupBox::title {       color:          rgb(220, 220, 220); }"
-//     //         "QCheckBox::indicator {   width:          38px;"
-//     //         "                         height:         21px; }"
-//     //         "QCheckBox::indicator:unchecked {"
-//     //         "                         image:          url(:/png/main/res/general_btn_off.png); }"
-//     //         "QCheckBox::indicator:checked {"
-//     //         "                         image:          url(:/png/main/res/general_btn_on.png); }"
-//     //         "QCheckBox {              color:          rgb(220, 220, 220);"
-//     //         "                         font:           bold; }" );
-
-
-//     //     ledBuffers->SetType ( CMultiColorLED::MT_LED );
-//     //     ledDelay->SetType ( CMultiColorLED::MT_LED );
-//     //     break;
-
-//     // default:
-//     //     // reset style sheet and set original parameters
-//     //     backgroundFrame->setStyleSheet ( "" );
-
-//     //     ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );
-//     //     ledDelay->SetType ( CMultiColorLED::MT_INDICATOR );
-//     //     break;
-//     // }
-//     backgroundFrame->setStyleSheet ( "" );
-
-//     ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );
-//     ledDelay->SetType ( CMultiColorLED::MT_INDICATOR );
-
-//     // also apply GUI design to child GUI controls
-//     MainMixerBoard->SetGUIDesign ( eNewDesign );
-// }
-
-// void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
-// {
-//     // apply MeterStyle to current window
-//     switch ( eNewMeterStyle )
-//     {
-//     case MT_LED_STRIPE:
-//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-//         break;
-
-//     case MT_LED_ROUND_BIG:
-//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-//         break;
-
-//     case MT_BAR_WIDE:
-//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-//         break;
-
-//     case MT_BAR_NARROW:
-//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-//         break;
-
-//     case MT_LED_ROUND_SMALL:
-//         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-//         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-//         break;
-//     }
-
-//     // also apply MeterStyle to child GUI controls
-//     MainMixerBoard->SetMeterStyle ( eNewMeterStyle );
-// }
-
 void CClientDlg::OnRecorderStateReceived ( const ERecorderState newRecorderState )
 {
     MainMixerBoard->SetRecorderState ( newRecorderState );
     // SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
-}
-
-void CClientDlg::OnGUIDesignChanged()
-{
-    // SetGUIDesign ( pClient->GetGUIDesign() );
-    // SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
-}
-
-// void CClientDlg::OnMeterStyleChanged() { SetMeterStyle ( pClient->GetMeterStyle() ); }
-
-void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign )
-{
-    // return if no change
-    if ( ( newRecorderState == eLastRecorderState ) && ( eNewDesign == eLastDesign ) )
-        return;
-    eLastRecorderState = newRecorderState;
-    eLastDesign        = eNewDesign;
-
-    if ( newRecorderState == RS_RECORDING )
-    {
-        MainMixerBoard->setStyleSheet ( "QGroupBox::title { subcontrol-origin: margin; "
-                                        "                   subcontrol-position: left top;"
-                                        "                   left: 7px;"
-                                        "                   color: rgb(255,255,255);"
-                                        "                   background-color: rgb(255,0,0); }" );
-        recLabel->setStyleSheet ( "QLabel { color: red; font: bold; }" );
-
-    }
-    else
-    {
-        if ( eNewDesign == GD_ORIGINAL )
-        {
-            MainMixerBoard->setStyleSheet ( "QGroupBox::title { subcontrol-origin: margin;"
-                                            "                   subcontrol-position: left top;"
-                                            "                   left: 7px;"
-                                            "                   color: rgb(220,220,220); }" );
-        }
-        else
-        {
-            MainMixerBoard->setStyleSheet ( "QGroupBox::title { subcontrol-origin: margin;"
-                                            "                   subcontrol-position: left top;"
-                                            "                   left: 7px;"
-                                            "                   color: rgb(0,0,0); }" );
-        }
-        recLabel->setStyleSheet ( "QLabel { color: rgb(86, 86, 86); font: normal; }" );
-    }
 }
 
 void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor )
@@ -1473,7 +1132,6 @@ void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, c
     ledDelay->SetLight ( eOverallDelayLEDColor );
 }
 
-
 void CClientDlg::OnConnectFromURLHandler(const QString& connect_url)
 {
     // connect directly to url koord://fqdnfqdn.kv.koord.live:30231
@@ -1485,4 +1143,3 @@ void CClientDlg::OnConnectFromURLHandler(const QString& connect_url)
     joinFieldEdit->setText(strSelectedAddress);
     emit EventJoinConnectClicked( connect_url );
 }
-

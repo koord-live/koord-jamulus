@@ -203,19 +203,19 @@ CClient::CClient ( const quint16  iPortNumber,
 
     // MainMixerBoard->HideAll();
 
-    // // init input level meter bars
+    // init input level meter bars
 
-    // // init status LEDs
+    // init status LEDs
 
-    // // init input boost
+    // init input boost
 
-    // // set window title (with no clients connected -> "0")
+    // set window title (with no clients connected -> "0")
 
-    // // setup timers
+    // setup timers
     // TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
     // TimerDetectFeedback.setSingleShot ( true );
 
-    // // Connect on startup ------------------------------------------------------
+    // Connect on startup ------------------------------------------------------
     // if ( !strConnOnStartupAddress.isEmpty() )
     // {
     //     // initiate connection (always show the address in the mixer board
@@ -223,12 +223,12 @@ CClient::CClient ( const quint16  iPortNumber,
     //     Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
     // }
 
-    // // restoreGeometry - maybe
+    // restoreGeometry - maybe
 
-    // // All Connections
+    // All Connections
 
-    // // Post Connections init
-    // // start timer for status bar
+    // Post Connections init
+    // start timer for status bar
     // TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
 
     // if ( bMuteStream )
