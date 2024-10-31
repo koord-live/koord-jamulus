@@ -24,11 +24,14 @@
 
 #pragma once
 
-#include <QFrame>
-#include <QPixmap>
+// these gotta go ....
+// #include <QFrame>
+// #include <QPixmap>
+// #include <QLayout>
+// #include <QProgressBar>
+// --
+
 #include <QTimer>
-#include <QLayout>
-#include <QProgressBar>
 #include "util.h"
 #include "global.h"
 
@@ -37,64 +40,18 @@
 #define CLIP_IND_TIME_OUT_MS   20000
 
 /* Classes ********************************************************************/
-class CLevelMeter : public QWidget
+class CLevelMeterNu : public QObject
 {
     Q_OBJECT
 
 public:
-    enum ELevelMeterType
-    {
-        MT_BAR_NARROW,
-        MT_BAR_WIDE,
-        MT_LED_STRIPE,
-        // MT_LED_ROUND_SMALL,
-        // MT_LED_ROUND_BIG
-    };
-
-    CLevelMeter ( QWidget* parent = nullptr );
-    virtual ~CLevelMeter();
-
+    CLevelMeterNu ( QObject* parent = nullptr );
+    virtual ~CLevelMeterNu();
     void SetValue ( const double dValue );
-    void SetLevelMeterType ( const ELevelMeterType eNType );
 
 protected:
-    class cLED
-    {
-    public:
-        enum ELightColor
-        {
-            RL_DISABLED,
-            RL_BLACK,
-            RL_GREEN,
-            RL_YELLOW,
-            RL_RED
-        };
-
-        cLED ( QWidget* parent );
-
-        void        SetColor ( const ELightColor eNewColor );
-        ELightColor GetColor() { return eCurLightColor; };
-        QLabel*     GetLabelPointer() { return pLEDLabel; }
-
-    protected:
-        QPixmap BitmCubeLedBlack;
-        QPixmap BitmCubeLedGreen;
-        QPixmap BitmCubeLedYellow;
-        QPixmap BitmCubeLedRed;
-
-        ELightColor eCurLightColor;
-        QLabel*     pLEDLabel;
-    };
-
-    virtual void mousePressEvent ( QMouseEvent* ) override { ClipReset(); }
-
-    void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType, const bool bIsClip );
-
-    CMinimumStackedLayout* pMinStackedLayout;
-    ELevelMeterType        eLevelMeterType;
-    CVector<cLED*>         vecpLEDs;
-    QProgressBar*          pBarMeter;
-
+    // virtual void mousePressEvent ( QMouseEvent* ) override { ClipReset(); }
+    void SetClipStatus ( const bool bIsClip );
     QTimer TimerClip;
 
 public slots:

@@ -321,6 +321,7 @@ HEADERS += src/buffer.h \
     src/channel.h \
     src/global.h \
     # src/kdsingleapplication.h \
+    src/levelmeternu.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
     src/threadpool.h \
@@ -432,6 +433,7 @@ SOURCES += src/buffer.cpp \
     src/channel.cpp \
     src/kdapplication.cpp \
     # src/kdsingleapplication.cpp \
+    src/levelmeternu.cpp \
     src/main.cpp \
     src/protocol.cpp \
     src/recorder/jamcontroller.cpp \
