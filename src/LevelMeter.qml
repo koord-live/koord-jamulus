@@ -1,51 +1,54 @@
 import QtQuick 2.15
-import QtQuick.Controls
-import QtQuick.Layouts
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Rectangle {
     id: root
-    width: 40
-    height: 300
+    width: parent.width
+    height: parent.height
     color: "white"
-    // radius: 3
     border.color: "black"
     border.width: 1
+    radius: 3
 
     property alias levelValue: levelBar.heightPercentage
 
     ColumnLayout {
         anchors.fill: parent
+        spacing: 10
 
         Rectangle {
             id: levelContainer
             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
             Layout.preferredHeight: root.height
-            width: 35
-            height: root.height
+            Layout.preferredWidth: root.width * 0.5
             color: "black"
-            border.color: "orange"
-            border.width: 5
-            // radius: 5
+            radius: 2
 
-            Rectangle {
-                id: levelBar
-                width: parent.width * 0.8
-                height: levelContainer.height * heightPercentage
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter // Center horizontally
-                // Layout.alignment: Qt.AlignBottom
-                color: "green"
-                border.color: "yellow"
-                border.width: 3
-                radius: 3
+            ColumnLayout {
+                anchors.fill: parent
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                property real heightPercentage: 0 // Level in percentage, can be updated from C++
+                // Spacer to push levelBar to the bottom
+                Item {
+                    Layout.fillHeight: true
+                }
+
+                Rectangle {
+                    id: levelBar
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: levelContainer.width * 0.5
+                    Layout.preferredHeight: levelContainer.height * heightPercentage
+                    radius: 1
+                    gradient: Gradient {
+                        GradientStop { position: 1.0; color: "green" }
+                        GradientStop { position: 0.5; color: "yellow" }
+                        GradientStop { position: 0.0; color: "red" }
+                    }
+                    property real heightPercentage: 0.5 // Default 50% height for demonstration
+                }
             }
         }
-
-        // Text {
-        //     text: "Level: " + levelBar.heightPercentage + "%"
-        //     anchors.horizontalCenter: parent.horizontalCenter
-        // }
     }
 }

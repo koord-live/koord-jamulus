@@ -4,9 +4,9 @@ import QtQuick.Layouts
 
 Item {
 
-    visible: true
-    width: 1280
-    height: 960
+    // width: parent.width
+    // height: parent.height
+    anchors.fill: parent
 
     ScrollView {
         width: parent.width
