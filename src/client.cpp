@@ -196,19 +196,13 @@ CClient::CClient ( const quint16  iPortNumber,
     // emit pSettings->updateSettings();
 
     // MainMixerBoard->SetSettingsPointer ( pSettings );
-
     // MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
-
     // MainMixerBoard->SetMIDICtrlUsed ( !strMIDISetup.isEmpty() );
-
     // MainMixerBoard->HideAll();
 
     // init input level meter bars
-
     // init status LEDs
-
     // init input boost
-
     // set window title (with no clients connected -> "0")
 
     // setup timers
@@ -226,6 +220,7 @@ CClient::CClient ( const quint16  iPortNumber,
     // restoreGeometry - maybe
 
     // All Connections
+    // ....
 
     // Post Connections init
     // start timer for status bar

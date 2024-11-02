@@ -318,6 +318,7 @@ RESOURCES += src/resources.qrc
 }
 
 HEADERS += src/buffer.h \
+    src/audiomixerboardnu.h \
     src/channel.h \
     src/global.h \
     # src/kdsingleapplication.h \
@@ -430,6 +431,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     $$files(libs/opus/silk/x86/*.h)
 
 SOURCES += src/buffer.cpp \
+    src/audiomixerboardnu.cpp \
     src/channel.cpp \
     src/kdapplication.cpp \
     # src/kdsingleapplication.cpp \

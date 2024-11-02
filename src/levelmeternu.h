@@ -24,13 +24,6 @@
 
 #pragma once
 
-// these gotta go ....
-// #include <QFrame>
-// #include <QPixmap>
-// #include <QLayout>
-// #include <QProgressBar>
-// --
-
 #include <QTimer>
 #include "util.h"
 #include "global.h"

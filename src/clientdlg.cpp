@@ -61,7 +61,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QQmlContext* settingsContext = settingsView->rootContext();
     settingsContext->setContextProperty("_settings", pNSetP );
     QWidget *settingsContainer = QWidget::createWindowContainer(settingsView, this);
-    settingsView->setSource(QUrl("qrc:/settingview.qml"));
+    settingsView->setSource(QUrl("qrc:/SettingsView.qml"));
     settingsTab->layout()->addWidget(settingsContainer);
 
     // transitional main view
@@ -69,7 +69,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QQmlContext* mainContext = mainView->rootContext();
     mainContext->setContextProperty("_main", pNSetP );
     QWidget *mainContainer = QWidget::createWindowContainer(mainView, this);
-    mainView->setSource(QUrl("qrc:/mainview.qml"));
+    mainView->setSource(QUrl("qrc:/MainView.qml"));
     videoTab->layout()->addWidget(mainContainer);
 
     // initialize video_url with blank value to start

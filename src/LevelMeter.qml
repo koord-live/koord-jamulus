@@ -2,53 +2,49 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
+
 Rectangle {
-    id: root
-    width: parent.width
-    height: parent.height
-    color: "white"
-    border.color: "black"
-    border.width: 1
-    radius: 3
+    id: levelContainer
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    color: "black"
+    radius: 2
 
-    property alias levelValue: levelBar.heightPercentage
+    property alias levelValueL: levelBarL.heightPercentage
+    property alias levelValueR: levelBarR.heightPercentage
 
-    ColumnLayout {
+    RowLayout {
+        id: levelBarsLayout
         anchors.fill: parent
-        spacing: 10
+        spacing: 0
 
         Rectangle {
-            id: levelContainer
+            id: levelBarL
             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
-            Layout.preferredHeight: root.height
-            Layout.preferredWidth: root.width * 0.5
-            color: "black"
-            radius: 2
-
-            ColumnLayout {
-                anchors.fill: parent
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                // Spacer to push levelBar to the bottom
-                Item {
-                    Layout.fillHeight: true
-                }
-
-                Rectangle {
-                    id: levelBar
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: levelContainer.width * 0.5
-                    Layout.preferredHeight: levelContainer.height * heightPercentage
-                    radius: 1
-                    gradient: Gradient {
-                        GradientStop { position: 1.0; color: "green" }
-                        GradientStop { position: 0.5; color: "yellow" }
-                        GradientStop { position: 0.0; color: "red" }
-                    }
-                    property real heightPercentage: 0.5 // Default 50% height for demonstration
-                }
+            Layout.preferredWidth: levelContainer.width * 0.35
+            Layout.preferredHeight: levelContainer.height * heightPercentage
+            radius: 1
+            gradient: Gradient {
+                GradientStop { position: 1.0; color: "green" }
+                GradientStop { position: 0.5; color: "yellow" }
+                GradientStop { position: 0.0; color: "red" }
             }
+            property real heightPercentage: 0.5 // Default 50% height for demonstration
+        }
+
+        Rectangle {
+            id: levelBarR
+            Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
+            Layout.preferredWidth: levelContainer.width * 0.35
+            Layout.preferredHeight: levelContainer.height * heightPercentage
+            radius: 1
+            gradient: Gradient {
+                GradientStop { position: 1.0; color: "green" }
+                GradientStop { position: 0.5; color: "yellow" }
+                GradientStop { position: 0.0; color: "red" }
+            }
+            property real heightPercentage: 0.5 // Default 50% height for demonstration
         }
     }
+
 }

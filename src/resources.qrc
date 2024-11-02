@@ -67,9 +67,10 @@
     </qresource>
     <qresource prefix="/">
         <file>nosessionview.qml</file>
-        <file>settingview.qml</file>
-        <file>mainview.qml</file>
+        <file>SettingsView.qml</file>
+        <file>MainView.qml</file>
         <file>LevelMeter.qml</file>
+        <file>ChannelFader.qml</file>
     </qresource>
     <qresource prefix="/svg/main">
         <file>res/share-via.svg</file>

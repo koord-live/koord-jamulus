@@ -212,7 +212,7 @@ public:
         // QQmlContext* settingsContext = settingsView->rootContext();
         // settingsContext->setContextProperty("_settings", this);
         // QWidget *settingsContainer = QWidget::createWindowContainer(settingsView);
-        // settingsView->setSource(QUrl("qrc:/settingview.qml"));
+        // settingsView->setSource(QUrl("qrc:/SettingsView.qml"));
         // settingsTab->layout()->addWidget(settingsContainer);
 
         // Do I put signal-slot connections here ???? even necessary?

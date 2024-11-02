@@ -60,24 +60,10 @@ Rectangle {
                             id: levelMeterRectangle
                             anchors.fill: parent
                             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
-                            levelValue: 0.8 // _main.level // Link to C++ property
+                            levelValueL: 0.8 // _main.level // Link to C++ property
+                            levelValueR: 0.9 // _main.level // Link to C++ property
                         }
                     }
-
-                    // Mute Button
-                    // Rectangle {
-                    //     width: 40
-                    //     height: 40
-                    //     color: "#c0c0c0"
-                    //     radius: 5
-                    //     Layout.alignment: Qt.AlignHCenter
-                    //     Text {
-                    //         text: "M"
-                    //         anchors.centerIn: parent
-                    //         font.pixelSize: 20
-                    //         color: "#ffffff"
-                    //     }
-                    // }
 
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter
@@ -119,51 +105,52 @@ Rectangle {
                     }
 
                     // Network Check Section
-                    ColumnLayout {
-                        spacing: 4
+                    GridLayout {
                         Layout.alignment: Qt.AlignCenter
+                        columns: 2
+
                         Text {
-                            text: "NET CHECK"
-                            font.pixelSize: 12
+                            text: "PING"
+                        }
+                        Rectangle {
+                            width: 40
+                            height: 15
+                            color: "#000000"
+                            Label {
+                                anchors.centerIn: parent
+                                text: "23"
+                                color: "green"
+                                font.bold: true
+                            }
                         }
 
-                        RowLayout {
-                            Text { text: "ping" }
-                            Rectangle {
-                                width: 40
-                                height: 15
-                                color: "#000000"
-                                Label {
-                                    anchors.centerIn: parent
-                                    text: "23"
-                                    color: "green"
-                                }
+                        Text {
+                            text: "DELAY"
+                        }
+                        Rectangle {
+                            width: 40
+                            height: 15
+                            color: "#000000"
+                            Label {
+                                anchors.centerIn: parent
+                                color: "red"
+                                text: "56"
+                                font.bold: true
                             }
                         }
-                        RowLayout {
-                            Text { text: "delay" }
-                            Rectangle {
-                                width: 40
-                                height: 15
-                                color: "#000000"
-                                Label {
-                                    anchors.centerIn: parent
-                                    color: "green"
-                                    text: "23"
-                                }
-                            }
+
+                        Text {
+                            text: "JITTER"
                         }
-                        RowLayout {
-                            Text { text: "jitter" }
-                            Rectangle {
-                                width: 40
-                                height: 15
-                                color: "#000000"
-                                Label {
-                                    anchors.centerIn: parent
-                                    text: "23"
-                                    color: "green"
-                                }
+                        Rectangle {
+                            width: 40
+                            height: 15
+                            color: "#000000"
+                            Label {
+                                anchors.centerIn: parent
+                                text: "--"
+                                color: "green"
+                                font.bold: true
                             }
                         }
                     }
@@ -178,20 +165,32 @@ Rectangle {
                 border.color: "#d9d9d9"
                 radius: 10
 
-                RowLayout {
-                    anchors.centerIn: parent
+                ColumnLayout {
+                    anchors.fill: parent
                     spacing: 20
 
-                    // Custom Button Style Using a Non-native Control
-                    Button {
-                        text: "Connect..."
-                        width: 100
-                        height: 40
-                        // background: Rectangle {
-                        //     color: "#ff8c00"
-                        //     radius: 5
-                        // }
-                        font.bold: true
+                    // Connect / control area
+                    Rectangle {
+                        Layout.alignment: Qt.AlignHCenter
+
+                        Button {
+                            text: "Connect..."
+                            Layout.preferredWidth: 100
+                            Layout.preferredHeight: 50
+                            font.bold: true
+                        }
+                    }
+
+                    // mixerboard area
+                    Rectangle {
+                        Layout.preferredHeight: 550
+                        Layout.preferredWidth: 90
+
+                        ChannelFader {
+                            id: channelFader1
+                            Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
+                            // levelValue: 0.8 // _main.level // Link to C++ property
+                        }
                     }
 
                 }
