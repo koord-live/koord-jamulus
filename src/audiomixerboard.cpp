@@ -454,21 +454,21 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
 
 void CChannelFader::SetChannelLevel ( const uint16_t iLevel ) { plbrChannelLevel->SetValue ( iLevel ); }
 
-// void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
-// {
-//     // store received channel info
-//     cReceivedChanInfo = cChanInfo;
-//
-//     // Label text --------------------------------------------------------------
-//
-//     QString strModText = cChanInfo.strName;
-//
-//     // show channel numbers if --ctrlmidich is used (#241, #95)
-//     if ( bMIDICtrlUsed )
-//     {
-//         strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
-//     }
-// }
+void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
+{
+    // store received channel info
+    cReceivedChanInfo = cChanInfo;
+
+    // Label text --------------------------------------------------------------
+
+    QString strModText = cChanInfo.strName;
+
+    // show channel numbers if --ctrlmidich is used (#241, #95)
+    if ( bMIDICtrlUsed )
+    {
+        strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
+    }
+}
 
 /******************************************************************************\
 * CAudioMixerBoard                                                             *

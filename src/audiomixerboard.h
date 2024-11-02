@@ -56,7 +56,7 @@ public:
     QString GetReceivedName() { return cReceivedChanInfo.strName; }
     // int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
     // QString GetReceivedCity() { return cReceivedChanInfo.strCity; }
-    // void    SetChannelInfos ( const CChannelInfo& cChanInfo );
+    void    SetChannelInfos ( const CChannelInfo& cChanInfo );
     void    Show() { pFrame->show(); }
     void    Hide() { pFrame->hide(); }
     bool    IsVisible() { return !pFrame->isHidden(); }

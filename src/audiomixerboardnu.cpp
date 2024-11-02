@@ -472,6 +472,9 @@ void CChannelFaderNu::SetChannelInfos ( const CChannelInfo& cChanInfo )
     }
 }
 
+
+
+
 /******************************************************************************\
 * CAudioMixerBoardNu                                                             *
 \******************************************************************************/
@@ -504,7 +507,7 @@ CAudioMixerBoardNu::CAudioMixerBoardNu ( QObject* parent ) :
 
     for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        // vecpChanFader[i] = new CChannelFaderNu ( this );
+        vecpChanFader[i] = new CChannelFaderNu ( this );
         vecpChanFader[i]->Hide();
     }
 
@@ -883,7 +886,7 @@ void CAudioMixerBoardNu::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanI
             }
 
             // set the channel infos
-            // vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[idxVecpChan] );
+            vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[idxVecpChan] );
         }
 
         // update the solo states since if any channel was on solo and a new client
